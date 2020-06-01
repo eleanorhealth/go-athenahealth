@@ -1,0 +1,12 @@
+{
+    "patients": [
+        {
+            "namefirst": "John",
+            "namelast": "Smith"
+        },
+        {
+            "namefirst": "Jane",
+            "namelast": "Doe"
+        }
+    ]
+}
