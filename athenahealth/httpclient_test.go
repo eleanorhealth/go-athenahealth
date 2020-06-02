@@ -233,6 +233,8 @@ func TestHTTPClient_PostForm(t *testing.T) {
 		r.Body.Close()
 		assert.True(len(b) > 0)
 
+		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
+
 		called = true
 	}
 
@@ -281,6 +283,8 @@ func TestHTTPClient_PutForm(t *testing.T) {
 		b, _ := ioutil.ReadAll(r.Body)
 		r.Body.Close()
 		assert.True(len(b) > 0)
+
+		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
 
 		called = true
 	}
@@ -332,6 +336,8 @@ func TestHTTPClient_DeleteForm(t *testing.T) {
 		b, _ := ioutil.ReadAll(r.Body)
 		r.Body.Close()
 		assert.True(len(b) > 0)
+
+		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
 
 		called = true
 	}
