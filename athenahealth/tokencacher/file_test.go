@@ -2,6 +2,7 @@ package tokencacher
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -50,7 +51,7 @@ func TestFile_Get_ErrTokenNotExist(t *testing.T) {
 
 	assert.Empty(token)
 	assert.Error(err)
-	assert.IsType(ErrTokenNotExist, err)
+	assert.True(errors.Is(err, ErrTokenNotExist))
 }
 
 func TestFile_Get_ErrTokenExpired(t *testing.T) {
@@ -76,7 +77,7 @@ func TestFile_Get_ErrTokenExpired(t *testing.T) {
 
 	assert.Empty(token)
 	assert.Error(err)
-	assert.IsType(ErrTokenExpired, err)
+	assert.True(errors.Is(err, ErrTokenExpired))
 }
 
 func TestFile_Set(t *testing.T) {

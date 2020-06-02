@@ -1,6 +1,7 @@
 package tokencacher
 
 import (
+	"errors"
 	"testing"
 	"time"
 
@@ -31,21 +32,21 @@ func TestDefault_Get_ErrTokenNotExist(t *testing.T) {
 
 	assert.Empty(token)
 	assert.Error(err)
-	assert.IsType(ErrTokenNotExist, err)
+	assert.True(errors.Is(err, ErrTokenNotExist))
 }
 
 func TestDefault_Get_ErrTokenExpired(t *testing.T) {
 	assert := assert.New(t)
 
 	cacher := NewDefault()
-	cacher.token = ""
+	cacher.token = "foo"
 	cacher.expiresAt = time.Now().Add(-time.Minute * 1)
 
 	token, err := cacher.Get()
 
 	assert.Empty(token)
 	assert.Error(err)
-	assert.IsType(ErrTokenExpired, err)
+	assert.True(errors.Is(err, ErrTokenExpired))
 }
 
 func TestDefault_Set(t *testing.T) {

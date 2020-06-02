@@ -1,6 +1,7 @@
 package tokencacher
 
 import (
+	"errors"
 	"testing"
 	"time"
 
@@ -50,7 +51,7 @@ func TestRedis_Get_ErrTokenNotExist(t *testing.T) {
 
 	assert.Empty(token)
 	assert.Error(err)
-	assert.IsType(ErrTokenNotExist, err)
+	assert.True(errors.Is(err, ErrTokenNotExist))
 }
 
 func TestRedis_Set(t *testing.T) {
