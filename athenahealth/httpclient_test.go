@@ -2,9 +2,11 @@ package athenahealth
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strings"
 	"testing"
 	"time"
 
@@ -118,7 +120,7 @@ func TestHTTPClient_request(t *testing.T) {
 	defer ts.Close()
 
 	var out map[string]string
-	res, err := athenaClient.request("GET", "/", nil, &out)
+	res, err := athenaClient.request("GET", "/", nil, nil, &out)
 
 	assert.NotNil(res)
 	assert.Nil(err)
@@ -135,7 +137,7 @@ func TestHTTPClient_request_error(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	res, err := athenaClient.request("GET", "/", nil, nil)
+	res, err := athenaClient.request("GET", "/", nil, nil, nil)
 
 	assert.NotNil(res)
 	assert.NotNil(err)
@@ -204,6 +206,9 @@ func TestHTTPClient_Post(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPost, r.Method)
+		b, _ := ioutil.ReadAll(r.Body)
+		r.Body.Close()
+		assert.True(len(b) > 0)
 
 		called = true
 	}
@@ -211,7 +216,33 @@ func TestHTTPClient_Post(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	res, err := athenaClient.Post("/", nil, nil)
+	res, err := athenaClient.Post("/", strings.NewReader("foo"), nil)
+
+	assert.NotNil(res)
+	assert.Nil(err)
+	assert.True(called)
+}
+
+func TestHTTPClient_PostForm(t *testing.T) {
+	assert := assert.New(t)
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(http.MethodPost, r.Method)
+		b, _ := ioutil.ReadAll(r.Body)
+		r.Body.Close()
+		assert.True(len(b) > 0)
+
+		called = true
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	var values = url.Values{}
+	values.Add("foo", "bar")
+
+	res, err := athenaClient.PostForm("/", values, nil)
 
 	assert.NotNil(res)
 	assert.Nil(err)
@@ -224,6 +255,9 @@ func TestHTTPClient_Put(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPut, r.Method)
+		b, _ := ioutil.ReadAll(r.Body)
+		r.Body.Close()
+		assert.True(len(b) > 0)
 
 		called = true
 	}
@@ -231,7 +265,33 @@ func TestHTTPClient_Put(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	res, err := athenaClient.Put("/", nil, nil)
+	res, err := athenaClient.Put("/", strings.NewReader("foo"), nil)
+
+	assert.NotNil(res)
+	assert.Nil(err)
+	assert.True(called)
+}
+
+func TestHTTPClient_PutForm(t *testing.T) {
+	assert := assert.New(t)
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(http.MethodPut, r.Method)
+		b, _ := ioutil.ReadAll(r.Body)
+		r.Body.Close()
+		assert.True(len(b) > 0)
+
+		called = true
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	var values = url.Values{}
+	values.Add("foo", "bar")
+
+	res, err := athenaClient.PutForm("/", values, nil)
 
 	assert.NotNil(res)
 	assert.Nil(err)
@@ -244,6 +304,9 @@ func TestHTTPClient_Delete(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodDelete, r.Method)
+		b, _ := ioutil.ReadAll(r.Body)
+		r.Body.Close()
+		assert.True(len(b) > 0)
 
 		called = true
 	}
@@ -253,7 +316,33 @@ func TestHTTPClient_Delete(t *testing.T) {
 
 	athenaClient.baseURL = ts.URL
 
-	res, err := athenaClient.Delete("/", nil)
+	res, err := athenaClient.Delete("/", strings.NewReader("foo"), nil)
+
+	assert.NotNil(res)
+	assert.Nil(err)
+	assert.True(called)
+}
+
+func TestHTTPClient_DeleteForm(t *testing.T) {
+	assert := assert.New(t)
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(http.MethodDelete, r.Method)
+		b, _ := ioutil.ReadAll(r.Body)
+		r.Body.Close()
+		assert.True(len(b) > 0)
+
+		called = true
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	var values = url.Values{}
+	values.Add("foo", "bar")
+
+	res, err := athenaClient.DeleteForm("/", values, nil)
 
 	assert.NotNil(res)
 	assert.Nil(err)
