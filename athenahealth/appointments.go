@@ -60,7 +60,7 @@ type BookedAppointmentsOptions struct {
 	StartDate    time.Time
 }
 
-type BookedAppointmentsResponse struct {
+type bookedAppointmentsResponse struct {
 	TotalCount   int                  `json:"totalcount"`
 	Appointments []*BookedAppointment `json:"appointments"`
 }
@@ -69,7 +69,7 @@ type BookedAppointmentsResponse struct {
 // GET /v1/{practiceid}/appointments/booked
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-3
 func (h *HTTPClient) ListBookedAppointments(opts *BookedAppointmentsOptions) ([]*BookedAppointment, error) {
-	out := &BookedAppointmentsResponse{}
+	out := &bookedAppointmentsResponse{}
 
 	q := url.Values{}
 
@@ -115,7 +115,7 @@ type ChangedAppointmentsOptions struct {
 	StartDate                  time.Time
 }
 
-type ChangedAppointmentsResponse struct {
+type changedAppointmentsResponse struct {
 	TotalCount   int            `json:"totalcount"`
 	Appointments []*Appointment `json:"appointments"`
 }
@@ -124,7 +124,7 @@ type ChangedAppointmentsResponse struct {
 // GET /v1/{practiceid}/appointments/changed
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-5
 func (h *HTTPClient) ListChangedAppointments(opts *ChangedAppointmentsOptions) ([]*Appointment, error) {
-	out := &ChangedAppointmentsResponse{}
+	out := &changedAppointmentsResponse{}
 
 	q := url.Values{}
 
