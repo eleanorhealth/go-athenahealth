@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -88,7 +87,7 @@ func (h *HTTPClient) setBaseURL() {
 	}
 }
 
-func (h *HTTPClient) request(method, path string, body url.Values, out interface{}) (*http.Response, error) {
+func (h *HTTPClient) request(method, path string, body io.Reader, headers http.Header, out interface{}) (*http.Response, error) {
 	var token string
 	var err error
 	var expiresAt time.Time
@@ -120,23 +119,17 @@ func (h *HTTPClient) request(method, path string, body url.Values, out interface
 
 	reqURL := fmt.Sprintf("%s%s", h.baseURL, path)
 
-	var reqBody io.Reader
-	if body != nil {
-		reqBody = strings.NewReader(body.Encode())
-	}
-
-	req, err := http.NewRequest(method, reqURL, reqBody)
+	req, err := http.NewRequest(method, reqURL, body)
 	if err != nil {
 		return nil, err
 	}
 
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
-	req.Header.Add("User-Agent", userAgent)
-
-	if body != nil {
-		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-		req.Header.Add("Content-Length", strconv.Itoa(len(body.Encode())))
+	if headers != nil {
+		req.Header = headers
 	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+	req.Header.Add("User-Agent", userAgent)
 
 	res, err := h.httpClient.Do(req)
 	if err != nil {
@@ -194,17 +187,53 @@ func (h *HTTPClient) Get(path string, query url.Values, out interface{}) (*http.
 		path = fmt.Sprintf("%s?%s", path, query.Encode())
 	}
 
-	return h.request("GET", path, nil, out)
+	return h.request("GET", path, nil, nil, out)
 }
 
-func (h *HTTPClient) Post(path string, body url.Values, out interface{}) (*http.Response, error) {
-	return h.request("POST", path, body, out)
+func (h *HTTPClient) Post(path string, body io.Reader, out interface{}) (*http.Response, error) {
+	return h.request("POST", path, body, nil, out)
 }
 
-func (h *HTTPClient) Put(path string, body url.Values, out interface{}) (*http.Response, error) {
-	return h.request("PUT", path, body, out)
+func (h *HTTPClient) PostForm(path string, v url.Values, out interface{}) (*http.Response, error) {
+	var body io.Reader
+	var headers = http.Header{}
+
+	if v != nil {
+		body = strings.NewReader(v.Encode())
+		headers.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
+
+	return h.request("POST", path, body, headers, out)
 }
 
-func (h *HTTPClient) Delete(path string, body url.Values, out interface{}) (*http.Response, error) {
-	return h.request("DELETE", path, body, out)
+func (h *HTTPClient) Put(path string, body io.Reader, out interface{}) (*http.Response, error) {
+	return h.request("PUT", path, body, nil, out)
+}
+
+func (h *HTTPClient) PutForm(path string, v url.Values, out interface{}) (*http.Response, error) {
+	var body io.Reader
+	var headers = http.Header{}
+
+	if v != nil {
+		body = strings.NewReader(v.Encode())
+		headers.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
+
+	return h.request("PUT", path, body, headers, out)
+}
+
+func (h *HTTPClient) Delete(path string, body io.Reader, out interface{}) (*http.Response, error) {
+	return h.request("DELETE", path, body, nil, out)
+}
+
+func (h *HTTPClient) DeleteForm(path string, v url.Values, out interface{}) (*http.Response, error) {
+	var body io.Reader
+	var headers = http.Header{}
+
+	if v != nil {
+		body = strings.NewReader(v.Encode())
+		headers.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
+
+	return h.request("DELETE", path, body, headers, out)
 }
