@@ -46,7 +46,7 @@ type ListPatientsOptions struct {
 	LastName  string
 }
 
-type listPatientsResponse struct {
+type ListPatientsResponse struct {
 	Patients []*Patient `json:"patients"`
 }
 
@@ -54,7 +54,7 @@ type listPatientsResponse struct {
 // GET /v1/{practiceid}/patients
 // https://developer.athenahealth.com/docs/read/patientinfo/Patient_Information#section-1
 func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) ([]*Patient, error) {
-	out := &listPatientsResponse{}
+	out := &ListPatientsResponse{}
 
 	q := url.Values{}
 
