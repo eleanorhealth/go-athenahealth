@@ -9,16 +9,17 @@ import (
 )
 
 type Appointment struct {
-	AppointmentID     string `json:"appointmentid"`
-	AppointmentStatus string `json:"appointmentstatus"`
-	AppointmentType   string `json:"appointmenttype"`
-	AppointmentTypeID string `json:"appointmenttypeid"`
-	Date              string `json:"date"`
-	DepartmentID      string `json:"departmentid"`
-	Duration          int    `json:"duration"`
-	PatientID         string `json:"patientid"`
-	ProviderID        string `json:"providerid"`
-	StartTime         string `json:"starttime"`
+	AppointmentID              string `json:"appointmentid"`
+	AppointmentStatus          string `json:"appointmentstatus"`
+	AppointmentType            string `json:"appointmenttype"`
+	AppointmentTypeID          string `json:"appointmenttypeid"`
+	ChargeEntryNotRequired     bool   `json:"chargeentrynotrequired"`
+	Date                       string `json:"date"`
+	DepartmentID               string `json:"departmentid"`
+	Duration                   int    `json:"duration"`
+	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
+	ProviderID                 string `json:"providerid"`
+	StartTime                  string `json:"starttime"`
 }
 
 // GetAppointment - Single appointment.
@@ -40,19 +41,30 @@ func (h *HTTPClient) GetAppointment(id string) (*Appointment, error) {
 }
 
 type BookedAppointment struct {
-	AppointmentID     string `json:"appointmentid"`
-	AppointmentStatus string `json:"appointmentstatus"`
-	AppointmentType   string `json:"appointmenttype"`
-	AppointmentTypeID string `json:"appointmenttypeid"`
-	Date              string `json:"date"`
-	DepartmentID      string `json:"departmentid"`
-	Duration          int    `json:"duration"`
-	PatientID         string `json:"patientid"`
-	ProviderID        string `json:"providerid"`
-	StartTime         string `json:"starttime"`
+	AppointmentID              string `json:"appointmentid"`
+	AppointmentStatus          string `json:"appointmentstatus"`
+	AppointmentType            string `json:"appointmenttype"`
+	AppointmentTypeID          string `json:"appointmenttypeid"`
+	ChargeEntryNotRequired     bool   `json:"chargeentrynotrequired"`
+	CoordinatorEnterprise      bool   `json:"coordinatorenterprise"`
+	Copay                      int    `json:"copay"`
+	Date                       string `json:"date"`
+	DepartmentID               string `json:"departmentid"`
+	Duration                   int    `json:"duration"`
+	HL7ProviderID              int    `json:"hl7providerid"`
+	Lastmodified               string `json:"lastmodified"`
+	LastModifiedBy             string `json:"lastmodifiedby"`
+	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
+	PatientID                  string `json:"patientid"`
+	ProviderID                 string `json:"providerid"`
+	ScheduledBy                string `json:"scheduledby"`
+	ScheduledDatetime          string `json:"scheduleddatetime"`
+	StartTime                  string `json:"starttime"`
+	TemplateAppointmentID      string `json:"templateappointmentid"`
+	TemplateAppointmentTypeID  string `json:"templateappointmenttypeid"`
 }
 
-type BookedAppointmentsOptions struct {
+type ListBookedAppointmentsOptions struct {
 	DepartmentID string
 	EndDate      time.Time
 	PatientID    string
@@ -60,15 +72,15 @@ type BookedAppointmentsOptions struct {
 	StartDate    time.Time
 }
 
-type bookedAppointmentsResponse struct {
+type listBookedAppointmentsResponse struct {
 	Appointments []*BookedAppointment `json:"appointments"`
 }
 
 // ListBookedAppointments - Booked appointment slots.
 // GET /v1/{practiceid}/appointments/booked
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-3
-func (h *HTTPClient) ListBookedAppointments(opts *BookedAppointmentsOptions) ([]*BookedAppointment, error) {
-	out := &bookedAppointmentsResponse{}
+func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions) ([]*BookedAppointment, error) {
+	out := &listBookedAppointmentsResponse{}
 
 	q := url.Values{}
 
@@ -102,28 +114,60 @@ func (h *HTTPClient) ListBookedAppointments(opts *BookedAppointmentsOptions) ([]
 	return out.Appointments, nil
 }
 
-type ChangedAppointmentsOptions struct {
+type ChangedAppointment struct {
+	AppointmentID    string `json:"appointmentid"`
+	AppointmentNotes []struct {
+		DisplayOnSchedule bool   `json:"displayonschedule"`
+		Text              string `json:"text"`
+		ID                int    `json:"id"`
+	} `json:"appointmentnotes"`
+	AppointmentStatus          string `json:"appointmentstatus"`
+	AppointmentType            string `json:"appointmenttype"`
+	AppointmentTypeID          string `json:"appointmenttypeid"`
+	CancelledBy                string `json:"cancelledby"`
+	CancelledDatetime          string `json:"cancelleddatetime"`
+	CancelReasonID             string `json:"cancelreasonid"`
+	CancelReasonName           string `json:"cancelreasonname"`
+	CancelReasonNoShow         bool   `json:"cancelreasonnoshow"`
+	CancelReasonSlotAvailable  bool   `json:"cancelreasonslotavailable"`
+	ChargeEntryNotRequired     bool   `json:"chargeentrynotrequired"`
+	CoordinatorEnterprise      bool   `json:"coordinatorenterprise"`
+	Date                       string `json:"date"`
+	DepartmentID               string `json:"departmentid"`
+	Duration                   int    `json:"duration"`
+	HL7ProviderID              int    `json:"hl7providerid"`
+	LastModified               string `json:"lastmodified"`
+	LastModifiedBy             string `json:"lastmodifiedby"`
+	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
+	PatientID                  string `json:"patientid"`
+	ProviderID                 string `json:"providerid"`
+	ScheduledBy                string `json:"scheduledby"`
+	ScheduledDateime           string `json:"scheduleddatetime"`
+	StartTime                  string `json:"starttime"`
+	TemplateAppointmentID      string `json:"templateappointmentid"`
+	TemplateAppointmentTypeID  string `json:"templateappointmenttypeid"`
+}
+
+type ListChangedAppointmentsOptions struct {
 	DepartmentID               string
-	EndDate                    time.Time
 	LeaveUnprocessed           bool
 	PatientID                  string
 	ProviderID                 string
 	ShowPatientDetail          bool
 	ShowProcessedEndDatetime   time.Time
 	ShowProcessedStartDatetime time.Time
-	StartDate                  time.Time
 }
 
-type changedAppointmentsResponse struct {
-	TotalCount   int            `json:"totalcount"`
-	Appointments []*Appointment `json:"appointments"`
+type listChangedAppointmentsResponse struct {
+	TotalCount   int                   `json:"totalcount"`
+	Appointments []*ChangedAppointment `json:"appointments"`
 }
 
 // ListChangedAppointments - Changed appointment slots.
 // GET /v1/{practiceid}/appointments/changed
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-5
-func (h *HTTPClient) ListChangedAppointments(opts *ChangedAppointmentsOptions) ([]*Appointment, error) {
-	out := &changedAppointmentsResponse{}
+func (h *HTTPClient) ListChangedAppointments(opts *ListChangedAppointmentsOptions) ([]*ChangedAppointment, error) {
+	out := &listChangedAppointmentsResponse{}
 
 	q := url.Values{}
 
@@ -138,14 +182,6 @@ func (h *HTTPClient) ListChangedAppointments(opts *ChangedAppointmentsOptions) (
 
 		if len(opts.PatientID) > 0 {
 			q.Add("patientid", opts.PatientID)
-		}
-
-		if !opts.StartDate.IsZero() {
-			q.Add("startdate", opts.StartDate.Format("01/02/2006"))
-		}
-
-		if !opts.EndDate.IsZero() {
-			q.Add("enddate", opts.EndDate.Format("01/02/2006"))
 		}
 
 		if opts.ShowPatientDetail {

@@ -1,0 +1,15 @@
+[
+    {
+        "date": "02\/27\/2009",
+        "appointmentid": "1",
+        "starttime": "08:00",
+        "departmentid": "1",
+        "appointmentstatus": "o",
+        "duration": 30,
+        "appointmenttypeid": "1",
+        "appointmenttype": "Follow Up",
+        "providerid": "21",
+        "chargeentrynotrequired": false,
+        "patientappointmenttypename": "Follow Up Appointment"
+      }
+]
