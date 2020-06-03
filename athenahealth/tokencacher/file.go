@@ -14,7 +14,7 @@ type File struct {
 	lock sync.Mutex
 }
 
-type cache struct {
+type fileCache struct {
 	Token     string    `json:"token"`
 	ExpiresAt time.Time `json:"expiresAt"`
 }
@@ -42,7 +42,7 @@ func (f *File) Get() (string, error) {
 		return "", ErrTokenNotExist
 	}
 
-	c := &cache{}
+	c := &fileCache{}
 	err = json.Unmarshal(contents, c)
 	if err != nil {
 		return "", fmt.Errorf("Error unmarshaling token: %s", err)
@@ -59,7 +59,7 @@ func (f *File) Set(token string, expiresAt time.Time) error {
 	f.lock.Lock()
 	defer f.lock.Unlock()
 
-	c := &cache{
+	c := &fileCache{
 		Token:     token,
 		ExpiresAt: expiresAt,
 	}
