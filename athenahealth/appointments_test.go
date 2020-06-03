@@ -43,8 +43,8 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 
 	opts := &ListBookedAppointmentsOptions{
 		ProviderID: "1",
-		StartDate:  time.Date(2020, 6, 1, 0, 0, 0, 0, time.Local),
-		EndDate:    time.Date(2020, 6, 3, 0, 0, 0, 0, time.Local),
+		StartDate:  time.Date(2020, 6, 1, 0, 0, 0, 0, time.UTC),
+		EndDate:    time.Date(2020, 6, 3, 0, 0, 0, 0, time.UTC),
 	}
 
 	appointments, err := athenaClient.ListBookedAppointments(opts)
@@ -70,8 +70,8 @@ func TestHTTPClient_ListChangedAppointments(t *testing.T) {
 
 	opts := &ListChangedAppointmentsOptions{
 		ProviderID:                 "1",
-		ShowProcessedStartDatetime: time.Date(2020, 6, 1, 15, 30, 45, 0, time.Local),
-		ShowProcessedEndDatetime:   time.Date(2020, 6, 2, 12, 30, 45, 0, time.Local),
+		ShowProcessedStartDatetime: time.Date(2020, 6, 1, 15, 30, 45, 0, time.UTC),
+		ShowProcessedEndDatetime:   time.Date(2020, 6, 2, 12, 30, 45, 0, time.UTC),
 	}
 
 	appointments, err := athenaClient.ListChangedAppointments(opts)
