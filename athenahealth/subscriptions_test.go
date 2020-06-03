@@ -58,7 +58,10 @@ func TestHTTPClient_Subscribe(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	err := athenaClient.Subscribe("appointments", "UpdateAppointment")
+	opts := &SubscribeOpts{
+		EventName: "UpdateAppointment",
+	}
+	err := athenaClient.Subscribe("appointments", opts)
 
 	assert.Nil(err)
 	assert.True(called)
@@ -80,7 +83,10 @@ func TestHTTPClient_Unsubscribe(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	err := athenaClient.Unsubscribe("appointments", "UpdateAppointment")
+	opts := &UnsubscribeOpts{
+		EventName: "UpdateAppointment",
+	}
+	err := athenaClient.Unsubscribe("appointments", opts)
 
 	assert.Nil(err)
 	assert.True(called)

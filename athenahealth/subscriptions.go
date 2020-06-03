@@ -46,15 +46,19 @@ func (h *HTTPClient) ListSubscriptionEvents(feedType string) ([]*SubscriptionEve
 	return out.Subscriptions, nil
 }
 
+type SubscribeOpts struct {
+	EventName string
+}
+
 // Subscribe - Handles subscriptions for changed appointment slots.
 // POST /v1/{practiceid}/appointments/changed/subscription
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-6
-func (h *HTTPClient) Subscribe(feedType, eventName string) error {
+func (h *HTTPClient) Subscribe(feedType string, opts *SubscribeOpts) error {
 	var form url.Values
 
-	if eventName != "" {
+	if opts != nil {
 		form = url.Values{}
-		form.Add("eventname", eventName)
+		form.Add("eventname", opts.EventName)
 	}
 
 	_, err := h.PostForm(fmt.Sprintf("/%s/changed/subscription", feedType), form, nil)
@@ -65,15 +69,19 @@ func (h *HTTPClient) Subscribe(feedType, eventName string) error {
 	return nil
 }
 
+type UnsubscribeOpts struct {
+	EventName string
+}
+
 // Unsubscribe - Handles subscriptions for changed appointment slots.
 // POST /v1/{practiceid}/appointments/changed/subscription
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-6
-func (h *HTTPClient) Unsubscribe(feedType, eventName string) error {
+func (h *HTTPClient) Unsubscribe(feedType string, opts *UnsubscribeOpts) error {
 	var form url.Values
 
-	if eventName != "" {
+	if opts != nil {
 		form = url.Values{}
-		form.Add("eventname", eventName)
+		form.Add("eventname", opts.EventName)
 	}
 
 	_, err := h.DeleteForm(fmt.Sprintf("/%s/changed/subscription", feedType), form, nil)
