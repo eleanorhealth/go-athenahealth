@@ -22,6 +22,9 @@ const (
 
 	// ProdBaseURL is the base URL used to make API requests in the production environment.
 	ProdBaseURL = "https://api.athenahealth.com/v1/"
+
+	// userAgent is the user agent that will be sent with every HTTP request.
+	userAgent = "go-athenahealth/1.0"
 )
 
 type HTTPClient struct {
@@ -126,6 +129,7 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+	req.Header.Add("User-Agent", userAgent)
 
 	res, err := h.httpClient.Do(req)
 	if err != nil {

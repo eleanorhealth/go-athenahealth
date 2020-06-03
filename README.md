@@ -1,5 +1,9 @@
 # go-athenahealth
 
+go-athenahealth is an athenahealth API client for Go.
+
+**This project is a work in progress. Use with caution.**
+
 ## Getting Started
 
 ### Basic Example
