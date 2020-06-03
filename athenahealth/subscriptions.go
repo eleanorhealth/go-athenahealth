@@ -28,7 +28,7 @@ type SubscriptionEvent struct {
 	EventName string `json:"eventname"`
 }
 
-type subscriptionEventsResponse struct {
+type listSubscriptionEventsResponse struct {
 	Subscriptions []*SubscriptionEvent `json:"subscriptions"`
 }
 
@@ -36,7 +36,7 @@ type subscriptionEventsResponse struct {
 // GET /v1/{practiceid}/appointments/changed/subscription/events.
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-8
 func (h *HTTPClient) ListSubscriptionEvents(feedType string) ([]*SubscriptionEvent, error) {
-	out := &subscriptionEventsResponse{}
+	out := &listSubscriptionEventsResponse{}
 
 	_, err := h.Get(fmt.Sprintf("/%s/changed/subscription/events", feedType), nil, &out)
 	if err != nil {

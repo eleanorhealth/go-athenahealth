@@ -1,0 +1,37 @@
+{
+    "subscriptions":[
+        {
+            "eventname":"ScheduleAppointment"
+        },
+        {
+            "eventname":"CheckIn"
+        },
+        {
+            "eventname":"CheckOut"
+        },
+        {
+            "eventname":"UpdateAppointment"
+        },
+        {
+            "eventname":"CancelAppointment"
+        },
+        {
+            "eventname":"UpdateReminderCall"
+        },
+        {
+            "eventname":"UpdateSuggestedOverbooking"
+        },
+        {
+            "eventname":"FreezeAppointment"
+        },
+        {
+            "eventname":"UnfreezeAppointment"
+        },
+        {
+            "eventname":"DeleteAppointment"
+        },
+        {
+            "eventname":"AddAppointmentSlot"
+        }
+    ]
+}

@@ -20,9 +20,9 @@ func TestHTTPClient_GetAppointment(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	patient, err := athenaClient.GetAppointment("1")
+	appointment, err := athenaClient.GetAppointment("1")
 
-	assert.NotNil(patient)
+	assert.NotNil(appointment)
 	assert.Nil(err)
 }
 
