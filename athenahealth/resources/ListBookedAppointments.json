@@ -1,0 +1,51 @@
+{
+    "totalcount":2,
+    "appointments":[
+        {
+            "date":"06\/01\/2020",
+            "appointmentid":"1115851",
+            "starttime":"08:00",
+            "departmentid":"1",
+            "appointmentstatus":"f",
+            "scheduledby":"API-15378",
+            "patientid":"7895",
+            "duration":15,
+            "templateappointmenttypeid":"82",
+            "hl7providerid":69,
+            "lastmodifiedby":"API-15378",
+            "copay":0,
+            "appointmenttypeid":"82",
+            "lastmodified":"06\/02\/2020 17:30:37",
+            "appointmenttype":"Any 15",
+            "providerid":"69",
+            "chargeentrynotrequired":false,
+            "scheduleddatetime":"06\/02\/2020 17:30:37",
+            "coordinatorenterprise":false,
+            "templateappointmentid":"1115851",
+            "patientappointmenttypename":"Any 15"
+        },
+        {
+            "date":"06\/02\/2020",
+            "appointmentid":"1110189",
+            "starttime":"09:00",
+            "departmentid":"1",
+            "appointmentstatus":"f",
+            "scheduledby":"API-12301",
+            "patientid":"7968",
+            "duration":30,
+            "templateappointmenttypeid":"4",
+            "hl7providerid":528,
+            "lastmodifiedby":"API-12301",
+            "copay":0,
+            "appointmenttypeid":"4",
+            "lastmodified":"06\/02\/2020 01:01:43",
+            "appointmenttype":"PHYSICAL EXAM",
+            "providerid":"528",
+            "chargeentrynotrequired":false,
+            "scheduleddatetime":"06\/02\/2020 01:01:43",
+            "coordinatorenterprise":false,
+            "templateappointmentid":"1110189",
+            "patientappointmenttypename":"Physical Exam Visit"
+        }
+    ]
+}

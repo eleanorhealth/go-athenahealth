@@ -1,0 +1,32 @@
+{
+    "status":"ACTIVE",
+    "subscriptions":[
+        {
+            "eventname":"ScheduleAppointment"
+        },
+        {
+            "eventname":"CheckIn"
+        },
+        {
+            "eventname":"CheckOut"
+        },
+        {
+            "eventname":"UpdateAppointment"
+        },
+        {
+            "eventname":"CancelAppointment"
+        },
+        {
+            "eventname":"FreezeAppointment"
+        },
+        {
+            "eventname":"UnfreezeAppointment"
+        },
+        {
+            "eventname":"DeleteAppointment"
+        },
+        {
+            "eventname":"AddAppointmentSlot"
+        }
+    ]
+}
