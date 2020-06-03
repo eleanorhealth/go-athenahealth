@@ -61,7 +61,6 @@ type BookedAppointmentsOptions struct {
 }
 
 type bookedAppointmentsResponse struct {
-	TotalCount   int                  `json:"totalcount"`
 	Appointments []*BookedAppointment `json:"appointments"`
 }
 
