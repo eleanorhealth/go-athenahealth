@@ -276,6 +276,90 @@ func (h *HTTPClient) CreateAppointmentNote(appointmentID string, opts *CreateApp
 	return nil
 }
 
+type AppointmentNote struct {
+	Created           string `json:"created"`
+	CreatedBy         string `json:"createdby"`
+	DisplayOnSchedule bool   `json:"displayonschedule"`
+	NoteID            string `json:"noteid"`
+	NoteText          string `json:"notetext"`
+}
+
+type ListAppointmentNotesOpts struct {
+	AppointmentID string
+	ShowDeleted   bool
+}
+
+type listAppointmentNotesResponse struct {
+	Notes []*AppointmentNote `json:"notes"`
+}
+
+// ListAppointmentNotes - Notes for this appointment.
+// GET /v1/{practiceid}/appointments/{appointmentid}/notes
+// https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-1
+func (h *HTTPClient) ListAppointmentNotes(appointmentID string, opts *ListAppointmentNotesOpts) ([]*AppointmentNote, error) {
+	out := &listAppointmentNotesResponse{}
+
+	q := url.Values{}
+
+	if opts != nil {
+		if len(opts.AppointmentID) > 0 {
+			q.Add("appointmentid", opts.AppointmentID)
+		}
+
+		if opts.ShowDeleted {
+			q.Add("showdeleted", strconv.FormatBool(opts.ShowDeleted))
+		}
+	}
+
+	_, err := h.Get(fmt.Sprintf("/appointments/%s/notes", appointmentID), q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Notes, nil
+}
+
+type UpdateAppointmentNoteOpts struct {
+	AppointmentID     string
+	DisplayOnSchedule bool
+	NoteID            string
+	NoteText          string
+}
+
+// UpdateAppointmentNote - Notes for this appointment.
+// PUT /v1/{practiceid}/appointments/{appointmentid}/notes/{noteid}
+// https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-3
+func (h *HTTPClient) UpdateAppointmentNote(appointmentID, noteID string, opts *UpdateAppointmentNoteOpts) error {
+	var form url.Values
+
+	if opts != nil {
+		form = url.Values{}
+
+		if len(opts.AppointmentID) > 0 {
+			form.Add("appointmentid", opts.AppointmentID)
+		}
+
+		if opts.DisplayOnSchedule {
+			form.Add("displayonschedule", strconv.FormatBool(opts.DisplayOnSchedule))
+		}
+
+		if len(opts.NoteID) > 0 {
+			form.Add("noteid", opts.NoteID)
+		}
+
+		if len(opts.NoteText) > 0 {
+			form.Add("notetext", opts.NoteText)
+		}
+	}
+
+	_, err := h.PutForm(fmt.Sprintf("/appointments/%s/notes/%s", appointmentID, noteID), form, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type DeleteAppointmentNoteOpts struct {
 	AppointmentID string
 	NoteID        string

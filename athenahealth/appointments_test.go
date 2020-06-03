@@ -124,6 +124,58 @@ func TestHTTPClient_CreateAppointmentNote(t *testing.T) {
 	assert.True(called)
 }
 
+func TestHTTPClient_ListAppointmentNotes(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal("1", r.URL.Query().Get("appointmentid"))
+
+		b, _ := ioutil.ReadFile("./resources/ListAppointmentNotes.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &ListAppointmentNotesOpts{
+		AppointmentID: "1",
+	}
+
+	appointments, err := athenaClient.ListAppointmentNotes("1", opts)
+
+	assert.Len(appointments, 2)
+	assert.Nil(err)
+}
+
+func TestHTTPClient_UpdateAppointmentNote(t *testing.T) {
+	assert := assert.New(t)
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		reqBody, _ := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+
+		assert.Contains(string(reqBody), "notetext=test+note")
+		assert.Contains(string(reqBody), "noteid=2")
+
+		called = true
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &UpdateAppointmentNoteOpts{
+		AppointmentID: "1",
+		NoteID:        "2",
+		NoteText:      "test note",
+	}
+
+	err := athenaClient.UpdateAppointmentNote("1", "2", opts)
+
+	assert.Nil(err)
+	assert.True(called)
+}
+
 func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
 	assert := assert.New(t)
 
