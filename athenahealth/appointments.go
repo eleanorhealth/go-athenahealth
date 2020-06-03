@@ -40,6 +40,38 @@ func (h *HTTPClient) GetAppointment(id string) (*Appointment, error) {
 	return out[0], nil
 }
 
+type AppointmentCustomField struct {
+	CaseSensitive  bool   `json:"casesensitive"`
+	CustomFieldID  int    `json:"customfieldid"`
+	DisallowUpdate bool   `json:"disallowupdate"`
+	Name           string `json:"name"`
+	Searchable     bool   `json:"searchable,omitempty"`
+	Select         bool   `json:"select"`
+	Type           string `json:"type"`
+	SelectList     []struct {
+		OptionValue string `json:"optionvalue"`
+		OptionID    int    `json:"optionid"`
+	} `json:"selectlist,omitempty"`
+}
+
+type listAppointmentCustomFieldsResponse struct {
+	AppointmentCustomFields []*AppointmentCustomField `json:"appointmentcustomfields"`
+}
+
+// ListAppointmentCustomFields - List of appointment custom fields (practice specific).
+// GET /v1/{practiceid}/appointments/customfields
+// https://developer.athenahealth.com/docs/read/appointments/Appointment_Custom_Fields#section-0
+func (h *HTTPClient) ListAppointmentCustomFields() ([]*AppointmentCustomField, error) {
+	out := &listAppointmentCustomFieldsResponse{}
+
+	_, err := h.Get("/appointments/customfields", nil, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.AppointmentCustomFields, nil
+}
+
 type BookedAppointment struct {
 	AppointmentID              string `json:"appointmentid"`
 	AppointmentStatus          string `json:"appointmentstatus"`
@@ -206,4 +238,71 @@ func (h *HTTPClient) ListChangedAppointments(opts *ListChangedAppointmentsOption
 	}
 
 	return out.Appointments, nil
+}
+
+type CreateAppointmentNoteOpts struct {
+	AppointmentID     string
+	DisplayOnSchedule bool
+	NoteText          string
+}
+
+// CreateAppointmentNote - Notes for this appointment.
+// POST /v1/{practiceid}/appointments/{appointmentid}/notes
+// https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-0
+func (h *HTTPClient) CreateAppointmentNote(appointmentID string, opts *CreateAppointmentNoteOpts) error {
+	var form url.Values
+
+	if opts != nil {
+		form = url.Values{}
+
+		if len(opts.AppointmentID) > 0 {
+			form.Add("appointmentid", opts.AppointmentID)
+		}
+
+		if opts.DisplayOnSchedule {
+			form.Add("displayonschedule", strconv.FormatBool(opts.DisplayOnSchedule))
+		}
+
+		if len(opts.NoteText) > 0 {
+			form.Add("notetext", opts.NoteText)
+		}
+	}
+
+	_, err := h.PostForm(fmt.Sprintf("/appointments/%s/notes", appointmentID), form, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type DeleteAppointmentNoteOpts struct {
+	AppointmentID string
+	NoteID        string
+}
+
+// DeleteAppointmentNote - Notes for this appointment.
+// DELETE /v1/{practiceid}/appointments/{appointmentid}/notes/{noteid}
+// https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-0
+func (h *HTTPClient) DeleteAppointmentNote(appointmentID, noteID string, opts *DeleteAppointmentNoteOpts) error {
+	var form url.Values
+
+	if opts != nil {
+		form = url.Values{}
+
+		if len(opts.AppointmentID) > 0 {
+			form.Add("appointmentid", opts.AppointmentID)
+		}
+
+		if len(opts.NoteID) > 0 {
+			form.Add("noteid", opts.NoteID)
+		}
+	}
+
+	_, err := h.DeleteForm(fmt.Sprintf("/appointments/%s/notes/%s", appointmentID, noteID), form, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

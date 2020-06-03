@@ -26,6 +26,23 @@ func TestHTTPClient_GetAppointment(t *testing.T) {
 	assert.Nil(err)
 }
 
+func TestHTTPClient_ListAppointmentCustomFields(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		b, _ := ioutil.ReadFile("./resources/ListAppointmentCustomFields.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	customFields, err := athenaClient.ListAppointmentCustomFields()
+
+	assert.Len(customFields, 2)
+	assert.Nil(err)
+}
+
 func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 	assert := assert.New(t)
 
@@ -78,4 +95,58 @@ func TestHTTPClient_ListChangedAppointments(t *testing.T) {
 
 	assert.Len(appointments, 2)
 	assert.Nil(err)
+}
+
+func TestHTTPClient_CreateAppointmentNote(t *testing.T) {
+	assert := assert.New(t)
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		reqBody, _ := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+
+		assert.Contains(string(reqBody), "notetext=test+note")
+
+		called = true
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &CreateAppointmentNoteOpts{
+		AppointmentID: "1",
+		NoteText:      "test note",
+	}
+
+	err := athenaClient.CreateAppointmentNote("1", opts)
+
+	assert.Nil(err)
+	assert.True(called)
+}
+
+func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
+	assert := assert.New(t)
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		reqBody, _ := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+
+		assert.Contains(string(reqBody), "noteid=1")
+
+		called = true
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &DeleteAppointmentNoteOpts{
+		AppointmentID: "1",
+		NoteID:        "1",
+	}
+
+	err := athenaClient.DeleteAppointmentNote("1", "1", opts)
+
+	assert.Nil(err)
+	assert.True(called)
 }
