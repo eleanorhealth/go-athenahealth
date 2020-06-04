@@ -46,14 +46,14 @@ func (h *HTTPClient) ListSubscriptionEvents(feedType string) ([]*SubscriptionEve
 	return out.Subscriptions, nil
 }
 
-type SubscribeOpts struct {
+type SubscribeOptions struct {
 	EventName string
 }
 
 // Subscribe - Handles subscriptions for changed appointment slots.
 // POST /v1/{practiceid}/appointments/changed/subscription
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-6
-func (h *HTTPClient) Subscribe(feedType string, opts *SubscribeOpts) error {
+func (h *HTTPClient) Subscribe(feedType string, opts *SubscribeOptions) error {
 	var form url.Values
 
 	if opts != nil {
@@ -69,14 +69,14 @@ func (h *HTTPClient) Subscribe(feedType string, opts *SubscribeOpts) error {
 	return nil
 }
 
-type UnsubscribeOpts struct {
+type UnsubscribeOptions struct {
 	EventName string
 }
 
 // Unsubscribe - Handles subscriptions for changed appointment slots.
 // POST /v1/{practiceid}/appointments/changed/subscription
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-6
-func (h *HTTPClient) Unsubscribe(feedType string, opts *UnsubscribeOpts) error {
+func (h *HTTPClient) Unsubscribe(feedType string, opts *UnsubscribeOptions) error {
 	var form url.Values
 
 	if opts != nil {

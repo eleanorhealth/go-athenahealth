@@ -240,7 +240,7 @@ func (h *HTTPClient) ListChangedAppointments(opts *ListChangedAppointmentsOption
 	return out.Appointments, nil
 }
 
-type CreateAppointmentNoteOpts struct {
+type CreateAppointmentNoteOptions struct {
 	AppointmentID     string
 	DisplayOnSchedule bool
 	NoteText          string
@@ -249,7 +249,7 @@ type CreateAppointmentNoteOpts struct {
 // CreateAppointmentNote - Notes for this appointment.
 // POST /v1/{practiceid}/appointments/{appointmentid}/notes
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-0
-func (h *HTTPClient) CreateAppointmentNote(appointmentID string, opts *CreateAppointmentNoteOpts) error {
+func (h *HTTPClient) CreateAppointmentNote(appointmentID string, opts *CreateAppointmentNoteOptions) error {
 	var form url.Values
 
 	if opts != nil {
@@ -284,7 +284,7 @@ type AppointmentNote struct {
 	NoteText          string `json:"notetext"`
 }
 
-type ListAppointmentNotesOpts struct {
+type ListAppointmentNotesOptions struct {
 	AppointmentID string
 	ShowDeleted   bool
 }
@@ -296,7 +296,7 @@ type listAppointmentNotesResponse struct {
 // ListAppointmentNotes - Notes for this appointment.
 // GET /v1/{practiceid}/appointments/{appointmentid}/notes
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-1
-func (h *HTTPClient) ListAppointmentNotes(appointmentID string, opts *ListAppointmentNotesOpts) ([]*AppointmentNote, error) {
+func (h *HTTPClient) ListAppointmentNotes(appointmentID string, opts *ListAppointmentNotesOptions) ([]*AppointmentNote, error) {
 	out := &listAppointmentNotesResponse{}
 
 	q := url.Values{}
@@ -319,7 +319,7 @@ func (h *HTTPClient) ListAppointmentNotes(appointmentID string, opts *ListAppoin
 	return out.Notes, nil
 }
 
-type UpdateAppointmentNoteOpts struct {
+type UpdateAppointmentNoteOptions struct {
 	AppointmentID     string
 	DisplayOnSchedule bool
 	NoteID            string
@@ -329,7 +329,7 @@ type UpdateAppointmentNoteOpts struct {
 // UpdateAppointmentNote - Notes for this appointment.
 // PUT /v1/{practiceid}/appointments/{appointmentid}/notes/{noteid}
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-3
-func (h *HTTPClient) UpdateAppointmentNote(appointmentID, noteID string, opts *UpdateAppointmentNoteOpts) error {
+func (h *HTTPClient) UpdateAppointmentNote(appointmentID, noteID string, opts *UpdateAppointmentNoteOptions) error {
 	var form url.Values
 
 	if opts != nil {
@@ -360,7 +360,7 @@ func (h *HTTPClient) UpdateAppointmentNote(appointmentID, noteID string, opts *U
 	return nil
 }
 
-type DeleteAppointmentNoteOpts struct {
+type DeleteAppointmentNoteOptions struct {
 	AppointmentID string
 	NoteID        string
 }
@@ -368,7 +368,7 @@ type DeleteAppointmentNoteOpts struct {
 // DeleteAppointmentNote - Notes for this appointment.
 // DELETE /v1/{practiceid}/appointments/{appointmentid}/notes/{noteid}
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-0
-func (h *HTTPClient) DeleteAppointmentNote(appointmentID, noteID string, opts *DeleteAppointmentNoteOpts) error {
+func (h *HTTPClient) DeleteAppointmentNote(appointmentID, noteID string, opts *DeleteAppointmentNoteOptions) error {
 	var form url.Values
 
 	if opts != nil {

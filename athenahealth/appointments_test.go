@@ -113,7 +113,7 @@ func TestHTTPClient_CreateAppointmentNote(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	opts := &CreateAppointmentNoteOpts{
+	opts := &CreateAppointmentNoteOptions{
 		AppointmentID: "1",
 		NoteText:      "test note",
 	}
@@ -137,7 +137,7 @@ func TestHTTPClient_ListAppointmentNotes(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	opts := &ListAppointmentNotesOpts{
+	opts := &ListAppointmentNotesOptions{
 		AppointmentID: "1",
 	}
 
@@ -164,7 +164,7 @@ func TestHTTPClient_UpdateAppointmentNote(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	opts := &UpdateAppointmentNoteOpts{
+	opts := &UpdateAppointmentNoteOptions{
 		AppointmentID: "1",
 		NoteID:        "2",
 		NoteText:      "test note",
@@ -192,7 +192,7 @@ func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	opts := &DeleteAppointmentNoteOpts{
+	opts := &DeleteAppointmentNoteOptions{
 		AppointmentID: "1",
 		NoteID:        "1",
 	}
