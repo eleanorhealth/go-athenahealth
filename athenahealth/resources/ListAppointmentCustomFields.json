@@ -1,0 +1,35 @@
+{
+    "appointmentcustomfields":[
+        {
+            "customfieldid":641,
+            "disallowupdate":false,
+            "select":true,
+            "casesensitive":false,
+            "name":"ACW Patient Note",
+            "type":"TEXT"
+        },
+        {
+            "selectlist":[
+                {
+                    "optionvalue":"3",
+                    "optionid":88
+                },
+                {
+                    "optionvalue":"2",
+                    "optionid":87
+                },
+                {
+                    "optionvalue":"1",
+                    "optionid":86
+                }
+            ],
+            "customfieldid":362,
+            "disallowupdate":false,
+            "select":true,
+            "casesensitive":false,
+            "name":"PATIENT CATEGORY- APPOINTMENT",
+            "type":"TEXT"
+        }
+    ],
+    "totalcount":2
+}

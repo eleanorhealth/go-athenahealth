@@ -45,41 +45,49 @@ func TestHTTPClient_ListSubscriptionEvents(t *testing.T) {
 func TestHTTPClient_Subscribe(t *testing.T) {
 	assert := assert.New(t)
 
+	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 
-		assert.Contains(string(reqBody), "UpdateAppointment")
+		assert.Contains(string(reqBody), "eventname=UpdateAppointment")
 
-		b, _ := ioutil.ReadFile("./resources/Subscribe.json")
-		w.Write(b)
+		called = true
 	}
 
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	err := athenaClient.Subscribe("appointments", "UpdateAppointment")
+	opts := &SubscribeOpts{
+		EventName: "UpdateAppointment",
+	}
+	err := athenaClient.Subscribe("appointments", opts)
 
 	assert.Nil(err)
+	assert.True(called)
 }
 
 func TestHTTPClient_Unsubscribe(t *testing.T) {
 	assert := assert.New(t)
 
+	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 
-		assert.Contains(string(reqBody), "UpdateAppointment")
+		assert.Contains(string(reqBody), "eventname=UpdateAppointment")
 
-		b, _ := ioutil.ReadFile("./resources/Unsubscribe.json")
-		w.Write(b)
+		called = true
 	}
 
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	err := athenaClient.Unsubscribe("appointments", "UpdateAppointment")
+	opts := &UnsubscribeOpts{
+		EventName: "UpdateAppointment",
+	}
+	err := athenaClient.Unsubscribe("appointments", opts)
 
 	assert.Nil(err)
+	assert.True(called)
 }
