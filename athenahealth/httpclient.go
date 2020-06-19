@@ -12,6 +12,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
 )
@@ -40,8 +41,9 @@ type HTTPClient struct {
 
 	tokenProvider TokenProvider
 	tokenCacher   TokenCacher
+	rateLimiter   RateLimiter
 
-	tokenLock sync.Mutex
+	requestLock sync.Mutex
 }
 
 var _ Client = &HTTPClient{}
@@ -72,6 +74,7 @@ func NewHTTPClient(httpClient *http.Client, practiceID, key, secret string) *HTT
 
 		tokenProvider: tokenprovider.NewDefault(httpClient, key, secret, preview),
 		tokenCacher:   tokencacher.NewDefault(),
+		rateLimiter:   ratelimiter.NewDefault(),
 	}
 
 	c.setBaseURL()
@@ -92,26 +95,41 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 	var err error
 	var expiresAt time.Time
 
-	h.tokenLock.Lock()
+	h.requestLock.Lock()
+
+	retryAfter, err := h.rateLimiter.Allowed(h.preview)
+	if err != nil {
+		h.requestLock.Unlock()
+
+		if errors.Is(err, ratelimiter.ErrRateExceeded) {
+			time.Sleep(retryAfter)
+			return h.request(method, path, body, headers, out)
+		}
+
+		return nil, err
+	}
 
 	token, err = h.tokenCacher.Get()
 	if err != nil {
 		if !errors.Is(err, tokencacher.ErrTokenNotExist) && !errors.Is(err, tokencacher.ErrTokenExpired) {
+			h.requestLock.Unlock()
 			return nil, err
 		}
 
 		token, expiresAt, err = h.tokenProvider.Provide()
 		if err != nil {
+			h.requestLock.Unlock()
 			return nil, err
 		}
 
 		err = h.tokenCacher.Set(token, expiresAt)
 		if err != nil {
+			h.requestLock.Unlock()
 			return nil, err
 		}
 	}
 
-	h.tokenLock.Unlock()
+	h.requestLock.Unlock()
 
 	if !strings.HasPrefix(path, "/") {
 		path = fmt.Sprintf("/%s", path)
@@ -178,6 +196,12 @@ func (h *HTTPClient) WithTokenProvider(provider TokenProvider) *HTTPClient {
 
 func (h *HTTPClient) WithTokenCacher(cacher TokenCacher) *HTTPClient {
 	h.tokenCacher = cacher
+
+	return h
+}
+
+func (h *HTTPClient) WithRateLimiter(rateLimiter RateLimiter) *HTTPClient {
+	h.rateLimiter = rateLimiter
 
 	return h
 }
