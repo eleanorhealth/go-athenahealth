@@ -1,0 +1,29 @@
+[
+    {
+        "medicationhistoryconsent": false,
+        "timezoneoffset": -5,
+        "ishospitaldepartment": false,
+        "providergroupid": "1",
+        "state": "NJ",
+        "portalurl": "https:\/\/google.com\/",
+        "city": "Boston",
+        "placeofservicefacility": false,
+        "servicedepartment": true,
+        "providergroupname": "Foo Bar Health",
+        "doesnotobservedst": false,
+        "departmentid": "1",
+        "address": "123 Main St",
+        "placeofservicetypeid": "11",
+        "clinicals": "DOCUMENTSONLY",
+        "timezone": -4,
+        "patientdepartmentname": "Foo Bar Health Boston",
+        "chartsharinggroupid": "1",
+        "name": "Foo_Bar_Health_Boston",
+        "placeofservicetypename": "OFFICE",
+        "phone": "(555) 555-5555",
+        "address2": "SUITE 1",
+        "zip": "02210",
+        "timezonename": "US\/Eastern",
+        "communicatorbrandid": "1"
+    }
+]
