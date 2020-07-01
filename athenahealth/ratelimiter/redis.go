@@ -11,8 +11,8 @@ import (
 const redisKeyPreview = "athena_rate_limit:preview"
 const redisKeyProd = "athena_rate_limit:prod"
 
-const defaultRatePreivew = 5
-const defaultRateProd = 100
+const defaultRatePerSecPreview = 5
+const defaultRatePerSecProd = 100
 
 type Redis struct {
 	client  *redis.Client
@@ -28,11 +28,11 @@ func NewRedis(client *redis.Client, ratePreview, rateProd int) *Redis {
 	}
 
 	if ratePreview <= 0 {
-		ratePreview = defaultRatePreivew
+		ratePreview = defaultRatePerSecPreview
 	}
 
 	if rateProd <= 0 {
-		rateProd = defaultRateProd
+		rateProd = defaultRatePerSecProd
 	}
 
 	r := &Redis{
