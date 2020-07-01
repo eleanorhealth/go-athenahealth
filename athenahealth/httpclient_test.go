@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,6 +23,9 @@ const testToken = "token"
 func testClient(h http.HandlerFunc) (*HTTPClient, *httptest.Server) {
 	if h == nil {
 		h = func(w http.ResponseWriter, r *http.Request) {
+			b, _ := json.Marshal(nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.Write(b)
 		}
 	}
 
@@ -51,6 +56,18 @@ func (t *testTokenCacher) Get() (string, error) {
 
 func (t *testTokenCacher) Set(string, time.Time) error {
 	return nil
+}
+
+type testRateLimiter struct {
+	AllowedFunc func(preview bool) (time.Duration, error)
+}
+
+func (t *testRateLimiter) Allowed(preview bool) (time.Duration, error) {
+	if t.AllowedFunc != nil {
+		return t.AllowedFunc(preview)
+	}
+
+	return 0, nil
 }
 
 func TestNewHTTPClient(t *testing.T) {
@@ -144,6 +161,37 @@ func TestHTTPClient_request_error(t *testing.T) {
 	assert.IsType(&APIError{}, err)
 }
 
+func TestHTTPClient_rate_limit(t *testing.T) {
+	assert := assert.New(t)
+
+	rateLimiter := &testRateLimiter{}
+
+	rateLimited := false
+	called := false
+	rateLimiter.AllowedFunc = func(preview bool) (time.Duration, error) {
+		if rateLimited {
+			called = true
+			return 0, nil
+		}
+
+		rateLimited = true
+
+		return 100 * time.Millisecond, ratelimiter.ErrRateExceeded
+	}
+
+	athenaClient, ts := testClient(nil)
+	athenaClient.WithRateLimiter(rateLimiter)
+
+	defer ts.Close()
+
+	var out map[string]string
+	res, err := athenaClient.request("GET", "/", nil, nil, &out)
+
+	assert.NotNil(res)
+	assert.Nil(err)
+	assert.True(called)
+}
+
 func TestHTTPClient_WithPreview(t *testing.T) {
 	assert := assert.New(t)
 
@@ -174,6 +222,17 @@ func TestHTTPClient_WithTokenCacher(t *testing.T) {
 	athenaClient.WithTokenCacher(tokenCacher)
 
 	assert.Equal(tokenCacher, athenaClient.tokenCacher)
+}
+
+func TestHTTPClient_WithRateLimiter(t *testing.T) {
+	assert := assert.New(t)
+
+	athenaClient := NewHTTPClient(&http.Client{}, "", "", "")
+
+	rateLimiter := &testRateLimiter{}
+	athenaClient.WithRateLimiter(rateLimiter)
+
+	assert.Equal(rateLimiter, athenaClient.rateLimiter)
 }
 
 func TestHTTPClient_Get(t *testing.T) {

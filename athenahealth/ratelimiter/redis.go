@@ -8,22 +8,39 @@ import (
 	"github.com/go-redis/redis_rate/v9"
 )
 
-const redisPreviewKey = "athena_rate_limit:preview"
-const redisProdKey = "athena_rate_limit:prod"
+const redisKeyPreview = "athena_rate_limit:preview"
+const redisKeyProd = "athena_rate_limit:prod"
+
+const defaultRatePreivew = 5
+const defaultRateProd = 100
 
 type Redis struct {
 	client  *redis.Client
 	limiter *redis_rate.Limiter
+
+	ratePreivew int
+	rateProd    int
 }
 
-func NewRedis(client *redis.Client) *Redis {
+func NewRedis(client *redis.Client, ratePreview, rateProd int) *Redis {
 	if client == nil {
 		panic("client is nil")
+	}
+
+	if ratePreview <= 0 {
+		ratePreview = defaultRatePreivew
+	}
+
+	if rateProd <= 0 {
+		rateProd = defaultRateProd
 	}
 
 	r := &Redis{
 		client:  client,
 		limiter: redis_rate.NewLimiter(client),
+
+		ratePreivew: ratePreview,
+		rateProd:    rateProd,
 	}
 
 	return r
@@ -34,11 +51,11 @@ func (r *Redis) Allowed(preview bool) (time.Duration, error) {
 	var limit *redis_rate.Limit
 
 	if preview {
-		key = redisPreviewKey
-		limit = redis_rate.PerSecond(5)
+		key = redisKeyPreview
+		limit = redis_rate.PerSecond(r.ratePreivew)
 	} else {
-		key = redisProdKey
-		limit = redis_rate.PerSecond(100)
+		key = redisKeyProd
+		limit = redis_rate.PerSecond(r.rateProd)
 	}
 
 	res, err := r.limiter.Allow(context.Background(), key, limit)

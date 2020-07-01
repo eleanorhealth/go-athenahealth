@@ -38,5 +38,5 @@ type TokenCacher interface {
 }
 
 type RateLimiter interface {
-	Allowed(preview bool) (time.Duration, error)
+	Allowed(preview bool) (retryAfter time.Duration, err error)
 }
