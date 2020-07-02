@@ -24,3 +24,30 @@ func TestHTTPClient_GetDepartment(t *testing.T) {
 	assert.NotNil(department)
 	assert.Nil(err)
 }
+
+func TestHTTPClient_ListDepartments(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal("1", r.URL.Query().Get("hospitalonly"))
+		assert.Equal("1", r.URL.Query().Get("providerlist"))
+		assert.Equal("1", r.URL.Query().Get("showalldepartments"))
+
+		b, _ := ioutil.ReadFile("./resources/ListDepartments.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &ListDepartmentsOptions{
+		HospitalOnly:       true,
+		ProviderList:       true,
+		ShowAllDepartments: true,
+	}
+
+	departments, err := athenaClient.ListDepartments(opts)
+
+	assert.Len(departments, 1)
+	assert.Nil(err)
+}

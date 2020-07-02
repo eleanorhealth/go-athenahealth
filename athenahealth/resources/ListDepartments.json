@@ -1,0 +1,33 @@
+{
+    "totalcount": 2,
+    "departments": [
+        {
+            "medicationhistoryconsent": false,
+            "timezoneoffset": -5,
+            "ishospitaldepartment": false,
+            "providergroupid": "1",
+            "state": "MA",
+            "portalurl": "https://www.eleanorhealth.com/",
+            "city": "BOSTON",
+            "placeofservicefacility": false,
+            "servicedepartment": true,
+            "providergroupname": "ELEANOR HEALTH",
+            "doesnotobservedst": false,
+            "departmentid": "1",
+            "address": "123 Main St",
+            "placeofservicetypeid": "11",
+            "clinicals": "DOCUMENTSONLY",
+            "timezone": -4,
+            "patientdepartmentname": "Eleanor Health",
+            "chartsharinggroupid": "1",
+            "name": "Eleanor_Health",
+            "placeofservicetypename": "OFFICE",
+            "phone": "(555) 555-5555",
+            "address2": "SUITE 100",
+            "clinicalproviderfax": "(617) 555-5555",
+            "zip": "02210",
+            "timezonename": "US\/Eastern",
+            "communicatorbrandid": "1"
+        }
+    ]
+}
