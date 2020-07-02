@@ -1,32 +1,32 @@
 {
-    "status":"ACTIVE",
-    "subscriptions":[
+    "status": "ACTIVE",
+    "subscriptions": [
         {
-            "eventname":"ScheduleAppointment"
+            "eventname": "ScheduleAppointment"
         },
         {
-            "eventname":"CheckIn"
+            "eventname": "CheckIn"
         },
         {
-            "eventname":"CheckOut"
+            "eventname": "CheckOut"
         },
         {
-            "eventname":"UpdateAppointment"
+            "eventname": "UpdateAppointment"
         },
         {
-            "eventname":"CancelAppointment"
+            "eventname": "CancelAppointment"
         },
         {
-            "eventname":"FreezeAppointment"
+            "eventname": "FreezeAppointment"
         },
         {
-            "eventname":"UnfreezeAppointment"
+            "eventname": "UnfreezeAppointment"
         },
         {
-            "eventname":"DeleteAppointment"
+            "eventname": "DeleteAppointment"
         },
         {
-            "eventname":"AddAppointmentSlot"
+            "eventname": "AddAppointmentSlot"
         }
     ]
 }

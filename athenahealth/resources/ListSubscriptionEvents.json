@@ -1,37 +1,37 @@
 {
-    "subscriptions":[
+    "subscriptions": [
         {
-            "eventname":"ScheduleAppointment"
+            "eventname": "ScheduleAppointment"
         },
         {
-            "eventname":"CheckIn"
+            "eventname": "CheckIn"
         },
         {
-            "eventname":"CheckOut"
+            "eventname": "CheckOut"
         },
         {
-            "eventname":"UpdateAppointment"
+            "eventname": "UpdateAppointment"
         },
         {
-            "eventname":"CancelAppointment"
+            "eventname": "CancelAppointment"
         },
         {
-            "eventname":"UpdateReminderCall"
+            "eventname": "UpdateReminderCall"
         },
         {
-            "eventname":"UpdateSuggestedOverbooking"
+            "eventname": "UpdateSuggestedOverbooking"
         },
         {
-            "eventname":"FreezeAppointment"
+            "eventname": "FreezeAppointment"
         },
         {
-            "eventname":"UnfreezeAppointment"
+            "eventname": "UnfreezeAppointment"
         },
         {
-            "eventname":"DeleteAppointment"
+            "eventname": "DeleteAppointment"
         },
         {
-            "eventname":"AddAppointmentSlot"
+            "eventname": "AddAppointmentSlot"
         }
     ]
 }

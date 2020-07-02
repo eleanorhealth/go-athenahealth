@@ -3,6 +3,7 @@ package athenahealth
 import (
 	"errors"
 	"fmt"
+	"net/url"
 )
 
 type Department struct {
@@ -49,4 +50,44 @@ func (h *HTTPClient) GetDepartment(id string) (*Department, error) {
 	}
 
 	return out[0], nil
+}
+
+type ListDepartmentsOptions struct {
+	HospitalOnly       bool
+	ProviderList       bool
+	ShowAllDepartments bool
+}
+
+type listDepartmentsResponse struct {
+	Departments []*Department `json:"departments"`
+}
+
+// ListDepartments - List of all departments available for this practice
+// GET /v1/{practiceid}/departments
+// https://developer.athenahealth.com/docs/read/administrative/Departments#section-0
+func (h *HTTPClient) ListDepartments(opts *ListDepartmentsOptions) ([]*Department, error) {
+	out := &listDepartmentsResponse{}
+
+	q := url.Values{}
+
+	if opts != nil {
+		if opts.HospitalOnly {
+			q.Add("hospitalonly", "1")
+		}
+
+		if opts.ProviderList {
+			q.Add("providerlist", "1")
+		}
+
+		if opts.ProviderList {
+			q.Add("showalldepartments", "1")
+		}
+	}
+
+	_, err := h.Get("/departments", q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Departments, nil
 }
