@@ -102,16 +102,25 @@ type ListBookedAppointmentsOptions struct {
 	PatientID    string
 	ProviderID   string
 	StartDate    time.Time
+
+	Pagination *PaginationOptions
+}
+
+type ListBookedAppointmentsResult struct {
+	BookedAppointments []*BookedAppointment
+	Pagination         *PaginationResult
 }
 
 type listBookedAppointmentsResponse struct {
 	Appointments []*BookedAppointment `json:"appointments"`
+
+	PaginationResponse
 }
 
 // ListBookedAppointments - Booked appointment slots.
 // GET /v1/{practiceid}/appointments/booked
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-3
-func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions) ([]*BookedAppointment, error) {
+func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error) {
 	out := &listBookedAppointmentsResponse{}
 
 	q := url.Values{}
@@ -136,6 +145,16 @@ func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions)
 		if !opts.EndDate.IsZero() {
 			q.Add("enddate", opts.EndDate.Format("01/02/2006"))
 		}
+
+		if opts.Pagination != nil {
+			if opts.Pagination.Limit > 0 {
+				q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
+			}
+
+			if opts.Pagination.Offset > 0 {
+				q.Add("offset", strconv.Itoa(opts.Pagination.Offset))
+			}
+		}
 	}
 
 	_, err := h.Get("/appointments/booked", q, out)
@@ -143,7 +162,10 @@ func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions)
 		return nil, err
 	}
 
-	return out.Appointments, nil
+	return &ListBookedAppointmentsResult{
+		BookedAppointments: out.Appointments,
+		Pagination:         makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
 }
 
 type ChangedAppointment struct {

@@ -46,8 +46,11 @@ func TestHTTPClient_ListDepartments(t *testing.T) {
 		ShowAllDepartments: true,
 	}
 
-	departments, err := athenaClient.ListDepartments(opts)
+	res, err := athenaClient.ListDepartments(opts)
 
-	assert.Len(departments, 1)
+	assert.Len(res.Departments, 1)
+	assert.Equal(res.Pagination.NextOffset, 30)
+	assert.Equal(res.Pagination.PreviousOffset, 10)
+	assert.Equal(res.Pagination.TotalCount, 2)
 	assert.Nil(err)
 }

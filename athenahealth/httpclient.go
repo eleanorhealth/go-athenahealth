@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -58,6 +59,43 @@ type APIError struct {
 
 func (a *APIError) Error() string {
 	return fmt.Sprintf("athenahealth API error: %s", a.Err)
+}
+
+type PaginationOptions struct {
+	Limit  int
+	Offset int
+}
+
+type PaginationResult struct {
+	NextOffset     int
+	PreviousOffset int
+	TotalCount     int
+}
+
+type PaginationResponse struct {
+	Previous   string `json:"previous"`
+	Next       string `json:"next"`
+	TotalCount int    `json:"totalcount"`
+}
+
+func makePaginationResult(nextURL, previousURL string, totalCount int) *PaginationResult {
+	var nextOffset, previousOffset int
+
+	next, err := url.Parse(nextURL)
+	if err == nil {
+		nextOffset, _ = strconv.Atoi(next.Query().Get("offset"))
+	}
+
+	previous, err := url.Parse(previousURL)
+	if err == nil {
+		previousOffset, _ = strconv.Atoi(previous.Query().Get("offset"))
+	}
+
+	return &PaginationResult{
+		NextOffset:     nextOffset,
+		PreviousOffset: previousOffset,
+		TotalCount:     totalCount,
+	}
 }
 
 func NewHTTPClient(httpClient *http.Client, practiceID, key, secret string) *HTTPClient {

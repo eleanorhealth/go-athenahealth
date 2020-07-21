@@ -5,13 +5,13 @@ import "time"
 // Client describes a client for the athenahealth API.
 type Client interface {
 	GetDepartment(string) (*Department, error)
-	ListDepartments(*ListDepartmentsOptions) ([]*Department, error)
+	ListDepartments(*ListDepartmentsOptions) (*ListDepartmentsResult, error)
 
 	GetPatient(string) (*Patient, error)
 	ListPatients(*ListPatientsOptions) ([]*Patient, error)
 
 	GetAppointment(string) (*Appointment, error)
-	ListBookedAppointments(*ListBookedAppointmentsOptions) ([]*BookedAppointment, error)
+	ListBookedAppointments(*ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error)
 	ListChangedAppointments(*ListChangedAppointmentsOptions) ([]*ChangedAppointment, error)
 
 	ListAppointmentCustomFields() ([]*AppointmentCustomField, error)
