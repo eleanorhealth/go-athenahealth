@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"strconv"
 )
 
 type Department struct {
@@ -56,16 +57,26 @@ type ListDepartmentsOptions struct {
 	HospitalOnly       bool
 	ProviderList       bool
 	ShowAllDepartments bool
+
+	Pagination *PaginationOptions
+}
+
+type ListDepartmentsResult struct {
+	Departments []*Department
+
+	Pagination *PaginationResult
 }
 
 type listDepartmentsResponse struct {
 	Departments []*Department `json:"departments"`
+
+	PaginationResponse
 }
 
 // ListDepartments - List of all departments available for this practice
 // GET /v1/{practiceid}/departments
 // https://developer.athenahealth.com/docs/read/administrative/Departments#section-0
-func (h *HTTPClient) ListDepartments(opts *ListDepartmentsOptions) ([]*Department, error) {
+func (h *HTTPClient) ListDepartments(opts *ListDepartmentsOptions) (*ListDepartmentsResult, error) {
 	out := &listDepartmentsResponse{}
 
 	q := url.Values{}
@@ -82,6 +93,16 @@ func (h *HTTPClient) ListDepartments(opts *ListDepartmentsOptions) ([]*Departmen
 		if opts.ProviderList {
 			q.Add("showalldepartments", "1")
 		}
+
+		if opts.Pagination != nil {
+			if opts.Pagination.Limit > 0 {
+				q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
+			}
+
+			if opts.Pagination.Offset > 0 {
+				q.Add("offset", strconv.Itoa(opts.Pagination.Offset))
+			}
+		}
 	}
 
 	_, err := h.Get("/departments", q, out)
@@ -89,5 +110,8 @@ func (h *HTTPClient) ListDepartments(opts *ListDepartmentsOptions) ([]*Departmen
 		return nil, err
 	}
 
-	return out.Departments, nil
+	return &ListDepartmentsResult{
+		Departments: out.Departments,
+		Pagination:  makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
 }

@@ -413,3 +413,17 @@ func TestHTTPClient_DeleteForm(t *testing.T) {
 	assert.Nil(err)
 	assert.True(called)
 }
+
+func Test_makePaginationResult(t *testing.T) {
+	assert := assert.New(t)
+
+	nextURL := "/booked?DEPARTMENTID=1&ENDDATE=12%2F31%2F2020&STARTDATE=01%2F01%2F2020&limit=10&offset=30"
+	previousURL := "/booked?DEPARTMENTID=1&ENDDATE=12%2F31%2F2020&STARTDATE=01%2F01%2F2020&limit=10&offset=10"
+	totalCount := 50
+
+	p := makePaginationResult(nextURL, previousURL, totalCount)
+
+	assert.Equal(30, p.NextOffset)
+	assert.Equal(10, p.PreviousOffset)
+	assert.Equal(totalCount, p.TotalCount)
+}

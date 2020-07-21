@@ -64,9 +64,12 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 		EndDate:    time.Date(2020, 6, 3, 0, 0, 0, 0, time.UTC),
 	}
 
-	appointments, err := athenaClient.ListBookedAppointments(opts)
+	res, err := athenaClient.ListBookedAppointments(opts)
 
-	assert.Len(appointments, 2)
+	assert.Len(res.BookedAppointments, 2)
+	assert.Equal(res.Pagination.NextOffset, 30)
+	assert.Equal(res.Pagination.PreviousOffset, 10)
+	assert.Equal(res.Pagination.TotalCount, 2)
 	assert.Nil(err)
 }
 
