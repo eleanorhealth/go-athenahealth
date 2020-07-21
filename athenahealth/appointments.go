@@ -84,7 +84,7 @@ type BookedAppointment struct {
 	DepartmentID               string `json:"departmentid"`
 	Duration                   int    `json:"duration"`
 	HL7ProviderID              int    `json:"hl7providerid"`
-	Lastmodified               string `json:"lastmodified"`
+	LastModified               string `json:"lastmodified"`
 	LastModifiedBy             string `json:"lastmodifiedby"`
 	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
 	PatientID                  string `json:"patientid"`
