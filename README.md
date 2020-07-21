@@ -6,6 +6,12 @@ go-athenahealth is an athenahealth API client for Go.
 
 ## Getting Started
 
+### Install
+
+```bash
+$ go get github.com/eleanorhealth/go-athenahealth
+```
+
 ### Basic Example
 
 ```go
