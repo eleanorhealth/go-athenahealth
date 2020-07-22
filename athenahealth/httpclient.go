@@ -223,6 +223,10 @@ func (h *HTTPClient) WithPreview(preview bool) *HTTPClient {
 	h.preview = preview
 	h.setBaseURL()
 
+	if _, ok := h.tokenProvider.(*tokenprovider.Default); ok {
+		h.tokenProvider = tokenprovider.NewDefault(h.httpClient, h.key, h.secret, preview)
+	}
+
 	return h
 }
 
