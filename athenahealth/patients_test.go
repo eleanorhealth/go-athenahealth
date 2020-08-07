@@ -12,6 +12,8 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 	assert := assert.New(t)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal("true", r.URL.Query().Get("showcustomfields"))
+
 		b, _ := ioutil.ReadFile("./resources/GetPatient.json")
 		w.Write(b)
 	}
@@ -19,7 +21,11 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	patient, err := athenaClient.GetPatient("1")
+	opts := &GetPatientOptions{
+		ID:               "1",
+		ShowCustomFields: true,
+	}
+	patient, err := athenaClient.GetPatient(opts)
 
 	assert.NotNil(patient)
 	assert.Nil(err)

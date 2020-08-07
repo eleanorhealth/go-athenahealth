@@ -1,0 +1,20 @@
+[
+    {
+       "customfieldid":"1",
+       "disallowupdate":true,
+       "select":false,
+       "casesensitive":false,
+       "name":"Legacy Patient ID",
+       "searchable":true,
+       "type":"TEXT"
+    },
+    {
+       "customfieldid":"22",
+       "disallowupdate":false,
+       "select":false,
+       "casesensitive":false,
+       "name":"Test Patient Field",
+       "length":"10",
+       "type":"TEXT"
+    }
+]
