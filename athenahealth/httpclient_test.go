@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -96,11 +97,13 @@ func TestAPIError_Error(t *testing.T) {
 	assert := assert.New(t)
 
 	err := &APIError{
-		Err:             "unknown error",
-		DetailedMessage: "something went wrong",
+		Err:                   ErrNotFound,
+		AthenaError:           "unknown error",
+		AthenaDetailedMessage: "something went wrong",
 	}
 
-	assert.Contains(err.Error(), err.Err)
+	assert.True(errors.Is(err.Err, ErrNotFound))
+	assert.Contains(err.Error(), err.AthenaError)
 }
 
 func TestAPIError_setBaseURL(t *testing.T) {

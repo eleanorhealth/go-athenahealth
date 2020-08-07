@@ -7,7 +7,7 @@ type Client interface {
 	GetDepartment(string) (*Department, error)
 	ListDepartments(*ListDepartmentsOptions) (*ListDepartmentsResult, error)
 
-	GetPatient(*GetPatientOptions) (*Patient, error)
+	GetPatient(string, *GetPatientOptions) (*Patient, error)
 	ListPatients(*ListPatientsOptions) ([]*Patient, error)
 
 	GetAppointment(string) (*Appointment, error)

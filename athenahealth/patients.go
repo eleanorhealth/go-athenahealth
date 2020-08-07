@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"net/url"
 )
 
@@ -103,14 +102,13 @@ type Patient struct {
 }
 
 type GetPatientOptions struct {
-	ID               string
 	ShowCustomFields bool
 }
 
 // GetPatient - Full view/update of patient demographics.
 // GET /v1/{practiceid}/patients/{patientid}
 // https://developer.athenahealth.com/docs/read/patientinfo/Patient_Information#section-5
-func (h *HTTPClient) GetPatient(opts *GetPatientOptions) (*Patient, error) {
+func (h *HTTPClient) GetPatient(id string, opts *GetPatientOptions) (*Patient, error) {
 	out := []*Patient{}
 
 	q := url.Values{}
@@ -121,12 +119,8 @@ func (h *HTTPClient) GetPatient(opts *GetPatientOptions) (*Patient, error) {
 		}
 	}
 
-	res, err := h.Get(fmt.Sprintf("/patients/%s", opts.ID), q, &out)
+	_, err := h.Get(fmt.Sprintf("/patients/%s", id), q, &out)
 	if err != nil {
-		if res.StatusCode == http.StatusNotFound {
-			return nil, ErrPatientNotFound
-		}
-
 		return nil, err
 	}
 

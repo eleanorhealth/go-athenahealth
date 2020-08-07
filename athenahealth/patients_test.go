@@ -21,11 +21,11 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
+	id := "1"
 	opts := &GetPatientOptions{
-		ID:               "1",
 		ShowCustomFields: true,
 	}
-	patient, err := athenaClient.GetPatient(opts)
+	patient, err := athenaClient.GetPatient(id, opts)
 
 	assert.NotNil(patient)
 	assert.Nil(err)
