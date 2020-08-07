@@ -16,7 +16,7 @@ type CustomField struct {
 	Type           string `json:"type"`
 }
 
-// ListCustomFields - Gets a set of patients or creates a patient.
+// ListCustomFields - List of custom fields (practice specific).
 // GET /v1/{practiceid}/customfields
 // https://developer.athenahealth.com/docs/read/administrative/Custom_Fields_List#section-0
 func (h *HTTPClient) ListCustomFields() ([]*CustomField, error) {

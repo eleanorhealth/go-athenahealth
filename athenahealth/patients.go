@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 )
 
@@ -120,8 +121,12 @@ func (h *HTTPClient) GetPatient(opts *GetPatientOptions) (*Patient, error) {
 		}
 	}
 
-	_, err := h.Get(fmt.Sprintf("/patients/%s", opts.ID), q, &out)
+	res, err := h.Get(fmt.Sprintf("/patients/%s", opts.ID), q, &out)
 	if err != nil {
+		if res.StatusCode == http.StatusNotFound {
+			return nil, ErrPatientNotFound
+		}
+
 		return nil, err
 	}
 
