@@ -51,14 +51,24 @@ var _ Client = &HTTPClient{}
 
 // APIError represents an error response from the athenahealth API.
 type APIError struct {
-	Err             string `json:"error"`
-	DetailedMessage string `json:"detailedmessage"`
+	Err                   error  `json:"-"`
+	AthenaError           string `json:"error"`
+	AthenaDetailedMessage string `json:"detailedmessage"`
 
 	HTTPResponse *http.Response
 }
 
 func (a *APIError) Error() string {
-	return fmt.Sprintf("athenahealth API error: %s", a.Err)
+	details := "no detailed message"
+	if len(a.AthenaDetailedMessage) > 0 {
+		details = a.AthenaDetailedMessage
+	}
+
+	return fmt.Sprintf("athenahealth API error: %s (%s)", a.AthenaError, details)
+}
+
+func (a *APIError) Unwrap() error {
+	return a.Err
 }
 
 type PaginationOptions struct {
@@ -202,6 +212,10 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 	// 300 Multiple Choices
 	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusMultipleChoices {
 		err := &APIError{}
+		if res.StatusCode == http.StatusNotFound {
+			err.Err = ErrNotFound
+		}
+
 		json.Unmarshal(resBody, err)
 
 		err.HTTPResponse = res
