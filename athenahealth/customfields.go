@@ -3,7 +3,7 @@ package athenahealth
 type CustomFieldValue struct {
 	CustomFieldID    string `json:"customfieldid"`
 	CustomFieldValue string `json:"customfieldvalue"`
-	OptionID         int    `json:"optionid"`
+	OptionID         string `json:"optionid"`
 }
 
 type CustomField struct {
