@@ -1,45 +1,19 @@
 package athenahealth
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/url"
-	"strconv"
 )
-
-type Balance string
-
-func (b *Balance) UnmarshalJSON(data []byte) error {
-	var aux interface{}
-
-	err := json.Unmarshal(data, &aux)
-	if err != nil {
-		return err
-	}
-
-	switch v := aux.(type) {
-	case string:
-		*b = Balance(v)
-	case int:
-		*b = Balance(strconv.Itoa(v))
-	case float64:
-		*b = Balance(strconv.FormatFloat(v, 'f', -1, 64))
-	default:
-		return fmt.Errorf("unknown balance type: %T", v)
-	}
-
-	return nil
-}
 
 // Patient represents a patient in athenahealth.
 type Patient struct {
 	Address1 string `json:"address1"`
 	Balances []struct {
-		Balance         Balance `json:"balance"`
-		DepartmentList  string  `json:"departmentlist"`
-		ProviderGroupID int     `json:"providergroupid"`
-		CleanBalance    bool    `json:"cleanbalance"`
+		Balance         NumberString `json:"balance"`
+		DepartmentList  string       `json:"departmentlist"`
+		ProviderGroupID int          `json:"providergroupid"`
+		CleanBalance    bool         `json:"cleanbalance"`
 	} `json:"balances"`
 	CareSummaryDeliveryPreference      string             `json:"caresummarydeliverypreference"`
 	City                               string             `json:"city"`
