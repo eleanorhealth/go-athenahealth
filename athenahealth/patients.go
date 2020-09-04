@@ -1,7 +1,6 @@
 package athenahealth
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/url"
@@ -11,10 +10,10 @@ import (
 type Patient struct {
 	Address1 string `json:"address1"`
 	Balances []struct {
-		Balance         json.Number `json:"balance"`
-		DepartmentList  string      `json:"departmentlist"`
-		ProviderGroupID int         `json:"providergroupid"`
-		CleanBalance    bool        `json:"cleanbalance"`
+		Balance         NumberString `json:"balance"`
+		DepartmentList  string       `json:"departmentlist"`
+		ProviderGroupID int          `json:"providergroupid"`
+		CleanBalance    bool         `json:"cleanbalance"`
 	} `json:"balances"`
 	CareSummaryDeliveryPreference      string             `json:"caresummarydeliverypreference"`
 	City                               string             `json:"city"`
