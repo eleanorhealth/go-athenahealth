@@ -24,7 +24,7 @@ func (n *NumberString) UnmarshalJSON(data []byte) error {
 	case float64:
 		*n = NumberString(strconv.FormatFloat(v, 'f', -1, 64))
 	default:
-		return fmt.Errorf("unknown balance type: %T", v)
+		return fmt.Errorf("unknown type: %T", v)
 	}
 
 	return nil
