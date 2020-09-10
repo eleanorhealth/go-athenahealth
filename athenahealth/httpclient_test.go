@@ -143,7 +143,7 @@ func TestHTTPClient_request(t *testing.T) {
 	res, err := athenaClient.request("GET", "/", nil, nil, &out)
 
 	assert.NotNil(res)
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.Equal("Hello World!", out["msg"])
 }
 
@@ -191,7 +191,7 @@ func TestHTTPClient_rate_limit(t *testing.T) {
 	res, err := athenaClient.request("GET", "/", nil, nil, &out)
 
 	assert.NotNil(res)
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -258,7 +258,7 @@ func TestHTTPClient_Get(t *testing.T) {
 	res, err := athenaClient.Get("/", query, nil)
 
 	assert.NotNil(res)
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -281,7 +281,7 @@ func TestHTTPClient_Post(t *testing.T) {
 	res, err := athenaClient.Post("/", strings.NewReader("foo"), nil)
 
 	assert.NotNil(res)
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -309,7 +309,7 @@ func TestHTTPClient_PostForm(t *testing.T) {
 	res, err := athenaClient.PostForm("/", values, nil)
 
 	assert.NotNil(res)
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -332,7 +332,7 @@ func TestHTTPClient_Put(t *testing.T) {
 	res, err := athenaClient.Put("/", strings.NewReader("foo"), nil)
 
 	assert.NotNil(res)
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -360,7 +360,7 @@ func TestHTTPClient_PutForm(t *testing.T) {
 	res, err := athenaClient.PutForm("/", values, nil)
 
 	assert.NotNil(res)
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -385,7 +385,7 @@ func TestHTTPClient_Delete(t *testing.T) {
 	res, err := athenaClient.Delete("/", strings.NewReader("foo"), nil)
 
 	assert.NotNil(res)
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -413,7 +413,7 @@ func TestHTTPClient_DeleteForm(t *testing.T) {
 	res, err := athenaClient.DeleteForm("/", values, nil)
 
 	assert.NotNil(res)
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 

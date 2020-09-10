@@ -1,0 +1,80 @@
+package athenahealth
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestHTTPClient_GetPatientSocialHistory(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal("2", r.URL.Query().Get("departmentid"))
+		assert.Equal("patient", r.URL.Query().Get("recipientcategory"))
+		assert.Equal("true", r.URL.Query().Get("shownotperformedquestions"))
+		assert.Equal("true", r.URL.Query().Get("showunansweredquestions"))
+
+		b, _ := ioutil.ReadFile("./resources/GetPatientSocialHistory.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &GetPatientSocialHistoryOptions{
+		DepartmentID:              "2",
+		RecipientCategory:         "patient",
+		ShowNotPerformedQuestions: true,
+		ShowUnansweredQuestions:   true,
+	}
+
+	socialHistory, err := athenaClient.GetPatientSocialHistory("1", opts)
+	assert.NoError(err)
+
+	assert.Len(socialHistory.Questions, 2)
+}
+
+func TestHTTPClient_UpdatePatientSocialHistory(t *testing.T) {
+	assert := assert.New(t)
+
+	questions := []*UpdatePatientSocialHistoryQuestion{
+		{
+			Key:  "KEY.1",
+			Note: "9/10/2020",
+		},
+	}
+	questionBytes, err := json.Marshal(questions)
+	assert.NoError(err)
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		reqBody, _ := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+
+		assert.Contains(string(reqBody), "departmentid=2")
+		assert.Contains(string(reqBody), fmt.Sprintf("questions=%s", url.QueryEscape(string(questionBytes))))
+		assert.Contains(string(reqBody), "sectionnote=foo")
+
+		called = true
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &UpdatePatientSocialHistoryOptions{
+		DepartmentID: "2",
+		Questions:    questions,
+		SectionNote:  "foo",
+	}
+
+	err = athenaClient.UpdatePatientSocialHistory("1", opts)
+	assert.NoError(err)
+
+	assert.True(called)
+}

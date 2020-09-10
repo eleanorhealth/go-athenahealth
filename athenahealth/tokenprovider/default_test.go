@@ -53,5 +53,5 @@ func TestDefault_Provide(t *testing.T) {
 
 	assert.Equal(authRes.AccessToken, token)
 	assert.True(expiresAt.After(time.Now()))
-	assert.Nil(err)
+	assert.NoError(err)
 }

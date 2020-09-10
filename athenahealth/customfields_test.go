@@ -22,5 +22,5 @@ func TestHTTPClient_ListCustomFields(t *testing.T) {
 	customFields, err := athenaClient.ListCustomFields()
 
 	assert.Len(customFields, 2)
-	assert.Nil(err)
+	assert.NoError(err)
 }

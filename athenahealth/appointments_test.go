@@ -23,7 +23,7 @@ func TestHTTPClient_GetAppointment(t *testing.T) {
 	appointment, err := athenaClient.GetAppointment("1")
 
 	assert.NotNil(appointment)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestHTTPClient_ListAppointmentCustomFields(t *testing.T) {
@@ -40,7 +40,7 @@ func TestHTTPClient_ListAppointmentCustomFields(t *testing.T) {
 	customFields, err := athenaClient.ListAppointmentCustomFields()
 
 	assert.Len(customFields, 2)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestHTTPClient_ListBookedAppointments(t *testing.T) {
@@ -70,7 +70,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 	assert.Equal(res.Pagination.NextOffset, 30)
 	assert.Equal(res.Pagination.PreviousOffset, 10)
 	assert.Equal(res.Pagination.TotalCount, 2)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestHTTPClient_ListChangedAppointments(t *testing.T) {
@@ -97,7 +97,7 @@ func TestHTTPClient_ListChangedAppointments(t *testing.T) {
 	appointments, err := athenaClient.ListChangedAppointments(opts)
 
 	assert.Len(appointments, 2)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestHTTPClient_CreateAppointmentNote(t *testing.T) {
@@ -123,7 +123,7 @@ func TestHTTPClient_CreateAppointmentNote(t *testing.T) {
 
 	err := athenaClient.CreateAppointmentNote("1", opts)
 
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -147,7 +147,7 @@ func TestHTTPClient_ListAppointmentNotes(t *testing.T) {
 	appointments, err := athenaClient.ListAppointmentNotes("1", opts)
 
 	assert.Len(appointments, 2)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestHTTPClient_UpdateAppointmentNote(t *testing.T) {
@@ -175,7 +175,7 @@ func TestHTTPClient_UpdateAppointmentNote(t *testing.T) {
 
 	err := athenaClient.UpdateAppointmentNote("1", "2", opts)
 
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -202,6 +202,6 @@ func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
 
 	err := athenaClient.DeleteAppointmentNote("1", "1", opts)
 
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }

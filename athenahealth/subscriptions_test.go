@@ -22,7 +22,7 @@ func TestHTTPClient_GetSubscription(t *testing.T) {
 	subscription, err := athenaClient.GetSubscription("appointments")
 
 	assert.NotNil(subscription)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestHTTPClient_ListSubscriptionEvents(t *testing.T) {
@@ -39,7 +39,7 @@ func TestHTTPClient_ListSubscriptionEvents(t *testing.T) {
 	events, err := athenaClient.ListSubscriptionEvents("appointments")
 
 	assert.Len(events, 11)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestHTTPClient_Subscribe(t *testing.T) {
@@ -63,7 +63,7 @@ func TestHTTPClient_Subscribe(t *testing.T) {
 	}
 	err := athenaClient.Subscribe("appointments", opts)
 
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }
 
@@ -88,6 +88,6 @@ func TestHTTPClient_Unsubscribe(t *testing.T) {
 	}
 	err := athenaClient.Unsubscribe("appointments", opts)
 
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.True(called)
 }

@@ -31,7 +31,7 @@ func TestRedis_Get(t *testing.T) {
 	token, err := cacher.Get()
 
 	assert.Equal(expectedToken, token)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestRedis_Get_ErrTokenNotExist(t *testing.T) {
@@ -70,7 +70,7 @@ func TestRedis_Set(t *testing.T) {
 	expectedToken := "foo"
 	err = cacher.Set(expectedToken, time.Now().Add(time.Minute*1))
 
-	assert.Nil(err)
+	assert.NoError(err)
 
 	token, _ := s.Get(RedisDefaultKey)
 	ttl := s.TTL(RedisDefaultKey)

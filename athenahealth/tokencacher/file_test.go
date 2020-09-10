@@ -33,7 +33,7 @@ func TestFile_Get(t *testing.T) {
 	token, err := cacher.Get()
 
 	assert.Equal(c.Token, token)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestFile_Get_ErrTokenNotExist(t *testing.T) {
@@ -100,7 +100,7 @@ func TestFile_Set(t *testing.T) {
 	c := &fileCache{}
 	json.Unmarshal(b, c)
 
-	assert.Nil(err)
+	assert.NoError(err)
 	assert.Equal(token, c.Token)
 	assert.True(expiresAt.Equal(c.ExpiresAt))
 }
