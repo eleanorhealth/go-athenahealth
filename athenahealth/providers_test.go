@@ -22,5 +22,5 @@ func TestHTTPClient_GetProvider(t *testing.T) {
 	provider, err := athenaClient.GetProvider("1")
 
 	assert.NotNil(provider)
-	assert.Nil(err)
+	assert.NoError(err)
 }

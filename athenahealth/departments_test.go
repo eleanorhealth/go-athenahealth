@@ -22,7 +22,7 @@ func TestHTTPClient_GetDepartment(t *testing.T) {
 	department, err := athenaClient.GetDepartment("1")
 
 	assert.NotNil(department)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestHTTPClient_ListDepartments(t *testing.T) {
@@ -52,5 +52,5 @@ func TestHTTPClient_ListDepartments(t *testing.T) {
 	assert.Equal(res.Pagination.NextOffset, 30)
 	assert.Equal(res.Pagination.PreviousOffset, 10)
 	assert.Equal(res.Pagination.TotalCount, 2)
-	assert.Nil(err)
+	assert.NoError(err)
 }

@@ -18,7 +18,7 @@ func TestDefault_Get(t *testing.T) {
 	token, err := cacher.Get()
 
 	assert.Equal(cacher.token, token)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestDefault_Get_ErrTokenNotExist(t *testing.T) {
@@ -61,5 +61,5 @@ func TestDefault_Set(t *testing.T) {
 
 	assert.Equal(token, cacher.token)
 	assert.True(expiresAt.Equal(cacher.expiresAt))
-	assert.Nil(err)
+	assert.NoError(err)
 }

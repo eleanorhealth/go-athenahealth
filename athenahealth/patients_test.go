@@ -28,7 +28,7 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 	patient, err := athenaClient.GetPatient(id, opts)
 
 	assert.NotNil(patient)
-	assert.Nil(err)
+	assert.NoError(err)
 }
 
 func TestHTTPClient_ListPatients(t *testing.T) {
@@ -53,5 +53,5 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 	patients, err := athenaClient.ListPatients(opts)
 
 	assert.Len(patients, 2)
-	assert.Nil(err)
+	assert.NoError(err)
 }
