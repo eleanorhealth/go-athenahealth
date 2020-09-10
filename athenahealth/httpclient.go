@@ -29,6 +29,8 @@ const (
 	userAgent = "go-athenahealth/1.0"
 )
 
+var _ Client = (*HTTPClient)(nil)
+
 type HTTPClient struct {
 	httpClient *http.Client
 

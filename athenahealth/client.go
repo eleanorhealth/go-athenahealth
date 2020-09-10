@@ -10,6 +10,9 @@ type Client interface {
 	GetPatient(string, *GetPatientOptions) (*Patient, error)
 	ListPatients(*ListPatientsOptions) ([]*Patient, error)
 
+	GetPatientSocialHistory(string, *GetPatientSocialHistoryOptions) (*GetPatientSocialHistoryResponse, error)
+	UpdatePatientSocialHistory(string, *UpdatePatientSocialHistoryOptions) error
+
 	GetAppointment(string) (*Appointment, error)
 	ListBookedAppointments(*ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error)
 	ListChangedAppointments(*ListChangedAppointmentsOptions) ([]*ChangedAppointment, error)
