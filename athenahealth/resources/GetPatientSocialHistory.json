@@ -1,0 +1,27 @@
+{
+    "questions":[
+        {
+            "answer":"Never used electronic cigarettes",
+            "templateid":55,
+            "key":"ECIGVAPESTATUS",
+            "question":"E-cigarette\/Vape Status",
+            "ordering":2,
+            "lastupdated":"09\/03\/2020",
+            "questionid":102
+        },
+        {
+            "answer":"12",
+            "templateid":55,
+            "note":"8\/5\/20: 30\n8\/1\/20:12\n7\/31\/20: 12",
+            "key":"LOCAL.44",
+            "question":"GAD-7",
+            "ordering":1,
+            "lastupdated":"09\/03\/2020",
+            "notelastupdateddate":"09\/03\/2020",
+            "questionid":101
+        }
+    ],
+    "templates":[
+        
+    ]
+}
