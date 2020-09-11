@@ -10,6 +10,7 @@ type Client interface {
 	GetPatient(string, *GetPatientOptions) (*Patient, error)
 	ListPatients(*ListPatientsOptions) ([]*Patient, error)
 
+	ListSocialHistoryTemplates() ([]*SocialHistoryTemplate, error)
 	GetPatientSocialHistory(string, *GetPatientSocialHistoryOptions) (*GetPatientSocialHistoryResponse, error)
 	UpdatePatientSocialHistory(string, *UpdatePatientSocialHistoryOptions) error
 

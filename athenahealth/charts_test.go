@@ -11,6 +11,23 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestHTTPClient_ListSocialHistoryTemplates(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		b, _ := ioutil.ReadFile("./resources/ListSocialHistoryTemplates.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	templates, err := athenaClient.ListSocialHistoryTemplates()
+	assert.NoError(err)
+
+	assert.Len(templates, 2)
+}
+
 func TestHTTPClient_GetPatientSocialHistory(t *testing.T) {
 	assert := assert.New(t)
 
