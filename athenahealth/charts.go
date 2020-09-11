@@ -6,9 +6,33 @@ import (
 	"net/url"
 )
 
-type PatientSocialHistoryTemplate struct {
-	TemplateID   string `json:"templateid"`
-	TemplateName string `json:"templatename"`
+type SocialHistoryTemplate struct {
+	Questions    []*SocialHistoryQuestion `json:"questions"`
+	TemplateID   int                      `json:"templateid"`
+	Templatename string                   `json:"templatename"`
+}
+
+type SocialHistoryQuestion struct {
+	InputType  string        `json:"inputtype"`
+	Key        string        `json:"key"`
+	Options    []interface{} `json:"options"`
+	Ordering   int           `json:"ordering"`
+	Question   string        `json:"question"`
+	QuestionID int           `json:"questionid"`
+}
+
+// ListPatientSocialHistoryTemplates - List of social history questions and templates configured by this practice.
+// GET /v1/{practiceid}/chart/configuration/socialhistory
+// https://developer.athenahealth.com/docs/read/chart/Social_History#section-0
+func (h *HTTPClient) ListSocialHistoryTemplates() ([]*SocialHistoryTemplate, error) {
+	out := []*SocialHistoryTemplate{}
+
+	_, err := h.Get(fmt.Sprintf("/chart/configuration/socialhistory"), nil, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
 }
 
 type PatientSocialHistoryQuestion struct {
@@ -33,7 +57,10 @@ type GetPatientSocialHistoryOptions struct {
 type GetPatientSocialHistoryResponse struct {
 	Questions   []*PatientSocialHistoryQuestion `json:"questions"`
 	SectionNote string                          `json:"sectionnote"`
-	Templates   []*PatientSocialHistoryTemplate `json:"templates"`
+	Templates   []*struct {
+		TemplateID   string `json:"templateid"`
+		TemplateName string `json:"templatename"`
+	} `json:"templates"`
 }
 
 // GetPatientSocialHistory - List of social history data for this patient.
@@ -111,7 +138,7 @@ func (h *HTTPClient) UpdatePatientSocialHistory(patientID string, opts *UpdatePa
 		}
 	}
 
-	_, err := h.PutForm(fmt.Sprintf("chart/%s/socialhistory", patientID), form, nil)
+	_, err := h.PutForm(fmt.Sprintf("/chart/%s/socialhistory", patientID), form, nil)
 	if err != nil {
 		return err
 	}
