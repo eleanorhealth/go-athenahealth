@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"encoding/base64"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -53,5 +54,42 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 	patients, err := athenaClient.ListPatients(opts)
 
 	assert.Len(patients, 2)
+	assert.NoError(err)
+}
+
+func TestHTTPClient_GetPatientPhoto_JPEGOutputNotSupported(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	id := "1"
+	opts := &GetPatientPhotoOptions{
+		JPEGOutput: true,
+	}
+	_, err := athenaClient.GetPatientPhoto(id, opts)
+
+	assert.Error(err)
+}
+
+func TestHTTPClient_UpdatePatientPhoto(t *testing.T) {
+	assert := assert.New(t)
+
+	data := []byte("Hello World!")
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+
+		assert.Equal(base64.StdEncoding.EncodeToString(data), r.Form.Get("image"))
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	id := "1"
+	err := athenaClient.UpdatePatientPhoto(id, data)
 	assert.NoError(err)
 }

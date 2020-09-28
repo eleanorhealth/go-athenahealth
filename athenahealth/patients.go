@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"net/url"
@@ -163,4 +164,45 @@ func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) ([]*Patient, error)
 	}
 
 	return out.Patients, nil
+}
+
+type GetPatientPhotoOptions struct {
+	JPEGOutput bool
+}
+
+type patientPhoto struct {
+	Image []byte `json:"image"`
+}
+
+// GetPatientPhoto - Get a patient's photo.
+// GET /v1/{practiceid}/patients/{patientid}/photo
+// https://developer.athenahealth.com/docs/read/forms_and_documents/Patient_Photo#section-0
+func (h *HTTPClient) GetPatientPhoto(patientID string, opts *GetPatientPhotoOptions) ([]byte, error) {
+	out := &patientPhoto{}
+
+	q := url.Values{}
+
+	if opts != nil {
+		if opts.JPEGOutput {
+			return nil, errors.New("JPEGOutput is not supported")
+		}
+	}
+
+	_, err := h.Get(fmt.Sprintf("/patients/%s/photo", patientID), q, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Image, nil
+}
+
+// UpdatePatientPhoto - Update a patient's photo.
+// POST /v1/{practiceid}/patients/{patientid}/photo
+// https://developer.athenahealth.com/docs/read/forms_and_documents/Patient_Photo#section-1
+func (h *HTTPClient) UpdatePatientPhoto(patientID string, data []byte) error {
+	form := url.Values{}
+	form.Add("image", base64.StdEncoding.EncodeToString(data))
+
+	_, err := h.PostForm(fmt.Sprintf("/patients/%s/photo", patientID), form, nil)
+	return err
 }
