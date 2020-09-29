@@ -71,6 +71,7 @@ type Patient struct {
 	HasMobile                          bool               `json:"hasmobile"`
 	Homebound                          bool               `json:"homebound"`
 	HomePhone                          string             `json:"homephone"`
+	Insurances                         []Insurance        `json:"insurances"`
 	Language6392Code                   string             `json:"language6392code"`
 	LastAppointment                    string             `json:"lastappointment"`
 	LastEmail                          string             `json:"lastemail"`
@@ -100,8 +101,53 @@ type Patient struct {
 	Zip                                string             `json:"zip"`
 }
 
+type Insurance struct {
+	EligibilityLastChecked              string `json:"eligibilitylastchecked"`
+	EligibilityReason                   string `json:"eligibilityreason"`
+	EligibilityStatus                   string `json:"eligibilitystatus"`
+	ID                                  string `json:"id"`
+	InsuranceID                         string `json:"insuranceid"`
+	InsuranceIDNumber                   string `json:"insuranceidnumber"`
+	InsurancePackageAddress1            string `json:"insurancepackageaddress1"`
+	InsurancePackageCity                string `json:"insurancepackagecity"`
+	InsurancePackageID                  int    `json:"insurancepackageid"`
+	InsurancePackageState               string `json:"insurancepackagestate"`
+	InsurancePackageZip                 string `json:"insurancepackagezip"`
+	InsurancePhone                      string `json:"insurancephone"`
+	InsurancePlanDisplayName            string `json:"insuranceplandisplayname"`
+	InsurancePlanName                   string `json:"insuranceplanname"`
+	InsurancePolicyHolder               string `json:"insurancepolicyholder"`
+	InsurancePolicyHolderAddress1       string `json:"insurancepolicyholderaddress1"`
+	InsurancePolicyHolderCity           string `json:"insurancepolicyholdercity"`
+	InsurancePolicyHolderCountryCode    string `json:"insurancepolicyholdercountrycode"`
+	InsurancePolicyHolderCountryISO3166 string `json:"insurancepolicyholdercountryiso3166"`
+	InsurancePolicyHolderDOB            string `json:"insurancepolicyholderdob"`
+	InsurancePolicyHolderFirstName      string `json:"insurancepolicyholderfirstname"`
+	InsurancePolicyHolderLastName       string `json:"insurancepolicyholderlastname"`
+	InsurancePolicyHolderSex            string `json:"insurancepolicyholdersex"`
+	InsurancePolicyHolderState          string `json:"insurancepolicyholderstate"`
+	InsurancePolicyHolderZip            string `json:"insurancepolicyholderzip"`
+	InsuranceType                       string `json:"insurancetype"`
+	InsuredAddress                      string `json:"insuredaddress"`
+	InsuredCity                         string `json:"insuredcity"`
+	InsuredCountryCode                  string `json:"insuredcountrycode"`
+	InsuredCountryISO3166               string `json:"insuredcountryiso3166"`
+	InsuredDOB                          string `json:"insureddob"`
+	InsuredEntityTypeID                 int    `json:"insuredentitytypeid"`
+	InsuredFirstName                    string `json:"insuredfirstname"`
+	InsuredLastName                     string `json:"insuredlastname"`
+	InsuredSex                          string `json:"insuredsex"`
+	InsuredState                        string `json:"insuredstate"`
+	InsuredZip                          string `json:"insuredzip"`
+	IRCName                             string `json:"ircname"`
+	RelationshipToInsured               string `json:"relationshiptoinsured"`
+	RelationshipToInsuredID             int    `json:"relationshiptoinsuredid"`
+	SequenceNumber                      int    `json:"sequencenumber"`
+}
+
 type GetPatientOptions struct {
 	ShowCustomFields bool
+	ShowInsurance    bool
 }
 
 // GetPatient - Full view/update of patient demographics.
@@ -115,6 +161,10 @@ func (h *HTTPClient) GetPatient(id string, opts *GetPatientOptions) (*Patient, e
 	if opts != nil {
 		if opts.ShowCustomFields {
 			q.Add("showcustomfields", "true")
+		}
+
+		if opts.ShowInsurance {
+			q.Add("showinsurance", "true")
 		}
 	}
 
