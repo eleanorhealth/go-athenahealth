@@ -32,7 +32,7 @@ type Client interface {
 	Subscribe(string, *SubscribeOptions) error
 	Unsubscribe(string, *UnsubscribeOptions) error
 
-	GetPatientPhoto(patientID string, opts *GetPatientPhotoOptions) ([]byte, error)
+	GetPatientPhoto(patientID string, opts *GetPatientPhotoOptions) (string, error)
 	UpdatePatientPhoto(patientID string, data []byte) error
 }
 

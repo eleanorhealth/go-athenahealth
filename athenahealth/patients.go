@@ -171,26 +171,26 @@ type GetPatientPhotoOptions struct {
 }
 
 type patientPhoto struct {
-	Image []byte `json:"image"`
+	Image string `json:"image"`
 }
 
 // GetPatientPhoto - Get a patient's photo.
 // GET /v1/{practiceid}/patients/{patientid}/photo
 // https://developer.athenahealth.com/docs/read/forms_and_documents/Patient_Photo#section-0
-func (h *HTTPClient) GetPatientPhoto(patientID string, opts *GetPatientPhotoOptions) ([]byte, error) {
+func (h *HTTPClient) GetPatientPhoto(patientID string, opts *GetPatientPhotoOptions) (string, error) {
 	out := &patientPhoto{}
 
 	q := url.Values{}
 
 	if opts != nil {
 		if opts.JPEGOutput {
-			return nil, errors.New("JPEGOutput is not supported")
+			return "", errors.New("JPEGOutput is not supported")
 		}
 	}
 
 	_, err := h.Get(fmt.Sprintf("/patients/%s/photo", patientID), q, &out)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	return out.Image, nil
