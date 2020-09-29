@@ -85,6 +85,7 @@ type Patient struct {
 	PatientPhoto                       bool               `json:"patientphoto"`
 	PatientPhotoURL                    string             `json:"patientphotourl"`
 	PortalAccessGiven                  bool               `json:"portalaccessgiven"`
+	PortalStatus                       PortalStatus       `json:"portalstatus"`
 	PortalTermsOnFile                  bool               `json:"portaltermsonfile"`
 	PovertyLevelFamilySizeDeclined     bool               `json:"povertylevelfamilysizedeclined"`
 	PovertyLevelIncomeDeclined         bool               `json:"povertylevelincomedeclined"`
@@ -146,9 +147,22 @@ type Insurance struct {
 	SequenceNumber                      int    `json:"sequencenumber"`
 }
 
+type PortalStatus struct {
+	BlockedFailedLogins       bool   `json:"blockedfailedlogins"`
+	EntityToDisplay           string `json:"entitytodisplay"`
+	FamilyBlockedFailedLogins bool   `json:"familyblockedfailedlogins"`
+	FamilyRegistered          bool   `json:"familyregistered"`
+	NoPortal                  bool   `json:"noportal"`
+	PortalRegistrationDate    string `json:"portalregistrationdate"`
+	Registered                bool   `json:"registered"`
+	Status                    string `json:"status"`
+	TermsAccepted             bool   `json:"termsaccepted"`
+}
+
 type GetPatientOptions struct {
 	ShowCustomFields bool
 	ShowInsurance    bool
+	ShowPortalStatus bool
 }
 
 // GetPatient - Full view/update of patient demographics.
@@ -166,6 +180,10 @@ func (h *HTTPClient) GetPatient(id string, opts *GetPatientOptions) (*Patient, e
 
 		if opts.ShowInsurance {
 			q.Add("showinsurance", "true")
+		}
+
+		if opts.ShowPortalStatus {
+			q.Add("showportalstatus", "true")
 		}
 	}
 
