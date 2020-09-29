@@ -36,15 +36,15 @@ func (h *HTTPClient) ListSocialHistoryTemplates() ([]*SocialHistoryTemplate, err
 }
 
 type PatientSocialHistoryQuestion struct {
-	Answer              string `json:"answer"`
-	Key                 string `json:"key"`
-	Lastupdated         string `json:"lastupdated"`
-	Note                string `json:"note"`
-	NoteLastUpdatedDate string `json:"notelastupdateddate"`
-	Ordering            int    `json:"ordering"`
-	Question            string `json:"question"`
-	QuestionID          int    `json:"questionid"`
-	TemplateID          int    `json:"templateid"`
+	Answer              string      `json:"answer"`
+	Key                 string      `json:"key"`
+	Lastupdated         string      `json:"lastupdated"`
+	Note                string      `json:"note"`
+	NoteLastUpdatedDate string      `json:"notelastupdateddate"`
+	Ordering            int         `json:"ordering"`
+	Question            string      `json:"question"`
+	QuestionID          json.Number `json:"questionid"`
+	TemplateID          json.Number `json:"templateid"`
 }
 
 type GetPatientSocialHistoryOptions struct {
