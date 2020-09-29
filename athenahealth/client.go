@@ -31,6 +31,9 @@ type Client interface {
 	ListSubscriptionEvents(string) ([]*SubscriptionEvent, error)
 	Subscribe(string, *SubscribeOptions) error
 	Unsubscribe(string, *UnsubscribeOptions) error
+
+	GetPatientPhoto(patientID string, opts *GetPatientPhotoOptions) (string, error)
+	UpdatePatientPhoto(patientID string, data []byte) error
 }
 
 type TokenProvider interface {
