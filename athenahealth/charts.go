@@ -8,7 +8,7 @@ import (
 
 type SocialHistoryTemplate struct {
 	Questions    []*SocialHistoryQuestion `json:"questions"`
-	TemplateID   int                      `json:"templateid"`
+	TemplateID   json.Number              `json:"templateid"`
 	Templatename string                   `json:"templatename"`
 }
 
@@ -58,8 +58,8 @@ type GetPatientSocialHistoryResponse struct {
 	Questions   []*PatientSocialHistoryQuestion `json:"questions"`
 	SectionNote string                          `json:"sectionnote"`
 	Templates   []*struct {
-		TemplateID   string `json:"templateid"`
-		TemplateName string `json:"templatename"`
+		TemplateID   json.Number `json:"templateid"`
+		TemplateName string      `json:"templatename"`
 	} `json:"templates"`
 }
 
