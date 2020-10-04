@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"strconv"
+	"time"
 )
 
 type Provider struct {
@@ -47,24 +49,36 @@ func (h *HTTPClient) GetProvider(id string) (*Provider, error) {
 	return out[0], nil
 }
 
-type ChangedProvider struct {
-	ProviderID string `json:"providerid"`
-}
-
 type ListChangedProviderOptions struct {
+	LeaveUnprocessed           bool
+	ShowProcessedEndDatetime   time.Time
+	ShowProcessedStartDatetime time.Time
 }
 
 type listChangedProvidersResponse struct {
-	Providers []*ChangedProvider `json:"providers"`
+	Providers []*Provider `json:"providers"`
 }
 
-// ListChangedProviders ...
-func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*ChangedProvider, error) {
+// ListChangedProviders - A list of all changes to providers.
+// GET /v1/{practiceid}/providers/changed
+// https://developer.athenahealth.com/docs/read/administrative/Providers#section-4
+func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*Provider, error) {
 	out := &listChangedProvidersResponse{}
 
 	q := url.Values{}
 
 	if opts != nil {
+		if opts.LeaveUnprocessed {
+			q.Add("leaveunprocessed", strconv.FormatBool(opts.LeaveUnprocessed))
+		}
+
+		if !opts.ShowProcessedEndDatetime.IsZero() {
+			q.Add("showprocessedenddatetime", opts.ShowProcessedEndDatetime.Format("01/02/2006 15:04:05"))
+		}
+
+		if !opts.ShowProcessedStartDatetime.IsZero() {
+			q.Add("showprocessedstartdatetime", opts.ShowProcessedStartDatetime.Format("01/02/2006 15:04:05"))
+		}
 	}
 
 	_, err := h.Get("/providers/changed", q, out)

@@ -13,6 +13,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
@@ -186,6 +187,8 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 	}
 
 	reqURL := fmt.Sprintf("%s%s", h.baseURL, path)
+
+	spew.Dump(reqURL)
 
 	req, err := http.NewRequest(method, reqURL, body)
 	if err != nil {

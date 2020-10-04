@@ -168,40 +168,6 @@ func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions)
 	}, nil
 }
 
-type ChangedAppointment struct {
-	AppointmentID    string `json:"appointmentid"`
-	AppointmentNotes []struct {
-		DisplayOnSchedule bool   `json:"displayonschedule"`
-		Text              string `json:"text"`
-		ID                int    `json:"id"`
-	} `json:"appointmentnotes"`
-	AppointmentStatus          string `json:"appointmentstatus"`
-	AppointmentType            string `json:"appointmenttype"`
-	AppointmentTypeID          string `json:"appointmenttypeid"`
-	CancelledBy                string `json:"cancelledby"`
-	CancelledDatetime          string `json:"cancelleddatetime"`
-	CancelReasonID             string `json:"cancelreasonid"`
-	CancelReasonName           string `json:"cancelreasonname"`
-	CancelReasonNoShow         bool   `json:"cancelreasonnoshow"`
-	CancelReasonSlotAvailable  bool   `json:"cancelreasonslotavailable"`
-	ChargeEntryNotRequired     bool   `json:"chargeentrynotrequired"`
-	CoordinatorEnterprise      bool   `json:"coordinatorenterprise"`
-	Date                       string `json:"date"`
-	DepartmentID               string `json:"departmentid"`
-	Duration                   int    `json:"duration"`
-	HL7ProviderID              int    `json:"hl7providerid"`
-	LastModified               string `json:"lastmodified"`
-	LastModifiedBy             string `json:"lastmodifiedby"`
-	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
-	PatientID                  string `json:"patientid"`
-	ProviderID                 string `json:"providerid"`
-	ScheduledBy                string `json:"scheduledby"`
-	ScheduledDateime           string `json:"scheduleddatetime"`
-	StartTime                  string `json:"starttime"`
-	TemplateAppointmentID      string `json:"templateappointmentid"`
-	TemplateAppointmentTypeID  string `json:"templateappointmenttypeid"`
-}
-
 type ListChangedAppointmentsOptions struct {
 	DepartmentID               string
 	LeaveUnprocessed           bool
@@ -213,13 +179,13 @@ type ListChangedAppointmentsOptions struct {
 }
 
 type listChangedAppointmentsResponse struct {
-	Appointments []*ChangedAppointment `json:"appointments"`
+	Appointments []*Appointment `json:"appointments"`
 }
 
 // ListChangedAppointments - Changed appointment slots.
 // GET /v1/{practiceid}/appointments/changed
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-5
-func (h *HTTPClient) ListChangedAppointments(opts *ListChangedAppointmentsOptions) ([]*ChangedAppointment, error) {
+func (h *HTTPClient) ListChangedAppointments(opts *ListChangedAppointmentsOptions) ([]*Appointment, error) {
 	out := &listChangedAppointmentsResponse{}
 
 	q := url.Values{}
