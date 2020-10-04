@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -91,5 +92,40 @@ func TestHTTPClient_UpdatePatientPhoto(t *testing.T) {
 
 	id := "1"
 	err := athenaClient.UpdatePatientPhoto(id, data)
+	assert.NoError(err)
+}
+
+func TestHTTPClient_ListChangedPatients(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal("d1", r.URL.Query().Get("departmentid"))
+		assert.Equal("true", r.URL.Query().Get("ignorerestrictions"))
+		assert.Equal("true", r.URL.Query().Get("leaveunprocessed"))
+		assert.Equal("p1", r.URL.Query().Get("patientid"))
+		assert.Equal("true", r.URL.Query().Get("returnglobalid"))
+		assert.Equal("06/01/2020 15:30:45", r.URL.Query().Get("showprocessedstartdatetime"))
+		assert.Equal("06/02/2020 12:30:45", r.URL.Query().Get("showprocessedenddatetime"))
+
+		b, _ := ioutil.ReadFile("./resources/ListChangedPatients.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &ListChangedPatientOptions{
+		DepartmentID:               "d1",
+		IgnoreRestrictions:         true,
+		LeaveUnprocessed:           true,
+		PatientID:                  "p1",
+		ReturnGlobalID:             true,
+		ShowProcessedStartDatetime: time.Date(2020, 6, 1, 15, 30, 45, 0, time.UTC),
+		ShowProcessedEndDatetime:   time.Date(2020, 6, 2, 12, 30, 45, 0, time.UTC),
+	}
+
+	patients, err := athenaClient.ListChangedPatients(opts)
+
+	assert.Len(patients, 2)
 	assert.NoError(err)
 }

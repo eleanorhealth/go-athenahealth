@@ -1,0 +1,48 @@
+{
+    "providers": [
+        {
+            "firstname": "Jane",
+            "specialty": "Psychiatry",
+            "specialtyid": 26,
+            "schedulingname": "Doe_Jane",
+            "providertypeid": "MD",
+            "billable": true,
+            "displayname": "Jane Doe, MD",
+            "ansinamecode": "Allopathic & Osteopathic Physicians : Psychiatry & Neurology : Psychiatry",
+            "lastname": "Doe",
+            "providerid": 1,
+            "supervisingproviderusername": "Doe_Jane",
+            "providerusername": "jdoe25",
+            "supervisingproviderid": 1,
+            "ansispecialtycode": "123",
+            "hideinportal": false,
+            "sex": "F",
+            "entitytype": "Person",
+            "npi": 123456,
+            "providertype": "MD",
+            "createencounteroncheckin": true
+        },
+        {
+            "firstname": "John",
+            "specialty": "Psychology",
+            "specialtyid": 27,
+            "schedulingname": "Smith_John",
+            "providertypeid": "MD",
+            "billable": true,
+            "displayname": "John Smith, MD",
+            "ansinamecode": "Psychology",
+            "lastname": "Smith",
+            "providerid": 1,
+            "supervisingproviderusername": "Smith_John",
+            "providerusername": "jsmith26",
+            "supervisingproviderid": 1,
+            "ansispecialtycode": "456",
+            "hideinportal": false,
+            "sex": "M",
+            "entitytype": "Person",
+            "npi": 987654,
+            "providertype": "MD",
+            "createencounteroncheckin": true
+        }
+    ]
+}
