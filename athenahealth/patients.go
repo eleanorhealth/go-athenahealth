@@ -274,3 +274,31 @@ func (h *HTTPClient) UpdatePatientPhoto(patientID string, data []byte) error {
 	_, err := h.PostForm(fmt.Sprintf("/patients/%s/photo", patientID), form, nil)
 	return err
 }
+
+type ChangedPatient struct {
+	PatientID string `json:"patientid"`
+}
+
+type ListChangedPatientOptions struct {
+}
+
+type listChangedPatientsResponse struct {
+	Patients []*ChangedPatient `json:"patients"`
+}
+
+// ListChangedPatients ...
+func (h *HTTPClient) ListChangedPatients(opts *ListChangedPatientOptions) ([]*ChangedPatient, error) {
+	out := &listChangedPatientsResponse{}
+
+	q := url.Values{}
+
+	if opts != nil {
+	}
+
+	_, err := h.Get("/patients/changed", q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Patients, nil
+}

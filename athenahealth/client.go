@@ -4,36 +4,39 @@ import "time"
 
 // Client describes a client for the athenahealth API.
 type Client interface {
-	GetDepartment(string) (*Department, error)
+	GetDepartment(departmentID string) (*Department, error)
 	ListDepartments(*ListDepartmentsOptions) (*ListDepartmentsResult, error)
 
-	GetPatient(string, *GetPatientOptions) (*Patient, error)
+	GetPatient(patientID string, opts *GetPatientOptions) (*Patient, error)
 	ListPatients(*ListPatientsOptions) ([]*Patient, error)
 
 	ListSocialHistoryTemplates() ([]*SocialHistoryTemplate, error)
-	GetPatientSocialHistory(string, *GetPatientSocialHistoryOptions) (*GetPatientSocialHistoryResponse, error)
-	UpdatePatientSocialHistory(string, *UpdatePatientSocialHistoryOptions) error
+	GetPatientSocialHistory(patientID string, opts *GetPatientSocialHistoryOptions) (*GetPatientSocialHistoryResponse, error)
+	UpdatePatientSocialHistory(patientID string, opts *UpdatePatientSocialHistoryOptions) error
 
-	GetAppointment(string) (*Appointment, error)
+	GetAppointment(appointmentID string) (*Appointment, error)
 	ListBookedAppointments(*ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error)
 	ListChangedAppointments(*ListChangedAppointmentsOptions) ([]*ChangedAppointment, error)
 
 	ListAppointmentCustomFields() ([]*AppointmentCustomField, error)
 
-	CreateAppointmentNote(string, *CreateAppointmentNoteOptions) error
-	DeleteAppointmentNote(string, string, *DeleteAppointmentNoteOptions) error
-	ListAppointmentNotes(string, *ListAppointmentNotesOptions) ([]*AppointmentNote, error)
-	UpdateAppointmentNote(string, string, *UpdateAppointmentNoteOptions) error
+	CreateAppointmentNote(appointmentID string, opts *CreateAppointmentNoteOptions) error
+	DeleteAppointmentNote(appointmentID string, noteID string, opts *DeleteAppointmentNoteOptions) error
+	ListAppointmentNotes(appointmentID string, opts *ListAppointmentNotesOptions) ([]*AppointmentNote, error)
+	UpdateAppointmentNote(appointmentID string, noteID string, opts *UpdateAppointmentNoteOptions) error
 
-	GetProvider(string) (*Provider, error)
+	GetProvider(providerID string) (*Provider, error)
 
-	GetSubscription(string) (*Subscription, error)
-	ListSubscriptionEvents(string) ([]*SubscriptionEvent, error)
-	Subscribe(string, *SubscribeOptions) error
-	Unsubscribe(string, *UnsubscribeOptions) error
+	GetSubscription(feedType string) (*Subscription, error)
+	ListSubscriptionEvents(feedType string) ([]*SubscriptionEvent, error)
+	Subscribe(feedType string, opts *SubscribeOptions) error
+	Unsubscribe(feedType string, opts *UnsubscribeOptions) error
 
 	GetPatientPhoto(patientID string, opts *GetPatientPhotoOptions) (string, error)
 	UpdatePatientPhoto(patientID string, data []byte) error
+
+	ListChangedPatients(*ListChangedPatientOptions) ([]*ChangedPatient, error)
+	ListChangedProviders(*ListChangedProviderOptions) ([]*ChangedProvider, error)
 }
 
 type TokenProvider interface {

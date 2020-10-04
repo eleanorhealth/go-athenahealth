@@ -3,6 +3,7 @@ package athenahealth
 import (
 	"errors"
 	"fmt"
+	"net/url"
 )
 
 type Provider struct {
@@ -44,4 +45,32 @@ func (h *HTTPClient) GetProvider(id string) (*Provider, error) {
 	}
 
 	return out[0], nil
+}
+
+type ChangedProvider struct {
+	ProviderID string `json:"providerid"`
+}
+
+type ListChangedProviderOptions struct {
+}
+
+type listChangedProvidersResponse struct {
+	Providers []*ChangedProvider `json:"providers"`
+}
+
+// ListChangedProviders ...
+func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*ChangedProvider, error) {
+	out := &listChangedProvidersResponse{}
+
+	q := url.Values{}
+
+	if opts != nil {
+	}
+
+	_, err := h.Get("/providers/changed", q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Providers, nil
 }
