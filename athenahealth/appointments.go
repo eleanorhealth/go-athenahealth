@@ -17,6 +17,7 @@ type Appointment struct {
 	Date                       string `json:"date"`
 	DepartmentID               string `json:"departmentid"`
 	Duration                   int    `json:"duration"`
+	EncounterID                string `json:"encounterid"`
 	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
 	ProviderID                 string `json:"providerid"`
 	StartTime                  string `json:"starttime"`
@@ -83,6 +84,7 @@ type BookedAppointment struct {
 	Date                       string `json:"date"`
 	DepartmentID               string `json:"departmentid"`
 	Duration                   int    `json:"duration"`
+	EncounterID                string `json:"encounterid"`
 	HL7ProviderID              int    `json:"hl7providerid"`
 	LastModified               string `json:"lastmodified"`
 	LastModifiedBy             string `json:"lastmodifiedby"`
@@ -189,6 +191,7 @@ type ChangedAppointment struct {
 	Date                       string `json:"date"`
 	DepartmentID               string `json:"departmentid"`
 	Duration                   int    `json:"duration"`
+	EncounterID                string `json:"encounterid"`
 	HL7ProviderID              int    `json:"hl7providerid"`
 	LastModified               string `json:"lastmodified"`
 	LastModifiedBy             string `json:"lastmodifiedby"`
