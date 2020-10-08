@@ -49,6 +49,22 @@ func (h *HTTPClient) GetProvider(id string) (*Provider, error) {
 	return out[0], nil
 }
 
+type ChangedProvider struct {
+	ANSINameCode      string `json:"ansinamecode"`
+	ANSISpecialtyCode string `json:"ansispecialtycode"`
+	Billable          bool   `json:"billable"`
+	DisplayName       string `json:"displayname"`
+	EntityType        string `json:"entitytype"`
+	FirstName         string `json:"firstname"`
+	HideInPortal      bool   `json:"hideinportal"`
+	LastName          string `json:"lastname"`
+	ProviderID        int    `json:"providerid"`
+	ProviderType      string `json:"providertype"`
+	ProviderTypeID    string `json:"providertypeid"`
+	SchedulingName    string `json:"schedulingname"`
+	Specialty         string `json:"specialty"`
+}
+
 type ListChangedProviderOptions struct {
 	LeaveUnprocessed           bool
 	ShowProcessedEndDatetime   time.Time
@@ -56,13 +72,13 @@ type ListChangedProviderOptions struct {
 }
 
 type listChangedProvidersResponse struct {
-	Providers []*Provider `json:"providers"`
+	ChangedProviders []*ChangedProvider `json:"providers"`
 }
 
 // ListChangedProviders - A list of all changes to providers.
 // GET /v1/{practiceid}/providers/changed
 // https://developer.athenahealth.com/docs/read/administrative/Providers#section-4
-func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*Provider, error) {
+func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*ChangedProvider, error) {
 	out := &listChangedProvidersResponse{}
 
 	q := url.Values{}
@@ -86,5 +102,5 @@ func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*
 		return nil, err
 	}
 
-	return out.Providers, nil
+	return out.ChangedProviders, nil
 }
