@@ -49,6 +49,6 @@ func TestHTTPClient_ListChangedProviders(t *testing.T) {
 
 	patients, err := athenaClient.ListChangedProviders(opts)
 
-	assert.Len(patients, 2)
+	assert.Len(patients, 1)
 	assert.NoError(err)
 }

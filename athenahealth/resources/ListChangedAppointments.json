@@ -1,85 +1,55 @@
 {
     "totalcount": 2,
     "appointments": [
-        {
-            "date": "06\/02\/2020",
-            "cancelreasonname": "CANCELLED FROM API",
-            "appointmentid": "1050322",
-            "starttime": "10:00",
-            "cancelledby": "API-15476",
-            "departmentid": "150",
-            "appointmentstatus": "x",
-            "scheduledby": "API-15476",
-            "cancelreasonnoshow": false,
-            "patientid": "7965",
-            "duration": 15,
-            "templateappointmenttypeid": "82",
-            "hl7providerid": 27,
-            "lastmodifiedby": "API-15476",
-            "cancelreasonid": "-5",
-            "cancelreasonslotavailable": true,
-            "appointmenttypeid": "82",
-            "lastmodified": "06\/02\/2020 09:06:50",
-            "appointmenttype": "Any 15",
-            "providerid": "27",
-            "chargeentrynotrequired": false,
-            "scheduleddatetime": "06\/01\/2020 20:17:46",
-            "coordinatorenterprise": false,
-            "templateappointmentid": "1050322",
-            "cancelleddatetime": "06\/02\/2020 09:06:50",
-            "appointmentnotes": [
-                {
-                    "displayonschedule": false,
-                    "text": "API appointment cancellation. Reported reason for cancellation: I don't wanna go.",
-                    "id": 43592
-                },
-                {
-                    "displayonschedule": false,
-                    "text": "API (GuideWell\/Florida Blue - crtcrt - GW-Demo (MDP Partner)) appointment created.  Reported reason for booking: Appointment booked for demo purposes.",
-                    "id": 43581
-                }
-            ],
-            "patientappointmenttypename": "Any 15"
-        },
-        {
-            "date": "06\/02\/2020",
-            "cancelreasonname": "CANCELLED FROM API",
-            "appointmentid": "1115846",
-            "starttime": "08:15",
-            "cancelledby": "API-15476",
-            "departmentid": "150",
-            "appointmentstatus": "x",
-            "scheduledby": "API-15476",
-            "cancelreasonnoshow": false,
-            "patientid": "7965",
-            "duration": 30,
-            "templateappointmenttypeid": "82",
-            "hl7providerid": 27,
-            "lastmodifiedby": "API-15476",
-            "cancelreasonid": "-5",
-            "cancelreasonslotavailable": true,
-            "appointmenttypeid": "8",
-            "lastmodified": "06\/02\/2020 09:10:26",
-            "appointmenttype": "New Patient Appointment",
-            "providerid": "27",
-            "chargeentrynotrequired": false,
-            "scheduleddatetime": "06\/01\/2020 20:56:10",
-            "coordinatorenterprise": false,
-            "templateappointmentid": "1060320",
-            "cancelleddatetime": "06\/02\/2020 09:10:26",
-            "appointmentnotes": [
-                {
-                    "displayonschedule": false,
-                    "text": "API (GuideWell\/Florida Blue - crtcrt - GW-Demo (MDP Partner)) appointment created.  Reported reason for booking: Appointment booked for demo purposes.",
-                    "id": 43582
-                },
-                {
-                    "displayonschedule": false,
-                    "text": "API appointment cancellation. Reported reason for cancellation: testing cancel feature",
-                    "id": 43593
-                }
-            ],
-            "patientappointmenttypename": "New Patient Appointment"
-        }
+      {
+        "date": "10\/09\/2020",
+        "cancelreasonname": "PATIENT CANCELLED",
+        "appointmentid": "3290",
+        "starttime": "13:00",
+        "cancelledby": "msmith",
+        "departmentid": "1",
+        "appointmentstatus": "x",
+        "scheduledby": "msmith",
+        "cancelreasonnoshow": false,
+        "patientid": "1",
+        "duration": 30,
+        "templateappointmenttypeid": "6",
+        "hl7providerid": 7,
+        "lastmodifiedby": "msmith",
+        "cancelreasonid": "12",
+        "cancelreasonslotavailable": true,
+        "appointmenttypeid": "6",
+        "lastmodified": "10\/09\/2020 10:53:55",
+        "appointmenttype": "FOLLOW UP 30",
+        "providerid": "7",
+        "chargeentrynotrequired": false,
+        "scheduleddatetime": "10\/09\/2020 10:51:51",
+        "coordinatorenterprise": false,
+        "templateappointmentid": "3290",
+        "cancelleddatetime": "10\/09\/2020 10:53:55",
+        "patientappointmenttypename": "FOLLOW UP 30"
+      },
+      {
+        "date": "10\/13\/2020",
+        "appointmentid": "3292",
+        "starttime": "09:00",
+        "departmentid": "1",
+        "appointmentstatus": "f",
+        "scheduledby": "jdoe",
+        "patientid": "2",
+        "duration": 30,
+        "templateappointmenttypeid": "6",
+        "hl7providerid": 1,
+        "lastmodifiedby": "jdoe",
+        "appointmenttypeid": "6",
+        "lastmodified": "10\/10\/2020 01:33:51",
+        "appointmenttype": "FOLLOW UP 30",
+        "providerid": "1",
+        "chargeentrynotrequired": false,
+        "scheduleddatetime": "10\/10\/2020 01:33:51",
+        "coordinatorenterprise": false,
+        "templateappointmentid": "3292",
+        "patientappointmenttypename": "FOLLOW UP 30"
+      }
     ]
-}
+  }

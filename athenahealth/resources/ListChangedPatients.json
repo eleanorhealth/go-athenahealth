@@ -1,12 +1,62 @@
 {
     "patients": [
-        {
-            "namefirst": "John",
-            "namelast": "Smith"
-        },
-        {
-            "namefirst": "Jane",
-            "namelast": "Doe"
-        }
-    ]
-}
+      {
+        "email": "foo@eleanorhealth.com",
+        "departmentid": "1",
+        "homephone": "8605555555",
+        "guarantorstate": "MA",
+        "portalaccessgiven": true,
+        "homebound": false,
+        "contactpreference": "MOBILEPHONE",
+        "lastemail": "foo@eleanorhealth.com",
+        "guarantordob": "01\/15\/1985",
+        "zip": "02210",
+        "guarantoraddresssameaspatient": true,
+        "portaltermsonfile": false,
+        "status": "active",
+        "lastname": "Smith",
+        "guarantorfirstname": "Mike",
+        "city": "BOSTON",
+        "lastappointment": "10\/07\/2020 10:30",
+        "guarantoremail": "foo@eleanorhealth.com",
+        "guarantorcity": "BOSTON",
+        "guarantorzip": "02210",
+        "sex": "M",
+        "privacyinformationverified": true,
+        "primarydepartmentid": "1",
+        "emailexists": true,
+        "firstappointment": "10\/06\/2020 13:45",
+        "primaryproviderid": "5",
+        "consenttocall": true,
+        "mobilephone": "8605555555",
+        "hasmobile": true,
+        "registrationdate": "05\/28\/2020",
+        "caresummarydeliverypreference": "PORTAL",
+        "guarantorlastname": "Smith",
+        "firstname": "Mike",
+        "guarantorcountrycode": "USA",
+        "state": "MA",
+        "patientid": "1",
+        "dob": "01\/15\/1985",
+        "customfields": [
+          {
+            "customfieldid": "22",
+            "customfieldvalue": "Foo",
+            "optionid": "1"
+          }
+        ],
+        "guarantorrelationshiptopatient": "1",
+        "address1": "100 Main St",
+        "guarantorphone": "8605555555",
+        "altfirstname": "Mike",
+        "maritalstatus": "S",
+        "countrycode": "USA",
+        "guarantoraddress1": "100 Main St",
+        "maritalstatusname": "SINGLE",
+        "consenttotext": true,
+        "countrycode3166": "US",
+        "guarantorcountrycode3166": "US"
+      }
+    ],
+    "totalcount": 1
+  }
