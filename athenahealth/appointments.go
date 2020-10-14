@@ -171,7 +171,12 @@ func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions)
 }
 
 type ChangedAppointment struct {
-	AppointmentID              string `json:"appointmentid"`
+	AppointmentID    string `json:"appointmentid"`
+	AppointmentNotes []struct {
+		DisplayOnSchedule bool   `json:"displayonschedule"`
+		Text              string `json:"text"`
+		ID                int    `json:"id"`
+	} `json:"appointmentnotes"`
 	AppointmentStatus          string `json:"appointmentstatus"`
 	AppointmentType            string `json:"appointmenttype"`
 	AppointmentTypeID          string `json:"appointmenttypeid"`
