@@ -209,6 +209,7 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 		return res, err
 	}
 	res.Body.Close()
+	fmt.Println(string(resBody))
 
 	// 200 OK
 	// 300 Multiple Choices

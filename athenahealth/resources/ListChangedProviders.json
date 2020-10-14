@@ -1,22 +1,27 @@
 {
     "providers": [
-      {
-        "firstname": "Nzinga Test",
-        "specialty": "Psychiatry",
-        "ansinamecode": "Allopathic & Osteopathic Physicians : Psychiatry & Neurology : Psychiatry (2084P0800X)",
-        "lastname": "Harrison",
-        "providerid": 1,
-        "providerusername": "nharrison25",
-        "ansispecialtycode": "2084P0800X",
-        "schedulingname": "Harrison_Nzinga",
-        "hideinportal": false,
-        "sex": "F",
-        "entitytype": "Person",
-        "providertypeid": "MD",
-        "billable": true,
-        "displayname": "Nzinga Harrison, MD",
-        "providertype": "MD"
-      }
+        {
+            "firstname": "Jane",
+            "specialty": "Psychiatry",
+            "specialtyid": 26,
+            "schedulingname": "Doe_Jane",
+            "providertypeid": "MD",
+            "billable": true,
+            "displayname": "Jane Doe, MD",
+            "ansinamecode": "Psychiatry",
+            "lastname": "Doe",
+            "providerid": 1,
+            "supervisingproviderusername": "Doe_Jane",
+            "providerusername": "jdoe5",
+            "supervisingproviderid": 1,
+            "ansispecialtycode": "123400X",
+            "hideinportal": false,
+            "sex": "F",
+            "entitytype": "Person",
+            "npi": 12345,
+            "providertype": "MD",
+            "createencounteroncheckin": true
+        }
     ],
     "totalcount": 1
-  }
+}

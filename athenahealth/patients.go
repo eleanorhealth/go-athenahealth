@@ -277,62 +277,6 @@ func (h *HTTPClient) UpdatePatientPhoto(patientID string, data []byte) error {
 	return err
 }
 
-type ChangedPatient struct {
-	Address1                      string `json:"address1"`
-	AltFirstName                  string `json:"altfirstname"`
-	CareSummaryDeliveryPreference string `json:"caresummarydeliverypreference"`
-	City                          string `json:"city"`
-	ConsentToCall                 bool   `json:"consenttocall"`
-	ConsentToText                 bool   `json:"consenttotext"`
-	ContactPreference             string `json:"contactpreference"`
-	CountryCode                   string `json:"countrycode"`
-	CountryCode3166               string `json:"countrycode3166"`
-	CustomFields                  []struct {
-		CustomFieldID    string `json:"customfieldid"`
-		CustomFieldValue string `json:"customfieldvalue"`
-		OptionID         string `json:"optionid"`
-	} `json:"customfields"`
-	DepartmentID                   string `json:"departmentid"`
-	DOB                            string `json:"dob"`
-	Email                          string `json:"email"`
-	EmailExists                    bool   `json:"emailexists"`
-	FirstAppointment               string `json:"firstappointment"`
-	FirstName                      string `json:"firstname"`
-	GuarantorAddress1              string `json:"guarantoraddress1"`
-	GuarantorAddressSameAsPatient  bool   `json:"guarantoraddresssameaspatient"`
-	GuarantorCity                  string `json:"guarantorcity"`
-	GuarantorCountryCode           string `json:"guarantorcountrycode"`
-	GuarantorCountryCode3166       string `json:"guarantorcountrycode3166"`
-	GuarantorDOB                   string `json:"guarantordob"`
-	GuarantorEmail                 string `json:"guarantoremail"`
-	GuarantorFirstName             string `json:"guarantorfirstname"`
-	GuarantorLastName              string `json:"guarantorlastname"`
-	GuarantorPhone                 string `json:"guarantorphone"`
-	GuarantorRelationshipToPatient string `json:"guarantorrelationshiptopatient"`
-	GuarantorState                 string `json:"guarantorstate"`
-	GuarantorZip                   string `json:"guarantorzip"`
-	HasMobile                      bool   `json:"hasmobile"`
-	Homebound                      bool   `json:"homebound"`
-	HomePhone                      string `json:"homephone"`
-	LastAppointment                string `json:"lastappointment"`
-	LastEmail                      string `json:"lastemail"`
-	LastName                       string `json:"lastname"`
-	MaritalStatus                  string `json:"maritalstatus"`
-	MaritalStatusName              string `json:"maritalstatusname"`
-	MobilePhone                    string `json:"mobilephone"`
-	PatientID                      string `json:"patientid"`
-	PortalAccessGiven              bool   `json:"portalaccessgiven"`
-	PortalTermsOnFile              bool   `json:"portaltermsonfile"`
-	PrimaryDepartmentID            string `json:"primarydepartmentid"`
-	PrimaryProviderID              string `json:"primaryproviderid"`
-	PrivacyInformationVerified     bool   `json:"privacyinformationverified"`
-	RegistrationDate               string `json:"registrationdate"`
-	Sex                            string `json:"sex"`
-	State                          string `json:"state"`
-	Status                         string `json:"status"`
-	Zip                            string `json:"zip"`
-}
-
 type ListChangedPatientOptions struct {
 	DepartmentID               string
 	IgnoreRestrictions         bool
@@ -344,13 +288,13 @@ type ListChangedPatientOptions struct {
 }
 
 type listChangedPatientsResponse struct {
-	ChangedPatients []*ChangedPatient `json:"patients"`
+	ChangedPatients []*Patient `json:"patients"`
 }
 
 // ListChangedPatients - Gets changed patient records.
 // GET /v1/{practiceid}/patients/changed
 // https://developer.athenahealth.com/docs/read/patientinfo/Patients_Changed
-func (h *HTTPClient) ListChangedPatients(opts *ListChangedPatientOptions) ([]*ChangedPatient, error) {
+func (h *HTTPClient) ListChangedPatients(opts *ListChangedPatientOptions) ([]*Patient, error) {
 	out := &listChangedPatientsResponse{}
 
 	q := url.Values{}

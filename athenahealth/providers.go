@@ -9,26 +9,26 @@ import (
 )
 
 type Provider struct {
+	ANSINameCode                string `json:"ansinamecode"`
+	ANSISpecialtyCode           string `json:"ansispecialtycode"`
+	Billable                    bool   `json:"billable"`
+	CreateEncounterOnCheckIn    bool   `json:"createencounteroncheckin"`
+	DisplayName                 string `json:"displayname"`
+	EntityType                  string `json:"entitytype"`
 	FirstName                   string `json:"firstname"`
+	HideInPortal                bool   `json:"hideinportal"`
+	LastName                    string `json:"lastname"`
+	NPI                         int    `json:"npi"`
+	ProviderID                  int    `json:"providerid"`
+	ProviderType                string `json:"providertype"`
+	ProviderTypeID              string `json:"providertypeid"`
+	ProviderUsername            string `json:"providerusername"`
+	SchedulingName              string `json:"schedulingname"`
+	Sex                         string `json:"sex"`
 	Specialty                   string `json:"specialty"`
 	SpecialtyID                 int    `json:"specialtyid"`
-	SchedulingName              string `json:"schedulingname"`
-	ProviderTypeID              string `json:"providertypeid"`
-	Billable                    bool   `json:"billable"`
-	DisplayName                 string `json:"displayname"`
-	ANSINameCode                string `json:"ansinamecode"`
-	LastName                    string `json:"lastname"`
-	ProviderID                  int    `json:"providerid"`
-	SupervisingProviderUsername string `json:"supervisingproviderusername"`
-	ProviderUsername            string `json:"providerusername"`
 	SupervisingProviderID       int    `json:"supervisingproviderid"`
-	ANSISpecialtyCode           string `json:"ansispecialtycode"`
-	HideInPortal                bool   `json:"hideinportal"`
-	Sex                         string `json:"sex"`
-	EntityType                  string `json:"entitytype"`
-	NPI                         int    `json:"npi"`
-	ProviderType                string `json:"providertype"`
-	CreateEncounterOnCheckIn    bool   `json:"createencounteroncheckin"`
+	SupervisingProviderUsername string `json:"supervisingproviderusername"`
 }
 
 // GetProvider - Get details about a single provider.
@@ -49,22 +49,6 @@ func (h *HTTPClient) GetProvider(id string) (*Provider, error) {
 	return out[0], nil
 }
 
-type ChangedProvider struct {
-	ANSINameCode      string `json:"ansinamecode"`
-	ANSISpecialtyCode string `json:"ansispecialtycode"`
-	Billable          bool   `json:"billable"`
-	DisplayName       string `json:"displayname"`
-	EntityType        string `json:"entitytype"`
-	FirstName         string `json:"firstname"`
-	HideInPortal      bool   `json:"hideinportal"`
-	LastName          string `json:"lastname"`
-	ProviderID        int    `json:"providerid"`
-	ProviderType      string `json:"providertype"`
-	ProviderTypeID    string `json:"providertypeid"`
-	SchedulingName    string `json:"schedulingname"`
-	Specialty         string `json:"specialty"`
-}
-
 type ListChangedProviderOptions struct {
 	LeaveUnprocessed           bool
 	ShowProcessedEndDatetime   time.Time
@@ -72,13 +56,13 @@ type ListChangedProviderOptions struct {
 }
 
 type listChangedProvidersResponse struct {
-	ChangedProviders []*ChangedProvider `json:"providers"`
+	ChangedProviders []*Provider `json:"providers"`
 }
 
 // ListChangedProviders - A list of all changes to providers.
 // GET /v1/{practiceid}/providers/changed
 // https://developer.athenahealth.com/docs/read/administrative/Providers#section-4
-func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*ChangedProvider, error) {
+func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*Provider, error) {
 	out := &listChangedProvidersResponse{}
 
 	q := url.Values{}

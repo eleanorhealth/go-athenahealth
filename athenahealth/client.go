@@ -16,7 +16,7 @@ type Client interface {
 
 	GetAppointment(appointmentID string) (*Appointment, error)
 	ListBookedAppointments(*ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error)
-	ListChangedAppointments(*ListChangedAppointmentsOptions) ([]*ChangedAppointment, error)
+	ListChangedAppointments(*ListChangedAppointmentsOptions) ([]*BookedAppointment, error)
 
 	ListAppointmentCustomFields() ([]*AppointmentCustomField, error)
 
@@ -35,8 +35,8 @@ type Client interface {
 	GetPatientPhoto(patientID string, opts *GetPatientPhotoOptions) (string, error)
 	UpdatePatientPhoto(patientID string, data []byte) error
 
-	ListChangedPatients(*ListChangedPatientOptions) ([]*ChangedPatient, error)
-	ListChangedProviders(*ListChangedProviderOptions) ([]*ChangedProvider, error)
+	ListChangedPatients(*ListChangedPatientOptions) ([]*Patient, error)
+	ListChangedProviders(*ListChangedProviderOptions) ([]*Provider, error)
 }
 
 type TokenProvider interface {
