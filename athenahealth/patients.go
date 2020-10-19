@@ -202,8 +202,9 @@ func (h *HTTPClient) GetPatient(id string, opts *GetPatientOptions) (*Patient, e
 }
 
 type ListPatientsOptions struct {
-	FirstName string
-	LastName  string
+	FirstName    string
+	LastName     string
+	DepartmentID int
 }
 
 type listPatientsResponse struct {
@@ -225,6 +226,10 @@ func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) ([]*Patient, error)
 
 		if len(opts.LastName) > 0 {
 			q.Add("lastname", opts.LastName)
+		}
+
+		if opts.DepartmentID > 0 {
+			q.Add("departmentid", strconv.Itoa(opts.DepartmentID))
 		}
 	}
 
