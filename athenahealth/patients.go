@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 // Patient represents a patient in athenahealth.
@@ -279,4 +280,64 @@ func (h *HTTPClient) UpdatePatientPhoto(patientID string, data []byte) error {
 
 	_, err := h.PostForm(fmt.Sprintf("/patients/%s/photo", patientID), form, nil)
 	return err
+}
+
+type ListChangedPatientOptions struct {
+	DepartmentID               string
+	IgnoreRestrictions         bool
+	LeaveUnprocessed           bool
+	PatientID                  string
+	ReturnGlobalID             bool
+	ShowProcessedEndDatetime   time.Time
+	ShowProcessedStartDatetime time.Time
+}
+
+type listChangedPatientsResponse struct {
+	ChangedPatients []*Patient `json:"patients"`
+}
+
+// ListChangedPatients - Gets changed patient records.
+// GET /v1/{practiceid}/patients/changed
+// https://developer.athenahealth.com/docs/read/patientinfo/Patients_Changed
+func (h *HTTPClient) ListChangedPatients(opts *ListChangedPatientOptions) ([]*Patient, error) {
+	out := &listChangedPatientsResponse{}
+
+	q := url.Values{}
+
+	if opts != nil {
+		if len(opts.DepartmentID) > 0 {
+			q.Add("departmentid", opts.DepartmentID)
+		}
+
+		if opts.IgnoreRestrictions {
+			q.Add("ignorerestrictions", strconv.FormatBool(opts.IgnoreRestrictions))
+		}
+
+		if opts.LeaveUnprocessed {
+			q.Add("leaveunprocessed", strconv.FormatBool(opts.LeaveUnprocessed))
+		}
+
+		if len(opts.PatientID) > 0 {
+			q.Add("patientid", opts.PatientID)
+		}
+
+		if opts.ReturnGlobalID {
+			q.Add("returnglobalid", strconv.FormatBool(opts.ReturnGlobalID))
+		}
+
+		if !opts.ShowProcessedEndDatetime.IsZero() {
+			q.Add("showprocessedenddatetime", opts.ShowProcessedEndDatetime.Format("01/02/2006 15:04:05"))
+		}
+
+		if !opts.ShowProcessedStartDatetime.IsZero() {
+			q.Add("showprocessedstartdatetime", opts.ShowProcessedStartDatetime.Format("01/02/2006 15:04:05"))
+		}
+	}
+
+	_, err := h.Get("/patients/changed", q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.ChangedPatients, nil
 }
