@@ -25,6 +25,7 @@ type Client interface {
 	ListAppointmentNotes(appointmentID string, opts *ListAppointmentNotesOptions) ([]*AppointmentNote, error)
 	UpdateAppointmentNote(appointmentID string, noteID string, opts *UpdateAppointmentNoteOptions) error
 
+	ListProviders(*ListProvidersOptions) (*ListProvidersResult, error)
 	GetProvider(providerID string) (*Provider, error)
 
 	GetSubscription(feedType string) (*Subscription, error)
