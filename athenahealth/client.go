@@ -8,7 +8,7 @@ type Client interface {
 	ListDepartments(*ListDepartmentsOptions) (*ListDepartmentsResult, error)
 
 	GetPatient(patientID string, opts *GetPatientOptions) (*Patient, error)
-	ListPatients(*ListPatientsOptions) ([]*Patient, error)
+	ListPatients(*ListPatientsOptions) (*ListPatientsResult, error)
 
 	ListSocialHistoryTemplates() ([]*SocialHistoryTemplate, error)
 	GetPatientSocialHistory(patientID string, opts *GetPatientSocialHistoryOptions) (*GetPatientSocialHistoryResponse, error)

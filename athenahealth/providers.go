@@ -88,3 +88,50 @@ func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*
 
 	return out.ChangedProviders, nil
 }
+
+type ListProvidersOptions struct {
+	Pagination *PaginationOptions
+}
+
+type ListProvidersResult struct {
+	Providers []*Provider
+
+	Pagination *PaginationResult
+}
+
+type ListProvidersResponse struct {
+	Providers []*Provider `json:"providers"`
+
+	PaginationResponse
+}
+
+// ListProviders - List of all providers available for this practice (with details)
+// GET /v1/{practiceid}/providers
+// https://developer.athenahealth.com/docs/read/administrative/Providers#section-1
+func (h *HTTPClient) ListProviders(opts *ListProvidersOptions) (*ListProvidersResult, error) {
+	out := &ListProvidersResponse{}
+
+	q := url.Values{}
+
+	if opts != nil {
+		if opts.Pagination != nil {
+			if opts.Pagination.Limit > 0 {
+				q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
+			}
+
+			if opts.Pagination.Offset > 0 {
+				q.Add("offset", strconv.Itoa(opts.Pagination.Offset))
+			}
+		}
+	}
+
+	_, err := h.Get("/providers", q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ListProvidersResult{
+		Providers:  out.Providers,
+		Pagination: makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
+}

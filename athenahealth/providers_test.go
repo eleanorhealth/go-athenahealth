@@ -52,3 +52,25 @@ func TestHTTPClient_ListChangedProviders(t *testing.T) {
 	assert.Len(patients, 1)
 	assert.NoError(err)
 }
+
+func TestHTTPClient_ListProviders(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		b, _ := ioutil.ReadFile("./resources/ListProviders.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &ListProvidersOptions{}
+
+	res, err := athenaClient.ListProviders(opts)
+
+	assert.Len(res.Providers, 1)
+	assert.Equal(res.Pagination.NextOffset, 30)
+	assert.Equal(res.Pagination.PreviousOffset, 10)
+	assert.Equal(res.Pagination.TotalCount, 2)
+	assert.NoError(err)
+}

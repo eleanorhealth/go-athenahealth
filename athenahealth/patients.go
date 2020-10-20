@@ -205,16 +205,26 @@ type ListPatientsOptions struct {
 	FirstName    string
 	LastName     string
 	DepartmentID int
+
+	Pagination *PaginationOptions
+}
+
+type ListPatientsResult struct {
+	Patients []*Patient
+
+	Pagination *PaginationResult
 }
 
 type listPatientsResponse struct {
 	Patients []*Patient `json:"patients"`
+
+	PaginationResponse
 }
 
 // ListPatients - Gets a set of patients or creates a patient.
 // GET /v1/{practiceid}/patients
 // https://developer.athenahealth.com/docs/read/patientinfo/Patient_Information#section-1
-func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) ([]*Patient, error) {
+func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) (*ListPatientsResult, error) {
 	out := &listPatientsResponse{}
 
 	q := url.Values{}
@@ -231,6 +241,16 @@ func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) ([]*Patient, error)
 		if opts.DepartmentID > 0 {
 			q.Add("departmentid", strconv.Itoa(opts.DepartmentID))
 		}
+
+		if opts.Pagination != nil {
+			if opts.Pagination.Limit > 0 {
+				q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
+			}
+
+			if opts.Pagination.Offset > 0 {
+				q.Add("offset", strconv.Itoa(opts.Pagination.Offset))
+			}
+		}
 	}
 
 	_, err := h.Get("/patients", q, out)
@@ -238,7 +258,10 @@ func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) ([]*Patient, error)
 		return nil, err
 	}
 
-	return out.Patients, nil
+	return &ListPatientsResult{
+		Patients:   out.Patients,
+		Pagination: makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
 }
 
 type GetPatientPhotoOptions struct {
