@@ -136,6 +136,7 @@
         "consenttotext": true,
         "countrycode3166": "US",
         "contactpreference_lab_phone": true,
-        "guarantorcountrycode3166": "US"
+        "guarantorcountrycode3166": "US",
+        "localpatientid":"123"
     }
 ]

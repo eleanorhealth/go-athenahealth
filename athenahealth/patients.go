@@ -79,6 +79,7 @@ type Patient struct {
 	LastAppointment                    string             `json:"lastappointment"`
 	LastEmail                          string             `json:"lastemail"`
 	LastName                           string             `json:"lastname"`
+	LocalPatientID                     string             `json:"localpatientid"`
 	MaritalStatus                      string             `json:"maritalstatus"`
 	MaritalStatusName                  string             `json:"maritalstatusname"`
 	MobilePhone                        string             `json:"mobilephone"`
@@ -162,9 +163,10 @@ type PortalStatus struct {
 }
 
 type GetPatientOptions struct {
-	ShowCustomFields bool
-	ShowInsurance    bool
-	ShowPortalStatus bool
+	ShowCustomFields   bool
+	ShowInsurance      bool
+	ShowPortalStatus   bool
+	ShowLocalPatientID bool
 }
 
 // GetPatient - Full view/update of patient demographics.
@@ -186,6 +188,10 @@ func (h *HTTPClient) GetPatient(id string, opts *GetPatientOptions) (*Patient, e
 
 		if opts.ShowPortalStatus {
 			q.Add("showportalstatus", "true")
+		}
+
+		if opts.ShowLocalPatientID {
+			q.Add("showlocalpatientid", "true")
 		}
 	}
 
