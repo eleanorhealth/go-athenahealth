@@ -1,0 +1,31 @@
+{
+  "previous": "/foo?limit=10&offset=10",
+  "next": "/foo?limit=10&offset=30",
+  "totalcount": 1,
+  "providers": [
+    {
+      "firstname": "John",
+      "specialty": "Licensed Clinical Social Worker",
+      "homedepartment": "Boston",
+      "specialtyid": 80,
+      "schedulingname": "Smith_John",
+      "providertypeid": "LICSW",
+      "billable": true,
+      "displayname": "John Smith, LCSW",
+      "scheduleresourcetype": "Therapy",
+      "ansinamecode": "Behavioral Health & Social Service Providers",
+      "lastname": "Smith",
+      "providerid": 20,
+      "supervisingproviderusername": "jsmith",
+      "providerusername": "smith200",
+      "supervisingproviderid": 20,
+      "ansispecialtycode": "123",
+      "hideinportal": false,
+      "sex": "M",
+      "entitytype": "Person",
+      "npi": 12356789,
+      "providertype": "LICENSED INDEPENDENT CLINICAL SOCIAL WORKER",
+      "createencounteroncheckin": true
+    }
+  ]
+}

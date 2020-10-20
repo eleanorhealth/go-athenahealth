@@ -60,9 +60,12 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 		DepartmentID: 100,
 	}
 
-	patients, err := athenaClient.ListPatients(opts)
+	res, err := athenaClient.ListPatients(opts)
 
-	assert.Len(patients, 2)
+	assert.Len(res.Patients, 2)
+	assert.Equal(res.Pagination.NextOffset, 30)
+	assert.Equal(res.Pagination.PreviousOffset, 10)
+	assert.Equal(res.Pagination.TotalCount, 2)
 	assert.NoError(err)
 }
 

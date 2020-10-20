@@ -1,4 +1,7 @@
 {
+    "previous": "/foo?limit=10&offset=10",
+    "next": "/foo?limit=10&offset=30",
+    "totalcount": 2,
     "patients": [
         {
             "email": "foo@eleanorhealth.com",
