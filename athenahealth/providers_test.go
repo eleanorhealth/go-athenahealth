@@ -71,6 +71,6 @@ func TestHTTPClient_ListProviders(t *testing.T) {
 	assert.Len(res.Providers, 1)
 	assert.Equal(res.Pagination.NextOffset, 30)
 	assert.Equal(res.Pagination.PreviousOffset, 10)
-	assert.Equal(res.Pagination.TotalCount, 2)
+	assert.Equal(res.Pagination.TotalCount, 1)
 	assert.NoError(err)
 }

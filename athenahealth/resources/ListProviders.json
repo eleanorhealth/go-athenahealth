@@ -1,52 +1,31 @@
 {
-    "previous": "/foo?limit=10&offset=10",
-    "next": "/foo?limit=10&offset=30",
-    "totalcount": 2,
-    "providers": [
-      {
-        "creditcardtypes": [
-          "AX",
-          "DS",
-          "MC",
-          "VI"
-        ],
-        "timezoneoffset": -5,
-        "singleappointmentcontractmax": "150",
-        "state": "NJ",
-        "placeofservicefacility": false,
-        "latitude": "39.929129",
-        "departmentid": "1",
-        "address": "2250 CHAPEL AVE WEST",
-        "placeofservicetypeid": "11",
-        "longitude": "-75.0155743",
-        "clinicals": "ON",
-        "timezone": -4,
-        "name": "Eleanor_Health_Cherry_Hill_NJ",
-        "patientdepartmentname": "Eleanor Health Cherry Hill",
-        "chartsharinggroupid": "1",
-        "placeofservicetypename": "OFFICE",
-        "clinicalproviderfax": "(833) 916-1017",
-        "zip": "08002-2051",
-        "timezonename": "US\/Eastern",
-        "communicatorbrandid": "1",
-        "medicationhistoryconsent": true,
-        "ishospitaldepartment": false,
-        "providergroupid": "1",
-        "portalurl": "https:\/\/21505-1.portal.athenahealth.com\/",
-        "city": "CHERRY HILL",
-        "servicedepartment": true,
-        "oneyearcontractmax": "1500",
-        "fax": "(833) 916-1017",
-        "providergroupname": "ELEANOR HEALTH PROFESSIONAL NJ",
-        "doesnotobservedst": false,
-        "phone": "(856) 434-7441",
-        "address2": "SUITE 120",
-        "ecommercecreditcardtypes": [
-          "AX",
-          "DS",
-          "MC",
-          "VI"
-        ]
-      }
-    ]
-  }
+  "previous": "/foo?limit=10&offset=10",
+  "next": "/foo?limit=10&offset=30",
+  "totalcount": 1,
+  "providers": [
+    {
+      "firstname": "John",
+      "specialty": "Licensed Clinical Social Worker",
+      "homedepartment": "Boston",
+      "specialtyid": 80,
+      "schedulingname": "Smith_John",
+      "providertypeid": "LICSW",
+      "billable": true,
+      "displayname": "John Smith, LCSW",
+      "scheduleresourcetype": "Therapy",
+      "ansinamecode": "Behavioral Health & Social Service Providers",
+      "lastname": "Smith",
+      "providerid": 20,
+      "supervisingproviderusername": "jsmith",
+      "providerusername": "smith200",
+      "supervisingproviderid": 20,
+      "ansispecialtycode": "123",
+      "hideinportal": false,
+      "sex": "M",
+      "entitytype": "Person",
+      "npi": 12356789,
+      "providertype": "LICENSED INDEPENDENT CLINICAL SOCIAL WORKER",
+      "createencounteroncheckin": true
+    }
+  ]
+}
