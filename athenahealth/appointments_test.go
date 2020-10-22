@@ -50,6 +50,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 		assert.Equal("1", r.URL.Query().Get("providerid"))
 		assert.Equal("06/01/2020", r.URL.Query().Get("startdate"))
 		assert.Equal("06/03/2020", r.URL.Query().Get("enddate"))
+		assert.Equal("x", r.URL.Query().Get("appointmentstatus"))
 
 		b, _ := ioutil.ReadFile("./resources/ListBookedAppointments.json")
 		w.Write(b)
@@ -59,9 +60,10 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 	defer ts.Close()
 
 	opts := &ListBookedAppointmentsOptions{
-		ProviderID: "1",
-		StartDate:  time.Date(2020, 6, 1, 0, 0, 0, 0, time.UTC),
-		EndDate:    time.Date(2020, 6, 3, 0, 0, 0, 0, time.UTC),
+		ProviderID:        "1",
+		StartDate:         time.Date(2020, 6, 1, 0, 0, 0, 0, time.UTC),
+		EndDate:           time.Date(2020, 6, 3, 0, 0, 0, 0, time.UTC),
+		AppointmentStatus: "x",
 	}
 
 	res, err := athenaClient.ListBookedAppointments(opts)

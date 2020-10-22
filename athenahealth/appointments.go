@@ -115,11 +115,12 @@ type BookedAppointment struct {
 }
 
 type ListBookedAppointmentsOptions struct {
-	DepartmentID string
-	EndDate      time.Time
-	PatientID    string
-	ProviderID   string
-	StartDate    time.Time
+	DepartmentID      string
+	EndDate           time.Time
+	PatientID         string
+	ProviderID        string
+	StartDate         time.Time
+	AppointmentStatus string
 
 	Pagination *PaginationOptions
 }
@@ -162,6 +163,10 @@ func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions)
 
 		if !opts.EndDate.IsZero() {
 			q.Add("enddate", opts.EndDate.Format("01/02/2006"))
+		}
+
+		if len(opts.AppointmentStatus) > 0 {
+			q.Add("appointmentstatus", opts.AppointmentStatus)
 		}
 
 		if opts.Pagination != nil {
