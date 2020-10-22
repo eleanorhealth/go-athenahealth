@@ -1,6 +1,7 @@
-package tokencacher
+package stats
 
 import (
+	"context"
 	"testing"
 
 	"github.com/alicebob/miniredis"
@@ -21,10 +22,10 @@ func TestRedis_IncrRequests(t *testing.T) {
 		Addr: s.Addr(),
 	}), "")
 
-	err = stats.IncrRequests()
+	err = stats.IncrRequests(context.Background())
 	assert.NoError(err)
 
-	err = stats.IncrRequests()
+	err = stats.IncrRequests(context.Background())
 	assert.NoError(err)
 
 	assert.Equal("2", s.HGet(RedisDefaultKey, "requests"))

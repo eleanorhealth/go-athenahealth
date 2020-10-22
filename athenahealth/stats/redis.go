@@ -1,4 +1,4 @@
-package tokencacher
+package stats
 
 import (
 	"context"
@@ -30,7 +30,7 @@ func NewRedis(client *redis.Client, key string) *Redis {
 	return r
 }
 
-func (r *Redis) IncrRequests() error {
-	_, err := r.client.HIncrBy(context.Background(), r.key, "requests", 1).Result()
+func (r *Redis) IncrRequests(ctx context.Context) error {
+	_, err := r.client.HIncrBy(ctx, r.key, "requests", 1).Result()
 	return err
 }

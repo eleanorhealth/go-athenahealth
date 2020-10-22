@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -69,6 +70,18 @@ func (t *testRateLimiter) Allowed(preview bool) (time.Duration, error) {
 	}
 
 	return 0, nil
+}
+
+type testStats struct {
+	IncrRequestsFunc func(context.Context) error
+}
+
+func (t *testStats) IncrRequests(ctx context.Context) error {
+	if t.IncrRequestsFunc != nil {
+		return t.IncrRequestsFunc(ctx)
+	}
+
+	return nil
 }
 
 func TestNewHTTPClient(t *testing.T) {
@@ -236,6 +249,17 @@ func TestHTTPClient_WithRateLimiter(t *testing.T) {
 	athenaClient.WithRateLimiter(rateLimiter)
 
 	assert.Equal(rateLimiter, athenaClient.rateLimiter)
+}
+
+func TestHTTPClient_WithStats(t *testing.T) {
+	assert := assert.New(t)
+
+	athenaClient := NewHTTPClient(&http.Client{}, "", "", "")
+
+	stats := &testStats{}
+	athenaClient.WithStats(stats)
+
+	assert.Equal(stats, athenaClient.stats)
 }
 
 func TestHTTPClient_Get(t *testing.T) {

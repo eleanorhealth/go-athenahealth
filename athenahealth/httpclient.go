@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
+	"github.com/eleanorhealth/go-athenahealth/athenahealth/stats"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
 )
@@ -45,6 +46,7 @@ type HTTPClient struct {
 	tokenProvider TokenProvider
 	tokenCacher   TokenCacher
 	rateLimiter   RateLimiter
+	stats         Stats
 
 	requestLock sync.Mutex
 }
@@ -125,6 +127,7 @@ func NewHTTPClient(httpClient *http.Client, practiceID, key, secret string) *HTT
 		tokenProvider: tokenprovider.NewDefault(httpClient, key, secret, preview),
 		tokenCacher:   tokencacher.NewDefault(),
 		rateLimiter:   ratelimiter.NewDefault(),
+		stats:         stats.NewDefault(),
 	}
 
 	c.setBaseURL()
@@ -260,6 +263,12 @@ func (h *HTTPClient) WithTokenCacher(cacher TokenCacher) *HTTPClient {
 
 func (h *HTTPClient) WithRateLimiter(rateLimiter RateLimiter) *HTTPClient {
 	h.rateLimiter = rateLimiter
+
+	return h
+}
+
+func (h *HTTPClient) WithStats(stats Stats) *HTTPClient {
+	h.stats = stats
 
 	return h
 }

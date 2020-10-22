@@ -1,6 +1,9 @@
 package athenahealth
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 // Client describes a client for the athenahealth API.
 type Client interface {
@@ -54,5 +57,5 @@ type RateLimiter interface {
 }
 
 type Stats interface {
-	IncrRequests() error
+	IncrRequests(context.Context) error
 }
