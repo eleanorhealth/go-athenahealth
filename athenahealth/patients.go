@@ -245,7 +245,7 @@ func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) (*ListPatientsResul
 			q.Add("lastname", opts.LastName)
 		}
 
-		if opts.DepartmentID > 0 {
+		if opts.DepartmentID != 0 {
 			q.Add("departmentid", strconv.Itoa(opts.DepartmentID))
 		}
 
