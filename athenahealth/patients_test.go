@@ -46,6 +46,7 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 		assert.Equal("John", r.URL.Query().Get("firstname"))
 		assert.Equal("Smith", r.URL.Query().Get("lastname"))
 		assert.Equal("100", r.URL.Query().Get("departmentid"))
+		assert.Equal("i", r.URL.Query().Get("status"))
 
 		b, _ := ioutil.ReadFile("./resources/ListPatients.json")
 		w.Write(b)
@@ -58,6 +59,7 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 		FirstName:    "John",
 		LastName:     "Smith",
 		DepartmentID: 100,
+		Status:       "i",
 	}
 
 	res, err := athenaClient.ListPatients(opts)

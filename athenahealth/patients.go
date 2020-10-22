@@ -211,6 +211,7 @@ type ListPatientsOptions struct {
 	FirstName    string
 	LastName     string
 	DepartmentID int
+	Status       string
 
 	Pagination *PaginationOptions
 }
@@ -246,6 +247,10 @@ func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) (*ListPatientsResul
 
 		if opts.DepartmentID > 0 {
 			q.Add("departmentid", strconv.Itoa(opts.DepartmentID))
+		}
+
+		if len(opts.Status) > 0 {
+			q.Add("status", opts.Status)
 		}
 
 		if opts.Pagination != nil {
