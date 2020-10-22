@@ -52,3 +52,7 @@ type TokenCacher interface {
 type RateLimiter interface {
 	Allowed(preview bool) (retryAfter time.Duration, err error)
 }
+
+type Stats interface {
+	IncrRequests() error
+}
