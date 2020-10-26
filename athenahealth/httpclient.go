@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -209,6 +210,8 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 		return res, err
 	}
 	res.Body.Close()
+
+	res.Body = ioutil.NopCloser(bytes.NewBuffer(resBody))
 
 	// 200 OK
 	// 300 Multiple Choices
