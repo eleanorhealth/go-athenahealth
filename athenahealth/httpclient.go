@@ -173,7 +173,9 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 			return nil, err
 		}
 
-		err = h.tokenCacher.Set(token, expiresAt)
+		// Remove 1 minute from the expiration time to create a buffer to see
+		// if it resolves intermittent 401s.
+		err = h.tokenCacher.Set(token, expiresAt.Add(-1*time.Minute))
 		if err != nil {
 			h.requestLock.Unlock()
 			return nil, err
