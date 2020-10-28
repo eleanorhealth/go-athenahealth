@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"sync"
 	"time"
 )
@@ -32,6 +33,14 @@ func NewFile(path string) *File {
 func (f *File) Get() (string, error) {
 	f.lock.Lock()
 	defer f.lock.Unlock()
+
+	_, err := os.Stat(f.path)
+	if os.IsNotExist(err) {
+		err = ioutil.WriteFile(f.path, nil, 0600)
+		if err != nil {
+			return "", err
+		}
+	}
 
 	contents, err := ioutil.ReadFile(f.path)
 	if err != nil {
