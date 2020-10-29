@@ -67,7 +67,12 @@ func (a *APIError) Error() string {
 		details = a.AthenaDetailedMessage
 	}
 
-	return fmt.Sprintf("athenahealth API error: %s (%s)", a.AthenaError, details)
+	var status string
+	if a.HTTPResponse != nil {
+		status = a.HTTPResponse.Status
+	}
+
+	return fmt.Sprintf("athenahealth API error (%s): %s (%s)", status, a.AthenaError, details)
 }
 
 func (a *APIError) Unwrap() error {
