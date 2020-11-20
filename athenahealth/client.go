@@ -38,6 +38,8 @@ type Client interface {
 
 	ListChangedPatients(*ListChangedPatientOptions) ([]*Patient, error)
 	ListChangedProviders(*ListChangedProviderOptions) ([]*Provider, error)
+
+	ListAdminDocuments(patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error)
 }
 
 type TokenProvider interface {
