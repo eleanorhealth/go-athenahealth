@@ -41,6 +41,7 @@ type Client interface {
 	ListChangedProblems(*ListChangedProblemsOptions) ([]*Problem, error)
 
 	ListProblems(patientID string, opts *ListProblemsOptions) ([]*Problem, error)
+	ListAdminDocuments(patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error)
 }
 
 type TokenProvider interface {
