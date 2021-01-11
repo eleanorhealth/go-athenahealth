@@ -1,0 +1,42 @@
+{
+    "lastmodifieddatetime": "2021-01-11T17:03:05-05:00",
+    "totalcount": 2,
+    "lastupdated": "01\/11\/2021",
+    "lastmodifiedby": "fterragna",
+    "problems": [
+      {
+        "lastmodifieddatetime": "2020-07-27T10:56:15-04:00",
+        "name": "Cocaine dependence",
+        "problemid": 1942,
+        "events": [
+          {
+            "eventtype": "START",
+            "startdate": "07\/27\/2020",
+            "createddate": "07\/27\/2020",
+            "onsetdate": "07\/27\/2020",
+            "createdby": "fterragna"
+          }
+        ],
+        "codeset": "SNOMED",
+        "lastmodifiedby": "fterragna",
+        "code": "31956009"
+      },
+      {
+        "lastmodifieddatetime": "2021-01-11T15:12:20-05:00",
+        "name": "Insomnia",
+        "problemid": 3834,
+        "events": [
+          {
+            "eventtype": "START",
+            "startdate": "01\/11\/2021",
+            "createddate": "01\/11\/2021",
+            "onsetdate": "01\/11\/2021",
+            "createdby": "fterragna"
+          }
+        ],
+        "codeset": "SNOMED",
+        "lastmodifiedby": "fterragna",
+        "code": "193462001"
+      }
+    ]
+  }
