@@ -9,6 +9,31 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestHTTPClient_ListProblems(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal("d5", r.URL.Query().Get("departmentid"))
+		assert.Equal("p1", r.URL.Query().Get("patientid"))
+
+		b, _ := ioutil.ReadFile("./resources/ListProblems.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &ListProblemsOptions{
+		DepartmentID: "d5",
+		PatientID:    "p1",
+	}
+
+	problems, err := athenaClient.ListProblems(opts.PatientID, opts)
+
+	assert.Len(problems, 2)
+	assert.NoError(err)
+}
+
 func TestHTTPClient_ListChangedProblems(t *testing.T) {
 	assert := assert.New(t)
 

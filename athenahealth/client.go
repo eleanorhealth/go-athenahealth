@@ -39,6 +39,8 @@ type Client interface {
 	ListChangedPatients(*ListChangedPatientOptions) ([]*Patient, error)
 	ListChangedProviders(*ListChangedProviderOptions) ([]*Provider, error)
 	ListChangedProblems(*ListChangedProblemsOptions) ([]*Problem, error)
+
+	ListProblems(patientID string, opts *ListProblemsOptions) ([]*Problem, error)
 }
 
 type TokenProvider interface {
