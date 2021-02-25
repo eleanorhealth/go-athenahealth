@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -68,7 +69,12 @@ func (a *APIError) Error() string {
 		details = a.AthenaDetailedMessage
 	}
 
-	return fmt.Sprintf("athenahealth API error: %s (%s)", a.AthenaError, details)
+	var status string
+	if a.HTTPResponse != nil {
+		status = a.HTTPResponse.Status
+	}
+
+	return fmt.Sprintf("athenahealth API error (%s): %s (%s)", status, a.AthenaError, details)
 }
 
 func (a *APIError) Unwrap() error {
@@ -175,7 +181,9 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 			return nil, err
 		}
 
-		err = h.tokenCacher.Set(token, expiresAt)
+		// Remove 1 minute from the expiration time to create a buffer to see
+		// if it resolves intermittent 401s.
+		err = h.tokenCacher.Set(token, expiresAt.Add(-1*time.Minute))
 		if err != nil {
 			h.requestLock.Unlock()
 			return nil, err
@@ -212,6 +220,8 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 		return res, err
 	}
 	res.Body.Close()
+
+	res.Body = ioutil.NopCloser(bytes.NewBuffer(resBody))
 
 	// 200 OK
 	// 300 Multiple Choices

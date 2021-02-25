@@ -1,0 +1,28 @@
+{
+    "previous": "/foo?limit=10&offset=10",
+    "next": "/foo?limit=10&offset=30",
+    "totalcount": 1,
+    "admins": [
+      {
+        "priority": "2",
+        "assignedto": "sbaker200",
+        "documentclass": "ADMIN",
+        "createddatetime": "2020-11-17T12:33:37-05:00",
+        "departmentid": "5",
+        "documenttypeid": 288737,
+        "internalnote": "test",
+        "adminid": 44987,
+        "createduser": "fterragna",
+        "description": "external records",
+        "documentdate": "11\/17\/2020",
+        "documentroute": "FAX",
+        "documentsource": "UPLOAD",
+        "createddate": "11\/17\/2020",
+        "status": "REVIEW",
+        "providerid": 20,
+        "providerusername": "sbaker200",
+        "lastmodifieddatetime": "2020-11-17T12:45:01-05:00",
+        "lastmodifieddate": "11\/17\/2020"
+      }
+    ]
+  }

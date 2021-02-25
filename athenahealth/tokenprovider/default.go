@@ -3,7 +3,7 @@ package tokenprovider
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -70,7 +70,7 @@ func (d *Default) Provide() (string, time.Time, error) {
 	}
 
 	if res.StatusCode != http.StatusOK {
-		return "", time.Now(), errors.New("Unauthorized")
+		return "", time.Now(), fmt.Errorf("%s", res.Status)
 	}
 
 	b, err := ioutil.ReadAll(res.Body)
