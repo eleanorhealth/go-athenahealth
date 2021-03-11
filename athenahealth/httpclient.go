@@ -215,6 +215,24 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 		return res, err
 	}
 
+	err = h.stats.Request()
+	if err != nil {
+		return res, err
+	}
+
+	responseError := res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusMultipleChoices
+	if responseError {
+		err = h.stats.ResponseError()
+		if err != nil {
+			return res, err
+		}
+	} else {
+		err = h.stats.ResponseSuccess()
+		if err != nil {
+			return res, err
+		}
+	}
+
 	resBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return res, err
@@ -223,9 +241,7 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 
 	res.Body = ioutil.NopCloser(bytes.NewBuffer(resBody))
 
-	// 200 OK
-	// 300 Multiple Choices
-	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusMultipleChoices {
+	if responseError {
 		err := &APIError{}
 		if res.StatusCode == http.StatusNotFound {
 			err.Err = ErrNotFound

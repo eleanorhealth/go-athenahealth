@@ -1,7 +1,6 @@
 package athenahealth
 
 import (
-	"context"
 	"time"
 )
 
@@ -61,5 +60,7 @@ type RateLimiter interface {
 }
 
 type Stats interface {
-	IncrRequests(context.Context) error
+	Request() error
+	ResponseSuccess() error
+	ResponseError() error
 }

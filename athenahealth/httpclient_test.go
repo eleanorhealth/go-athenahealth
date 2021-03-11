@@ -1,7 +1,6 @@
 package athenahealth
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -73,12 +72,30 @@ func (t *testRateLimiter) Allowed(preview bool) (time.Duration, error) {
 }
 
 type testStats struct {
-	IncrRequestsFunc func(context.Context) error
+	RequestFunc         func() error
+	ResponseSuccessFunc func() error
+	ResponseErrorFunc   func() error
 }
 
-func (t *testStats) IncrRequests(ctx context.Context) error {
-	if t.IncrRequestsFunc != nil {
-		return t.IncrRequestsFunc(ctx)
+func (t *testStats) Request() error {
+	if t.RequestFunc != nil {
+		return t.RequestFunc()
+	}
+
+	return nil
+}
+
+func (t *testStats) ResponseSuccess() error {
+	if t.ResponseSuccessFunc != nil {
+		return t.ResponseSuccessFunc()
+	}
+
+	return nil
+}
+
+func (t *testStats) ResponseError() error {
+	if t.ResponseErrorFunc != nil {
+		return t.ResponseErrorFunc()
 	}
 
 	return nil
