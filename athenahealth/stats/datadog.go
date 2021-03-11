@@ -17,11 +17,6 @@ func NewDatadog(client statsd.ClientInterface) *Datadog {
 }
 
 func (d *Datadog) Request() error {
-	err := d.client.Count("athenahealth.requests.count", 1, []string{}, 1.0)
-	if err != nil {
-		return err
-	}
-
 	return d.client.Incr("athenahealth.requests", []string{}, 1.0)
 }
 
