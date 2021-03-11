@@ -30,5 +30,5 @@ func (d *Datadog) ResponseSuccess() error {
 }
 
 func (d *Datadog) ResponseError() error {
-	return d.client.Incr("responses.error", []string{}, 1.0)
+	return d.client.Incr("athenahealth.responses.error", []string{}, 1.0)
 }
