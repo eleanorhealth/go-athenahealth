@@ -48,7 +48,7 @@ func NewRedis(client *redis.Client, ratePreview, rateProd int) *Redis {
 
 func (r *Redis) Allowed(preview bool) (time.Duration, error) {
 	var key string
-	var limit *redis_rate.Limit
+	var limit redis_rate.Limit
 
 	if preview {
 		key = redisKeyPreview

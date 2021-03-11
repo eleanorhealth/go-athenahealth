@@ -1,6 +1,8 @@
 package athenahealth
 
-import "time"
+import (
+	"time"
+)
 
 // Client describes a client for the athenahealth API.
 type Client interface {
@@ -55,4 +57,10 @@ type TokenCacher interface {
 
 type RateLimiter interface {
 	Allowed(preview bool) (retryAfter time.Duration, err error)
+}
+
+type Stats interface {
+	Request() error
+	ResponseSuccess() error
+	ResponseError() error
 }

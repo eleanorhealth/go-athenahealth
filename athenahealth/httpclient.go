@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
+	"github.com/eleanorhealth/go-athenahealth/athenahealth/stats"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
 )
@@ -46,6 +47,7 @@ type HTTPClient struct {
 	tokenProvider TokenProvider
 	tokenCacher   TokenCacher
 	rateLimiter   RateLimiter
+	stats         Stats
 
 	requestLock sync.Mutex
 }
@@ -131,6 +133,7 @@ func NewHTTPClient(httpClient *http.Client, practiceID, key, secret string) *HTT
 		tokenProvider: tokenprovider.NewDefault(httpClient, key, secret, preview),
 		tokenCacher:   tokencacher.NewDefault(),
 		rateLimiter:   ratelimiter.NewDefault(),
+		stats:         stats.NewDefault(),
 	}
 
 	c.setBaseURL()
@@ -212,6 +215,24 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 		return res, err
 	}
 
+	err = h.stats.Request()
+	if err != nil {
+		return res, err
+	}
+
+	responseError := res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusMultipleChoices
+	if responseError {
+		err = h.stats.ResponseError()
+		if err != nil {
+			return res, err
+		}
+	} else {
+		err = h.stats.ResponseSuccess()
+		if err != nil {
+			return res, err
+		}
+	}
+
 	resBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return res, err
@@ -220,9 +241,7 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 
 	res.Body = ioutil.NopCloser(bytes.NewBuffer(resBody))
 
-	// 200 OK
-	// 300 Multiple Choices
-	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusMultipleChoices {
+	if responseError {
 		err := &APIError{}
 		if res.StatusCode == http.StatusNotFound {
 			err.Err = ErrNotFound
@@ -270,6 +289,12 @@ func (h *HTTPClient) WithTokenCacher(cacher TokenCacher) *HTTPClient {
 
 func (h *HTTPClient) WithRateLimiter(rateLimiter RateLimiter) *HTTPClient {
 	h.rateLimiter = rateLimiter
+
+	return h
+}
+
+func (h *HTTPClient) WithStats(stats Stats) *HTTPClient {
+	h.stats = stats
 
 	return h
 }

@@ -71,6 +71,36 @@ func (t *testRateLimiter) Allowed(preview bool) (time.Duration, error) {
 	return 0, nil
 }
 
+type testStats struct {
+	RequestFunc         func() error
+	ResponseSuccessFunc func() error
+	ResponseErrorFunc   func() error
+}
+
+func (t *testStats) Request() error {
+	if t.RequestFunc != nil {
+		return t.RequestFunc()
+	}
+
+	return nil
+}
+
+func (t *testStats) ResponseSuccess() error {
+	if t.ResponseSuccessFunc != nil {
+		return t.ResponseSuccessFunc()
+	}
+
+	return nil
+}
+
+func (t *testStats) ResponseError() error {
+	if t.ResponseErrorFunc != nil {
+		return t.ResponseErrorFunc()
+	}
+
+	return nil
+}
+
 func TestNewHTTPClient(t *testing.T) {
 	assert := assert.New(t)
 
@@ -236,6 +266,17 @@ func TestHTTPClient_WithRateLimiter(t *testing.T) {
 	athenaClient.WithRateLimiter(rateLimiter)
 
 	assert.Equal(rateLimiter, athenaClient.rateLimiter)
+}
+
+func TestHTTPClient_WithStats(t *testing.T) {
+	assert := assert.New(t)
+
+	athenaClient := NewHTTPClient(&http.Client{}, "", "", "")
+
+	stats := &testStats{}
+	athenaClient.WithStats(stats)
+
+	assert.Equal(stats, athenaClient.stats)
 }
 
 func TestHTTPClient_Get(t *testing.T) {
