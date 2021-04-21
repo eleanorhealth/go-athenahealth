@@ -37,7 +37,7 @@ type HTTPClient struct {
 	httpClient *http.Client
 
 	practiceID string
-	key        string
+	clientID   string
 	secret     string
 
 	preview bool
@@ -118,19 +118,19 @@ func makePaginationResult(nextURL, previousURL string, totalCount int) *Paginati
 	}
 }
 
-func NewHTTPClient(httpClient *http.Client, practiceID, key, secret string) *HTTPClient {
+func NewHTTPClient(httpClient *http.Client, practiceID, clientID, secret string) *HTTPClient {
 	preview := true
 
 	c := &HTTPClient{
 		httpClient: httpClient,
 
 		practiceID: practiceID,
-		key:        key,
+		clientID:   clientID,
 		secret:     secret,
 
 		preview: preview,
 
-		tokenProvider: tokenprovider.NewDefault(httpClient, key, secret, preview),
+		tokenProvider: tokenprovider.NewDefault(httpClient, clientID, secret, preview),
 		tokenCacher:   tokencacher.NewDefault(),
 		rateLimiter:   ratelimiter.NewDefault(),
 		stats:         stats.NewDefault(),
@@ -269,7 +269,7 @@ func (h *HTTPClient) WithPreview(preview bool) *HTTPClient {
 	h.setBaseURL()
 
 	if _, ok := h.tokenProvider.(*tokenprovider.Default); ok {
-		h.tokenProvider = tokenprovider.NewDefault(h.httpClient, h.key, h.secret, preview)
+		h.tokenProvider = tokenprovider.NewDefault(h.httpClient, h.clientID, h.secret, preview)
 	}
 
 	return h
