@@ -22,10 +22,10 @@ import (
 
 const (
 	// PreviewBaseURL is the base URL used to make API requests in the preview environment.
-	PreviewBaseURL = "https://api.athenahealth.com/preview1/"
+	PreviewBaseURL = "https://api.preview.platform.athenahealth.com/v1/"
 
 	// ProdBaseURL is the base URL used to make API requests in the production environment.
-	ProdBaseURL = "https://api.athenahealth.com/v1/"
+	ProdBaseURL = "https://api.platform.athenahealth.com/v1/"
 
 	// userAgent is the user agent that will be sent with every HTTP request.
 	userAgent = "go-athenahealth/1.0"

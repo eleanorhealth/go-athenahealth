@@ -12,10 +12,10 @@ import (
 
 const (
 	// PreviewAuthURL is the URL used to authenticate in the preview environment.
-	PreviewAuthURL = "https://api.athenahealth.com/oauthpreview/token"
+	PreviewAuthURL = "https://api.preview.platform.athenahealth.com/oauth2/v1/token"
 
 	// ProdAuthURL is the URL used to authenticate in the production environment.
-	ProdAuthURL = "https://api.athenahealth.com/oauth/token"
+	ProdAuthURL = "https://api.platform.athenahealth.com/oauth2/v1/token"
 )
 
 type Default struct {
@@ -45,10 +45,8 @@ func NewDefault(httpClient *http.Client, key, secret string, preview bool) *Defa
 }
 
 type authResponse struct {
-	AccessToken  string `json:"access_token"`
-	TokenType    string `json:"token_type"`
-	ExpiresIn    int64  `json:"expires_in"`
-	RefreshToken string `json:"refresh_token"`
+	AccessToken string `json:"access_token"`
+	ExpiresIn   int64  `json:"expires_in"`
 }
 
 func (d *Default) Provide() (string, time.Time, error) {
