@@ -112,7 +112,7 @@ func TestNewHTTPClient(t *testing.T) {
 
 	assert.Equal(practiceID, athenaClient.practiceID)
 	assert.Equal(secret, athenaClient.secret)
-	assert.Equal(key, athenaClient.key)
+	assert.Equal(key, athenaClient.clientID)
 
 	// Preview mode should default to true.
 	assert.True(athenaClient.preview)

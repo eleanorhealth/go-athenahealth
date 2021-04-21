@@ -12,27 +12,27 @@ import (
 
 const (
 	// PreviewAuthURL is the URL used to authenticate in the preview environment.
-	PreviewAuthURL = "https://api.athenahealth.com/oauthpreview/token"
+	PreviewAuthURL = "https://api.preview.platform.athenahealth.com/oauth2/v1/token"
 
 	// ProdAuthURL is the URL used to authenticate in the production environment.
-	ProdAuthURL = "https://api.athenahealth.com/oauth/token"
+	ProdAuthURL = "https://api.platform.athenahealth.com/oauth2/v1/token"
 )
 
 type Default struct {
 	httpClient *http.Client
 
-	key    string
-	secret string
+	clientID string
+	secret   string
 
 	authURL string
 }
 
-func NewDefault(httpClient *http.Client, key, secret string, preview bool) *Default {
+func NewDefault(httpClient *http.Client, clientID, secret string, preview bool) *Default {
 	d := &Default{
 		httpClient: httpClient,
 
-		key:    key,
-		secret: secret,
+		clientID: clientID,
+		secret:   secret,
 	}
 
 	if preview {
@@ -45,15 +45,14 @@ func NewDefault(httpClient *http.Client, key, secret string, preview bool) *Defa
 }
 
 type authResponse struct {
-	AccessToken  string `json:"access_token"`
-	TokenType    string `json:"token_type"`
-	ExpiresIn    int64  `json:"expires_in"`
-	RefreshToken string `json:"refresh_token"`
+	AccessToken string      `json:"access_token"`
+	ExpiresIn   json.Number `json:"expires_in"`
 }
 
 func (d *Default) Provide() (string, time.Time, error) {
 	vals := url.Values{
 		"grant_type": {"client_credentials"},
+		"scope":      {"athena/service/Athenanet.MDP.*"},
 	}
 
 	req, err := http.NewRequest("POST", d.authURL, bytes.NewBufferString(vals.Encode()))
@@ -62,7 +61,7 @@ func (d *Default) Provide() (string, time.Time, error) {
 	}
 
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	req.SetBasicAuth(d.key, d.secret)
+	req.SetBasicAuth(d.clientID, d.secret)
 
 	res, err := d.httpClient.Do(req)
 	if err != nil {
@@ -85,7 +84,12 @@ func (d *Default) Provide() (string, time.Time, error) {
 		return "", time.Now(), err
 	}
 
-	expiresAt := time.Now().Add(time.Second * time.Duration(authRes.ExpiresIn))
+	expiresIn, err := authRes.ExpiresIn.Int64()
+	if err != nil {
+		return "", time.Now(), err
+	}
+
+	expiresAt := time.Now().Add(time.Second * time.Duration(expiresIn))
 
 	return authRes.AccessToken, expiresAt, nil
 }

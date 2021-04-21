@@ -22,10 +22,10 @@ import (
 
 const (
 	// PreviewBaseURL is the base URL used to make API requests in the preview environment.
-	PreviewBaseURL = "https://api.athenahealth.com/preview1/"
+	PreviewBaseURL = "https://api.preview.platform.athenahealth.com/v1/"
 
 	// ProdBaseURL is the base URL used to make API requests in the production environment.
-	ProdBaseURL = "https://api.athenahealth.com/v1/"
+	ProdBaseURL = "https://api.platform.athenahealth.com/v1/"
 
 	// userAgent is the user agent that will be sent with every HTTP request.
 	userAgent = "go-athenahealth/1.0"
@@ -37,7 +37,7 @@ type HTTPClient struct {
 	httpClient *http.Client
 
 	practiceID string
-	key        string
+	clientID   string
 	secret     string
 
 	preview bool
@@ -118,19 +118,19 @@ func makePaginationResult(nextURL, previousURL string, totalCount int) *Paginati
 	}
 }
 
-func NewHTTPClient(httpClient *http.Client, practiceID, key, secret string) *HTTPClient {
+func NewHTTPClient(httpClient *http.Client, practiceID, clientID, secret string) *HTTPClient {
 	preview := true
 
 	c := &HTTPClient{
 		httpClient: httpClient,
 
 		practiceID: practiceID,
-		key:        key,
+		clientID:   clientID,
 		secret:     secret,
 
 		preview: preview,
 
-		tokenProvider: tokenprovider.NewDefault(httpClient, key, secret, preview),
+		tokenProvider: tokenprovider.NewDefault(httpClient, clientID, secret, preview),
 		tokenCacher:   tokencacher.NewDefault(),
 		rateLimiter:   ratelimiter.NewDefault(),
 		stats:         stats.NewDefault(),
@@ -269,7 +269,7 @@ func (h *HTTPClient) WithPreview(preview bool) *HTTPClient {
 	h.setBaseURL()
 
 	if _, ok := h.tokenProvider.(*tokenprovider.Default); ok {
-		h.tokenProvider = tokenprovider.NewDefault(h.httpClient, h.key, h.secret, preview)
+		h.tokenProvider = tokenprovider.NewDefault(h.httpClient, h.clientID, h.secret, preview)
 	}
 
 	return h

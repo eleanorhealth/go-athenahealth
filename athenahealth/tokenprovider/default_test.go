@@ -20,7 +20,7 @@ func TestNewDefault(t *testing.T) {
 	p := NewDefault(&http.Client{}, key, secret, preview)
 
 	assert.NotNil(p.httpClient)
-	assert.Equal(key, p.key)
+	assert.Equal(key, p.clientID)
 	assert.Equal(secret, p.secret)
 	assert.Equal(PreviewAuthURL, p.authURL)
 
@@ -34,7 +34,7 @@ func TestDefault_Provide(t *testing.T) {
 
 	authRes := &authResponse{
 		AccessToken: "foo",
-		ExpiresIn:   60,
+		ExpiresIn:   "60",
 	}
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
