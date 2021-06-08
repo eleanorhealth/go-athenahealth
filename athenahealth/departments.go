@@ -15,11 +15,13 @@ type Department struct {
 	State                    string `json:"state"`
 	PortalURL                string `json:"portalurl"`
 	City                     string `json:"city"`
+	ClinicalProviderFax      string `json:"clincalproviderfax"`
 	PlaceOfServiceFacility   bool   `json:"placeofservicefacility"`
 	ServiceDepartment        bool   `json:"servicedepartment"`
 	ProviderGroupName        string `json:"providergroupname"`
 	DoesNotObserveDST        bool   `json:"doesnotobservedst"`
 	DepartmentID             string `json:"departmentid"`
+	Fax                      string `json:"fax"`
 	Address                  string `json:"address"`
 	PlaceOfServiceTypeID     string `json:"placeofservicetypeid"`
 	Clinicals                string `json:"clinicals"`
