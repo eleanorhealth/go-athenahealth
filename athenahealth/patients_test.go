@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"testing"
 	"time"
 
@@ -140,5 +141,56 @@ func TestHTTPClient_ListChangedPatients(t *testing.T) {
 	patients, err := athenaClient.ListChangedPatients(opts)
 
 	assert.Len(patients, 1)
+	assert.NoError(err)
+}
+
+func TestHTTPClient_UpdatePatientInformationVerificationDetails(t *testing.T) {
+	assert := assert.New(t)
+
+	deptID := 1
+	expirationDate := time.Now()
+	insuredSignature := "true"
+	patientSignature := "true"
+	privacyNotice := "true"
+	reasonPatientUnableToSign := "test reason"
+	signatureDatetime := time.Now()
+	signatureName := "John Smith"
+	signerRelationshipToPatientID := "care provider"
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Contains(r.URL.Path, "/patients/123/")
+
+		assert.Equal(strconv.Itoa(deptID), r.FormValue("departmentid"))
+		assert.Equal(expirationDate.Format("01/02/2006"), r.FormValue("expirationdate"))
+		assert.Equal(insuredSignature, r.FormValue("insuredsignature"))
+		assert.Equal(patientSignature, r.FormValue("patientsignature"))
+		assert.Equal(privacyNotice, r.FormValue("privacynotice"))
+		assert.Equal(reasonPatientUnableToSign, r.FormValue("reasonpatientunabletosign"))
+		assert.Equal(signatureDatetime.Format("01/02/2006 15:04:05"), r.FormValue("signaturedatetime"))
+		assert.Equal(signatureName, r.FormValue("signaturename"))
+		assert.Equal(signerRelationshipToPatientID, r.FormValue("signerrelationshiptopatientid"))
+
+		b, _ := ioutil.ReadFile("./resources/UpdatePatientInformationVerificationDetails.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &UpdatePatientInformationVerificationDetailsOptions{
+		DepartmentID:                deptID,
+		ExpirationDate:              &expirationDate,
+		InsuredSignature:            &insuredSignature,
+		PatientSignature:            &patientSignature,
+		PrivacyNotice:               &privacyNotice,
+		ReasonPatientUnableToSign:   &reasonPatientUnableToSign,
+		SignatureDatetime:           signatureDatetime,
+		SignatureName:               signatureName,
+		SignerRelationshipToPatient: &signerRelationshipToPatientID,
+	}
+
+	err := athenaClient.UpdatePatientInformationVerificationDetails("123", opts)
 	assert.NoError(err)
 }
