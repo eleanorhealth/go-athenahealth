@@ -11,6 +11,7 @@ type Client interface {
 
 	GetPatient(patientID string, opts *GetPatientOptions) (*Patient, error)
 	ListPatients(*ListPatientsOptions) (*ListPatientsResult, error)
+	UpdatePatientInformationVerificationDetails(patientID string, opts *UpdatePatientInformationVerificationDetailsOptions) error
 
 	ListSocialHistoryTemplates() ([]*SocialHistoryTemplate, error)
 	GetPatientSocialHistory(patientID string, opts *GetPatientSocialHistoryOptions) (*GetPatientSocialHistoryResponse, error)
@@ -44,6 +45,7 @@ type Client interface {
 
 	ListProblems(patientID string, opts *ListProblemsOptions) ([]*Problem, error)
 	ListAdminDocuments(patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error)
+	AddDocument(patientID string, opts *AddDocumentOptions) (string, error)
 }
 
 type TokenProvider interface {

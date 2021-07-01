@@ -375,3 +375,71 @@ func (h *HTTPClient) ListChangedPatients(opts *ListChangedPatientOptions) ([]*Pa
 
 	return out.ChangedPatients, nil
 }
+
+type UpdatePatientInformationVerificationDetailsOptions struct {
+	DepartmentID                int
+	ExpirationDate              *time.Time
+	InsuredSignature            *string
+	PatientSignature            *string
+	PrivacyNotice               *string
+	ReasonPatientUnableToSign   *string
+	SignatureDatetime           time.Time
+	SignatureName               string
+	SignerRelationshipToPatient *string
+}
+
+type updatePatientInformationVerificationDetailsResponse struct {
+	Success bool `json:"success"`
+}
+
+// UpdatePatientInformationVerificationDetails - Update patient's privacy information verification details.
+// POST /v1/{practiceid}/patients/{patientid}/privacyinformationverified
+// https://developer.athenahealth.com/docs/read/patientinfo/Patients_Changed
+func (h *HTTPClient) UpdatePatientInformationVerificationDetails(patientID string, opts *UpdatePatientInformationVerificationDetailsOptions) error {
+	out := []*updatePatientInformationVerificationDetailsResponse{}
+	var form url.Values
+
+	if opts != nil {
+		form = url.Values{}
+
+		form.Add("departmentid", strconv.Itoa(opts.DepartmentID))
+
+		if opts.ExpirationDate != nil {
+			form.Add("expirationdate", opts.ExpirationDate.Format("01/02/2006"))
+		}
+
+		if opts.InsuredSignature != nil {
+			form.Add("insuredsignature", *opts.InsuredSignature)
+		}
+
+		if opts.PatientSignature != nil {
+			form.Add("patientsignature", *opts.PatientSignature)
+		}
+
+		if opts.PrivacyNotice != nil {
+			form.Add("privacynotice", *opts.PrivacyNotice)
+		}
+
+		if opts.ReasonPatientUnableToSign != nil {
+			form.Add("reasonpatientunabletosign", *opts.ReasonPatientUnableToSign)
+		}
+
+		form.Add("signaturedatetime", opts.SignatureDatetime.Format("01/02/2006 15:04:05"))
+		form.Add("signaturename", opts.SignatureName)
+
+		if opts.SignerRelationshipToPatient != nil {
+			form.Add("signerrelationshiptopatientid", *opts.SignerRelationshipToPatient)
+		}
+	}
+
+	_, err := h.PostForm(fmt.Sprintf("/patients/%s/privacyinformationverified", patientID), form, &out)
+	if err != nil {
+		return err
+	}
+
+	if len(out) != 1 || !out[0].Success {
+		return errors.New("unexpected response")
+	}
+
+	return nil
+}
