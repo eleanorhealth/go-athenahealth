@@ -87,7 +87,7 @@ type AddDocumentOptions struct {
 	ActionNote         *string
 	AppointmentID      *int
 	AttachmentContents string
-	Autoclose          *string
+	AutoClose          *string
 	DepartmentID       *int
 	DocumentSubclass   string
 	InternalNote       *string
@@ -145,8 +145,8 @@ func (h *HTTPClient) AddDocument(patientID string, opts *AddDocumentOptions) (st
 
 		form.Add("attachmentcontents", base64.StdEncoding.EncodeToString([]byte(opts.AttachmentContents)))
 
-		if opts.Autoclose != nil {
-			form.Add("autoclose", *opts.Autoclose)
+		if opts.AutoClose != nil {
+			form.Add("autoclose", *opts.AutoClose)
 		}
 
 		if opts.DepartmentID != nil {

@@ -74,7 +74,7 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 		ActionNote:         &actionNote,
 		AppointmentID:      &apptID,
 		AttachmentContents: attachmentContents,
-		Autoclose:          &autoclose,
+		AutoClose:          &autoclose,
 		DepartmentID:       &deptID,
 		DocumentSubclass:   documentSubclass,
 		InternalNote:       &internalNote,
