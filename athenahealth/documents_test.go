@@ -42,7 +42,7 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 
 	actionNote := "test action note"
 	apptID := 1
-	attachmentContents := "test attachment contents"
+	attachmentContents := []byte("test attachment contents")
 	autoclose := "true"
 	deptID := 2
 	documentSubclass := "ADMIN_CONSENT"

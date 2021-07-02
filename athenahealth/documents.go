@@ -86,7 +86,7 @@ func (h *HTTPClient) ListAdminDocuments(patientID string, opts *ListAdminDocumen
 type AddDocumentOptions struct {
 	ActionNote         *string
 	AppointmentID      *int
-	AttachmentContents string
+	AttachmentContents []byte
 	AutoClose          *string
 	DepartmentID       *int
 	DocumentSubclass   string
@@ -143,7 +143,7 @@ func (h *HTTPClient) AddDocument(patientID string, opts *AddDocumentOptions) (st
 			form.Add("appointmentid", apptID)
 		}
 
-		form.Add("attachmentcontents", base64.StdEncoding.EncodeToString([]byte(opts.AttachmentContents)))
+		form.Add("attachmentcontents", base64.StdEncoding.EncodeToString(opts.AttachmentContents))
 
 		if opts.AutoClose != nil {
 			form.Add("autoclose", *opts.AutoClose)
