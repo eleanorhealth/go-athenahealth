@@ -92,7 +92,7 @@ func (h *HTTPClient) ListDepartments(opts *ListDepartmentsOptions) (*ListDepartm
 			q.Add("providerlist", "1")
 		}
 
-		if opts.ProviderList {
+		if opts.ShowAllDepartments {
 			q.Add("showalldepartments", "1")
 		}
 
