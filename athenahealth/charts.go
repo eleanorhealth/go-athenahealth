@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -24,10 +25,10 @@ type SocialHistoryQuestion struct {
 // ListPatientSocialHistoryTemplates - List of social history questions and templates configured by this practice.
 // GET /v1/{practiceid}/chart/configuration/socialhistory
 // https://developer.athenahealth.com/docs/read/chart/Social_History#section-0
-func (h *HTTPClient) ListSocialHistoryTemplates() ([]*SocialHistoryTemplate, error) {
+func (h *HTTPClient) ListSocialHistoryTemplates(ctx context.Context) ([]*SocialHistoryTemplate, error) {
 	out := []*SocialHistoryTemplate{}
 
-	_, err := h.Get(fmt.Sprintf("/chart/configuration/socialhistory"), nil, &out)
+	_, err := h.Get(ctx, fmt.Sprintf("/chart/configuration/socialhistory"), nil, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +67,7 @@ type GetPatientSocialHistoryResponse struct {
 // GetPatientSocialHistory - List of social history data for this patient.
 // GET /v1/{practiceid}/chart/{patientid}/socialhistory
 // https://developer.athenahealth.com/docs/read/chart/Social_History#section-2
-func (h *HTTPClient) GetPatientSocialHistory(patientID string, opts *GetPatientSocialHistoryOptions) (*GetPatientSocialHistoryResponse, error) {
+func (h *HTTPClient) GetPatientSocialHistory(ctx context.Context, patientID string, opts *GetPatientSocialHistoryOptions) (*GetPatientSocialHistoryResponse, error) {
 	out := &GetPatientSocialHistoryResponse{}
 
 	q := url.Values{}
@@ -89,7 +90,7 @@ func (h *HTTPClient) GetPatientSocialHistory(patientID string, opts *GetPatientS
 		}
 	}
 
-	_, err := h.Get(fmt.Sprintf("chart/%s/socialhistory", patientID), q, &out)
+	_, err := h.Get(ctx, fmt.Sprintf("chart/%s/socialhistory", patientID), q, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +115,7 @@ type UpdatePatientSocialHistoryOptions struct {
 // UpdatePatientSocialHistory - Update the set of social history questions for this patient.
 // PUT /v1/{practiceid}/chart/{patientid}/socialhistory
 // https://developer.athenahealth.com/docs/read/chart/Social_History#section-2
-func (h *HTTPClient) UpdatePatientSocialHistory(patientID string, opts *UpdatePatientSocialHistoryOptions) error {
+func (h *HTTPClient) UpdatePatientSocialHistory(ctx context.Context, patientID string, opts *UpdatePatientSocialHistoryOptions) error {
 	var form url.Values
 
 	if opts != nil {
@@ -138,7 +139,7 @@ func (h *HTTPClient) UpdatePatientSocialHistory(patientID string, opts *UpdatePa
 		}
 	}
 
-	_, err := h.PutForm(fmt.Sprintf("/chart/%s/socialhistory", patientID), form, nil)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/chart/%s/socialhistory", patientID), form, nil)
 	if err != nil {
 		return err
 	}

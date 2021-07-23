@@ -1,6 +1,7 @@
 package tokencacher
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -30,7 +31,7 @@ func TestFile_Get(t *testing.T) {
 
 	cacher := NewFile(file.Name())
 
-	token, err := cacher.Get()
+	token, err := cacher.Get(context.Background())
 
 	assert.Equal(c.Token, token)
 	assert.NoError(err)
@@ -47,7 +48,7 @@ func TestFile_Get_ErrTokenNotExist(t *testing.T) {
 
 	cacher := NewFile(file.Name())
 
-	token, err := cacher.Get()
+	token, err := cacher.Get(context.Background())
 
 	assert.Empty(token)
 	assert.Error(err)
@@ -73,7 +74,7 @@ func TestFile_Get_ErrTokenExpired(t *testing.T) {
 
 	cacher := NewFile(file.Name())
 
-	token, err := cacher.Get()
+	token, err := cacher.Get(context.Background())
 
 	assert.Empty(token)
 	assert.Error(err)
@@ -94,7 +95,7 @@ func TestFile_Set(t *testing.T) {
 	token := "foo"
 	expiresAt := time.Now().Add(time.Minute * 1)
 
-	err = cacher.Set(token, expiresAt)
+	err = cacher.Set(context.Background(), token, expiresAt)
 
 	b, _ := ioutil.ReadFile(file.Name())
 	c := &fileCache{}

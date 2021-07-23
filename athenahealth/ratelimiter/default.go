@@ -1,6 +1,7 @@
 package ratelimiter
 
 import (
+	"context"
 	"time"
 )
 
@@ -11,6 +12,6 @@ func NewDefault() *Default {
 	return &Default{}
 }
 
-func (d *Default) Allowed(preview bool) (time.Duration, error) {
+func (d *Default) Allowed(ctx context.Context, preview bool) (time.Duration, error) {
 	return 0, nil
 }

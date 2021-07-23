@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -44,18 +45,18 @@ func testClient(h http.HandlerFunc) (*HTTPClient, *httptest.Server) {
 type testTokenProvider struct {
 }
 
-func (t *testTokenProvider) Provide() (string, time.Time, error) {
+func (t *testTokenProvider) Provide(ctx context.Context) (string, time.Time, error) {
 	return testToken, time.Now().Add(time.Minute * 1), nil
 }
 
 type testTokenCacher struct {
 }
 
-func (t *testTokenCacher) Get() (string, error) {
+func (t *testTokenCacher) Get(ctx context.Context) (string, error) {
 	return testToken, nil
 }
 
-func (t *testTokenCacher) Set(string, time.Time) error {
+func (t *testTokenCacher) Set(context.Context, string, time.Time) error {
 	return nil
 }
 
@@ -63,7 +64,7 @@ type testRateLimiter struct {
 	AllowedFunc func(preview bool) (time.Duration, error)
 }
 
-func (t *testRateLimiter) Allowed(preview bool) (time.Duration, error) {
+func (t *testRateLimiter) Allowed(ctx context.Context, preview bool) (time.Duration, error) {
 	if t.AllowedFunc != nil {
 		return t.AllowedFunc(preview)
 	}
@@ -170,7 +171,7 @@ func TestHTTPClient_request(t *testing.T) {
 	defer ts.Close()
 
 	var out map[string]string
-	res, err := athenaClient.request("GET", "/", nil, nil, &out)
+	res, err := athenaClient.request(context.Background(), "GET", "/", nil, nil, &out)
 
 	assert.NotNil(res)
 	assert.NoError(err)
@@ -187,7 +188,7 @@ func TestHTTPClient_request_error(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	res, err := athenaClient.request("GET", "/", nil, nil, nil)
+	res, err := athenaClient.request(context.Background(), "GET", "/", nil, nil, nil)
 
 	assert.NotNil(res)
 	assert.NotNil(err)
@@ -218,7 +219,7 @@ func TestHTTPClient_rate_limit(t *testing.T) {
 	defer ts.Close()
 
 	var out map[string]string
-	res, err := athenaClient.request("GET", "/", nil, nil, &out)
+	res, err := athenaClient.request(context.Background(), "GET", "/", nil, nil, &out)
 
 	assert.NotNil(res)
 	assert.NoError(err)
@@ -296,7 +297,7 @@ func TestHTTPClient_Get(t *testing.T) {
 	var query = url.Values{}
 	query.Add("foo", "bar")
 
-	res, err := athenaClient.Get("/", query, nil)
+	res, err := athenaClient.Get(context.Background(), "/", query, nil)
 
 	assert.NotNil(res)
 	assert.NoError(err)
@@ -319,7 +320,7 @@ func TestHTTPClient_Post(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	res, err := athenaClient.Post("/", strings.NewReader("foo"), nil)
+	res, err := athenaClient.Post(context.Background(), "/", strings.NewReader("foo"), nil)
 
 	assert.NotNil(res)
 	assert.NoError(err)
@@ -347,7 +348,7 @@ func TestHTTPClient_PostForm(t *testing.T) {
 	var values = url.Values{}
 	values.Add("foo", "bar")
 
-	res, err := athenaClient.PostForm("/", values, nil)
+	res, err := athenaClient.PostForm(context.Background(), "/", values, nil)
 
 	assert.NotNil(res)
 	assert.NoError(err)
@@ -370,7 +371,7 @@ func TestHTTPClient_Put(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	res, err := athenaClient.Put("/", strings.NewReader("foo"), nil)
+	res, err := athenaClient.Put(context.Background(), "/", strings.NewReader("foo"), nil)
 
 	assert.NotNil(res)
 	assert.NoError(err)
@@ -398,7 +399,7 @@ func TestHTTPClient_PutForm(t *testing.T) {
 	var values = url.Values{}
 	values.Add("foo", "bar")
 
-	res, err := athenaClient.PutForm("/", values, nil)
+	res, err := athenaClient.PutForm(context.Background(), "/", values, nil)
 
 	assert.NotNil(res)
 	assert.NoError(err)
@@ -423,7 +424,7 @@ func TestHTTPClient_Delete(t *testing.T) {
 
 	athenaClient.baseURL = ts.URL
 
-	res, err := athenaClient.Delete("/", strings.NewReader("foo"), nil)
+	res, err := athenaClient.Delete(context.Background(), "/", strings.NewReader("foo"), nil)
 
 	assert.NotNil(res)
 	assert.NoError(err)
@@ -451,7 +452,7 @@ func TestHTTPClient_DeleteForm(t *testing.T) {
 	var values = url.Values{}
 	values.Add("foo", "bar")
 
-	res, err := athenaClient.DeleteForm("/", values, nil)
+	res, err := athenaClient.DeleteForm(context.Background(), "/", values, nil)
 
 	assert.NotNil(res)
 	assert.NoError(err)

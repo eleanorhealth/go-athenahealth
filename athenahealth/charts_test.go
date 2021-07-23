@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -22,7 +23,7 @@ func TestHTTPClient_ListSocialHistoryTemplates(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	templates, err := athenaClient.ListSocialHistoryTemplates()
+	templates, err := athenaClient.ListSocialHistoryTemplates(context.Background())
 	assert.NoError(err)
 
 	assert.Len(templates, 2)
@@ -51,7 +52,7 @@ func TestHTTPClient_GetPatientSocialHistory(t *testing.T) {
 		ShowUnansweredQuestions:   true,
 	}
 
-	socialHistory, err := athenaClient.GetPatientSocialHistory("1", opts)
+	socialHistory, err := athenaClient.GetPatientSocialHistory(context.Background(), "1", opts)
 	assert.NoError(err)
 
 	assert.Len(socialHistory.Questions, 2)
@@ -90,7 +91,7 @@ func TestHTTPClient_UpdatePatientSocialHistory(t *testing.T) {
 		SectionNote:  "foo",
 	}
 
-	err = athenaClient.UpdatePatientSocialHistory("1", opts)
+	err = athenaClient.UpdatePatientSocialHistory(context.Background(), "1", opts)
 	assert.NoError(err)
 
 	assert.True(called)

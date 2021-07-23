@@ -2,6 +2,7 @@ package tokenprovider
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -49,13 +50,13 @@ type authResponse struct {
 	ExpiresIn   json.Number `json:"expires_in"`
 }
 
-func (d *Default) Provide() (string, time.Time, error) {
+func (d *Default) Provide(ctx context.Context) (string, time.Time, error) {
 	vals := url.Values{
 		"grant_type": {"client_credentials"},
 		"scope":      {"athena/service/Athenanet.MDP.*"},
 	}
 
-	req, err := http.NewRequest("POST", d.authURL, bytes.NewBufferString(vals.Encode()))
+	req, err := http.NewRequestWithContext(ctx, "POST", d.authURL, bytes.NewBufferString(vals.Encode()))
 	if err != nil {
 		return "", time.Now(), err
 	}

@@ -1,6 +1,7 @@
 package tokencacher
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -15,7 +16,7 @@ func TestDefault_Get(t *testing.T) {
 	cacher.token = "foo"
 	cacher.expiresAt = time.Now().Add(time.Minute * 1)
 
-	token, err := cacher.Get()
+	token, err := cacher.Get(context.Background())
 
 	assert.Equal(cacher.token, token)
 	assert.NoError(err)
@@ -28,7 +29,7 @@ func TestDefault_Get_ErrTokenNotExist(t *testing.T) {
 	cacher.token = ""
 	cacher.expiresAt = time.Now().Add(time.Minute * 1)
 
-	token, err := cacher.Get()
+	token, err := cacher.Get(context.Background())
 
 	assert.Empty(token)
 	assert.Error(err)
@@ -42,7 +43,7 @@ func TestDefault_Get_ErrTokenExpired(t *testing.T) {
 	cacher.token = "foo"
 	cacher.expiresAt = time.Now().Add(-time.Minute * 1)
 
-	token, err := cacher.Get()
+	token, err := cacher.Get(context.Background())
 
 	assert.Empty(token)
 	assert.Error(err)
@@ -57,7 +58,7 @@ func TestDefault_Set(t *testing.T) {
 	token := "foo"
 	expiresAt := time.Now().Add(time.Minute * 1)
 
-	err := cacher.Set(token, expiresAt)
+	err := cacher.Set(context.Background(), token, expiresAt)
 
 	assert.Equal(token, cacher.token)
 	assert.True(expiresAt.Equal(cacher.expiresAt))

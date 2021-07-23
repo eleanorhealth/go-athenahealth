@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/url"
@@ -40,10 +41,10 @@ type Department struct {
 // GetDepartment - Details about a single department.
 // GET /v1/{practiceid}/departments/{departmentid}
 // https://developer.athenahealth.com/docs/read/administrative/Departments#section-1
-func (h *HTTPClient) GetDepartment(id string) (*Department, error) {
+func (h *HTTPClient) GetDepartment(ctx context.Context, id string) (*Department, error) {
 	out := []*Department{}
 
-	_, err := h.Get(fmt.Sprintf("/departments/%s", id), nil, &out)
+	_, err := h.Get(ctx, fmt.Sprintf("/departments/%s", id), nil, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +79,7 @@ type listDepartmentsResponse struct {
 // ListDepartments - List of all departments available for this practice
 // GET /v1/{practiceid}/departments
 // https://developer.athenahealth.com/docs/read/administrative/Departments#section-0
-func (h *HTTPClient) ListDepartments(opts *ListDepartmentsOptions) (*ListDepartmentsResult, error) {
+func (h *HTTPClient) ListDepartments(ctx context.Context, opts *ListDepartmentsOptions) (*ListDepartmentsResult, error) {
 	out := &listDepartmentsResponse{}
 
 	q := url.Values{}
@@ -107,7 +108,7 @@ func (h *HTTPClient) ListDepartments(opts *ListDepartmentsOptions) (*ListDepartm
 		}
 	}
 
-	_, err := h.Get("/departments", q, out)
+	_, err := h.Get(ctx, "/departments", q, out)
 	if err != nil {
 		return nil, err
 	}

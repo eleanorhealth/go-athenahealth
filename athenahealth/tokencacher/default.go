@@ -1,6 +1,7 @@
 package tokencacher
 
 import (
+	"context"
 	"sync"
 	"time"
 )
@@ -16,7 +17,7 @@ func NewDefault() *Default {
 	return &Default{}
 }
 
-func (d *Default) Get() (string, error) {
+func (d *Default) Get(ctx context.Context) (string, error) {
 	d.lock.Lock()
 	defer d.lock.Unlock()
 
@@ -31,7 +32,7 @@ func (d *Default) Get() (string, error) {
 	return d.token, nil
 }
 
-func (d *Default) Set(token string, expiresAt time.Time) error {
+func (d *Default) Set(ctx context.Context, token string, expiresAt time.Time) error {
 	d.lock.Lock()
 	defer d.lock.Unlock()
 

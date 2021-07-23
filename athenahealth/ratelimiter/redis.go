@@ -46,7 +46,7 @@ func NewRedis(client *redis.Client, ratePreview, rateProd int) *Redis {
 	return r
 }
 
-func (r *Redis) Allowed(preview bool) (time.Duration, error) {
+func (r *Redis) Allowed(ctx context.Context, preview bool) (time.Duration, error) {
 	var key string
 	var limit redis_rate.Limit
 
@@ -58,7 +58,7 @@ func (r *Redis) Allowed(preview bool) (time.Duration, error) {
 		limit = redis_rate.PerSecond(r.rateProd)
 	}
 
-	res, err := r.limiter.Allow(context.Background(), key, limit)
+	res, err := r.limiter.Allow(ctx, key, limit)
 	if err != nil {
 		return 0, err
 	}

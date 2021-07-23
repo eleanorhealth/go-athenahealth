@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/url"
@@ -34,10 +35,10 @@ type Provider struct {
 // GetProvider - Get details about a single provider.
 // GET /v1/{practiceid}/providers/{providerid}
 // https://developer.athenahealth.com/docs/read/administrative/Providers#section-3
-func (h *HTTPClient) GetProvider(id string) (*Provider, error) {
+func (h *HTTPClient) GetProvider(ctx context.Context, id string) (*Provider, error) {
 	out := []*Provider{}
 
-	_, err := h.Get(fmt.Sprintf("/providers/%s", id), nil, &out)
+	_, err := h.Get(ctx, fmt.Sprintf("/providers/%s", id), nil, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +63,7 @@ type listChangedProvidersResponse struct {
 // ListChangedProviders - A list of all changes to providers.
 // GET /v1/{practiceid}/providers/changed
 // https://developer.athenahealth.com/docs/read/administrative/Providers#section-4
-func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*Provider, error) {
+func (h *HTTPClient) ListChangedProviders(ctx context.Context, opts *ListChangedProviderOptions) ([]*Provider, error) {
 	out := &listChangedProvidersResponse{}
 
 	q := url.Values{}
@@ -81,7 +82,7 @@ func (h *HTTPClient) ListChangedProviders(opts *ListChangedProviderOptions) ([]*
 		}
 	}
 
-	_, err := h.Get("/providers/changed", q, out)
+	_, err := h.Get(ctx, "/providers/changed", q, out)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +109,7 @@ type ListProvidersResponse struct {
 // ListProviders - List of all providers available for this practice (with details)
 // GET /v1/{practiceid}/providers
 // https://developer.athenahealth.com/docs/read/administrative/Providers#section-1
-func (h *HTTPClient) ListProviders(opts *ListProvidersOptions) (*ListProvidersResult, error) {
+func (h *HTTPClient) ListProviders(ctx context.Context, opts *ListProvidersOptions) (*ListProvidersResult, error) {
 	out := &ListProvidersResponse{}
 
 	q := url.Values{}
@@ -125,7 +126,7 @@ func (h *HTTPClient) ListProviders(opts *ListProvidersOptions) (*ListProvidersRe
 		}
 	}
 
-	_, err := h.Get("/providers", q, out)
+	_, err := h.Get(ctx, "/providers", q, out)
 	if err != nil {
 		return nil, err
 	}

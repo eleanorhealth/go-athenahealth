@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -29,6 +30,9 @@ const (
 
 	// userAgent is the user agent that will be sent with every HTTP request.
 	userAgent = "go-athenahealth/1.0"
+
+	// defaultRequestTimeout defines the HTTP request's context deadline if one is not specified by the caller.
+	defaultRequestTimeout = 15 * time.Second
 )
 
 var _ Client = (*HTTPClient)(nil)
@@ -149,33 +153,39 @@ func (h *HTTPClient) setBaseURL() {
 	}
 }
 
-func (h *HTTPClient) request(method, path string, body io.Reader, headers http.Header, out interface{}) (*http.Response, error) {
+func (h *HTTPClient) request(ctx context.Context, method, path string, body io.Reader, headers http.Header, out interface{}) (*http.Response, error) {
+	if _, ok := ctx.Deadline(); !ok {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, defaultRequestTimeout)
+		defer cancel()
+	}
+
 	var token string
 	var err error
 	var expiresAt time.Time
 
 	h.requestLock.Lock()
 
-	retryAfter, err := h.rateLimiter.Allowed(h.preview)
+	retryAfter, err := h.rateLimiter.Allowed(ctx, h.preview)
 	if err != nil {
 		h.requestLock.Unlock()
 
 		if errors.Is(err, ratelimiter.ErrRateExceeded) {
 			time.Sleep(retryAfter)
-			return h.request(method, path, body, headers, out)
+			return h.request(ctx, method, path, body, headers, out)
 		}
 
 		return nil, err
 	}
 
-	token, err = h.tokenCacher.Get()
+	token, err = h.tokenCacher.Get(ctx)
 	if err != nil {
 		if !errors.Is(err, tokencacher.ErrTokenNotExist) && !errors.Is(err, tokencacher.ErrTokenExpired) {
 			h.requestLock.Unlock()
 			return nil, err
 		}
 
-		token, expiresAt, err = h.tokenProvider.Provide()
+		token, expiresAt, err = h.tokenProvider.Provide(ctx)
 		if err != nil {
 			h.requestLock.Unlock()
 			return nil, err
@@ -183,7 +193,7 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 
 		// Remove 1 minute from the expiration time to create a buffer to see
 		// if it resolves intermittent 401s.
-		err = h.tokenCacher.Set(token, expiresAt.Add(-1*time.Minute))
+		err = h.tokenCacher.Set(context.Background(), token, expiresAt.Add(-1*time.Minute))
 		if err != nil {
 			h.requestLock.Unlock()
 			return nil, err
@@ -198,7 +208,7 @@ func (h *HTTPClient) request(method, path string, body io.Reader, headers http.H
 
 	reqURL := fmt.Sprintf("%s%s", h.baseURL, path)
 
-	req, err := http.NewRequest(method, reqURL, body)
+	req, err := http.NewRequestWithContext(ctx, method, reqURL, body)
 	if err != nil {
 		return nil, err
 	}
@@ -299,19 +309,19 @@ func (h *HTTPClient) WithStats(stats Stats) *HTTPClient {
 	return h
 }
 
-func (h *HTTPClient) Get(path string, query url.Values, out interface{}) (*http.Response, error) {
+func (h *HTTPClient) Get(ctx context.Context, path string, query url.Values, out interface{}) (*http.Response, error) {
 	if len(query) > 0 {
 		path = fmt.Sprintf("%s?%s", path, query.Encode())
 	}
 
-	return h.request("GET", path, nil, nil, out)
+	return h.request(ctx, "GET", path, nil, nil, out)
 }
 
-func (h *HTTPClient) Post(path string, body io.Reader, out interface{}) (*http.Response, error) {
-	return h.request("POST", path, body, nil, out)
+func (h *HTTPClient) Post(ctx context.Context, path string, body io.Reader, out interface{}) (*http.Response, error) {
+	return h.request(ctx, "POST", path, body, nil, out)
 }
 
-func (h *HTTPClient) PostForm(path string, v url.Values, out interface{}) (*http.Response, error) {
+func (h *HTTPClient) PostForm(ctx context.Context, path string, v url.Values, out interface{}) (*http.Response, error) {
 	var body io.Reader
 	var headers = http.Header{}
 
@@ -320,14 +330,14 @@ func (h *HTTPClient) PostForm(path string, v url.Values, out interface{}) (*http
 		headers.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
 
-	return h.request("POST", path, body, headers, out)
+	return h.request(ctx, "POST", path, body, headers, out)
 }
 
-func (h *HTTPClient) Put(path string, body io.Reader, out interface{}) (*http.Response, error) {
-	return h.request("PUT", path, body, nil, out)
+func (h *HTTPClient) Put(ctx context.Context, path string, body io.Reader, out interface{}) (*http.Response, error) {
+	return h.request(ctx, "PUT", path, body, nil, out)
 }
 
-func (h *HTTPClient) PutForm(path string, v url.Values, out interface{}) (*http.Response, error) {
+func (h *HTTPClient) PutForm(ctx context.Context, path string, v url.Values, out interface{}) (*http.Response, error) {
 	var body io.Reader
 	var headers = http.Header{}
 
@@ -336,14 +346,14 @@ func (h *HTTPClient) PutForm(path string, v url.Values, out interface{}) (*http.
 		headers.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
 
-	return h.request("PUT", path, body, headers, out)
+	return h.request(ctx, "PUT", path, body, headers, out)
 }
 
-func (h *HTTPClient) Delete(path string, body io.Reader, out interface{}) (*http.Response, error) {
-	return h.request("DELETE", path, body, nil, out)
+func (h *HTTPClient) Delete(ctx context.Context, path string, body io.Reader, out interface{}) (*http.Response, error) {
+	return h.request(ctx, "DELETE", path, body, nil, out)
 }
 
-func (h *HTTPClient) DeleteForm(path string, v url.Values, out interface{}) (*http.Response, error) {
+func (h *HTTPClient) DeleteForm(ctx context.Context, path string, v url.Values, out interface{}) (*http.Response, error) {
 	var body io.Reader
 	var headers = http.Header{}
 
@@ -352,5 +362,5 @@ func (h *HTTPClient) DeleteForm(path string, v url.Values, out interface{}) (*ht
 		headers.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
 
-	return h.request("DELETE", path, body, headers, out)
+	return h.request(ctx, "DELETE", path, body, headers, out)
 }

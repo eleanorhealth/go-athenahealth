@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/url"
@@ -26,10 +27,10 @@ type Appointment struct {
 // GetAppointment - Single appointment.
 // GET /v1/{practiceid}/appointments/{appointmentid}
 // https://developer.athenahealth.com/docs/read/appointments/Appointments#section-1
-func (h *HTTPClient) GetAppointment(id string) (*Appointment, error) {
+func (h *HTTPClient) GetAppointment(ctx context.Context, id string) (*Appointment, error) {
 	out := []*Appointment{}
 
-	_, err := h.Get(fmt.Sprintf("/appointments/%s", id), nil, &out)
+	_, err := h.Get(ctx, fmt.Sprintf("/appointments/%s", id), nil, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -62,10 +63,10 @@ type listAppointmentCustomFieldsResponse struct {
 // ListAppointmentCustomFields - List of appointment custom fields (practice specific).
 // GET /v1/{practiceid}/appointments/customfields
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Custom_Fields#section-0
-func (h *HTTPClient) ListAppointmentCustomFields() ([]*AppointmentCustomField, error) {
+func (h *HTTPClient) ListAppointmentCustomFields(ctx context.Context) ([]*AppointmentCustomField, error) {
 	out := &listAppointmentCustomFieldsResponse{}
 
-	_, err := h.Get("/appointments/customfields", nil, &out)
+	_, err := h.Get(ctx, "/appointments/customfields", nil, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +140,7 @@ type listBookedAppointmentsResponse struct {
 // ListBookedAppointments - Booked appointment slots.
 // GET /v1/{practiceid}/appointments/booked
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-3
-func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error) {
+func (h *HTTPClient) ListBookedAppointments(ctx context.Context, opts *ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error) {
 	out := &listBookedAppointmentsResponse{}
 
 	q := url.Values{}
@@ -180,7 +181,7 @@ func (h *HTTPClient) ListBookedAppointments(opts *ListBookedAppointmentsOptions)
 		}
 	}
 
-	_, err := h.Get("/appointments/booked", q, out)
+	_, err := h.Get(ctx, "/appointments/booked", q, out)
 	if err != nil {
 		return nil, err
 	}
@@ -208,7 +209,7 @@ type listChangedAppointmentsResponse struct {
 // ListChangedAppointments - Changed appointment slots.
 // GET /v1/{practiceid}/appointments/changed
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-5
-func (h *HTTPClient) ListChangedAppointments(opts *ListChangedAppointmentsOptions) ([]*BookedAppointment, error) {
+func (h *HTTPClient) ListChangedAppointments(ctx context.Context, opts *ListChangedAppointmentsOptions) ([]*BookedAppointment, error) {
 	out := &listChangedAppointmentsResponse{}
 
 	q := url.Values{}
@@ -243,7 +244,7 @@ func (h *HTTPClient) ListChangedAppointments(opts *ListChangedAppointmentsOption
 		}
 	}
 
-	_, err := h.Get("/appointments/changed", q, out)
+	_, err := h.Get(ctx, "/appointments/changed", q, out)
 	if err != nil {
 		return nil, err
 	}
@@ -260,7 +261,7 @@ type CreateAppointmentNoteOptions struct {
 // CreateAppointmentNote - Notes for this appointment.
 // POST /v1/{practiceid}/appointments/{appointmentid}/notes
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-0
-func (h *HTTPClient) CreateAppointmentNote(appointmentID string, opts *CreateAppointmentNoteOptions) error {
+func (h *HTTPClient) CreateAppointmentNote(ctx context.Context, appointmentID string, opts *CreateAppointmentNoteOptions) error {
 	var form url.Values
 
 	if opts != nil {
@@ -279,7 +280,7 @@ func (h *HTTPClient) CreateAppointmentNote(appointmentID string, opts *CreateApp
 		}
 	}
 
-	_, err := h.PostForm(fmt.Sprintf("/appointments/%s/notes", appointmentID), form, nil)
+	_, err := h.PostForm(ctx, fmt.Sprintf("/appointments/%s/notes", appointmentID), form, nil)
 	if err != nil {
 		return err
 	}
@@ -307,7 +308,7 @@ type listAppointmentNotesResponse struct {
 // ListAppointmentNotes - Notes for this appointment.
 // GET /v1/{practiceid}/appointments/{appointmentid}/notes
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-1
-func (h *HTTPClient) ListAppointmentNotes(appointmentID string, opts *ListAppointmentNotesOptions) ([]*AppointmentNote, error) {
+func (h *HTTPClient) ListAppointmentNotes(ctx context.Context, appointmentID string, opts *ListAppointmentNotesOptions) ([]*AppointmentNote, error) {
 	out := &listAppointmentNotesResponse{}
 
 	q := url.Values{}
@@ -322,7 +323,7 @@ func (h *HTTPClient) ListAppointmentNotes(appointmentID string, opts *ListAppoin
 		}
 	}
 
-	_, err := h.Get(fmt.Sprintf("/appointments/%s/notes", appointmentID), q, out)
+	_, err := h.Get(ctx, fmt.Sprintf("/appointments/%s/notes", appointmentID), q, out)
 	if err != nil {
 		return nil, err
 	}
@@ -340,7 +341,7 @@ type UpdateAppointmentNoteOptions struct {
 // UpdateAppointmentNote - Notes for this appointment.
 // PUT /v1/{practiceid}/appointments/{appointmentid}/notes/{noteid}
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-3
-func (h *HTTPClient) UpdateAppointmentNote(appointmentID, noteID string, opts *UpdateAppointmentNoteOptions) error {
+func (h *HTTPClient) UpdateAppointmentNote(ctx context.Context, appointmentID, noteID string, opts *UpdateAppointmentNoteOptions) error {
 	var form url.Values
 
 	if opts != nil {
@@ -363,7 +364,7 @@ func (h *HTTPClient) UpdateAppointmentNote(appointmentID, noteID string, opts *U
 		}
 	}
 
-	_, err := h.PutForm(fmt.Sprintf("/appointments/%s/notes/%s", appointmentID, noteID), form, nil)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%s/notes/%s", appointmentID, noteID), form, nil)
 	if err != nil {
 		return err
 	}
@@ -379,7 +380,7 @@ type DeleteAppointmentNoteOptions struct {
 // DeleteAppointmentNote - Notes for this appointment.
 // DELETE /v1/{practiceid}/appointments/{appointmentid}/notes/{noteid}
 // https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-0
-func (h *HTTPClient) DeleteAppointmentNote(appointmentID, noteID string, opts *DeleteAppointmentNoteOptions) error {
+func (h *HTTPClient) DeleteAppointmentNote(ctx context.Context, appointmentID, noteID string, opts *DeleteAppointmentNoteOptions) error {
 	var form url.Values
 
 	if opts != nil {
@@ -394,7 +395,7 @@ func (h *HTTPClient) DeleteAppointmentNote(appointmentID, noteID string, opts *D
 		}
 	}
 
-	_, err := h.DeleteForm(fmt.Sprintf("/appointments/%s/notes/%s", appointmentID, noteID), form, nil)
+	_, err := h.DeleteForm(ctx, fmt.Sprintf("/appointments/%s/notes/%s", appointmentID, noteID), form, nil)
 	if err != nil {
 		return err
 	}
