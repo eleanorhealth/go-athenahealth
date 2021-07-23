@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"encoding/base64"
 	"io/ioutil"
 	"net/http"
@@ -28,7 +29,7 @@ func TestHTTPClient_ListAdminDocuments(t *testing.T) {
 		DepartmentID: "3",
 	}
 
-	res, err := athenaClient.ListAdminDocuments("123", opts)
+	res, err := athenaClient.ListAdminDocuments(context.Background(), "123", opts)
 
 	assert.Len(res.AdminDocuments, 1)
 	assert.Equal(res.Pagination.NextOffset, 30)
@@ -81,7 +82,7 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 		ProviderID:         &providerID,
 	}
 
-	documentID, err := athenaClient.AddDocument("123", opts)
+	documentID, err := athenaClient.AddDocument(context.Background(), "123", opts)
 
 	assert.Equal("100", documentID)
 	assert.NoError(err)

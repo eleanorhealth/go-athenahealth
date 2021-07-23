@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -19,7 +20,7 @@ func TestHTTPClient_GetDepartment(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	department, err := athenaClient.GetDepartment("1")
+	department, err := athenaClient.GetDepartment(context.Background(), "1")
 
 	assert.NotNil(department)
 	assert.NoError(err)
@@ -46,7 +47,7 @@ func TestHTTPClient_ListDepartments(t *testing.T) {
 		ShowAllDepartments: true,
 	}
 
-	res, err := athenaClient.ListDepartments(opts)
+	res, err := athenaClient.ListDepartments(context.Background(), opts)
 
 	assert.Len(res.Departments, 1)
 	assert.Equal(res.Pagination.NextOffset, 30)

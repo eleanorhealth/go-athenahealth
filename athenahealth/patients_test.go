@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"encoding/base64"
 	"io/ioutil"
 	"net/http"
@@ -34,7 +35,7 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 		ShowPortalStatus:   true,
 		ShowLocalPatientID: true,
 	}
-	patient, err := athenaClient.GetPatient(id, opts)
+	patient, err := athenaClient.GetPatient(context.Background(), id, opts)
 
 	assert.NotNil(patient)
 	assert.NoError(err)
@@ -63,7 +64,7 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 		Status:       "i",
 	}
 
-	res, err := athenaClient.ListPatients(opts)
+	res, err := athenaClient.ListPatients(context.Background(), opts)
 
 	assert.Len(res.Patients, 2)
 	assert.Equal(res.Pagination.NextOffset, 30)
@@ -85,7 +86,7 @@ func TestHTTPClient_GetPatientPhoto_JPEGOutputNotSupported(t *testing.T) {
 	opts := &GetPatientPhotoOptions{
 		JPEGOutput: true,
 	}
-	_, err := athenaClient.GetPatientPhoto(id, opts)
+	_, err := athenaClient.GetPatientPhoto(context.Background(), id, opts)
 
 	assert.Error(err)
 }
@@ -105,7 +106,7 @@ func TestHTTPClient_UpdatePatientPhoto(t *testing.T) {
 	defer ts.Close()
 
 	id := "1"
-	err := athenaClient.UpdatePatientPhoto(id, data)
+	err := athenaClient.UpdatePatientPhoto(context.Background(), id, data)
 	assert.NoError(err)
 }
 
@@ -138,7 +139,7 @@ func TestHTTPClient_ListChangedPatients(t *testing.T) {
 		ShowProcessedEndDatetime:   time.Date(2020, 6, 2, 12, 30, 45, 0, time.UTC),
 	}
 
-	patients, err := athenaClient.ListChangedPatients(opts)
+	patients, err := athenaClient.ListChangedPatients(context.Background(), opts)
 
 	assert.Len(patients, 1)
 	assert.NoError(err)
@@ -191,6 +192,6 @@ func TestHTTPClient_UpdatePatientInformationVerificationDetails(t *testing.T) {
 		SignerRelationshipToPatient: &signerRelationshipToPatientID,
 	}
 
-	err := athenaClient.UpdatePatientInformationVerificationDetails("123", opts)
+	err := athenaClient.UpdatePatientInformationVerificationDetails(context.Background(), "123", opts)
 	assert.NoError(err)
 }

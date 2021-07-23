@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -19,7 +20,7 @@ func TestHTTPClient_GetSubscription(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	subscription, err := athenaClient.GetSubscription("appointments")
+	subscription, err := athenaClient.GetSubscription(context.Background(), "appointments")
 
 	assert.NotNil(subscription)
 	assert.NoError(err)
@@ -36,7 +37,7 @@ func TestHTTPClient_ListSubscriptionEvents(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	events, err := athenaClient.ListSubscriptionEvents("appointments")
+	events, err := athenaClient.ListSubscriptionEvents(context.Background(), "appointments")
 
 	assert.Len(events, 11)
 	assert.NoError(err)
@@ -61,7 +62,7 @@ func TestHTTPClient_Subscribe(t *testing.T) {
 	opts := &SubscribeOptions{
 		EventName: "UpdateAppointment",
 	}
-	err := athenaClient.Subscribe("appointments", opts)
+	err := athenaClient.Subscribe(context.Background(), "appointments", opts)
 
 	assert.NoError(err)
 	assert.True(called)
@@ -86,7 +87,7 @@ func TestHTTPClient_Unsubscribe(t *testing.T) {
 	opts := &UnsubscribeOptions{
 		EventName: "UpdateAppointment",
 	}
-	err := athenaClient.Unsubscribe("appointments", opts)
+	err := athenaClient.Unsubscribe(context.Background(), "appointments", opts)
 
 	assert.NoError(err)
 	assert.True(called)

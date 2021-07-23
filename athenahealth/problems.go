@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -38,7 +39,7 @@ type listProblemsResponse struct {
 // ListProblems - Gets patient problems.
 // GET /v1/{practiceid}/chart/{patientid}/problems
 // https://developer.athenahealth.com/docs/read/chart/Problems#section-0
-func (h *HTTPClient) ListProblems(patientID string, opts *ListProblemsOptions) ([]*Problem, error) {
+func (h *HTTPClient) ListProblems(ctx context.Context, patientID string, opts *ListProblemsOptions) ([]*Problem, error) {
 	out := &listProblemsResponse{}
 
 	q := url.Values{}
@@ -53,7 +54,7 @@ func (h *HTTPClient) ListProblems(patientID string, opts *ListProblemsOptions) (
 		}
 	}
 
-	_, err := h.Get(fmt.Sprintf("/chart/%s/problems", patientID), q, out)
+	_, err := h.Get(ctx, fmt.Sprintf("/chart/%s/problems", patientID), q, out)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +76,7 @@ type listChangedProblemsResponse struct {
 // ListChangedProblems - Gets changed problems records
 // GET /v1/{practiceid}/chart/healthhistory/problems/changed
 // https://developer.athenahealth.com/docs/read/chart/Problems_Changed_Subscriptions#section-0
-func (h *HTTPClient) ListChangedProblems(opts *ListChangedProblemsOptions) ([]*Problem, error) {
+func (h *HTTPClient) ListChangedProblems(ctx context.Context, opts *ListChangedProblemsOptions) ([]*Problem, error) {
 	out := &listChangedProblemsResponse{}
 
 	q := url.Values{}
@@ -98,7 +99,7 @@ func (h *HTTPClient) ListChangedProblems(opts *ListChangedProblemsOptions) ([]*P
 		}
 	}
 
-	_, err := h.Get("/chart/healthhistory/problems/changed", q, out)
+	_, err := h.Get(ctx, "/chart/healthhistory/problems/changed", q, out)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -20,7 +21,7 @@ func TestHTTPClient_GetProvider(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	provider, err := athenaClient.GetProvider("1")
+	provider, err := athenaClient.GetProvider(context.Background(), "1")
 
 	assert.NotNil(provider)
 	assert.NoError(err)
@@ -47,7 +48,7 @@ func TestHTTPClient_ListChangedProviders(t *testing.T) {
 		ShowProcessedEndDatetime:   time.Date(2020, 6, 2, 12, 30, 45, 0, time.UTC),
 	}
 
-	patients, err := athenaClient.ListChangedProviders(opts)
+	patients, err := athenaClient.ListChangedProviders(context.Background(), opts)
 
 	assert.Len(patients, 1)
 	assert.NoError(err)
@@ -66,7 +67,7 @@ func TestHTTPClient_ListProviders(t *testing.T) {
 
 	opts := &ListProvidersOptions{}
 
-	res, err := athenaClient.ListProviders(opts)
+	res, err := athenaClient.ListProviders(context.Background(), opts)
 
 	assert.Len(res.Providers, 1)
 	assert.Equal(res.Pagination.NextOffset, 30)

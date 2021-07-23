@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -20,7 +21,7 @@ func TestHTTPClient_GetAppointment(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	appointment, err := athenaClient.GetAppointment("1")
+	appointment, err := athenaClient.GetAppointment(context.Background(), "1")
 
 	assert.NotNil(appointment)
 	assert.NoError(err)
@@ -37,7 +38,7 @@ func TestHTTPClient_ListAppointmentCustomFields(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	customFields, err := athenaClient.ListAppointmentCustomFields()
+	customFields, err := athenaClient.ListAppointmentCustomFields(context.Background())
 
 	assert.Len(customFields, 2)
 	assert.NoError(err)
@@ -66,7 +67,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 		AppointmentStatus: "x",
 	}
 
-	res, err := athenaClient.ListBookedAppointments(opts)
+	res, err := athenaClient.ListBookedAppointments(context.Background(), opts)
 
 	assert.Len(res.BookedAppointments, 2)
 	assert.Equal(res.Pagination.NextOffset, 30)
@@ -96,7 +97,7 @@ func TestHTTPClient_ListChangedAppointments(t *testing.T) {
 		ShowProcessedEndDatetime:   time.Date(2020, 6, 2, 12, 30, 45, 0, time.UTC),
 	}
 
-	appointments, err := athenaClient.ListChangedAppointments(opts)
+	appointments, err := athenaClient.ListChangedAppointments(context.Background(), opts)
 
 	assert.Len(appointments, 2)
 	assert.NoError(err)
@@ -123,7 +124,7 @@ func TestHTTPClient_CreateAppointmentNote(t *testing.T) {
 		NoteText:      "test note",
 	}
 
-	err := athenaClient.CreateAppointmentNote("1", opts)
+	err := athenaClient.CreateAppointmentNote(context.Background(), "1", opts)
 
 	assert.NoError(err)
 	assert.True(called)
@@ -146,7 +147,7 @@ func TestHTTPClient_ListAppointmentNotes(t *testing.T) {
 		AppointmentID: "1",
 	}
 
-	appointments, err := athenaClient.ListAppointmentNotes("1", opts)
+	appointments, err := athenaClient.ListAppointmentNotes(context.Background(), "1", opts)
 
 	assert.Len(appointments, 2)
 	assert.NoError(err)
@@ -175,7 +176,7 @@ func TestHTTPClient_UpdateAppointmentNote(t *testing.T) {
 		NoteText:      "test note",
 	}
 
-	err := athenaClient.UpdateAppointmentNote("1", "2", opts)
+	err := athenaClient.UpdateAppointmentNote(context.Background(), "1", "2", opts)
 
 	assert.NoError(err)
 	assert.True(called)
@@ -202,7 +203,7 @@ func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
 		NoteID:        "1",
 	}
 
-	err := athenaClient.DeleteAppointmentNote("1", "1", opts)
+	err := athenaClient.DeleteAppointmentNote(context.Background(), "1", "1", opts)
 
 	assert.NoError(err)
 	assert.True(called)

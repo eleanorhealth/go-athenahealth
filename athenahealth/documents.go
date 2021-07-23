@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
 	"net/url"
@@ -51,7 +52,7 @@ type listAdminDocumentsResponse struct {
 // ListAdminDocuments - Get admin documents.
 // GET /v1/{practiceid}/patients/{patientid}/documents/admin
 // https://developer.athenahealth.com/docs/read/forms_and_documents/Document_Lists_By_Class#section-19
-func (h *HTTPClient) ListAdminDocuments(patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error) {
+func (h *HTTPClient) ListAdminDocuments(ctx context.Context, patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error) {
 	out := &listAdminDocumentsResponse{}
 
 	q := url.Values{}
@@ -72,7 +73,7 @@ func (h *HTTPClient) ListAdminDocuments(patientID string, opts *ListAdminDocumen
 		}
 	}
 
-	_, err := h.Get(fmt.Sprintf("/patients/%s/documents/admin", patientID), q, out)
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s/documents/admin", patientID), q, out)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +129,7 @@ type addDocumentResponse struct {
 // MEDICALRECORD_HISTORICAL
 // MEDICALRECORD_PATIENTDIARY
 // MEDICALRECORD_VACCINATION
-func (h *HTTPClient) AddDocument(patientID string, opts *AddDocumentOptions) (string, error) {
+func (h *HTTPClient) AddDocument(ctx context.Context, patientID string, opts *AddDocumentOptions) (string, error) {
 	var form url.Values
 
 	if opts != nil {
@@ -168,7 +169,7 @@ func (h *HTTPClient) AddDocument(patientID string, opts *AddDocumentOptions) (st
 
 	res := &addDocumentResponse{}
 
-	_, err := h.PostForm(fmt.Sprintf("/patients/%s/documents", patientID), form, res)
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/documents", patientID), form, res)
 	if err != nil {
 		return "", err
 	}

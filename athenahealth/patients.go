@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -172,7 +173,7 @@ type GetPatientOptions struct {
 // GetPatient - Full view/update of patient demographics.
 // GET /v1/{practiceid}/patients/{patientid}
 // https://developer.athenahealth.com/docs/read/patientinfo/Patient_Information#section-5
-func (h *HTTPClient) GetPatient(id string, opts *GetPatientOptions) (*Patient, error) {
+func (h *HTTPClient) GetPatient(ctx context.Context, id string, opts *GetPatientOptions) (*Patient, error) {
 	out := []*Patient{}
 
 	q := url.Values{}
@@ -195,7 +196,7 @@ func (h *HTTPClient) GetPatient(id string, opts *GetPatientOptions) (*Patient, e
 		}
 	}
 
-	_, err := h.Get(fmt.Sprintf("/patients/%s", id), q, &out)
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s", id), q, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -231,7 +232,7 @@ type listPatientsResponse struct {
 // ListPatients - Gets a set of patients or creates a patient.
 // GET /v1/{practiceid}/patients
 // https://developer.athenahealth.com/docs/read/patientinfo/Patient_Information#section-1
-func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) (*ListPatientsResult, error) {
+func (h *HTTPClient) ListPatients(ctx context.Context, opts *ListPatientsOptions) (*ListPatientsResult, error) {
 	out := &listPatientsResponse{}
 
 	q := url.Values{}
@@ -264,7 +265,7 @@ func (h *HTTPClient) ListPatients(opts *ListPatientsOptions) (*ListPatientsResul
 		}
 	}
 
-	_, err := h.Get("/patients", q, out)
+	_, err := h.Get(ctx, "/patients", q, out)
 	if err != nil {
 		return nil, err
 	}
@@ -286,7 +287,7 @@ type patientPhoto struct {
 // GetPatientPhoto - Get a patient's photo.
 // GET /v1/{practiceid}/patients/{patientid}/photo
 // https://developer.athenahealth.com/docs/read/forms_and_documents/Patient_Photo#section-0
-func (h *HTTPClient) GetPatientPhoto(patientID string, opts *GetPatientPhotoOptions) (string, error) {
+func (h *HTTPClient) GetPatientPhoto(ctx context.Context, patientID string, opts *GetPatientPhotoOptions) (string, error) {
 	out := &patientPhoto{}
 
 	q := url.Values{}
@@ -297,7 +298,7 @@ func (h *HTTPClient) GetPatientPhoto(patientID string, opts *GetPatientPhotoOpti
 		}
 	}
 
-	_, err := h.Get(fmt.Sprintf("/patients/%s/photo", patientID), q, &out)
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s/photo", patientID), q, &out)
 	if err != nil {
 		return "", err
 	}
@@ -308,11 +309,11 @@ func (h *HTTPClient) GetPatientPhoto(patientID string, opts *GetPatientPhotoOpti
 // UpdatePatientPhoto - Update a patient's photo.
 // POST /v1/{practiceid}/patients/{patientid}/photo
 // https://developer.athenahealth.com/docs/read/forms_and_documents/Patient_Photo#section-1
-func (h *HTTPClient) UpdatePatientPhoto(patientID string, data []byte) error {
+func (h *HTTPClient) UpdatePatientPhoto(ctx context.Context, patientID string, data []byte) error {
 	form := url.Values{}
 	form.Add("image", base64.StdEncoding.EncodeToString(data))
 
-	_, err := h.PostForm(fmt.Sprintf("/patients/%s/photo", patientID), form, nil)
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/photo", patientID), form, nil)
 	return err
 }
 
@@ -333,7 +334,7 @@ type listChangedPatientsResponse struct {
 // ListChangedPatients - Gets changed patient records.
 // GET /v1/{practiceid}/patients/changed
 // https://developer.athenahealth.com/docs/read/patientinfo/Patients_Changed
-func (h *HTTPClient) ListChangedPatients(opts *ListChangedPatientOptions) ([]*Patient, error) {
+func (h *HTTPClient) ListChangedPatients(ctx context.Context, opts *ListChangedPatientOptions) ([]*Patient, error) {
 	out := &listChangedPatientsResponse{}
 
 	q := url.Values{}
@@ -368,7 +369,7 @@ func (h *HTTPClient) ListChangedPatients(opts *ListChangedPatientOptions) ([]*Pa
 		}
 	}
 
-	_, err := h.Get("/patients/changed", q, out)
+	_, err := h.Get(ctx, "/patients/changed", q, out)
 	if err != nil {
 		return nil, err
 	}
@@ -395,7 +396,7 @@ type updatePatientInformationVerificationDetailsResponse struct {
 // UpdatePatientInformationVerificationDetails - Update patient's privacy information verification details.
 // POST /v1/{practiceid}/patients/{patientid}/privacyinformationverified
 // https://developer.athenahealth.com/docs/read/patientinfo/Patients_Changed
-func (h *HTTPClient) UpdatePatientInformationVerificationDetails(patientID string, opts *UpdatePatientInformationVerificationDetailsOptions) error {
+func (h *HTTPClient) UpdatePatientInformationVerificationDetails(ctx context.Context, patientID string, opts *UpdatePatientInformationVerificationDetailsOptions) error {
 	out := []*updatePatientInformationVerificationDetailsResponse{}
 	var form url.Values
 
@@ -432,7 +433,7 @@ func (h *HTTPClient) UpdatePatientInformationVerificationDetails(patientID strin
 		}
 	}
 
-	_, err := h.PostForm(fmt.Sprintf("/patients/%s/privacyinformationverified", patientID), form, &out)
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/privacyinformationverified", patientID), form, &out)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -19,7 +20,7 @@ func TestHTTPClient_ListCustomFields(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	customFields, err := athenaClient.ListCustomFields()
+	customFields, err := athenaClient.ListCustomFields(context.Background())
 
 	assert.Len(customFields, 2)
 	assert.NoError(err)

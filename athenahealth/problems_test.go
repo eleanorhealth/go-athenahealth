@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -28,7 +29,7 @@ func TestHTTPClient_ListProblems(t *testing.T) {
 		PatientID:    "p1",
 	}
 
-	problems, err := athenaClient.ListProblems(opts.PatientID, opts)
+	problems, err := athenaClient.ListProblems(context.Background(), opts.PatientID, opts)
 
 	assert.Len(problems, 2)
 	assert.NoError(err)
@@ -57,7 +58,7 @@ func TestHTTPClient_ListChangedProblems(t *testing.T) {
 		ShowProcessedEndDatetime:   time.Date(2020, 6, 2, 12, 30, 45, 0, time.UTC),
 	}
 
-	problems, err := athenaClient.ListChangedProblems(opts)
+	problems, err := athenaClient.ListChangedProblems(context.Background(), opts)
 
 	assert.Len(problems, 1)
 	assert.NoError(err)
