@@ -1,6 +1,7 @@
 package tokencacher
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -30,7 +31,7 @@ func NewFile(path string) *File {
 	}
 }
 
-func (f *File) Get() (string, error) {
+func (f *File) Get(ctx context.Context) (string, error) {
 	f.lock.Lock()
 	defer f.lock.Unlock()
 
@@ -64,7 +65,7 @@ func (f *File) Get() (string, error) {
 	return c.Token, nil
 }
 
-func (f *File) Set(token string, expiresAt time.Time) error {
+func (f *File) Set(ctx context.Context, token string, expiresAt time.Time) error {
 	f.lock.Lock()
 	defer f.lock.Unlock()
 

@@ -1,6 +1,7 @@
 package tokencacher
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -28,7 +29,7 @@ func TestRedis_Get(t *testing.T) {
 		Addr: s.Addr(),
 	}), "")
 
-	token, err := cacher.Get()
+	token, err := cacher.Get(context.Background())
 
 	assert.Equal(expectedToken, token)
 	assert.NoError(err)
@@ -47,7 +48,7 @@ func TestRedis_Get_ErrTokenNotExist(t *testing.T) {
 		Addr: s.Addr(),
 	}), "")
 
-	token, err := cacher.Get()
+	token, err := cacher.Get(context.Background())
 
 	assert.Empty(token)
 	assert.Error(err)
@@ -68,7 +69,7 @@ func TestRedis_Set(t *testing.T) {
 	}), "")
 
 	expectedToken := "foo"
-	err = cacher.Set(expectedToken, time.Now().Add(time.Minute*1))
+	err = cacher.Set(context.Background(), expectedToken, time.Now().Add(time.Minute*1))
 
 	assert.NoError(err)
 

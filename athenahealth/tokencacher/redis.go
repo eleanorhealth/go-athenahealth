@@ -32,7 +32,7 @@ func NewRedis(client *redis.Client, key string) *Redis {
 	return r
 }
 
-func (r *Redis) Get() (string, error) {
+func (r *Redis) Get(ctx context.Context) (string, error) {
 	val, err := r.client.Get(context.Background(), r.key).Result()
 	if err != nil {
 		if errors.Is(err, redis.Nil) {
@@ -45,7 +45,7 @@ func (r *Redis) Get() (string, error) {
 	return val, nil
 }
 
-func (r *Redis) Set(token string, expiresAt time.Time) error {
+func (r *Redis) Set(ctx context.Context, token string, expiresAt time.Time) error {
 	_, err := r.client.Set(context.Background(), r.key, token, time.Second*time.Duration(expiresAt.Unix()-time.Now().Unix())).Result()
 
 	return err

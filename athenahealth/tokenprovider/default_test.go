@@ -1,6 +1,7 @@
 package tokenprovider
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -49,7 +50,7 @@ func TestDefault_Provide(t *testing.T) {
 	p := NewDefault(ts.Client(), "", "", false)
 	p.authURL = ts.URL
 
-	token, expiresAt, err := p.Provide()
+	token, expiresAt, err := p.Provide(context.Background())
 
 	assert.Equal(authRes.AccessToken, token)
 	assert.True(expiresAt.After(time.Now()))

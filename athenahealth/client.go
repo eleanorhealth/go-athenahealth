@@ -50,16 +50,16 @@ type Client interface {
 }
 
 type TokenProvider interface {
-	Provide() (string, time.Time, error)
+	Provide(context.Context) (string, time.Time, error)
 }
 
 type TokenCacher interface {
-	Get() (string, error)
-	Set(string, time.Time) error
+	Get(context.Context) (string, error)
+	Set(context.Context, string, time.Time) error
 }
 
 type RateLimiter interface {
-	Allowed(preview bool) (retryAfter time.Duration, err error)
+	Allowed(ctx context.Context, preview bool) (retryAfter time.Duration, err error)
 }
 
 type Stats interface {

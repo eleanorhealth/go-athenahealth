@@ -30,6 +30,9 @@ const (
 
 	// userAgent is the user agent that will be sent with every HTTP request.
 	userAgent = "go-athenahealth/1.0"
+
+	// defaultRequestTimeout defines the HTTP request's context deadline if one is not specified by the caller.
+	defaultRequestTimeout = 15 * time.Second
 )
 
 var _ Client = (*HTTPClient)(nil)
@@ -151,13 +154,19 @@ func (h *HTTPClient) setBaseURL() {
 }
 
 func (h *HTTPClient) request(ctx context.Context, method, path string, body io.Reader, headers http.Header, out interface{}) (*http.Response, error) {
+	if _, ok := ctx.Deadline(); !ok {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, defaultRequestTimeout)
+		defer cancel()
+	}
+
 	var token string
 	var err error
 	var expiresAt time.Time
 
 	h.requestLock.Lock()
 
-	retryAfter, err := h.rateLimiter.Allowed(h.preview)
+	retryAfter, err := h.rateLimiter.Allowed(ctx, h.preview)
 	if err != nil {
 		h.requestLock.Unlock()
 
@@ -169,14 +178,14 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		return nil, err
 	}
 
-	token, err = h.tokenCacher.Get()
+	token, err = h.tokenCacher.Get(ctx)
 	if err != nil {
 		if !errors.Is(err, tokencacher.ErrTokenNotExist) && !errors.Is(err, tokencacher.ErrTokenExpired) {
 			h.requestLock.Unlock()
 			return nil, err
 		}
 
-		token, expiresAt, err = h.tokenProvider.Provide()
+		token, expiresAt, err = h.tokenProvider.Provide(ctx)
 		if err != nil {
 			h.requestLock.Unlock()
 			return nil, err
@@ -184,7 +193,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 		// Remove 1 minute from the expiration time to create a buffer to see
 		// if it resolves intermittent 401s.
-		err = h.tokenCacher.Set(token, expiresAt.Add(-1*time.Minute))
+		err = h.tokenCacher.Set(context.Background(), token, expiresAt.Add(-1*time.Minute))
 		if err != nil {
 			h.requestLock.Unlock()
 			return nil, err

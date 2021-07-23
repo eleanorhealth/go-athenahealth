@@ -1,6 +1,7 @@
 package ratelimiter
 
 import (
+	"context"
 	"sync"
 	"testing"
 	"time"
@@ -23,7 +24,7 @@ func TestRedis_Allowed(t *testing.T) {
 		Addr: s.Addr(),
 	}), 1, 1)
 
-	retryAfter, err := rateLimiter.Allowed(true)
+	retryAfter, err := rateLimiter.Allowed(context.Background(), true)
 	assert.Zero(retryAfter)
 	assert.NoError(err)
 
@@ -32,24 +33,24 @@ func TestRedis_Allowed(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		go func() {
-			rateLimiter.Allowed(true)
+			rateLimiter.Allowed(context.Background(), true)
 			wg.Done()
 		}()
 	}
 
 	wg.Wait()
 
-	retryAfterPreview, err := rateLimiter.Allowed(true)
+	retryAfterPreview, err := rateLimiter.Allowed(context.Background(), true)
 	assert.NotZero(retryAfterPreview)
 	assert.IsType(ErrRateExceeded, err)
 
-	retryAfterProd, err := rateLimiter.Allowed(false)
+	retryAfterProd, err := rateLimiter.Allowed(context.Background(), false)
 	assert.Zero(retryAfterProd)
 	assert.NoError(err)
 
 	time.Sleep(retryAfterPreview)
 
-	retryAfter, err = rateLimiter.Allowed(true)
+	retryAfter, err = rateLimiter.Allowed(context.Background(), true)
 	assert.Zero(retryAfter)
 	assert.NoError(err)
 }

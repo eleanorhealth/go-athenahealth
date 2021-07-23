@@ -45,18 +45,18 @@ func testClient(h http.HandlerFunc) (*HTTPClient, *httptest.Server) {
 type testTokenProvider struct {
 }
 
-func (t *testTokenProvider) Provide() (string, time.Time, error) {
+func (t *testTokenProvider) Provide(ctx context.Context) (string, time.Time, error) {
 	return testToken, time.Now().Add(time.Minute * 1), nil
 }
 
 type testTokenCacher struct {
 }
 
-func (t *testTokenCacher) Get() (string, error) {
+func (t *testTokenCacher) Get(ctx context.Context) (string, error) {
 	return testToken, nil
 }
 
-func (t *testTokenCacher) Set(string, time.Time) error {
+func (t *testTokenCacher) Set(context.Context, string, time.Time) error {
 	return nil
 }
 
@@ -64,7 +64,7 @@ type testRateLimiter struct {
 	AllowedFunc func(preview bool) (time.Duration, error)
 }
 
-func (t *testRateLimiter) Allowed(preview bool) (time.Duration, error) {
+func (t *testRateLimiter) Allowed(ctx context.Context, preview bool) (time.Duration, error) {
 	if t.AllowedFunc != nil {
 		return t.AllowedFunc(preview)
 	}
