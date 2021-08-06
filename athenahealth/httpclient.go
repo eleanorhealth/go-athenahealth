@@ -19,6 +19,7 @@ import (
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/stats"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
+	"github.com/rs/zerolog"
 )
 
 const (
@@ -52,6 +53,7 @@ type HTTPClient struct {
 	tokenCacher   TokenCacher
 	rateLimiter   RateLimiter
 	stats         Stats
+	logger        *zerolog.Logger
 
 	requestLock sync.Mutex
 }
@@ -220,6 +222,13 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	req.Header.Add("User-Agent", userAgent)
 
+	if h.logger != nil {
+		h.logger.Info().
+			Str("method", method).
+			Str("url", reqURL).
+			Msg("athenahealth API request")
+	}
+
 	res, err := h.httpClient.Do(req)
 	if err != nil {
 		return res, err
@@ -251,6 +260,15 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	res.Body = ioutil.NopCloser(bytes.NewBuffer(resBody))
 
+	if h.logger != nil {
+		h.logger.Info().
+			Str("method", method).
+			Str("url", reqURL).
+			Int("statusCode", res.StatusCode).
+			Int("bodyLength", len(resBody)).
+			Msg("athenahealth API response")
+	}
+
 	if responseError {
 		err := &APIError{}
 		if res.StatusCode == http.StatusNotFound {
@@ -261,6 +279,12 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 		err.HTTPResponse = res
 
+		if h.logger != nil {
+			h.logger.Info().
+				Str("athenaError", err.AthenaError).
+				Str("athenaDetailedMessage", err.AthenaDetailedMessage).
+				Msg("athenahealth API error")
+		}
 		return res, err
 	}
 
@@ -272,6 +296,12 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	}
 
 	return res, nil
+}
+
+func (h *HTTPClient) WithLogger(logger *zerolog.Logger) *HTTPClient {
+	h.logger = logger
+
+	return h
 }
 
 func (h *HTTPClient) WithPreview(preview bool) *HTTPClient {
