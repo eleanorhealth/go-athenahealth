@@ -10,6 +10,7 @@ require (
 	github.com/go-redis/redis/v8 v8.7.1
 	github.com/go-redis/redis_rate/v9 v9.1.1
 	github.com/gomodule/redigo v1.8.4 // indirect
+	github.com/rs/zerolog v1.23.0
 	github.com/stretchr/testify v1.7.0
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
