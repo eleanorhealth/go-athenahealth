@@ -277,7 +277,9 @@ func TestHTTPClient_ListPatientsMatchingCustomField(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	res, err := athenaClient.ListPatientsMatchingCustomField(context.Background(), customFieldID, customFieldValue)
+	opts := &ListPatientsMatchingCustomFieldOptions{}
+
+	res, err := athenaClient.ListPatientsMatchingCustomField(context.Background(), customFieldID, customFieldValue, opts)
 
 	assert.Len(res.Patients, 1)
 	assert.Equal(res.Pagination.NextOffset, 30)
