@@ -48,7 +48,7 @@ type Client interface {
 	ListAdminDocuments(ctx context.Context, patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error)
 	AddDocument(ctx context.Context, patientID string, opts *AddDocumentOptions) (string, error)
 
-	ListPatientsMatchingCustomField(ctx context.Context, customFieldID, customFieldValue string, opts *ListPatientsMatchingCustomFieldOptions) (*ListPatientsMatchingCustomFieldResult, error)
+	ListPatientsMatchingCustomField(ctx context.Context, opts *ListPatientsMatchingCustomFieldOptions) (*ListPatientsMatchingCustomFieldResult, error)
 }
 
 type TokenProvider interface {

@@ -264,11 +264,14 @@ func TestHTTPClient_UpdatePatientCustomFields(t *testing.T) {
 func TestHTTPClient_ListPatientsMatchingCustomField(t *testing.T) {
 	assert := assert.New(t)
 
-	customFieldID := "1"
-	customFieldValue := "foo"
+	opts := &ListPatientsMatchingCustomFieldOptions{
+		CustomFieldID:    "1",
+		CustomFieldValue: "foo",
+		Pagination:       &PaginationOptions{},
+	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		assert.Contains(r.URL.Path, "/patients/customfields/"+customFieldID+"/"+customFieldValue)
+		assert.Contains(r.URL.Path, "/patients/customfields/"+opts.CustomFieldID+"/"+opts.CustomFieldValue)
 
 		b, _ := ioutil.ReadFile("./resources/ListPatientsMatchingCustomField.json")
 		w.Write(b)
@@ -277,9 +280,7 @@ func TestHTTPClient_ListPatientsMatchingCustomField(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	opts := &ListPatientsMatchingCustomFieldOptions{}
-
-	res, err := athenaClient.ListPatientsMatchingCustomField(context.Background(), customFieldID, customFieldValue, opts)
+	res, err := athenaClient.ListPatientsMatchingCustomField(context.Background(), opts)
 
 	assert.Len(res.Patients, 1)
 	assert.Equal(res.Pagination.NextOffset, 30)
