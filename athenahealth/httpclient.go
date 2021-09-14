@@ -258,6 +258,8 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	}
 	res.Body.Close()
 
+	fmt.Println(string(resBody))
+
 	res.Body = ioutil.NopCloser(bytes.NewBuffer(resBody))
 
 	if h.logger != nil {

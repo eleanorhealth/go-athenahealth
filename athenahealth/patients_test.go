@@ -260,3 +260,28 @@ func TestHTTPClient_UpdatePatientCustomFields(t *testing.T) {
 	err := athenaClient.UpdatePatientCustomFields(context.Background(), patientID, departmentID, customFields)
 	assert.NoError(err)
 }
+
+func TestHTTPClient_ListPatientsMatchingCustomField(t *testing.T) {
+	assert := assert.New(t)
+
+	customFieldID := "1"
+	customFieldValue := "foo"
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Contains(r.URL.Path, "/patients/customfields/"+customFieldID+"/"+customFieldValue)
+
+		b, _ := ioutil.ReadFile("./resources/ListPatientsMatchingCustomField.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	res, err := athenaClient.ListPatientsMatchingCustomField(context.Background(), customFieldID, customFieldValue)
+
+	assert.Len(res.Patients, 1)
+	assert.Equal(res.Pagination.NextOffset, 30)
+	assert.Equal(res.Pagination.PreviousOffset, 10)
+	assert.Equal(res.Pagination.TotalCount, 2)
+	assert.NoError(err)
+}
