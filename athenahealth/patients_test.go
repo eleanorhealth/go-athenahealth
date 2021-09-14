@@ -195,3 +195,68 @@ func TestHTTPClient_UpdatePatientInformationVerificationDetails(t *testing.T) {
 	err := athenaClient.UpdatePatientInformationVerificationDetails(context.Background(), "123", opts)
 	assert.NoError(err)
 }
+
+func TestHTTPClient_GetPatientCustomFields(t *testing.T) {
+	assert := assert.New(t)
+
+	patientID := "1"
+	departmentID := "2"
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Contains(r.URL.Path, "/patients/"+patientID+"/")
+
+		assert.Equal(departmentID, r.URL.Query().Get("departmentid"))
+
+		b, _ := ioutil.ReadFile("./resources/GetPatientCustomFields.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	customFields, err := athenaClient.GetPatientCustomFields(context.Background(), patientID, departmentID)
+	assert.NoError(err)
+
+	assert.Len(customFields, 2)
+
+	assert.Contains(customFields, &CustomFieldValue{
+		CustomFieldID:    "100",
+		CustomFieldValue: "999999",
+	})
+
+	assert.Contains(customFields, &CustomFieldValue{
+		CustomFieldID: "300",
+		OptionID:      "3",
+	})
+}
+
+func TestHTTPClient_UpdatePatientCustomFields(t *testing.T) {
+	assert := assert.New(t)
+
+	patientID := "1"
+	departmentID := "2"
+	customFields := []*CustomFieldValue{
+		{
+			CustomFieldID:    "3",
+			CustomFieldValue: "foobar",
+			OptionID:         "4",
+		},
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Contains(r.URL.Path, "/patients/"+patientID+"/")
+
+		assert.Equal(departmentID, r.FormValue("departmentid"))
+		assert.Equal(`[{"customfieldid":"3","customfieldvalue":"foobar","optionid":"4"}]`, r.FormValue("customfields"))
+		b, _ := ioutil.ReadFile("./resources/UpdatePatientCustomFields.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	err := athenaClient.UpdatePatientCustomFields(context.Background(), patientID, departmentID, customFields)
+	assert.NoError(err)
+}
