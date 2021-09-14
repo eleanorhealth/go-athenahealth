@@ -496,3 +496,54 @@ func (h *HTTPClient) UpdatePatientCustomFields(ctx context.Context, patientID, d
 
 	return nil
 }
+
+type ListPatientsMatchingCustomFieldOptions struct {
+	CustomFieldID    string
+	CustomFieldValue string
+
+	Pagination *PaginationOptions
+}
+
+type ListPatientsMatchingCustomFieldResult struct {
+	Patients []*Patient
+
+	Pagination *PaginationResult
+}
+
+type listPatientsMatchingCustomFieldResponse struct {
+	Patients []*Patient `json:"patients"`
+
+	PaginationResponse
+}
+
+// ListPatientsMatchingCustomField - Get list of patients - matching custom-field criteria.
+// GET /v1/{practiceid}/patients/customfields/{customfieldid}/{customfieldvalue}
+// https://docs.athenahealth.com/api/api-ref/patient#Get-list-of-patients---matching-custom-field-criteria
+func (h *HTTPClient) ListPatientsMatchingCustomField(ctx context.Context, opts *ListPatientsMatchingCustomFieldOptions) (*ListPatientsMatchingCustomFieldResult, error) {
+	if opts == nil {
+		panic("opts is nil")
+	}
+
+	out := &listPatientsMatchingCustomFieldResponse{}
+	q := url.Values{}
+
+	if opts.Pagination != nil {
+		if opts.Pagination.Limit > 0 {
+			q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
+		}
+
+		if opts.Pagination.Offset > 0 {
+			q.Add("offset", strconv.Itoa(opts.Pagination.Offset))
+		}
+	}
+
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/customfields/%s/%s", opts.CustomFieldID, opts.CustomFieldValue), nil, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ListPatientsMatchingCustomFieldResult{
+		Patients:   out.Patients,
+		Pagination: makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
+}
