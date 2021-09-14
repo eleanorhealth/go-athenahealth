@@ -47,6 +47,9 @@ type Client interface {
 	ListProblems(ctx context.Context, patientID string, opts *ListProblemsOptions) ([]*Problem, error)
 	ListAdminDocuments(ctx context.Context, patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error)
 	AddDocument(ctx context.Context, patientID string, opts *AddDocumentOptions) (string, error)
+
+	GetPatientCustomFields(ctx context.Context, patientID, departmentID string) ([]*CustomFieldValue, error)
+	UpdatePatientCustomFields(ctx context.Context, patientID, departmentID string, customFields []*CustomFieldValue) error
 }
 
 type TokenProvider interface {

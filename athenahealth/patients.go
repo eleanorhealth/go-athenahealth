@@ -3,11 +3,13 @@ package athenahealth
 import (
 	"context"
 	"encoding/base64"
-	"errors"
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 // Patient represents a patient in athenahealth.
@@ -439,6 +441,56 @@ func (h *HTTPClient) UpdatePatientInformationVerificationDetails(ctx context.Con
 	}
 
 	if len(out) != 1 || !out[0].Success {
+		return errors.New("unexpected response")
+	}
+
+	return nil
+}
+
+// GetPatientCustomFields - Retrieves custom fields information for a specific patient.
+// GET /v1/{practiceid}/patients/{patientid}/customfields
+// https://docs.athenahealth.com/api/api-ref/patient-custom-fields#Get-custom-field-information-from-patient's-records
+func (h *HTTPClient) GetPatientCustomFields(ctx context.Context, patientID, departmentID string) ([]*CustomFieldValue, error) {
+	out := []*CustomFieldValue{}
+
+	query := url.Values{}
+	query.Add("departmentid", departmentID)
+
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s/customfields", patientID), query, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+type updatePatientCustomFieldsResponse struct {
+	Success         bool `json:"success"`
+	UpdatedCount    int  `json:"updatedCount"`
+	DisallowedCount int  `json:"disallowedCount"`
+}
+
+// UpdatePatientCustomFields - Update custom-field information from patient's records.
+// PUT /v1/{practiceid}/patients/{patientid}/customfields
+// https://docs.athenahealth.com/api/api-ref/patient-custom-fields#Update-custom-field-information-from-patient's-records
+func (h *HTTPClient) UpdatePatientCustomFields(ctx context.Context, patientID, departmentID string, customFields []*CustomFieldValue) error {
+	out := &updatePatientCustomFieldsResponse{}
+
+	customFieldsJSON, err := json.Marshal(customFields)
+	if err != nil {
+		return errors.Wrap(err, "marshaling custom fields")
+	}
+
+	form := url.Values{}
+	form.Add("departmentid", departmentID)
+	form.Add("customfields", string(customFieldsJSON))
+
+	_, err = h.PutForm(ctx, fmt.Sprintf("/patients/%s/customfields", patientID), form, out)
+	if err != nil {
+		return err
+	}
+
+	if !out.Success {
 		return errors.New("unexpected response")
 	}
 
