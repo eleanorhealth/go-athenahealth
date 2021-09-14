@@ -49,6 +49,9 @@ type Client interface {
 	AddDocument(ctx context.Context, patientID string, opts *AddDocumentOptions) (string, error)
 
 	ListPatientsMatchingCustomField(ctx context.Context, opts *ListPatientsMatchingCustomFieldOptions) (*ListPatientsMatchingCustomFieldResult, error)
+
+	GetPatientCustomFields(ctx context.Context, patientID, departmentID string) ([]*CustomFieldValue, error)
+	UpdatePatientCustomFields(ctx context.Context, patientID, departmentID string, customFields []*CustomFieldValue) error
 }
 
 type TokenProvider interface {
