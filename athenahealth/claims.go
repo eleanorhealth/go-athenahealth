@@ -10,35 +10,36 @@ import (
 )
 
 type ClaimCharge struct {
-	AllowableAmount     json.Number `json:"allowableamount"`
-	AllowableMax        json.Number `json:"allowablemax"`
-	AllowableMin        json.Number `json:"allowablemin"`
-	AllowableScheduleID int         `json:"allowablescheduleid"`
-	ICD10Code1          int         `json:"icd10code1"`
-	ICD10Code2          int         `json:"icd10code2"`
-	ICD10Code3          int         `json:"icd10code3"`
-	ICD10Code4          int         `json:"icd10code4"`
-	ICD9Code1           int         `json:"icd9code1"`
-	ICD9Code2           int         `json:"icd9code2"`
-	ICD9Code3           int         `json:"icd9code3"`
-	ICD9Code4           int         `json:"icd9code4"`
-	LineNote            string      `json:"linenote"`
-	ProcedureCode       string      `json:"procedurecode"`
-	UnitAmount          json.Number `json:"unitamount"`
-	Units               int         `json:"units"`
+	AllowableAmount     *json.Number `json:"allowableamount,omitempty"`
+	AllowableMax        *json.Number `json:"allowablemax,omitempty"`
+	AllowableMin        *json.Number `json:"allowablemin,omitempty"`
+	AllowableScheduleID *int         `json:"allowablescheduleid,omitempty"`
+	ICD10Code1          string       `json:"icd10code1"`
+	ICD10Code2          string       `json:"icd10code2"`
+	ICD10Code3          string       `json:"icd10code3"`
+	ICD10Code4          string       `json:"icd10code4"`
+	ICD9Code1           string       `json:"icd9code1"`
+	ICD9Code2           string       `json:"icd9code2"`
+	ICD9Code3           string       `json:"icd9code3"`
+	ICD9Code4           string       `json:"icd9code4"`
+	LineNote            string       `json:"linenote"`
+	ProcedureCode       string       `json:"procedurecode"`
+	UnitAmount          *json.Number `json:"unitamount,omitempty"`
+	Units               int          `json:"units"`
 }
 
 type CreateClaimOptions struct {
 	ClaimCharges                []*ClaimCharge
 	CustomFields                []*CustomFieldValue
-	OrderingProviderID          string
+	DepartmentID                string
+	OrderingProviderID          *string
 	PatientID                   string
-	PrimaryPatientInsuranceID   string
-	ReferralAuthID              string
-	ReferringProviderID         string
-	RenderingProviderID         string
-	Reserved19                  string
-	SecondaryPatientInsuranceID string
+	PrimaryPatientInsuranceID   *string
+	ReferralAuthID              *string
+	ReferringProviderID         *string
+	RenderingProviderID         *string
+	Reserved19                  *string
+	SecondaryPatientInsuranceID *string
 	ServiceDate                 time.Time
 	SupervisingProviderID       string
 }
@@ -66,16 +67,39 @@ func (h *HTTPClient) CreateFinancialClaim(ctx context.Context, opts *CreateClaim
 		return []string{}, errors.Wrap(err, "marshaling custom fields")
 	}
 
-	form.Add("claimscharges", string(claimChargesJSON))
+	form.Add("claimcharges", string(claimChargesJSON))
 	form.Add("customfields", string(customFieldsJSON))
-	form.Add("orderingproviderid", opts.OrderingProviderID)
+	form.Add("departmentid", opts.DepartmentID)
+
+	if opts.OrderingProviderID != nil {
+		form.Add("orderingproviderid", *opts.OrderingProviderID)
+	}
+
 	form.Add("patientid", opts.PatientID)
-	form.Add("primarypatientinsuranceid", opts.PrimaryPatientInsuranceID)
-	form.Add("referralauthid", opts.ReferralAuthID)
-	form.Add("referringproviderid", opts.ReferringProviderID)
-	form.Add("renderingproviderid", opts.RenderingProviderID)
-	form.Add("reserved19", opts.Reserved19)
-	form.Add("secondarypatientinsuranceid", opts.SecondaryPatientInsuranceID)
+
+	if opts.PrimaryPatientInsuranceID != nil {
+		form.Add("primarypatientinsuranceid", *opts.PrimaryPatientInsuranceID)
+	}
+
+	if opts.ReferralAuthID != nil {
+		form.Add("referralauthid", *opts.ReferralAuthID)
+	}
+
+	if opts.ReferringProviderID != nil {
+		form.Add("referringproviderid", *opts.ReferringProviderID)
+	}
+
+	if opts.RenderingProviderID != nil {
+		form.Add("renderingproviderid", *opts.RenderingProviderID)
+	}
+
+	if opts.Reserved19 != nil {
+		form.Add("reserved19", *opts.Reserved19)
+	}
+
+	if opts.SecondaryPatientInsuranceID != nil {
+		form.Add("secondarypatientinsuranceid", *opts.SecondaryPatientInsuranceID)
+	}
 
 	if !opts.ServiceDate.IsZero() {
 		form.Add("servicedate", opts.ServiceDate.Format("01/02/2006"))
