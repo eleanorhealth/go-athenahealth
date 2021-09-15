@@ -288,3 +288,47 @@ func TestHTTPClient_ListPatientsMatchingCustomField(t *testing.T) {
 	assert.Equal(res.Pagination.TotalCount, 2)
 	assert.NoError(err)
 }
+
+func TestHTTPClient_CreatePatient(t *testing.T) {
+	assert := assert.New(t)
+
+	opts := &CreatePatientOptions{
+		Address1:     "100 Main St",
+		Address2:     "#3",
+		City:         "Boston",
+		DepartmentID: "1",
+		DOB:          time.Time{},
+		Email:        "john.smith@example.com",
+		FirstName:    "John",
+		LastName:     "Smith",
+		SSN:          "111-11-1111",
+		State:        "MA",
+		Zip:          "02210",
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("address1"), opts.Address1)
+		assert.Equal(r.Form.Get("address2"), opts.Address2)
+		assert.Equal(r.Form.Get("city"), opts.City)
+		assert.Equal(r.Form.Get("departmentid"), opts.DepartmentID)
+		assert.Equal(r.Form.Get("dob"), opts.DOB.Format("01/02/2006"))
+		assert.Equal(r.Form.Get("email"), opts.Email)
+		assert.Equal(r.Form.Get("firstname"), opts.FirstName)
+		assert.Equal(r.Form.Get("lastname"), opts.LastName)
+		assert.Equal(r.Form.Get("ssn"), opts.SSN)
+		assert.Equal(r.Form.Get("state"), opts.State)
+		assert.Equal(r.Form.Get("zip"), opts.Zip)
+
+		b, _ := ioutil.ReadFile("./resources/CreatePatient.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	actualPatientID, err := athenaClient.CreatePatient(context.Background(), opts)
+	assert.NoError(err)
+	assert.Equal("100", actualPatientID)
+}

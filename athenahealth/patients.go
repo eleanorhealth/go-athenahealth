@@ -547,3 +547,62 @@ func (h *HTTPClient) ListPatientsMatchingCustomField(ctx context.Context, opts *
 		Pagination: makePaginationResult(out.Next, out.Previous, out.TotalCount),
 	}, nil
 }
+
+type CreatePatientOptions struct {
+	Address1     string
+	Address2     string
+	City         string
+	DepartmentID string
+	DOB          time.Time
+	Email        string
+	FirstName    string
+	LastName     string
+	SSN          string
+	State        string
+	Zip          string
+}
+
+type createPatientResponse struct {
+	ErrorMessage string `json:"errormessage"`
+	PatientID    string `json:"patientid"`
+}
+
+// CreatePatient - Create new patient record.
+// POST /v1/{practiceid}/patients
+// https://docs.athenahealth.com/api/api-ref/patient#Create-new-patient-record
+func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptions) (string, error) {
+	if opts == nil {
+		panic("opts is nil")
+	}
+
+	out := []*createPatientResponse{}
+
+	form := url.Values{}
+
+	form.Add("address1", opts.Address1)
+	form.Add("address2", opts.Address2)
+	form.Add("city", opts.City)
+	form.Add("departmentid", opts.DepartmentID)
+	form.Add("dob", opts.DOB.Format("01/02/2006"))
+	form.Add("email", opts.Email)
+	form.Add("firstname", opts.FirstName)
+	form.Add("lastname", opts.LastName)
+	form.Add("ssn", opts.SSN)
+	form.Add("state", opts.State)
+	form.Add("zip", opts.Zip)
+
+	_, err := h.PostForm(ctx, "/patients", form, &out)
+	if err != nil {
+		return "", err
+	}
+
+	if len(out) != 1 {
+		return "", errors.New("unexpected response")
+	}
+
+	if len(out[0].ErrorMessage) > 0 {
+		return "", errors.New(out[0].ErrorMessage)
+	}
+
+	return out[0].PatientID, nil
+}
