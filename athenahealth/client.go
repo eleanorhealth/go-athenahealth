@@ -54,6 +54,8 @@ type Client interface {
 	UpdatePatientCustomFields(ctx context.Context, patientID, departmentID string, customFields []*CustomFieldValue) error
 
 	CreateFinancialClaim(ctx context.Context, opts *CreateClaimOptions) ([]string, error)
+
+	CreatePatient(ctx context.Context, opts *CreatePatientOptions) (string, error)
 }
 
 type TokenProvider interface {
