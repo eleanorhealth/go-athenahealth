@@ -52,6 +52,8 @@ type Client interface {
 
 	GetPatientCustomFields(ctx context.Context, patientID, departmentID string) ([]*CustomFieldValue, error)
 	UpdatePatientCustomFields(ctx context.Context, patientID, departmentID string, customFields []*CustomFieldValue) error
+
+	CreatePatient(ctx context.Context, opts *CreatePatientOptions) (string, error)
 }
 
 type TokenProvider interface {
