@@ -293,17 +293,18 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 	assert := assert.New(t)
 
 	opts := &CreatePatientOptions{
-		Address1:     "100 Main St",
-		Address2:     "#3",
-		City:         "Boston",
-		DepartmentID: "1",
-		DOB:          time.Time{},
-		Email:        "john.smith@example.com",
-		FirstName:    "John",
-		LastName:     "Smith",
-		SSN:          "111-11-1111",
-		State:        "MA",
-		Zip:          "02210",
+		Address1:              "100 Main St",
+		Address2:              "#3",
+		City:                  "Boston",
+		DepartmentID:          "1",
+		DOB:                   time.Time{},
+		Email:                 "john.smith@example.com",
+		FirstName:             "John",
+		LastName:              "Smith",
+		SSN:                   "111-11-1111",
+		State:                 "MA",
+		Zip:                   "02210",
+		BypassPatientMatching: true,
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
@@ -320,6 +321,10 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("ssn"), opts.SSN)
 		assert.Equal(r.Form.Get("state"), opts.State)
 		assert.Equal(r.Form.Get("zip"), opts.Zip)
+
+		if opts.BypassPatientMatching {
+			assert.Equal(r.Form.Get("bypasspatientmatching"), "true")
+		}
 
 		b, _ := ioutil.ReadFile("./resources/CreatePatient.json")
 		w.Write(b)
