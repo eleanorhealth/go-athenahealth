@@ -549,17 +549,18 @@ func (h *HTTPClient) ListPatientsMatchingCustomField(ctx context.Context, opts *
 }
 
 type CreatePatientOptions struct {
-	Address1     string
-	Address2     string
-	City         string
-	DepartmentID string
-	DOB          time.Time
-	Email        string
-	FirstName    string
-	LastName     string
-	SSN          string
-	State        string
-	Zip          string
+	Address1              string
+	Address2              string
+	City                  string
+	DepartmentID          string
+	DOB                   time.Time
+	Email                 string
+	FirstName             string
+	LastName              string
+	SSN                   string
+	State                 string
+	Zip                   string
+	BypassPatientMatching bool
 }
 
 type createPatientResponse struct {
@@ -590,6 +591,10 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 	form.Add("ssn", opts.SSN)
 	form.Add("state", opts.State)
 	form.Add("zip", opts.Zip)
+
+	if opts.BypassPatientMatching {
+		form.Add("bypasspatientmatching", "true")
+	}
 
 	_, err := h.PostForm(ctx, "/patients", form, &out)
 	if err != nil {
