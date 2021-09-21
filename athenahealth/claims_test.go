@@ -106,3 +106,47 @@ func TestHTTPClient_CreateClaim(t *testing.T) {
 	assert.NoError(err)
 	assert.Len(claimIDs, 2)
 }
+
+func TestHTTPClient_ListClaims(t *testing.T) {
+	assert := assert.New(t)
+
+	patientID := "1"
+	departmentID := "2"
+	providerID := "3"
+	startDate := time.Date(2021, 9, 1, 0, 0, 0, 0, time.UTC)
+	endDate := time.Date(2021, 9, 5, 0, 0, 0, 0, time.UTC)
+
+	opts := &ListClaimsOptions{
+		PatientID:        &patientID,
+		DepartmentID:     &departmentID,
+		ProviderID:       &providerID,
+		ServiceStartDate: &startDate,
+		ServiceEndDate:   &endDate,
+		ShowCustomFields: true,
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Contains(r.URL.Path, "/claims")
+
+		assert.Equal(r.URL.Query().Get("patientid"), patientID)
+		assert.Equal(r.URL.Query().Get("departmentid"), departmentID)
+		assert.Equal(r.URL.Query().Get("providerid"), providerID)
+		assert.Equal(r.URL.Query().Get("servicestartdate"), startDate.Format("01/02/2006"))
+		assert.Equal(r.URL.Query().Get("serviceenddate"), endDate.Format("01/02/2006"))
+		assert.Equal(r.URL.Query().Get("showcustomfields"), "true")
+
+		b, _ := ioutil.ReadFile("./resources/ListClaims.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	res, err := athenaClient.ListClaims(context.Background(), opts)
+
+	assert.Len(res.Claims, 1)
+	assert.Equal(res.Pagination.NextOffset, 30)
+	assert.Equal(res.Pagination.PreviousOffset, 10)
+	assert.Equal(res.Pagination.TotalCount, 1)
+	assert.NoError(err)
+}

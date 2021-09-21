@@ -56,6 +56,8 @@ type Client interface {
 	CreateFinancialClaim(ctx context.Context, opts *CreateClaimOptions) ([]string, error)
 
 	CreatePatient(ctx context.Context, opts *CreatePatientOptions) (string, error)
+
+	ListClaims(ctx context.Context, opts *ListClaimsOptions) (*ListClaimsResult, error)
 }
 
 type TokenProvider interface {
