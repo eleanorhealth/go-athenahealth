@@ -141,11 +141,11 @@ type ClaimDiagnosis struct {
 
 type Claim struct {
 	Procedures        []ClaimProcedure   `json:"procedures"`
-	ClaimcCeatedDate  string             `json:"claimcreateddate"`
+	ClaimCeatedDate   string             `json:"claimcreateddate"`
 	BilledProviderID  int                `json:"billedproviderid"`
 	ClaimID           string             `json:"claimid"`
-	Billedservicedate string             `json:"billedservicedate"`
-	Departmentid      int                `json:"departmentid"`
+	BilledServiceDate string             `json:"billedservicedate"`
+	DepartmentID      int                `json:"departmentid"`
 	Diagnoses         []ClaimDiagnosis   `json:"diagnoses"`
 	PatientID         int                `json:"patientid"`
 	CustomFields      []CustomFieldValue `json:"customfields"`
