@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -119,4 +120,112 @@ func (h *HTTPClient) CreateFinancialClaim(ctx context.Context, opts *CreateClaim
 	}
 
 	return res.ClaimIDs, nil
+}
+
+type ClaimProcedure struct {
+	ChargeAmount         string `json:"chargeamount"`
+	ProcedureDescription string `json:"proceduredescription"`
+	TransactionID        string `json:"transactionid"`
+	ProcedureCode        string `json:"procedurecode"`
+	ProcedureCategory    string `json:"procedurecategory"`
+}
+
+type ClaimDiagnosis struct {
+	DiagnosisCategory    string `json:"diagnosiscategory"`
+	DiagnosisID          string `json:"diagnosisid"`
+	DiagnosisRawCode     string `json:"diagnosisrawcode"`
+	DiagnosisCodeset     string `json:"diagnosiscodeset"`
+	DiagnosisDescription string `json:"diagnosisdescription"`
+	DeletedDiagnosis     string `json:"deleteddiagnosis"`
+}
+
+type Claim struct {
+	Procedures        []ClaimProcedure   `json:"procedures"`
+	ClaimCeatedDate   string             `json:"claimcreateddate"`
+	BilledProviderID  int                `json:"billedproviderid"`
+	ClaimID           string             `json:"claimid"`
+	BilledServiceDate string             `json:"billedservicedate"`
+	DepartmentID      int                `json:"departmentid"`
+	Diagnoses         []ClaimDiagnosis   `json:"diagnoses"`
+	PatientID         int                `json:"patientid"`
+	CustomFields      []CustomFieldValue `json:"customfields"`
+}
+
+type ListClaimsOptions struct {
+	PatientID        *string
+	DepartmentID     *string
+	ProviderID       *string
+	ServiceStartDate *time.Time
+	ServiceEndDate   *time.Time
+	ShowCustomFields bool
+
+	Pagination *PaginationOptions
+}
+
+type ListClaimsResult struct {
+	Claims []*Claim
+
+	Pagination *PaginationResult
+}
+
+type listClaimsResponse struct {
+	Claims []*Claim `json:"claims"`
+
+	PaginationResponse
+}
+
+// ListClaims - Get list of claims
+// GET /v1/{practiceid}/claims
+// https://docs.athenahealth.com/api/api-ref/claim#Get-list-of-claim-details
+func (h *HTTPClient) ListClaims(ctx context.Context, opts *ListClaimsOptions) (*ListClaimsResult, error) {
+	if opts == nil {
+		panic("opts is nil")
+	}
+
+	out := &listClaimsResponse{}
+	q := url.Values{}
+
+	if opts.PatientID != nil {
+		q.Add("patientid", *opts.PatientID)
+	}
+
+	if opts.DepartmentID != nil {
+		q.Add("departmentid", *opts.DepartmentID)
+	}
+
+	if opts.ProviderID != nil {
+		q.Add("providerid", *opts.ProviderID)
+	}
+
+	if opts.ServiceStartDate != nil {
+		q.Add("servicestartdate", opts.ServiceStartDate.Format("01/02/2006"))
+	}
+
+	if opts.ServiceEndDate != nil {
+		q.Add("serviceenddate", opts.ServiceEndDate.Format("01/02/2006"))
+	}
+
+	if opts.ShowCustomFields {
+		q.Add("showcustomfields", "true")
+	}
+
+	if opts.Pagination != nil {
+		if opts.Pagination.Limit > 0 {
+			q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
+		}
+
+		if opts.Pagination.Offset > 0 {
+			q.Add("offset", strconv.Itoa(opts.Pagination.Offset))
+		}
+	}
+
+	_, err := h.Get(ctx, "/claims", q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ListClaimsResult{
+		Claims:     out.Claims,
+		Pagination: makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
 }

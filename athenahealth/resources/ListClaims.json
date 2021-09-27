@@ -1,0 +1,57 @@
+{
+    "previous": "/foo?limit=10&offset=10",
+    "next": "/foo?limit=10&offset=30",
+    "totalcount": 1,
+    "claims": [
+        {
+            "procedures": [
+                {
+                    "chargeamount": "189",
+                    "proceduredescription": "DRUG TEST PRESUMPTIVE (PRSMV) DIRECT OP OBSERVATION",
+                    "transactionid": "17846",
+                    "procedurecode": "80305",
+                    "procedurecategory": "Substance Screening\/Urinalysis"
+                }
+            ],
+            "claimcreateddate": "09\/15\/2021",
+            "transactiondetails": {
+                "17846": "189"
+            },
+            "patientpayer": {
+                "status": "ATHENAHOLD"
+            },
+            "billedproviderid": 1,
+            "claimid": "5569",
+            "primaryinsurancepayer": {
+                "primarypatientinsuranceid": 945,
+                "status": "CLOSED"
+            },
+            "billedservicedate": "09\/15\/2021",
+            "departmentid": 3,
+            "diagnoses": [
+                {
+                    "diagnosiscategory": "INTESTINAL INFECTIOUS DISEASES (A00-A09)",
+                    "diagnosisid": "16754",
+                    "diagnosisrawcode": "A00.9",
+                    "diagnosiscodeset": "ICD10",
+                    "diagnosisdescription": "Cholera, unspecified",
+                    "deleteddiagnosis": "false"
+                },
+                {
+                    "diagnosiscategory": "Neurotic Disorders, Personality Disorders, and other Nonpsychotic Mental Disorders",
+                    "diagnosisid": "16755",
+                    "diagnosisrawcode": "300.0",
+                    "diagnosiscodeset": "ICD9",
+                    "diagnosisdescription": "ANXIETY STATES*",
+                    "deleteddiagnosis": "false"
+                }
+            ],
+            "patientid": 980,
+            "secondaryinsurancepayer": {
+                "secondarypatientinsuranceid": 0,
+                "status": "CLOSED"
+            },
+            "customfields": []
+        }
+    ]
+}
