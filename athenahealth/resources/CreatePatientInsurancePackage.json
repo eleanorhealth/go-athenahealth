@@ -1,0 +1,29 @@
+[
+    {
+        "insurancepolicyholdercountrycode": "USA",
+        "sequencenumber": 1,
+        "insurancepolicyholderlastname": "EBERT",
+        "insuredentitytypeid": 1,
+        "insuranceidnumber": "123",
+        "insurancepolicyholderdob": "05\/15\/1975",
+        "relationshiptoinsured": "Self",
+        "eligibilitystatus": "Unverified",
+        "insurancepackageaddress1": "PO BOX 4040",
+        "insurancepolicyholdersex": "F",
+        "ircname": "LA Healthcare Connections",
+        "insuranceplanname": "Foo bar",
+        "insurancetype": "Medicaid",
+        "insurancephone": "(617) 555-5555",
+        "insurancepackagestate": "MA",
+        "insurancepackagecity": "BOSTON",
+        "relationshiptoinsuredid": 1,
+        "insuranceid": "7990",
+        "insurancepolicyholder": "DORIS EBERT",
+        "insurancepolicyholderfirstname": "DORIS",
+        "insurancepackageid": 159571,
+        "insurancepolicyholdercountryiso3166": "US",
+        "ircid": 1780,
+        "insuranceplandisplayname": "Foo bar",
+        "insurancepackagezip": "63640-3826"
+    }
+]

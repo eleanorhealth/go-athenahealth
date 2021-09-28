@@ -537,7 +537,7 @@ func (h *HTTPClient) ListPatientsMatchingCustomField(ctx context.Context, opts *
 		}
 	}
 
-	_, err := h.Get(ctx, fmt.Sprintf("/patients/customfields/%s/%s", opts.CustomFieldID, opts.CustomFieldValue), nil, out)
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/customfields/%s/%s", opts.CustomFieldID, opts.CustomFieldValue), q, out)
 	if err != nil {
 		return nil, err
 	}

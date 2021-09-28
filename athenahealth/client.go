@@ -58,6 +58,9 @@ type Client interface {
 	CreatePatient(ctx context.Context, opts *CreatePatientOptions) (string, error)
 
 	ListClaims(ctx context.Context, opts *ListClaimsOptions) (*ListClaimsResult, error)
+
+	CreatePatientInsurancePackage(ctx context.Context, opts *CreatePatientInsurancePackageOptions) (*InsurancePackage, error)
+	ListPatientInsurancePackages(ctx context.Context, opts *ListPatientInsurancePackagesOptions) (*ListPatientInsurancePackagesResult, error)
 }
 
 type TokenProvider interface {
