@@ -234,7 +234,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		return res, err
 	}
 
-	err = h.stats.Request()
+	err = h.stats.Request(method, path)
 	if err != nil {
 		return res, err
 	}

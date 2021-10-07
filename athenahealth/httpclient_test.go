@@ -73,14 +73,14 @@ func (t *testRateLimiter) Allowed(ctx context.Context, preview bool) (time.Durat
 }
 
 type testStats struct {
-	RequestFunc         func() error
+	RequestFunc         func(method, path string) error
 	ResponseSuccessFunc func() error
 	ResponseErrorFunc   func() error
 }
 
-func (t *testStats) Request() error {
+func (t *testStats) Request(method, path string) error {
 	if t.RequestFunc != nil {
-		return t.RequestFunc()
+		return t.RequestFunc(method, path)
 	}
 
 	return nil

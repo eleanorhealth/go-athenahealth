@@ -10,7 +10,7 @@ func TestDefault_Request(t *testing.T) {
 	assert := assert.New(t)
 
 	stats := NewDefault()
-	err := stats.Request()
+	err := stats.Request("", "")
 	assert.NoError(err)
 }
 

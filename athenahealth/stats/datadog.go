@@ -1,10 +1,13 @@
 package stats
 
 import (
+	"regexp"
+	"strings"
+
 	"github.com/DataDog/datadog-go/statsd"
 )
 
-const datadogDefaultNamespace = "athenahealth-client"
+var idRegex = regexp.MustCompile(`(/)(\d+)(/?)`)
 
 type Datadog struct {
 	client statsd.ClientInterface
@@ -16,8 +19,12 @@ func NewDatadog(client statsd.ClientInterface) *Datadog {
 	}
 }
 
-func (d *Datadog) Request() error {
-	return d.client.Incr("athenahealth.requests", []string{}, 1.0)
+func (d *Datadog) Request(method, path string) error {
+	path = removeIDsFromPath(path)
+
+	return d.client.Incr("athenahealth.requests", []string{
+		"path:" + strings.ToUpper(method) + " " + strings.ToLower(path),
+	}, 1.0)
 }
 
 func (d *Datadog) ResponseSuccess() error {
@@ -26,4 +33,8 @@ func (d *Datadog) ResponseSuccess() error {
 
 func (d *Datadog) ResponseError() error {
 	return d.client.Incr("athenahealth.responses.error", []string{}, 1.0)
+}
+
+func removeIDsFromPath(path string) string {
+	return idRegex.ReplaceAllString(path, "$1{id}$3")
 }
