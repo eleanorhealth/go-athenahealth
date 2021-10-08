@@ -22,7 +22,8 @@ func TestDatadog_Request(t *testing.T) {
 	client := &mockClient{}
 
 	client.incrFn = func(name string, tags []string, rate float64) error {
-		assert.Equal("path:GET /patients/{id}", tags[0])
+		assert.Equal("http_method:get", tags[0])
+		assert.Equal("http_path:/patients/:id:", tags[1])
 		return nil
 	}
 
@@ -35,8 +36,8 @@ func TestDatadog_Request(t *testing.T) {
 func TestRemoveIDsFromPath(t *testing.T) {
 	assert := assert.New(t)
 
-	assert.Equal("/patients/{id}", removeIDsFromPath("/patients/123"))
-	assert.Equal("/patients/{id}", removeIDsFromPath("/patients/123"))
-	assert.Equal("/patients/{id}/foo/{id}", removeIDsFromPath("/patients/123/foo/1"))
-	assert.Equal("/patients/{id}/foo/{id}/", removeIDsFromPath("/patients/123/foo/1/"))
+	assert.Equal("/patients/:id:", cleanPath("/patients/123"))
+	assert.Equal("/patients/:id:", cleanPath("/patients/123?foo=bar"))
+	assert.Equal("/patients/:id:/foo/:id:", cleanPath("/patients/123/foo/1"))
+	assert.Equal("/patients/:id:/foo/:id:/", cleanPath("/patients/123/foo/1/"))
 }

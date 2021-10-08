@@ -1,8 +1,8 @@
 package stats
 
 import (
+	"net/url"
 	"regexp"
-	"strings"
 
 	"github.com/DataDog/datadog-go/statsd"
 )
@@ -20,10 +20,11 @@ func NewDatadog(client statsd.ClientInterface) *Datadog {
 }
 
 func (d *Datadog) Request(method, path string) error {
-	path = removeIDsFromPath(path)
+	path = cleanPath(path)
 
 	return d.client.Incr("athenahealth.requests", []string{
-		"path:" + strings.ToUpper(method) + " " + strings.ToLower(path),
+		"http_method:" + method,
+		"http_path:" + path,
 	}, 1.0)
 }
 
@@ -35,6 +36,11 @@ func (d *Datadog) ResponseError() error {
 	return d.client.Incr("athenahealth.responses.error", []string{}, 1.0)
 }
 
-func removeIDsFromPath(path string) string {
-	return idRegex.ReplaceAllString(path, "$1{id}$3")
+func cleanPath(path string) string {
+	u, err := url.Parse(path)
+	if err != nil {
+		return ""
+	}
+
+	return idRegex.ReplaceAllString(u.Path, "$1:id:$3")
 }
