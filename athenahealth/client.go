@@ -77,7 +77,7 @@ type RateLimiter interface {
 }
 
 type Stats interface {
-	Request() error
+	Request(method, path string) error
 	ResponseSuccess() error
 	ResponseError() error
 }

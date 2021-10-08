@@ -7,7 +7,7 @@ func NewDefault() *Default {
 	return &Default{}
 }
 
-func (d *Default) Request() error {
+func (d *Default) Request(method, path string) error {
 	return nil
 }
 
