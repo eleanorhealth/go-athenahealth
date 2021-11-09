@@ -556,7 +556,11 @@ type CreatePatientOptions struct {
 	DOB                   time.Time
 	Email                 string
 	FirstName             string
+	HomePhone             string
 	LastName              string
+	MiddleName            string
+	MobilePhone           string
+	Sex                   string
 	SSN                   string
 	State                 string
 	Zip                   string
@@ -587,7 +591,11 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 	form.Add("dob", opts.DOB.Format("01/02/2006"))
 	form.Add("email", opts.Email)
 	form.Add("firstname", opts.FirstName)
+	form.Add("homephone", opts.HomePhone)
 	form.Add("lastname", opts.LastName)
+	form.Add("middlename", opts.MiddleName)
+	form.Add("mobilephone", opts.MobilePhone)
+	form.Add("sex", opts.Sex)
 	form.Add("ssn", opts.SSN)
 	form.Add("state", opts.State)
 	form.Add("zip", opts.Zip)
