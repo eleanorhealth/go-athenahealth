@@ -300,7 +300,11 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 		DOB:                   time.Time{},
 		Email:                 "john.smith@example.com",
 		FirstName:             "John",
+		HomePhone:             "860-111-2222",
 		LastName:              "Smith",
+		MiddleName:            "F",
+		MobilePhone:           "860-555-6666",
+		Sex:                   "M",
 		SSN:                   "111-11-1111",
 		State:                 "MA",
 		Zip:                   "02210",
@@ -317,7 +321,11 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("dob"), opts.DOB.Format("01/02/2006"))
 		assert.Equal(r.Form.Get("email"), opts.Email)
 		assert.Equal(r.Form.Get("firstname"), opts.FirstName)
+		assert.Equal(r.Form.Get("homephone"), opts.HomePhone)
 		assert.Equal(r.Form.Get("lastname"), opts.LastName)
+		assert.Equal(r.Form.Get("middlename"), opts.MiddleName)
+		assert.Equal(r.Form.Get("mobilephone"), opts.MobilePhone)
+		assert.Equal(r.Form.Get("sex"), opts.Sex)
 		assert.Equal(r.Form.Get("ssn"), opts.SSN)
 		assert.Equal(r.Form.Get("state"), opts.State)
 		assert.Equal(r.Form.Get("zip"), opts.Zip)
