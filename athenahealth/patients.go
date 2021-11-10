@@ -563,6 +563,7 @@ type CreatePatientOptions struct {
 	Sex                   string
 	SSN                   string
 	State                 string
+	Status                string
 	Zip                   string
 	BypassPatientMatching bool
 }
@@ -598,6 +599,7 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 	form.Add("sex", opts.Sex)
 	form.Add("ssn", opts.SSN)
 	form.Add("state", opts.State)
+	form.Add("status", opts.Status)
 	form.Add("zip", opts.Zip)
 
 	if opts.BypassPatientMatching {

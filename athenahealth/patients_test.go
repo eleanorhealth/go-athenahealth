@@ -307,6 +307,7 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 		Sex:                   "M",
 		SSN:                   "111-11-1111",
 		State:                 "MA",
+		Status:                "p",
 		Zip:                   "02210",
 		BypassPatientMatching: true,
 	}
@@ -328,6 +329,7 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("sex"), opts.Sex)
 		assert.Equal(r.Form.Get("ssn"), opts.SSN)
 		assert.Equal(r.Form.Get("state"), opts.State)
+		assert.Equal(r.Form.Get("status"), opts.Status)
 		assert.Equal(r.Form.Get("zip"), opts.Zip)
 
 		if opts.BypassPatientMatching {

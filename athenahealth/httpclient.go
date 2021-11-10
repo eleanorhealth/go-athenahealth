@@ -275,6 +275,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 			err.Err = ErrNotFound
 		}
 
+		//nolint
 		json.Unmarshal(resBody, err)
 
 		err.HTTPResponse = res

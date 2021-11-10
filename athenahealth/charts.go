@@ -28,7 +28,7 @@ type SocialHistoryQuestion struct {
 func (h *HTTPClient) ListSocialHistoryTemplates(ctx context.Context) ([]*SocialHistoryTemplate, error) {
 	out := []*SocialHistoryTemplate{}
 
-	_, err := h.Get(ctx, fmt.Sprintf("/chart/configuration/socialhistory"), nil, &out)
+	_, err := h.Get(ctx, "/chart/configuration/socialhistory", nil, &out)
 	if err != nil {
 		return nil, err
 	}
