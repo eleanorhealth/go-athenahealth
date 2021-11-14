@@ -8,6 +8,32 @@ import (
 	"time"
 )
 
+type ChangedProblem struct {
+	Code      string                `json:"code"`
+	CodeSet   string                `json:"codeset"`
+	Events    []ChangedProblemEvent `json:"events"`
+	Name      string                `json:"name"`
+	PatientID int                   `json:"patientid"`
+	ProblemID int                   `json:"problemid"`
+}
+
+type ChangedProblemEvent struct {
+	Diagnoses  []ChangedProblemEventDiagnosis `json:"diagnoses"`
+	EndDate    string                         `json:"enddate"`
+	EventType  string                         `json:"eventtype"`
+	Laterality string                         `json:"laterality"`
+	Note       string                         `json:"note"`
+	Source     string                         `json:"source"`
+	StartDate  string                         `json:"startdate"`
+	Status     string                         `json:"status"`
+}
+
+type ChangedProblemEventDiagnosis struct {
+	Code    string `json:"code"`
+	Codeset string `json:"codeset"`
+	Name    string `json:"name"`
+}
+
 type ProblemEvent struct {
 	EventType   string `json:"eventtype"`
 	StartDate   string `json:"startdate"`
@@ -70,13 +96,13 @@ type ListChangedProblemsOptions struct {
 }
 
 type listChangedProblemsResponse struct {
-	ChangedProblems []*Problem `json:"problems"`
+	ChangedProblems []*ChangedProblem `json:"problems"`
 }
 
 // ListChangedProblems - Gets changed problems records
 // GET /v1/{practiceid}/chart/healthhistory/problems/changed
 // https://developer.athenahealth.com/docs/read/chart/Problems_Changed_Subscriptions#section-0
-func (h *HTTPClient) ListChangedProblems(ctx context.Context, opts *ListChangedProblemsOptions) ([]*Problem, error) {
+func (h *HTTPClient) ListChangedProblems(ctx context.Context, opts *ListChangedProblemsOptions) ([]*ChangedProblem, error) {
 	out := &listChangedProblemsResponse{}
 
 	q := url.Values{}

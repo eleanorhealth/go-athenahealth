@@ -42,7 +42,7 @@ type Client interface {
 
 	ListChangedPatients(context.Context, *ListChangedPatientOptions) ([]*Patient, error)
 	ListChangedProviders(context.Context, *ListChangedProviderOptions) ([]*Provider, error)
-	ListChangedProblems(context.Context, *ListChangedProblemsOptions) ([]*Problem, error)
+	ListChangedProblems(context.Context, *ListChangedProblemsOptions) ([]*ChangedProblem, error)
 
 	ListProblems(ctx context.Context, patientID string, opts *ListProblemsOptions) ([]*Problem, error)
 	ListAdminDocuments(ctx context.Context, patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error)
