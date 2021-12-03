@@ -51,11 +51,16 @@ func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {
 	assert := assert.New(t)
 
 	opts := &ListPatientInsurancePackagesOptions{
-		PatientID:  "1",
-		Pagination: &PaginationOptions{},
+		PatientID:     "1",
+		ShowCancelled: true,
+		Pagination:    &PaginationOptions{},
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("showcancelled"), "true")
+
 		b, _ := ioutil.ReadFile("./resources/ListPatientInsurancePackages.json")
 		w.Write(b)
 	}

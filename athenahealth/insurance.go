@@ -21,29 +21,31 @@ type CreatePatientInsurancePackageOptions struct {
 }
 
 type InsurancePackage struct {
-	InsurancePolicyHolderCountryCode    string `json:"insurancepolicyholdercountrycode"`
-	SequenceNumber                      int    `json:"sequencenumber"`
-	InsurancePolicyHolderLastName       string `json:"insurancepolicyholderlastname"`
-	InsuredEntityTypeID                 int    `json:"insuredentitytypeid"`
-	InsuranceIDNumber                   string `json:"insuranceidnumber"`
-	InsurancePolicyHolderdDOB           string `json:"insurancepolicyholderdob"`
-	RelationshipToInsured               string `json:"relationshiptoinsured"`
+	Cancelled                           string `json:"cancelled"`
 	EligibilityStatus                   string `json:"eligibilitystatus"`
-	InsurancePackageAddress1            string `json:"insurancepackageaddress1"`
-	InsurancePolicyHolderSex            string `json:"insurancepolicyholdersex"`
-	InsurancePlanName                   string `json:"insuranceplanname"`
-	InsuranceType                       string `json:"insurancetype"`
-	InsurancePhone                      string `json:"insurancephone"`
-	InsurancePackageState               string `json:"insurancepackagestate"`
-	InsurancePackageCity                string `json:"insurancepackagecity"`
-	RelationshipToInsuredID             int    `json:"relationshiptoinsuredid"`
+	ExpirationDate                      string `json:"expirationdate"`
 	InsuranceID                         string `json:"insuranceid"`
-	InsurancePolicyHolder               string `json:"insurancepolicyholder"`
-	InsurancePolicyHolderFirstName      string `json:"insurancepolicyholderfirstname"`
+	InsuranceIDNumber                   string `json:"insuranceidnumber"`
+	InsurancePackageAddress1            string `json:"insurancepackageaddress1"`
+	InsurancePackageCity                string `json:"insurancepackagecity"`
 	InsurancePackageID                  int    `json:"insurancepackageid"`
-	InsurancePolicyHoldercountryiso3166 string `json:"insurancepolicyholdercountryiso3166"`
-	InsurancePlanDisplayName            string `json:"insuranceplandisplayname"`
+	InsurancePackageState               string `json:"insurancepackagestate"`
 	InsurancePackageZip                 string `json:"insurancepackagezip"`
+	InsurancePhone                      string `json:"insurancephone"`
+	InsurancePlanDisplayName            string `json:"insuranceplandisplayname"`
+	InsurancePlanName                   string `json:"insuranceplanname"`
+	InsurancePolicyHolder               string `json:"insurancepolicyholder"`
+	InsurancePolicyHolderCountryCode    string `json:"insurancepolicyholdercountrycode"`
+	InsurancePolicyHoldercountryiso3166 string `json:"insurancepolicyholdercountryiso3166"`
+	InsurancePolicyHolderdDOB           string `json:"insurancepolicyholderdob"`
+	InsurancePolicyHolderFirstName      string `json:"insurancepolicyholderfirstname"`
+	InsurancePolicyHolderLastName       string `json:"insurancepolicyholderlastname"`
+	InsurancePolicyHolderSex            string `json:"insurancepolicyholdersex"`
+	InsuranceType                       string `json:"insurancetype"`
+	InsuredEntityTypeID                 int    `json:"insuredentitytypeid"`
+	RelationshipToInsured               string `json:"relationshiptoinsured"`
+	RelationshipToInsuredID             int    `json:"relationshiptoinsuredid"`
+	SequenceNumber                      int    `json:"sequencenumber"`
 }
 
 // CreatePatientInsurancePackage - Create patient's insurance package.
@@ -79,7 +81,8 @@ func (h *HTTPClient) CreatePatientInsurancePackage(ctx context.Context, opts *Cr
 }
 
 type ListPatientInsurancePackagesOptions struct {
-	PatientID string
+	PatientID     string
+	ShowCancelled bool
 
 	Pagination *PaginationOptions
 }
@@ -107,6 +110,10 @@ func (h *HTTPClient) ListPatientInsurancePackages(ctx context.Context, opts *Lis
 	q := url.Values{}
 
 	if opts.Pagination != nil {
+		if opts.ShowCancelled {
+			q.Add("showcancelled", "true")
+		}
+
 		if opts.Pagination.Limit > 0 {
 			q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
 		}
