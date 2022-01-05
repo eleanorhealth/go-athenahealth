@@ -51,6 +51,7 @@ type Problem struct {
 	Events               []ProblemEvent `json:"events"`
 	Codeset              string         `json:"codeset"`
 	Code                 string         `json:"code"`
+	BestMatchICD10Code   string         `json:"bestmatchicd10code"`
 }
 
 type ListProblemsOptions struct {
@@ -64,7 +65,7 @@ type listProblemsResponse struct {
 
 // ListProblems - Gets patient problems.
 // GET /v1/{practiceid}/chart/{patientid}/problems
-// https://developer.athenahealth.com/docs/read/chart/Problems#section-0
+// https://docs.athenahealth.com/api/api-ref/problems#Get-patient's-problem-list
 func (h *HTTPClient) ListProblems(ctx context.Context, patientID string, opts *ListProblemsOptions) ([]*Problem, error) {
 	out := &listProblemsResponse{}
 
@@ -101,7 +102,7 @@ type listChangedProblemsResponse struct {
 
 // ListChangedProblems - Gets changed problems records
 // GET /v1/{practiceid}/chart/healthhistory/problems/changed
-// https://developer.athenahealth.com/docs/read/chart/Problems_Changed_Subscriptions#section-0
+// https://docs.athenahealth.com/api/api-ref/problems#Get-list-of-changes-in-problems-based-on-subscribed-events
 func (h *HTTPClient) ListChangedProblems(ctx context.Context, opts *ListChangedProblemsOptions) ([]*ChangedProblem, error) {
 	out := &listChangedProblemsResponse{}
 
