@@ -54,6 +54,14 @@ type Problem struct {
 	BestMatchICD10Code   string         `json:"bestmatchicd10code"`
 }
 
+func (p *Problem) ICD10Code() string {
+	if p.Codeset == "ICD10" {
+		return p.Code
+	} else {
+		return p.BestMatchICD10Code
+	}
+}
+
 type ListProblemsOptions struct {
 	DepartmentID string
 	PatientID    string

@@ -63,3 +63,37 @@ func TestHTTPClient_ListChangedProblems(t *testing.T) {
 	assert.Len(problems, 1)
 	assert.NoError(err)
 }
+
+func TestProblem_ICD10Code(t *testing.T) {
+	tests := []struct {
+		name    string
+		problem *Problem
+		want    string
+	}{
+		{
+			name: "use code when codeset ICD10",
+			problem: &Problem{
+				Codeset:            "ICD10",
+				Code:               "F49.1",
+				BestMatchICD10Code: "F49",
+			},
+			want: "F49.1",
+		},
+		{
+			name: "use bestmatchicd10code when codeset not ICD10",
+			problem: &Problem{
+				Codeset:            "SNOMED",
+				Code:               "123456",
+				BestMatchICD10Code: "F49",
+			},
+			want: "F49",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.problem.ICD10Code(); got != tt.want {
+				t.Errorf("Problem.ICD10Code() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
