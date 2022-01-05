@@ -60,6 +60,7 @@ type Client interface {
 	ListClaims(ctx context.Context, opts *ListClaimsOptions) (*ListClaimsResult, error)
 
 	CreatePatientInsurancePackage(ctx context.Context, opts *CreatePatientInsurancePackageOptions) (*InsurancePackage, error)
+	UpdatePatientInsurancePackage(ctx context.Context, opts *UpdatePatientInsurancePackageOptions) error
 	ListPatientInsurancePackages(ctx context.Context, opts *ListPatientInsurancePackagesOptions) (*ListPatientInsurancePackagesResult, error)
 }
 
