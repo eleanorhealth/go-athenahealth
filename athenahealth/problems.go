@@ -63,8 +63,9 @@ func (p *Problem) ICD10Code() string {
 }
 
 type ListProblemsOptions struct {
-	DepartmentID string
-	PatientID    string
+	DepartmentID      string
+	PatientID         string
+	ShowDiagnosisInfo bool
 }
 
 type listProblemsResponse struct {
@@ -86,6 +87,10 @@ func (h *HTTPClient) ListProblems(ctx context.Context, patientID string, opts *L
 
 		if len(opts.PatientID) > 0 {
 			q.Add("patientid", opts.PatientID)
+		}
+
+		if opts.ShowDiagnosisInfo {
+			q.Add("showdiagnosisinfo", "true")
 		}
 	}
 

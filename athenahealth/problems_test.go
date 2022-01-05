@@ -16,6 +16,7 @@ func TestHTTPClient_ListProblems(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal("d5", r.URL.Query().Get("departmentid"))
 		assert.Equal("p1", r.URL.Query().Get("patientid"))
+		assert.Equal("true", r.URL.Query().Get("showdiagnosisinfo"))
 
 		b, _ := ioutil.ReadFile("./resources/ListProblems.json")
 		w.Write(b)
@@ -25,8 +26,9 @@ func TestHTTPClient_ListProblems(t *testing.T) {
 	defer ts.Close()
 
 	opts := &ListProblemsOptions{
-		DepartmentID: "d5",
-		PatientID:    "p1",
+		DepartmentID:      "d5",
+		PatientID:         "p1",
+		ShowDiagnosisInfo: true,
 	}
 
 	problems, err := athenaClient.ListProblems(context.Background(), opts.PatientID, opts)
