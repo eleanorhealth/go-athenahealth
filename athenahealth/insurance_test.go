@@ -47,6 +47,47 @@ func TestHTTPClient_CreatePatientInsurancePackage(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestHTTPClient_UpdatePatientInsurancePackage(t *testing.T) {
+	assert := assert.New(t)
+
+	insuranceIDNumber := "3"
+	insurancePolicyHolderFirstName := "John"
+	insurancePolicyHolderLastName := "Smith"
+	insurancePolicyHolderDOB := time.Date(1985, 5, 15, 0, 0, 0, 0, time.UTC)
+	insurancePolicyHolderSex := "M"
+	newSequenceNumber := 1
+
+	opts := &UpdatePatientInsurancePackageOptions{
+		PatientID:                      "1",
+		InsuranceIDNumber:              &insuranceIDNumber,
+		InsurancePolicyHolderFirstName: &insurancePolicyHolderFirstName,
+		InsurancePolicyHolderLastName:  &insurancePolicyHolderLastName,
+		InsurancePolicyHolderDOB:       &insurancePolicyHolderDOB,
+		InsurancePolicyHolderSex:       &insurancePolicyHolderSex,
+		NewSequenceNumber:              &newSequenceNumber,
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("insuranceidnumber"), *opts.InsuranceIDNumber)
+		assert.Equal(r.Form.Get("insurancepolicyholderfirstname"), *opts.InsurancePolicyHolderFirstName)
+		assert.Equal(r.Form.Get("insurancepolicyholderlastname"), *opts.InsurancePolicyHolderLastName)
+		assert.Equal(r.Form.Get("insurancepolicyholderdob"), opts.InsurancePolicyHolderDOB.Format("01/02/2006"))
+		assert.Equal(r.Form.Get("insurancepolicyholdersex"), *opts.InsurancePolicyHolderSex)
+		assert.Equal(r.Form.Get("newsequencenumber"), strconv.Itoa(*opts.NewSequenceNumber))
+
+		b, _ := ioutil.ReadFile("./resources/UpdatePatientInsurancePackage.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	err := athenaClient.UpdatePatientInsurancePackage(context.Background(), opts)
+	assert.NoError(err)
+}
+
 func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {
 	assert := assert.New(t)
 

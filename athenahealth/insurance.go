@@ -80,6 +80,76 @@ func (h *HTTPClient) CreatePatientInsurancePackage(ctx context.Context, opts *Cr
 	return out[0], nil
 }
 
+type UpdatePatientInsurancePackageOptions struct {
+	PatientID   string
+	InsuranceID string
+
+	ExpirationDate                 *time.Time
+	InsuranceIDNumber              *string
+	InsurancePolicyHolderDOB       *time.Time
+	InsurancePolicyHolderFirstName *string
+	InsurancePolicyHolderLastName  *string
+	InsurancePolicyHolderSex       *string
+	NewSequenceNumber              *int
+}
+
+type updatePatientInsurancePackageResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+// UpdatePatientInsurancePackage - Update a patient's specific insurance package.
+// PUT /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}
+// https://docs.athenahealth.com/api/api-ref/patient-insurance#Update-patient's-specific-insurance-package
+func (h *HTTPClient) UpdatePatientInsurancePackage(ctx context.Context, opts *UpdatePatientInsurancePackageOptions) error {
+	if opts == nil {
+		panic("opts is nil")
+	}
+
+	out := &updatePatientInsurancePackageResponse{}
+
+	form := url.Values{}
+
+	if opts.ExpirationDate != nil {
+		form.Add("expirationdate", opts.ExpirationDate.Format("01/02/2006"))
+	}
+
+	if opts.InsuranceIDNumber != nil {
+		form.Add("insuranceidnumber", *opts.InsuranceIDNumber)
+	}
+
+	if opts.InsurancePolicyHolderFirstName != nil {
+		form.Add("insurancepolicyholderfirstname", *opts.InsurancePolicyHolderFirstName)
+	}
+
+	if opts.InsurancePolicyHolderLastName != nil {
+		form.Add("insurancepolicyholderlastname", *opts.InsurancePolicyHolderLastName)
+	}
+
+	if opts.InsurancePolicyHolderDOB != nil {
+		form.Add("insurancepolicyholderdob", opts.InsurancePolicyHolderDOB.Format("01/02/2006"))
+	}
+
+	if opts.InsurancePolicyHolderSex != nil {
+		form.Add("insurancepolicyholdersex", *opts.InsurancePolicyHolderSex)
+	}
+
+	if opts.NewSequenceNumber != nil {
+		form.Add("newsequencenumber", strconv.Itoa(*opts.NewSequenceNumber))
+	}
+
+	_, err := h.PutForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s", opts.PatientID, opts.InsuranceID), form, &out)
+	if err != nil {
+		return err
+	}
+
+	if !out.Success {
+		return fmt.Errorf("unexpected response with message: %s", out.Message)
+	}
+
+	return nil
+}
+
 type ListPatientInsurancePackagesOptions struct {
 	PatientID     string
 	ShowCancelled bool
