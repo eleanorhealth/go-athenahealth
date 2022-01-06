@@ -143,7 +143,6 @@ func (h *HTTPClient) UpdatePatientInsurancePackage(ctx context.Context, opts *Up
 		return err
 	}
 
-	// TODO: are we ok with including this message in the error?
 	if !out.Success {
 		return fmt.Errorf("unexpected response with message: %s", out.Message)
 	}
