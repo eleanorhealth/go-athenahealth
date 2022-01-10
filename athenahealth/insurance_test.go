@@ -93,9 +93,14 @@ func TestHTTPClient_DeletePatientInsurancePackage(t *testing.T) {
 
 	cancellationNote := "foo"
 
+	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
-		assert.NoError(r.ParseForm())
-		assert.Equal(cancellationNote, r.Form.Get("cancellationnote"))
+		reqBody, _ := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+
+		assert.Contains(string(reqBody), "cancellationnote=foo")
+
+		called = true
 
 		b, _ := ioutil.ReadFile("./resources/DeletePatientInsurancePackage.json")
 		w.Write(b)
@@ -106,6 +111,8 @@ func TestHTTPClient_DeletePatientInsurancePackage(t *testing.T) {
 
 	err := athenaClient.DeletePatientInsurancePackage(context.Background(), "1", "2", cancellationNote)
 	assert.NoError(err)
+
+	assert.True(called)
 }
 
 func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {

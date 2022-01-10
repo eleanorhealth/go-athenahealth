@@ -138,7 +138,7 @@ func (h *HTTPClient) UpdatePatientInsurancePackage(ctx context.Context, opts *Up
 		form.Add("newsequencenumber", strconv.Itoa(*opts.NewSequenceNumber))
 	}
 
-	_, err := h.PutForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s", opts.PatientID, opts.InsuranceID), form, &out)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s", opts.PatientID, opts.InsuranceID), form, out)
 	if err != nil {
 		return err
 	}
@@ -167,7 +167,7 @@ func (h *HTTPClient) DeletePatientInsurancePackage(ctx context.Context, patientI
 		form.Add("cancellationnote", cancellationNote)
 	}
 
-	_, err := h.DeleteForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s", patientID, insuranceID), form, &out)
+	_, err := h.DeleteForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s", patientID, insuranceID), form, out)
 	if err != nil {
 		return err
 	}
