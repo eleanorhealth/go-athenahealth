@@ -345,11 +345,11 @@ func (h *HTTPClient) Get(ctx context.Context, path string, query url.Values, out
 		path = fmt.Sprintf("%s?%s", path, query.Encode())
 	}
 
-	return h.request(ctx, "GET", path, nil, nil, out)
+	return h.request(ctx, http.MethodGet, path, nil, nil, out)
 }
 
 func (h *HTTPClient) Post(ctx context.Context, path string, body io.Reader, out interface{}) (*http.Response, error) {
-	return h.request(ctx, "POST", path, body, nil, out)
+	return h.request(ctx, http.MethodPost, path, body, nil, out)
 }
 
 func (h *HTTPClient) PostForm(ctx context.Context, path string, v url.Values, out interface{}) (*http.Response, error) {
@@ -361,11 +361,11 @@ func (h *HTTPClient) PostForm(ctx context.Context, path string, v url.Values, ou
 		headers.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
 
-	return h.request(ctx, "POST", path, body, headers, out)
+	return h.request(ctx, http.MethodPost, path, body, headers, out)
 }
 
 func (h *HTTPClient) Put(ctx context.Context, path string, body io.Reader, out interface{}) (*http.Response, error) {
-	return h.request(ctx, "PUT", path, body, nil, out)
+	return h.request(ctx, http.MethodPut, path, body, nil, out)
 }
 
 func (h *HTTPClient) PutForm(ctx context.Context, path string, v url.Values, out interface{}) (*http.Response, error) {
@@ -377,11 +377,11 @@ func (h *HTTPClient) PutForm(ctx context.Context, path string, v url.Values, out
 		headers.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
 
-	return h.request(ctx, "PUT", path, body, headers, out)
+	return h.request(ctx, http.MethodPut, path, body, headers, out)
 }
 
 func (h *HTTPClient) Delete(ctx context.Context, path string, body io.Reader, out interface{}) (*http.Response, error) {
-	return h.request(ctx, "DELETE", path, body, nil, out)
+	return h.request(ctx, http.MethodDelete, path, body, nil, out)
 }
 
 func (h *HTTPClient) DeleteForm(ctx context.Context, path string, v url.Values, out interface{}) (*http.Response, error) {
@@ -393,5 +393,5 @@ func (h *HTTPClient) DeleteForm(ctx context.Context, path string, v url.Values, 
 		headers.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
 
-	return h.request(ctx, "DELETE", path, body, headers, out)
+	return h.request(ctx, http.MethodDelete, path, body, headers, out)
 }

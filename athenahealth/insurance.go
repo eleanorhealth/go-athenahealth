@@ -150,6 +150,35 @@ func (h *HTTPClient) UpdatePatientInsurancePackage(ctx context.Context, opts *Up
 	return nil
 }
 
+type deletePatientInsurancePackageResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+// DeletePatientInsurancePackage - Delete a patient's specific insurance package.
+// DELETE /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}
+// https://docs.athenahealth.com/api/api-ref/patient-insurance#Delete-patient's-specific-insurance-package
+func (h *HTTPClient) DeletePatientInsurancePackage(ctx context.Context, patientID, insuranceID, cancellationNote string) error {
+	out := &deletePatientInsurancePackageResponse{}
+
+	form := url.Values{}
+
+	if len(cancellationNote) > 0 {
+		form.Add("cancellationnote", cancellationNote)
+	}
+
+	_, err := h.DeleteForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s", patientID, insuranceID), form, &out)
+	if err != nil {
+		return err
+	}
+
+	if !out.Success {
+		return fmt.Errorf("unexpected response with message: %s", out.Message)
+	}
+
+	return nil
+}
+
 type ListPatientInsurancePackagesOptions struct {
 	PatientID     string
 	ShowCancelled bool
