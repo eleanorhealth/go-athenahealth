@@ -88,6 +88,33 @@ func TestHTTPClient_UpdatePatientInsurancePackage(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestHTTPClient_DeletePatientInsurancePackage(t *testing.T) {
+	assert := assert.New(t)
+
+	cancellationNote := "foo"
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		reqBody, _ := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+
+		assert.Contains(string(reqBody), "cancellationnote=foo")
+
+		called = true
+
+		b, _ := ioutil.ReadFile("./resources/DeletePatientInsurancePackage.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	err := athenaClient.DeletePatientInsurancePackage(context.Background(), "1", "2", cancellationNote)
+	assert.NoError(err)
+
+	assert.True(called)
+}
+
 func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {
 	assert := assert.New(t)
 
