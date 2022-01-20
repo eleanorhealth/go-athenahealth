@@ -80,6 +80,35 @@ func (h *HTTPClient) CreatePatientInsurancePackage(ctx context.Context, opts *Cr
 	return out[0], nil
 }
 
+type reactivatePatientInsurancePackageResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+// ReactivatePatientInsurancePackage - Reactivate a patient's insurance package.
+// POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/reactivate
+// https://docs.athenahealth.com/api/api-ref/patient-insurance#Reactivate-patient's-specific-insurance-package
+func (h *HTTPClient) ReactivatePatientInsurancePackage(ctx context.Context, patientID, insuranceID string, expirationDate *time.Time) error {
+	out := &reactivatePatientInsurancePackageResponse{}
+
+	form := url.Values{}
+
+	if expirationDate != nil {
+		form.Add("expirationdate", expirationDate.Format("01/02/2006"))
+	}
+
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s/reactivate", patientID, insuranceID), form, &out)
+	if err != nil {
+		return err
+	}
+
+	if !out.Success {
+		return fmt.Errorf("unexpected response with message: %s", out.Message)
+	}
+
+	return nil
+}
+
 type UpdatePatientInsurancePackageOptions struct {
 	PatientID   string
 	InsuranceID string

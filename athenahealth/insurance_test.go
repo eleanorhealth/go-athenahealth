@@ -115,6 +115,29 @@ func TestHTTPClient_DeletePatientInsurancePackage(t *testing.T) {
 	assert.True(called)
 }
 
+func TestHTTPClient_ReactivatePatientInsurancePackage(t *testing.T) {
+	assert := assert.New(t)
+
+	patientID := "1"
+	insuranceID := "2"
+	expDate := time.Date(2022, time.January, 20, 0, 0, 0, 0, time.UTC)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("expirationdate"), expDate.Format("01/02/2006"))
+
+		b, _ := ioutil.ReadFile("./resources/ReactivatePatientInsurancePackage.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	err := athenaClient.ReactivatePatientInsurancePackage(context.Background(), patientID, insuranceID, &expDate)
+	assert.NoError(err)
+}
+
 func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {
 	assert := assert.New(t)
 

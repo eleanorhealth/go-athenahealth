@@ -63,6 +63,7 @@ type Client interface {
 	DeletePatientInsurancePackage(ctx context.Context, patientID, insuranceID, cancellationNote string) error
 	ListPatientInsurancePackages(ctx context.Context, opts *ListPatientInsurancePackagesOptions) (*ListPatientInsurancePackagesResult, error)
 	UpdatePatientInsurancePackage(ctx context.Context, opts *UpdatePatientInsurancePackageOptions) error
+	ReactivatePatientInsurancePackage(ctx context.Context, patientID, insuranceID string, expirationDate *time.Time) error
 }
 
 type TokenProvider interface {
