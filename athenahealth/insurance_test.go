@@ -123,8 +123,10 @@ func TestHTTPClient_ReactivatePatientInsurancePackage(t *testing.T) {
 	expDate := time.Date(2022, time.January, 20, 0, 0, 0, 0, time.UTC)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		assert.NoError(r.ParseForm())
+		assert.Equal("/patients/1/insurances/2/reactivate", r.URL.Path)
+		assert.Equal(http.MethodPost, r.Method)
 
+		assert.NoError(r.ParseForm())
 		assert.Equal(r.Form.Get("expirationdate"), expDate.Format("01/02/2006"))
 
 		b, _ := ioutil.ReadFile("./resources/ReactivatePatientInsurancePackage.json")
