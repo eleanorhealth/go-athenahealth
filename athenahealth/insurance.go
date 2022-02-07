@@ -263,28 +263,28 @@ func (h *HTTPClient) ListPatientInsurancePackages(ctx context.Context, opts *Lis
 	}, nil
 }
 
-type CreatePatientInsuranceCardImageOptions struct {
+type UploadPatientInsuranceCardImageOptions struct {
 	DepartmentID string
 	Image        []byte
 }
 
-type createPatientInsuranceCardImageResponse struct {
+type uploadPatientInsuranceCardImageResponse struct {
 	Success string `json:"success"`
 }
 
-type CreatePatientInsuranceCardImageResult struct {
+type UploadPatientInsuranceCardImageResult struct {
 	Success string
 }
 
-// CreatePatientInsuranceCardImage - Uploads the patient's insurance card image
+// UploadPatientInsuranceCardImage - Uploads the patient's insurance card image
 // POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/image
 // https://docs.athenahealth.com/api/api-ref/insurance-card-image#Upload-patient's-insurance-card-image
-func (h *HTTPClient) CreatePatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string, opts *CreatePatientInsuranceCardImageOptions) (*CreatePatientInsuranceCardImageResult, error) {
+func (h *HTTPClient) UploadPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageOptions) (*UploadPatientInsuranceCardImageResult, error) {
 	if opts == nil {
 		panic("opts is nil")
 	}
 
-	out := &createPatientInsuranceCardImageResponse{}
+	out := &uploadPatientInsuranceCardImageResponse{}
 
 	form := url.Values{}
 
@@ -292,16 +292,14 @@ func (h *HTTPClient) CreatePatientInsuranceCardImage(ctx context.Context, patien
 		form.Add("departmentid", opts.DepartmentID)
 	}
 
-	image := base64.StdEncoding.EncodeToString(opts.Image)
-
-	form.Add("image", image)
+	form.Add("image", base64.StdEncoding.EncodeToString(opts.Image))
 
 	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s/image", patientID, insuranceID), form, &out)
 	if err != nil {
 		return nil, err
 	}
 
-	return &CreatePatientInsuranceCardImageResult{
+	return &UploadPatientInsuranceCardImageResult{
 		Success: out.Success,
 	}, nil
 }
