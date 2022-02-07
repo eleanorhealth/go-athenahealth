@@ -65,6 +65,8 @@ type Client interface {
 	ListPatientInsurancePackages(ctx context.Context, opts *ListPatientInsurancePackagesOptions) (*ListPatientInsurancePackagesResult, error)
 	UpdatePatientInsurancePackage(ctx context.Context, opts *UpdatePatientInsurancePackageOptions) error
 	ReactivatePatientInsurancePackage(ctx context.Context, patientID, insuranceID string, expirationDate *time.Time) error
+
+	CreatePatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string, opts *CreatePatientInsuranceCardImageOptions) (*CreatePatientInsuranceCardImageResult, error)
 }
 
 type TokenProvider interface {
