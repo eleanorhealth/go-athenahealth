@@ -347,3 +347,60 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 	assert.NoError(err)
 	assert.Equal("100", actualPatientID)
 }
+
+func TestHTTPClient_UpdatePatient(t *testing.T) {
+	assert := assert.New(t)
+
+	dob := time.Date(2022, 2, 7, 0, 0, 0, 0, time.UTC)
+
+	opts := &UpdatePatientOptions{
+		Address1:            "100 Main St",
+		Address2:            "#3",
+		AssignedSexAtBirth:  "assignedSexAtBirth",
+		City:                "Boston",
+		ContactPreference:   "MOBILE",
+		ContactName:         "Jane Smith",
+		ContactMobilePhone:  "321-321-4321",
+		ContactHomePhone:    "123-123-1234",
+		ContactRelationship: "SPOUSE",
+		DOB:                 dob.Format("01/02/2006"),
+		Email:               "john.smith@example.com",
+		Ethnicity:           "Slavic",
+		FirstName:           "John",
+		GenderIdentity:      "genderIdentity",
+		HomePhone:           "860-111-2222",
+		LastName:            "Smith",
+		MobilePhone:         "860-555-6666",
+		PreferredName:       "John Smith",
+		PreferredPronouns:   "He/Her/His",
+		Race:                "White",
+		State:               "MA",
+		Zip:                 "02210",
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("address1"), opts.Address1)
+		assert.Equal(r.Form.Get("address2"), opts.Address2)
+		assert.Equal(r.Form.Get("city"), opts.City)
+		assert.Equal(r.Form.Get("dob"), opts.DOB)
+		assert.Equal(r.Form.Get("email"), opts.Email)
+		assert.Equal(r.Form.Get("firstname"), opts.FirstName)
+		assert.Equal(r.Form.Get("homephone"), opts.HomePhone)
+		assert.Equal(r.Form.Get("lastname"), opts.LastName)
+		assert.Equal(r.Form.Get("mobilephone"), opts.MobilePhone)
+		assert.Equal(r.Form.Get("state"), opts.State)
+		assert.Equal(r.Form.Get("zip"), opts.Zip)
+
+		b, _ := ioutil.ReadFile("./resources/UpdatePatient.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	result, err := athenaClient.UpdatePatient(context.Background(), "100", opts)
+	assert.NoError(err)
+	assert.Equal("100", result.PatientID)
+}
