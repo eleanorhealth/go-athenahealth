@@ -278,6 +278,147 @@ func (h *HTTPClient) ListPatients(ctx context.Context, opts *ListPatientsOptions
 	}, nil
 }
 
+type UpdatePatientOptions struct {
+	Address1            string
+	Address2            string
+	AssignedSexAtBirth  string
+	City                string
+	ContactPreference   string
+	ContactName         string
+	ContactMobilePhone  string
+	ContactHomePhone    string
+	ContactRelationship string
+	DOB                 string
+	Email               string
+	Ethnicity           string
+	FirstName           string
+	GenderIdentity      string
+	HomePhone           string
+	LastName            string
+	MobilePhone         string
+	PreferredName       string
+	PreferredPronouns   string
+	Race                string
+	State               string
+	Zip                 string
+}
+
+type UpdatePatientResult struct {
+	PatientID string
+}
+
+type updatePatientResponse struct {
+	PatientID string `json:"patientid"`
+}
+
+// UpdatePatient - Modifies data of a specific patient
+// PUT /v1/{practiceid}/patients/{patientid}
+// https://docs.athenahealth.com/api/api-ref/patient#Update-specific-patient-record
+func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *UpdatePatientOptions) (*UpdatePatientResult, error) {
+	out := &updatePatientResponse{}
+
+	form := url.Values{}
+
+	if opts != nil {
+		if len(opts.Address1) > 0 {
+			form.Add("address1", opts.Address1)
+		}
+
+		if len(opts.Address2) > 0 {
+			form.Add("address2", opts.Address2)
+		}
+
+		if len(opts.AssignedSexAtBirth) > 0 {
+			form.Add("assignedsexatbirth", opts.AssignedSexAtBirth)
+		}
+
+		if len(opts.ContactPreference) > 0 {
+			form.Add("contactpreference", opts.ContactPreference)
+		}
+
+		if len(opts.ContactName) > 0 {
+			form.Add("contactname", opts.ContactName)
+		}
+
+		if len(opts.ContactMobilePhone) > 0 {
+			form.Add("contactmobilephone", opts.ContactMobilePhone)
+		}
+
+		if len(opts.ContactHomePhone) > 0 {
+			form.Add("contacthomephone", opts.ContactHomePhone)
+		}
+
+		if len(opts.ContactRelationship) > 0 {
+			form.Add("contactrelationship", opts.ContactRelationship)
+		}
+
+		if len(opts.City) > 0 {
+			form.Add("city", opts.City)
+		}
+
+		if len(opts.DOB) > 0 {
+			form.Add("dob", opts.DOB)
+		}
+
+		if len(opts.Email) > 0 {
+			form.Add("email", opts.Email)
+		}
+
+		if len(opts.Ethnicity) > 0 {
+			form.Add("ethnicity", opts.Ethnicity)
+		}
+
+		if len(opts.FirstName) > 0 {
+			form.Add("firstname", opts.FirstName)
+		}
+
+		if len(opts.GenderIdentity) > 0 {
+			form.Add("genderidentity", opts.GenderIdentity)
+		}
+
+		if len(opts.HomePhone) > 0 {
+			form.Add("homephone", opts.HomePhone)
+		}
+
+		if len(opts.LastName) > 0 {
+			form.Add("lastname", opts.LastName)
+		}
+
+		if len(opts.MobilePhone) > 0 {
+			form.Add("mobilephone", opts.MobilePhone)
+		}
+
+		if len(opts.PreferredName) > 0 {
+			form.Add("preferredname", opts.PreferredName)
+		}
+
+		if len(opts.PreferredPronouns) > 0 {
+			form.Add("preferredpronouns", opts.PreferredPronouns)
+		}
+
+		if len(opts.Race) > 0 {
+			form.Add("race", opts.Race)
+		}
+
+		if len(opts.State) > 0 {
+			form.Add("state", opts.State)
+		}
+
+		if len(opts.Zip) > 0 {
+			form.Add("zip", opts.Zip)
+		}
+	}
+
+	_, err := h.PutForm(ctx, fmt.Sprintf("/patients/%s", patientID), form, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &UpdatePatientResult{
+		PatientID: out.PatientID,
+	}, nil
+}
+
 type GetPatientPhotoOptions struct {
 	JPEGOutput bool
 }

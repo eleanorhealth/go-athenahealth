@@ -12,6 +12,7 @@ type Client interface {
 
 	GetPatient(ctx context.Context, patientID string, opts *GetPatientOptions) (*Patient, error)
 	ListPatients(context.Context, *ListPatientsOptions) (*ListPatientsResult, error)
+	UpdatePatient(ctx context.Context, patientID string, opts *UpdatePatientOptions) (*UpdatePatientResult, error)
 	UpdatePatientInformationVerificationDetails(ctx context.Context, patientID string, opts *UpdatePatientInformationVerificationDetailsOptions) error
 
 	ListSocialHistoryTemplates(context.Context) ([]*SocialHistoryTemplate, error)
