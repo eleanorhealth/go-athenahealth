@@ -99,6 +99,7 @@ type Patient struct {
 	PovertyLevelFamilySizeDeclined     bool               `json:"povertylevelfamilysizedeclined"`
 	PovertyLevelIncomeDeclined         bool               `json:"povertylevelincomedeclined"`
 	PovertyLevelIncomeRangeDeclined    bool               `json:"povertylevelincomerangedeclined"`
+	PreferredPronouns                  string             `json:"preferredpronouns"`
 	PrimaryDepartmentID                string             `json:"primarydepartmentid"`
 	PrimaryProviderID                  string             `json:"primaryproviderid"`
 	PrivacyInformationVerified         bool               `json:"privacyinformationverified"`
