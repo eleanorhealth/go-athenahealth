@@ -14,8 +14,10 @@ import (
 
 // Patient represents a patient in athenahealth.
 type Patient struct {
-	Address1 string `json:"address1"`
-	Balances []struct {
+	Address1           string `json:"address1"`
+	Address2           string `json:"address2"`
+	AssignedSexAtBirth string `json:"assignedsexatbirth"`
+	Balances           []struct {
 		Balance         NumberString `json:"balance"`
 		DepartmentList  string       `json:"departmentlist"`
 		ProviderGroupID int          `json:"providergroupid"`
@@ -58,6 +60,7 @@ type Patient struct {
 	EthnicityCode                      string             `json:"ethnicitycode"`
 	FirstAppointment                   string             `json:"firstappointment"`
 	FirstName                          string             `json:"firstname"`
+	GenderIdentity                     string             `json:"genderidentity"`
 	GuarantorAddress1                  string             `json:"guarantoraddress1"`
 	GuarantorAddressSameAsPatient      bool               `json:"guarantoraddresssameaspatient"`
 	GuarantorCity                      string             `json:"guarantorcity"`
