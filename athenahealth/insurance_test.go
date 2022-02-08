@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"encoding/base64"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -166,4 +167,36 @@ func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {
 	assert.Len(res.InsurancePackages, 1)
 	assert.Equal(res.Pagination.TotalCount, 2)
 	assert.NoError(err)
+}
+
+func TestHTTPClient_UploadPatientInsuranceCardImage(t *testing.T) {
+	assert := assert.New(t)
+
+	image := []byte("test attachment contents")
+	deptID := "2"
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Contains(r.URL.Path, "/patients/123/insurances/456/image")
+
+		assert.Equal(base64.StdEncoding.EncodeToString([]byte(image)), r.FormValue("image"))
+		assert.Equal(deptID, r.FormValue("departmentid"))
+
+		b, _ := ioutil.ReadFile("./resources/UploadPatientInsuranceCardImage.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &UploadPatientInsuranceCardImageOptions{
+		DepartmentID: deptID,
+		Image:        image,
+	}
+
+	result, err := athenaClient.UploadPatientInsuranceCardImage(context.Background(), "123", "456", opts)
+	assert.NoError(err)
+
+	assert.Equal("true", result.Success)
 }
