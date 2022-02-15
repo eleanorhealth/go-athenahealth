@@ -19,7 +19,8 @@
         ],
         "codeset": "SNOMED",
         "lastmodifiedby": "fterragna",
-        "code": "31956009"
+        "code": "31956009",
+        "bestmatchicd10code": "F49"
       },
       {
         "lastmodifieddatetime": "2021-01-11T15:12:20-05:00",
@@ -36,7 +37,8 @@
         ],
         "codeset": "SNOMED",
         "lastmodifiedby": "fterragna",
-        "code": "193462001"
+        "code": "193462001",
+        "bestmatchicd10code": "F49"
       }
     ]
   }
