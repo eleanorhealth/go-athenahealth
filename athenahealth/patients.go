@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -309,7 +310,7 @@ type UpdatePatientOptions struct {
 	OccupationCode      *string
 	PreferredName       *string
 	PreferredPronouns   *string
-	Race                *string
+	Race                []string
 	State               *string
 	Zip                 *string
 }
@@ -424,7 +425,7 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 		}
 
 		if opts.Race != nil {
-			form.Add("race", *opts.Race)
+			form.Add("race", strings.Join(opts.Race, "\t"))
 		}
 
 		if opts.State != nil {
