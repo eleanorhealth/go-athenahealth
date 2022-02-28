@@ -61,6 +61,7 @@ type Patient struct {
 	FirstAppointment                   string             `json:"firstappointment"`
 	FirstName                          string             `json:"firstname"`
 	GenderIdentity                     string             `json:"genderidentity"`
+	GenderIdentityOther                string             `json:"genderidentityother"`
 	GuarantorAddress1                  string             `json:"guarantoraddress1"`
 	GuarantorAddressSameAsPatient      bool               `json:"guarantoraddresssameaspatient"`
 	GuarantorCity                      string             `json:"guarantorcity"`
@@ -298,6 +299,7 @@ type UpdatePatientOptions struct {
 	Ethnicity           *string
 	FirstName           *string
 	GenderIdentity      *string
+	GenderIdentityOther *string
 	HomePhone           *string
 	LastName            *string
 	MobilePhone         *string
@@ -379,6 +381,10 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 
 		if opts.GenderIdentity != nil {
 			form.Add("genderidentity", *opts.GenderIdentity)
+		}
+
+		if opts.GenderIdentityOther != nil {
+			form.Add("genderidentityother", *opts.GenderIdentityOther)
 		}
 
 		if opts.HomePhone != nil {
