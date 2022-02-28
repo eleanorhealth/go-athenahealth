@@ -303,6 +303,7 @@ type UpdatePatientOptions struct {
 	HomePhone           *string
 	Language6392Code    *string
 	LastName            *string
+	MaritalStatus       *string
 	MobilePhone         *string
 	PreferredName       *string
 	PreferredPronouns   *string
@@ -398,6 +399,10 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 
 		if opts.Language6392Code != nil {
 			form.Add("language6392code", *opts.Language6392Code)
+		}
+
+		if opts.MaritalStatus != nil {
+			form.Add("maritalstatus", *opts.MaritalStatus)
 		}
 
 		if opts.MobilePhone != nil {
