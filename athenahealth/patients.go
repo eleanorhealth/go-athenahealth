@@ -90,7 +90,7 @@ type Patient struct {
 	MaritalStatus                      string             `json:"maritalstatus"`
 	MaritalStatusName                  string             `json:"maritalstatusname"`
 	MobilePhone                        string             `json:"mobilephone"`
-	OccupationCode                     bool               `json:"occupationcode"`
+	OccupationCode                     string             `json:"occupationcode"`
 	OnlineStatementOnly                bool               `json:"onlinestatementonly"`
 	PatientID                          string             `json:"patientid"`
 	PatientPhoto                       bool               `json:"patientphoto"`
