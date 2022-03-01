@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -367,12 +368,16 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 	Ethnicity := "Slavic"
 	FirstName := "John"
 	GenderIdentity := "genderIdentity"
+	GenderIdentityOther := "genderIdentityOther"
 	HomePhone := "860-111-2222"
+	Language6392Code := "321"
 	LastName := "Smith"
 	MobilePhone := "860-555-6666"
+	MaritalStatus := "Married"
+	OccupationCode := "123"
 	PreferredName := "John Smith"
-	PreferredPronouns := "He/Her/His"
-	Race := "White"
+	PreferredPronouns := "He/His"
+	Race := []string{"White", "Black"}
 	State := "MA"
 	Zip := "02210"
 
@@ -391,12 +396,16 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		Ethnicity:           &Ethnicity,
 		FirstName:           &FirstName,
 		GenderIdentity:      &GenderIdentity,
+		GenderIdentityOther: &GenderIdentityOther,
 		HomePhone:           &HomePhone,
+		Language6392Code:    &Language6392Code,
 		LastName:            &LastName,
+		MaritalStatus:       &MaritalStatus,
 		MobilePhone:         &MobilePhone,
+		OccupationCode:      &OccupationCode,
 		PreferredName:       &PreferredName,
 		PreferredPronouns:   &PreferredPronouns,
-		Race:                &Race,
+		Race:                Race,
 		State:               &State,
 		Zip:                 &Zip,
 	}
@@ -409,10 +418,18 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("city"), *opts.City)
 		assert.Equal(r.Form.Get("dob"), *opts.DOB)
 		assert.Equal(r.Form.Get("email"), *opts.Email)
+		assert.Equal(r.Form.Get("genderidentity"), *opts.GenderIdentity)
+		assert.Equal(r.Form.Get("genderidentityother"), *opts.GenderIdentityOther)
 		assert.Equal(r.Form.Get("firstname"), *opts.FirstName)
 		assert.Equal(r.Form.Get("homephone"), *opts.HomePhone)
+		assert.Equal(r.Form.Get("language6392code"), *opts.Language6392Code)
 		assert.Equal(r.Form.Get("lastname"), *opts.LastName)
+		assert.Equal(r.Form.Get("maritalstatus"), *opts.MaritalStatus)
 		assert.Equal(r.Form.Get("mobilephone"), *opts.MobilePhone)
+		assert.Equal(r.Form.Get("occupationcode"), *opts.OccupationCode)
+		assert.Equal(r.Form.Get("preferredname"), *opts.PreferredName)
+		assert.Equal(r.Form.Get("preferredpronouns"), *opts.PreferredPronouns)
+		assert.Equal(r.Form.Get("race"), strings.Join(Race, "\t"))
 		assert.Equal(r.Form.Get("state"), *opts.State)
 		assert.Equal(r.Form.Get("zip"), *opts.Zip)
 
