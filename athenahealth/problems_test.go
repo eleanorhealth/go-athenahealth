@@ -16,6 +16,7 @@ func TestHTTPClient_ListProblems(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal("d5", r.URL.Query().Get("departmentid"))
 		assert.Equal("p1", r.URL.Query().Get("patientid"))
+		assert.Equal("true", r.URL.Query().Get("showdiagnosisinfo"))
 
 		b, _ := ioutil.ReadFile("./resources/ListProblems.json")
 		w.Write(b)
@@ -25,8 +26,9 @@ func TestHTTPClient_ListProblems(t *testing.T) {
 	defer ts.Close()
 
 	opts := &ListProblemsOptions{
-		DepartmentID: "d5",
-		PatientID:    "p1",
+		DepartmentID:      "d5",
+		PatientID:         "p1",
+		ShowDiagnosisInfo: true,
 	}
 
 	problems, err := athenaClient.ListProblems(context.Background(), opts.PatientID, opts)
@@ -62,4 +64,38 @@ func TestHTTPClient_ListChangedProblems(t *testing.T) {
 
 	assert.Len(problems, 1)
 	assert.NoError(err)
+}
+
+func TestProblem_ICD10Code(t *testing.T) {
+	tests := []struct {
+		name    string
+		problem *Problem
+		want    string
+	}{
+		{
+			name: "use code when codeset ICD10",
+			problem: &Problem{
+				Codeset:            "ICD10",
+				Code:               "F49.1",
+				BestMatchICD10Code: "F49",
+			},
+			want: "F49.1",
+		},
+		{
+			name: "use bestmatchicd10code when codeset not ICD10",
+			problem: &Problem{
+				Codeset:            "SNOMED",
+				Code:               "123456",
+				BestMatchICD10Code: "F49",
+			},
+			want: "F49",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.problem.ICD10Code(); got != tt.want {
+				t.Errorf("Problem.ICD10Code() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
