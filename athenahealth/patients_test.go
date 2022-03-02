@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -346,4 +347,100 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 	actualPatientID, err := athenaClient.CreatePatient(context.Background(), opts)
 	assert.NoError(err)
 	assert.Equal("100", actualPatientID)
+}
+
+func TestHTTPClient_UpdatePatient(t *testing.T) {
+	assert := assert.New(t)
+
+	dob := time.Date(2022, 2, 7, 0, 0, 0, 0, time.UTC)
+
+	Address1 := "100 Main St"
+	Address2 := "#3"
+	AssignedSexAtBirth := "assignedSexAtBirth"
+	City := "Boston"
+	ContactPreference := "MOBILE"
+	ContactName := "Jane Smith"
+	ContactMobilePhone := "321-321-4321"
+	ContactHomePhone := "123-123-1234"
+	ContactRelationship := "SPOUSE"
+	DOB := dob.Format("01/02/2006")
+	Email := "john.smith@example.com"
+	Ethnicity := "Slavic"
+	FirstName := "John"
+	GenderIdentity := "genderIdentity"
+	GenderIdentityOther := "genderIdentityOther"
+	HomePhone := "860-111-2222"
+	Language6392Code := "321"
+	LastName := "Smith"
+	MobilePhone := "860-555-6666"
+	MaritalStatus := "Married"
+	OccupationCode := "123"
+	PreferredName := "John Smith"
+	PreferredPronouns := "He/His"
+	Race := []string{"White", "Black"}
+	State := "MA"
+	Zip := "02210"
+
+	opts := &UpdatePatientOptions{
+		Address1:            &Address1,
+		Address2:            &Address2,
+		AssignedSexAtBirth:  &AssignedSexAtBirth,
+		City:                &City,
+		ContactPreference:   &ContactPreference,
+		ContactName:         &ContactName,
+		ContactMobilePhone:  &ContactMobilePhone,
+		ContactHomePhone:    &ContactHomePhone,
+		ContactRelationship: &ContactRelationship,
+		DOB:                 &DOB,
+		Email:               &Email,
+		Ethnicity:           &Ethnicity,
+		FirstName:           &FirstName,
+		GenderIdentity:      &GenderIdentity,
+		GenderIdentityOther: &GenderIdentityOther,
+		HomePhone:           &HomePhone,
+		Language6392Code:    &Language6392Code,
+		LastName:            &LastName,
+		MaritalStatus:       &MaritalStatus,
+		MobilePhone:         &MobilePhone,
+		OccupationCode:      &OccupationCode,
+		PreferredName:       &PreferredName,
+		PreferredPronouns:   &PreferredPronouns,
+		Race:                Race,
+		State:               &State,
+		Zip:                 &Zip,
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("address1"), *opts.Address1)
+		assert.Equal(r.Form.Get("address2"), *opts.Address2)
+		assert.Equal(r.Form.Get("city"), *opts.City)
+		assert.Equal(r.Form.Get("dob"), *opts.DOB)
+		assert.Equal(r.Form.Get("email"), *opts.Email)
+		assert.Equal(r.Form.Get("genderidentity"), *opts.GenderIdentity)
+		assert.Equal(r.Form.Get("genderidentityother"), *opts.GenderIdentityOther)
+		assert.Equal(r.Form.Get("firstname"), *opts.FirstName)
+		assert.Equal(r.Form.Get("homephone"), *opts.HomePhone)
+		assert.Equal(r.Form.Get("language6392code"), *opts.Language6392Code)
+		assert.Equal(r.Form.Get("lastname"), *opts.LastName)
+		assert.Equal(r.Form.Get("maritalstatus"), *opts.MaritalStatus)
+		assert.Equal(r.Form.Get("mobilephone"), *opts.MobilePhone)
+		assert.Equal(r.Form.Get("occupationcode"), *opts.OccupationCode)
+		assert.Equal(r.Form.Get("preferredname"), *opts.PreferredName)
+		assert.Equal(r.Form.Get("preferredpronouns"), *opts.PreferredPronouns)
+		assert.Equal(r.Form.Get("race"), strings.Join(Race, "\t"))
+		assert.Equal(r.Form.Get("state"), *opts.State)
+		assert.Equal(r.Form.Get("zip"), *opts.Zip)
+
+		b, _ := ioutil.ReadFile("./resources/UpdatePatient.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	result, err := athenaClient.UpdatePatient(context.Background(), "100", opts)
+	assert.NoError(err)
+	assert.Equal("100", result.PatientID)
 }

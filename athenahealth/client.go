@@ -12,6 +12,7 @@ type Client interface {
 
 	GetPatient(ctx context.Context, patientID string, opts *GetPatientOptions) (*Patient, error)
 	ListPatients(context.Context, *ListPatientsOptions) (*ListPatientsResult, error)
+	UpdatePatient(ctx context.Context, patientID string, opts *UpdatePatientOptions) (*UpdatePatientResult, error)
 	UpdatePatientInformationVerificationDetails(ctx context.Context, patientID string, opts *UpdatePatientInformationVerificationDetailsOptions) error
 
 	ListSocialHistoryTemplates(context.Context) ([]*SocialHistoryTemplate, error)
@@ -64,6 +65,10 @@ type Client interface {
 	ListPatientInsurancePackages(ctx context.Context, opts *ListPatientInsurancePackagesOptions) (*ListPatientInsurancePackagesResult, error)
 	UpdatePatientInsurancePackage(ctx context.Context, opts *UpdatePatientInsurancePackageOptions) error
 	ReactivatePatientInsurancePackage(ctx context.Context, patientID, insuranceID string, expirationDate *time.Time) error
+
+	UploadPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageOptions) (*UploadPatientInsuranceCardImageResult, error)
+
+	AddPatientDriversLicenseDocument(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentOptions) (*AddPatientDriversLicenseDocumentResult, error)
 }
 
 type TokenProvider interface {

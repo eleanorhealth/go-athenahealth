@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"net/url"
@@ -259,5 +260,46 @@ func (h *HTTPClient) ListPatientInsurancePackages(ctx context.Context, opts *Lis
 	return &ListPatientInsurancePackagesResult{
 		InsurancePackages: out.Insurances,
 		Pagination:        makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
+}
+
+type UploadPatientInsuranceCardImageOptions struct {
+	DepartmentID string
+	Image        []byte
+}
+
+type uploadPatientInsuranceCardImageResponse struct {
+	Success string `json:"success"`
+}
+
+type UploadPatientInsuranceCardImageResult struct {
+	Success string
+}
+
+// UploadPatientInsuranceCardImage - Uploads the patient's insurance card image
+// POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/image
+// https://docs.athenahealth.com/api/api-ref/insurance-card-image#Upload-patient's-insurance-card-image
+func (h *HTTPClient) UploadPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageOptions) (*UploadPatientInsuranceCardImageResult, error) {
+	if opts == nil {
+		panic("opts is nil")
+	}
+
+	out := &uploadPatientInsuranceCardImageResponse{}
+
+	form := url.Values{}
+
+	if len(opts.DepartmentID) > 0 {
+		form.Add("departmentid", opts.DepartmentID)
+	}
+
+	form.Add("image", base64.StdEncoding.EncodeToString(opts.Image))
+
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s/image", patientID, insuranceID), form, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &UploadPatientInsuranceCardImageResult{
+		Success: out.Success,
 	}, nil
 }

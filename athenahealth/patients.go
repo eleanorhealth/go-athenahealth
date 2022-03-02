@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -14,8 +15,10 @@ import (
 
 // Patient represents a patient in athenahealth.
 type Patient struct {
-	Address1 string `json:"address1"`
-	Balances []struct {
+	Address1           string `json:"address1"`
+	Address2           string `json:"address2"`
+	AssignedSexAtBirth string `json:"assignedsexatbirth"`
+	Balances           []struct {
 		Balance         NumberString `json:"balance"`
 		DepartmentList  string       `json:"departmentlist"`
 		ProviderGroupID int          `json:"providergroupid"`
@@ -58,6 +61,8 @@ type Patient struct {
 	EthnicityCode                      string             `json:"ethnicitycode"`
 	FirstAppointment                   string             `json:"firstappointment"`
 	FirstName                          string             `json:"firstname"`
+	GenderIdentity                     string             `json:"genderidentity"`
+	GenderIdentityOther                string             `json:"genderidentityother"`
 	GuarantorAddress1                  string             `json:"guarantoraddress1"`
 	GuarantorAddressSameAsPatient      bool               `json:"guarantoraddresssameaspatient"`
 	GuarantorCity                      string             `json:"guarantorcity"`
@@ -86,6 +91,7 @@ type Patient struct {
 	MaritalStatus                      string             `json:"maritalstatus"`
 	MaritalStatusName                  string             `json:"maritalstatusname"`
 	MobilePhone                        string             `json:"mobilephone"`
+	OccupationCode                     string             `json:"occupationcode"`
 	OnlineStatementOnly                bool               `json:"onlinestatementonly"`
 	PatientID                          string             `json:"patientid"`
 	PatientPhoto                       bool               `json:"patientphoto"`
@@ -96,6 +102,8 @@ type Patient struct {
 	PovertyLevelFamilySizeDeclined     bool               `json:"povertylevelfamilysizedeclined"`
 	PovertyLevelIncomeDeclined         bool               `json:"povertylevelincomedeclined"`
 	PovertyLevelIncomeRangeDeclined    bool               `json:"povertylevelincomerangedeclined"`
+	PreferredPronouns                  string             `json:"preferredpronouns"`
+	PreferredName                      string             `json:"preferredname"`
 	PrimaryDepartmentID                string             `json:"primarydepartmentid"`
 	PrimaryProviderID                  string             `json:"primaryproviderid"`
 	PrivacyInformationVerified         bool               `json:"privacyinformationverified"`
@@ -275,6 +283,167 @@ func (h *HTTPClient) ListPatients(ctx context.Context, opts *ListPatientsOptions
 	return &ListPatientsResult{
 		Patients:   out.Patients,
 		Pagination: makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
+}
+
+type UpdatePatientOptions struct {
+	Address1            *string
+	Address2            *string
+	AssignedSexAtBirth  *string
+	City                *string
+	ContactPreference   *string
+	ContactName         *string
+	ContactMobilePhone  *string
+	ContactHomePhone    *string
+	ContactRelationship *string
+	DOB                 *string
+	Email               *string
+	Ethnicity           *string
+	FirstName           *string
+	GenderIdentity      *string
+	GenderIdentityOther *string
+	HomePhone           *string
+	Language6392Code    *string
+	LastName            *string
+	MaritalStatus       *string
+	MobilePhone         *string
+	OccupationCode      *string
+	PreferredName       *string
+	PreferredPronouns   *string
+	Race                []string
+	State               *string
+	Zip                 *string
+}
+
+type UpdatePatientResult struct {
+	PatientID string
+}
+
+type updatePatientResponse struct {
+	PatientID string `json:"patientid"`
+}
+
+// UpdatePatient - Modifies data of a specific patient
+// PUT /v1/{practiceid}/patients/{patientid}
+// https://docs.athenahealth.com/api/api-ref/patient#Update-specific-patient-record
+func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *UpdatePatientOptions) (*UpdatePatientResult, error) {
+	out := &updatePatientResponse{}
+
+	form := url.Values{}
+
+	if opts != nil {
+		if opts.Address1 != nil {
+			form.Add("address1", *opts.Address1)
+		}
+
+		if opts.Address2 != nil {
+			form.Add("address2", *opts.Address2)
+		}
+
+		if opts.AssignedSexAtBirth != nil {
+			form.Add("assignedsexatbirth", *opts.AssignedSexAtBirth)
+		}
+
+		if opts.ContactPreference != nil {
+			form.Add("contactpreference", *opts.ContactPreference)
+		}
+
+		if opts.ContactName != nil {
+			form.Add("contactname", *opts.ContactName)
+		}
+
+		if opts.ContactMobilePhone != nil {
+			form.Add("contactmobilephone", *opts.ContactMobilePhone)
+		}
+
+		if opts.ContactHomePhone != nil {
+			form.Add("contacthomephone", *opts.ContactHomePhone)
+		}
+
+		if opts.ContactRelationship != nil {
+			form.Add("contactrelationship", *opts.ContactRelationship)
+		}
+
+		if opts.City != nil {
+			form.Add("city", *opts.City)
+		}
+
+		if opts.DOB != nil {
+			form.Add("dob", *opts.DOB)
+		}
+
+		if opts.Email != nil {
+			form.Add("email", *opts.Email)
+		}
+
+		if opts.Ethnicity != nil {
+			form.Add("ethnicity", *opts.Ethnicity)
+		}
+
+		if opts.FirstName != nil {
+			form.Add("firstname", *opts.FirstName)
+		}
+
+		if opts.GenderIdentity != nil {
+			form.Add("genderidentity", *opts.GenderIdentity)
+		}
+
+		if opts.GenderIdentityOther != nil {
+			form.Add("genderidentityother", *opts.GenderIdentityOther)
+		}
+
+		if opts.HomePhone != nil {
+			form.Add("homephone", *opts.HomePhone)
+		}
+
+		if opts.LastName != nil {
+			form.Add("lastname", *opts.LastName)
+		}
+
+		if opts.Language6392Code != nil {
+			form.Add("language6392code", *opts.Language6392Code)
+		}
+
+		if opts.MaritalStatus != nil {
+			form.Add("maritalstatus", *opts.MaritalStatus)
+		}
+
+		if opts.MobilePhone != nil {
+			form.Add("mobilephone", *opts.MobilePhone)
+		}
+
+		if opts.OccupationCode != nil {
+			form.Add("occupationcode", *opts.OccupationCode)
+		}
+
+		if opts.PreferredName != nil {
+			form.Add("preferredname", *opts.PreferredName)
+		}
+
+		if opts.PreferredPronouns != nil {
+			form.Add("preferredpronouns", *opts.PreferredPronouns)
+		}
+
+		if opts.Race != nil {
+			form.Add("race", strings.Join(opts.Race, "\t"))
+		}
+
+		if opts.State != nil {
+			form.Add("state", *opts.State)
+		}
+
+		if opts.Zip != nil {
+			form.Add("zip", *opts.Zip)
+		}
+	}
+
+	_, err := h.PutForm(ctx, fmt.Sprintf("/patients/%s", patientID), form, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &UpdatePatientResult{
+		PatientID: out.PatientID,
 	}, nil
 }
 
