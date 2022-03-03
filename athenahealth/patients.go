@@ -29,6 +29,7 @@ type Patient struct {
 	ConsentToCall                      bool               `json:"consenttocall"`
 	ConsentToText                      bool               `json:"consenttotext"`
 	ContactHomePhone                   string             `json:"contacthomephone"`
+	ContactMobilePhone                 string             `json:"contactmobilephone"`
 	ContactName                        string             `json:"contactname"`
 	ContactPreference                  string             `json:"contactpreference"`
 	ContactPreferenceLabSMS            bool               `json:"contactpreference_lab_sms"`
