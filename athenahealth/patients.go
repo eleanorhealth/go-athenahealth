@@ -438,7 +438,7 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 		}
 	}
 
-	_, err := h.PutForm(ctx, fmt.Sprintf("/patients/%s", patientID), form, out)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/patients/%s", patientID), form, &out)
 	if err != nil {
 		return nil, err
 	}
