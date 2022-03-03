@@ -328,7 +328,7 @@ type updatePatientResponse struct {
 // PUT /v1/{practiceid}/patients/{patientid}
 // https://docs.athenahealth.com/api/api-ref/patient#Update-specific-patient-record
 func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *UpdatePatientOptions) (*UpdatePatientResult, error) {
-	out := &updatePatientResponse{}
+	out := []*updatePatientResponse{}
 
 	form := url.Values{}
 
@@ -438,13 +438,17 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 		}
 	}
 
-	_, err := h.PutForm(ctx, fmt.Sprintf("/patients/%s", patientID), form, out)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/patients/%s", patientID), form, &out)
 	if err != nil {
 		return nil, err
 	}
 
+	if len(out) != 1 {
+		return nil, errors.New("unexpected response")
+	}
+
 	return &UpdatePatientResult{
-		PatientID: out.PatientID,
+		PatientID: out[0].PatientID,
 	}, nil
 }
 
