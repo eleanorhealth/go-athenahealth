@@ -356,6 +356,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 
 	Address1 := "100 Main St"
 	Address2 := "#3"
+	AltFirstName := "Johnny"
 	AssignedSexAtBirth := "assignedSexAtBirth"
 	City := "Boston"
 	ContactPreference := "MOBILE"
@@ -384,6 +385,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 	opts := &UpdatePatientOptions{
 		Address1:            &Address1,
 		Address2:            &Address2,
+		AltFirstName:        &AltFirstName,
 		AssignedSexAtBirth:  &AssignedSexAtBirth,
 		City:                &City,
 		ContactPreference:   &ContactPreference,
@@ -415,6 +417,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 
 		assert.Equal(r.Form.Get("address1"), *opts.Address1)
 		assert.Equal(r.Form.Get("address2"), *opts.Address2)
+		assert.Equal(r.Form.Get("altfirstname"), *opts.AltFirstName)
 		assert.Equal(r.Form.Get("city"), *opts.City)
 		assert.Equal(r.Form.Get("dob"), *opts.DOB)
 		assert.Equal(r.Form.Get("email"), *opts.Email)

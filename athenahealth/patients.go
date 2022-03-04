@@ -17,6 +17,7 @@ import (
 type Patient struct {
 	Address1           string `json:"address1"`
 	Address2           string `json:"address2"`
+	AltFirstName       string `json:"altfirstname"`
 	AssignedSexAtBirth string `json:"assignedsexatbirth"`
 	Balances           []struct {
 		Balance         NumberString `json:"balance"`
@@ -290,6 +291,7 @@ func (h *HTTPClient) ListPatients(ctx context.Context, opts *ListPatientsOptions
 type UpdatePatientOptions struct {
 	Address1            *string
 	Address2            *string
+	AltFirstName        *string
 	AssignedSexAtBirth  *string
 	City                *string
 	ContactPreference   *string
@@ -339,6 +341,10 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 
 		if opts.Address2 != nil {
 			form.Add("address2", *opts.Address2)
+		}
+
+		if opts.AltFirstName != nil {
+			form.Add("altfirstname", *opts.AltFirstName)
 		}
 
 		if opts.AssignedSexAtBirth != nil {
