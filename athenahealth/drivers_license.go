@@ -13,11 +13,11 @@ type AddPatientDriversLicenseDocumentOptions struct {
 }
 
 type addPatientDriversLicenseDocumentResponse struct {
-	Success string `json:"success"`
+	Success bool `json:"success"`
 }
 
 type AddPatientDriversLicenseDocumentResult struct {
-	Success string
+	Success bool
 }
 
 // AddPatientDriversLicenseDocument - Create a record of patient's driving license document
