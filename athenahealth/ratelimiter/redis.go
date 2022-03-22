@@ -15,14 +15,14 @@ const defaultRatePerSecPreview = 5
 const defaultRatePerSecProd = 100
 
 type Redis struct {
-	client  *redis.Client
+	client  redis.UniversalClient
 	limiter *redis_rate.Limiter
 
 	ratePreivew int
 	rateProd    int
 }
 
-func NewRedis(client *redis.Client, ratePreview, rateProd int) *Redis {
+func NewRedis(client redis.UniversalClient, ratePreview, rateProd int) *Redis {
 	if client == nil {
 		panic("client is nil")
 	}
