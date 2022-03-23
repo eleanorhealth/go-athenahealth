@@ -301,7 +301,7 @@ type UpdatePatientOptions struct {
 	ContactRelationship *string
 	DOB                 *string
 	Email               *string
-	Ethnicity           *string
+	EthnicityCode       *string
 	FirstName           *string
 	GenderIdentity      *string
 	GenderIdentityOther *string
@@ -383,8 +383,8 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 			form.Add("email", *opts.Email)
 		}
 
-		if opts.Ethnicity != nil {
-			form.Add("ethnicity", *opts.Ethnicity)
+		if opts.EthnicityCode != nil {
+			form.Add("ethnicitycode", *opts.EthnicityCode)
 		}
 
 		if opts.FirstName != nil {

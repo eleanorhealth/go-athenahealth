@@ -366,7 +366,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 	ContactRelationship := "SPOUSE"
 	DOB := dob.Format("01/02/2006")
 	Email := "john.smith@example.com"
-	Ethnicity := "Slavic"
+	EthnicityCode := "Slavic"
 	FirstName := "John"
 	GenderIdentity := "genderIdentity"
 	GenderIdentityOther := "genderIdentityOther"
@@ -395,7 +395,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		ContactRelationship: &ContactRelationship,
 		DOB:                 &DOB,
 		Email:               &Email,
-		Ethnicity:           &Ethnicity,
+		EthnicityCode:       &EthnicityCode,
 		FirstName:           &FirstName,
 		GenderIdentity:      &GenderIdentity,
 		GenderIdentityOther: &GenderIdentityOther,
@@ -421,6 +421,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("city"), *opts.City)
 		assert.Equal(r.Form.Get("dob"), *opts.DOB)
 		assert.Equal(r.Form.Get("email"), *opts.Email)
+		assert.Equal(r.Form.Get("ethnicitycode"), *opts.EthnicityCode)
 		assert.Equal(r.Form.Get("genderidentity"), *opts.GenderIdentity)
 		assert.Equal(r.Form.Get("genderidentityother"), *opts.GenderIdentityOther)
 		assert.Equal(r.Form.Get("firstname"), *opts.FirstName)
