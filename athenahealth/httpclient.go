@@ -54,7 +54,6 @@ type HTTPClient struct {
 	tokenCacher   TokenCacher
 	rateLimiter   RateLimiter
 	stats         Stats
-	tracer        Tracer
 	logger        *zerolog.Logger
 
 	requestLock sync.Mutex
@@ -142,7 +141,6 @@ func NewHTTPClient(httpClient *http.Client, practiceID, clientID, secret string)
 		tokenCacher:   tokencacher.NewDefault(),
 		rateLimiter:   ratelimiter.NewDefault(),
 		stats:         stats.NewDefault(),
-		tracer:        tracer.NewDefault(),
 	}
 
 	c.setBaseURL()
@@ -212,9 +210,6 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	}
 
 	reqURL := fmt.Sprintf("%s%s", h.baseURL, path)
-
-	ctx = h.tracer.Before(ctx, method, path)
-	defer h.tracer.After(ctx)
 
 	req, err := http.NewRequestWithContext(ctx, method, reqURL, body)
 	if err != nil {
@@ -346,14 +341,8 @@ func (h *HTTPClient) WithStats(stats Stats) *HTTPClient {
 	return h
 }
 
-func (h *HTTPClient) WithTracer(tracer Tracer) *HTTPClient {
-	h.tracer = tracer
-
-	return h
-}
-
 func (h *HTTPClient) WithDatadogTracer(opts ...tracer.Option) *HTTPClient {
-	h.tracer = tracer.NewDatadog(opts...)
+	h.httpClient.Transport = tracer.WrapRoundTripper(h.httpClient.Transport, opts...)
 
 	return h
 }

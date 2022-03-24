@@ -89,8 +89,3 @@ type Stats interface {
 	ResponseSuccess() error
 	ResponseError() error
 }
-
-type Tracer interface {
-	Before(ctx context.Context, method, path string) context.Context
-	After(ctx context.Context)
-}
