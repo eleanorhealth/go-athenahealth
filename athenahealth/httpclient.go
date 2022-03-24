@@ -19,6 +19,7 @@ import (
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/stats"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
+	"github.com/eleanorhealth/go-athenahealth/athenahealth/tracer"
 	"github.com/rs/zerolog"
 )
 
@@ -53,6 +54,7 @@ type HTTPClient struct {
 	tokenCacher   TokenCacher
 	rateLimiter   RateLimiter
 	stats         Stats
+	tracer        Tracer
 	logger        *zerolog.Logger
 
 	requestLock sync.Mutex
@@ -140,6 +142,7 @@ func NewHTTPClient(httpClient *http.Client, practiceID, clientID, secret string)
 		tokenCacher:   tokencacher.NewDefault(),
 		rateLimiter:   ratelimiter.NewDefault(),
 		stats:         stats.NewDefault(),
+		tracer:        tracer.NewDefault(),
 	}
 
 	c.setBaseURL()
@@ -209,6 +212,9 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	}
 
 	reqURL := fmt.Sprintf("%s%s", h.baseURL, path)
+
+	ctx = h.tracer.Before(ctx, method, path)
+	defer h.tracer.After(ctx)
 
 	req, err := http.NewRequestWithContext(ctx, method, reqURL, body)
 	if err != nil {
@@ -336,6 +342,18 @@ func (h *HTTPClient) WithRateLimiter(rateLimiter RateLimiter) *HTTPClient {
 
 func (h *HTTPClient) WithStats(stats Stats) *HTTPClient {
 	h.stats = stats
+
+	return h
+}
+
+func (h *HTTPClient) WithTracer(tracer Tracer) *HTTPClient {
+	h.tracer = tracer
+
+	return h
+}
+
+func (h *HTTPClient) WithDatadogTracer(opts ...tracer.Option) *HTTPClient {
+	h.tracer = tracer.NewDatadog(opts...)
 
 	return h
 }
