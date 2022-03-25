@@ -19,7 +19,6 @@ import (
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/stats"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
-	"github.com/eleanorhealth/go-athenahealth/athenahealth/tracer"
 	"github.com/rs/zerolog"
 )
 
@@ -341,8 +340,8 @@ func (h *HTTPClient) WithStats(stats Stats) *HTTPClient {
 	return h
 }
 
-func (h *HTTPClient) WithDatadogTracer(opts ...tracer.Option) *HTTPClient {
-	h.httpClient.Transport = tracer.WrapRoundTripper(h.httpClient.Transport, opts...)
+func (h *HTTPClient) WithHttpClient(httpClient *http.Client) *HTTPClient {
+	h.httpClient = httpClient
 
 	return h
 }
