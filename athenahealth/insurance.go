@@ -269,11 +269,11 @@ type UploadPatientInsuranceCardImageOptions struct {
 }
 
 type uploadPatientInsuranceCardImageResponse struct {
-	Success string `json:"success"`
+	Success bool `json:"success"`
 }
 
 type UploadPatientInsuranceCardImageResult struct {
-	Success string
+	Success bool
 }
 
 // UploadPatientInsuranceCardImage - Uploads the patient's insurance card image
