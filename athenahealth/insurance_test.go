@@ -198,5 +198,5 @@ func TestHTTPClient_UploadPatientInsuranceCardImage(t *testing.T) {
 	result, err := athenaClient.UploadPatientInsuranceCardImage(context.Background(), "123", "456", opts)
 	assert.NoError(err)
 
-	assert.Equal("true", result.Success)
+	assert.True(result.Success)
 }
