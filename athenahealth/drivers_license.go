@@ -5,7 +5,10 @@ import (
 	"encoding/base64"
 	"fmt"
 	"net/url"
+	"time"
 )
+
+const patientDriversLicenseUploadTimeout = 2 * time.Minute
 
 type AddPatientDriversLicenseDocumentOptions struct {
 	DepartmentID string
@@ -37,6 +40,9 @@ func (h *HTTPClient) AddPatientDriversLicenseDocument(ctx context.Context, patie
 	}
 
 	form.Add("image", base64.StdEncoding.EncodeToString(opts.Image))
+
+	ctx, cancel := context.WithTimeout(ctx, patientDriversLicenseUploadTimeout)
+	defer cancel()
 
 	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/driverslicense", patientID), form, &out)
 	if err != nil {
