@@ -73,6 +73,9 @@ type ListMedicationsResponse struct {
 }
 type ListMedicationsResult ListMedicationsResponse
 
+// ListMedications - Get patient's medication list
+// GET /v1/{practiceid}/chart/{patientid}/medications?departmentid={departmentid}
+// https://docs.athenahealth.com/api/api-ref/medication#Get-patient's-medication-list
 func (h *HTTPClient) ListMedications(ctx context.Context, patientID, departmentID string) (*ListMedicationsResult, error) {
 	out := &ListMedicationsResponse{}
 
