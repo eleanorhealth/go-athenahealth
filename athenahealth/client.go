@@ -69,6 +69,8 @@ type Client interface {
 	UploadPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageOptions) (*UploadPatientInsuranceCardImageResult, error)
 
 	AddPatientDriversLicenseDocument(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentOptions) (*AddPatientDriversLicenseDocumentResult, error)
+
+	ListMedications(ctx context.Context, patientID, departmentID string) (*ListMedicationsResult, error)
 }
 
 type TokenProvider interface {
