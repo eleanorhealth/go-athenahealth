@@ -72,6 +72,7 @@ type AllergySectionQuestion struct {
 	AllergyConceptType string   `json:"allergyconcepttype"`
 	AllergyID          string   `json:"allergyid"`
 	AllergyReactionID  []string `json:"allergyreactionid"`
+	Name               string   `json:"name"`
 	SeverityID         []string `json:"severityid"`
 }
 
