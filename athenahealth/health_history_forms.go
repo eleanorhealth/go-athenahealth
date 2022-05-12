@@ -187,7 +187,7 @@ type FamilySectionFieldData struct {
 		Required       int        `json:"required"`
 		InputType      string     `json:"inputtype"`
 		DropdownValues [][]string `json:"dropdownvalues"`
-	}
+	} `json:"relation"`
 }
 
 type FamilySectionQuestion struct {
