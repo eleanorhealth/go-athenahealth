@@ -8,6 +8,7 @@ import (
 	"net/url"
 )
 
+// https://docs.athenahealth.com/api/workflows/health-history-forms-checkin
 type HealthHistoryFormSection[FieldDataT, QuestionsT any] struct {
 	FieldData           FieldDataT   `json:"fielddata"`
 	PopulatedFrom       string       `json:"populatedfrom"`
@@ -162,14 +163,16 @@ type SurgicalSectionFieldData struct {
 	} `json:"surgerydate"`
 }
 
-type SurgicalSectionQuestion struct {
-	Fields struct {
-		Default string `json:"default"`
-	} `json:"fields"`
+type SurgicalSectionQuestionFields struct {
+	Default     string   `json:"default"`     // Y/N checkbox which says whether they've had this surgery before.
+	SurgeryDate []string `json:"surgerydate"` // optional list of surgery dates as an approximate date: A date in either YYYY, MM/YYYY, or MM/DD/YYYY format. Even one surgery date should be submitted as a (singleton) list.
+}
 
-	PortalFormQuestionID       string `json:"portalformquestionid"`
-	Text                       string `json:"text"`
-	SurgicalHistoryProcedureID string `json:"surgicalhistoryprocedureid"`
+type SurgicalSectionQuestion struct {
+	Fields                     SurgicalSectionQuestionFields `json:"fields"`
+	PortalFormQuestionID       string                        `json:"portalformquestionid"`
+	SurgicalHistoryProcedureID string                        `json:"surgicalhistoryprocedureid"`
+	Text                       string                        `json:"text"`
 }
 
 type MedicalSectionFieldData struct {
@@ -192,16 +195,17 @@ type FamilySectionFieldData struct {
 		Required       int        `json:"required"`
 		InputType      string     `json:"inputtype"`
 		DropdownValues [][]string `json:"dropdownvalues"`
-	}
+	} `json:"relation"`
 }
 
 type FamilySectionQuestion struct {
-	Fields                       []interface{} `json:"fields"`
-	PortalFormQuestionID         string        `json:"portalformquestionid"`
-	Text                         string        `json:"text"`
-	SNOMEDFamilyHistoryProblemID string        `json:"snomedfamilyhistoryproblemid"`
-	SNOMEDCode                   string        `json:"snomedcode"`
-	OrigText                     string        `json:"origtext"`
+	Fields []struct {
+		Default       string `json:"default"`       // Y/N checkbox that says whether this person has this problem.
+		Relation      string `json:"relation"`      // relation this person has with the patient (Mother, Sister, etc.).
+		RelationKeyID string `json:"relationkeyid"` // ID of the particular relation. Each relation type has its own keyspace. This means you can have a Brother 1, Brother 2, Sister 1, etc.
+	} `json:"fields"`
+	PortalFormQuestionID string `json:"portalformquestionid"`
+	Text                 string `json:"text"`
 }
 
 type HealthHistoryForm struct {
@@ -221,7 +225,7 @@ func (h *HTTPClient) GetHealthHistoryFormForAppointment(ctx context.Context, app
 
 	_, err := h.Get(ctx, fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", url.QueryEscape(appointmentID), url.QueryEscape(formID)), nil, &out)
 	if err != nil {
-		return nil, fmt.Errorf("fetching healthy history form for appointment: %w", err)
+		return nil, fmt.Errorf("fetching health history form for appointment: %w", err)
 	}
 
 	type section struct {
@@ -349,7 +353,7 @@ func (h *HTTPClient) UpdateHealthHistoryFormForAppointment(ctx context.Context, 
 
 	_, err = h.PutForm(ctx, fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", url.QueryEscape(appointmentID), url.QueryEscape(formID)), payload, out)
 	if err != nil {
-		return fmt.Errorf("updating healthy history form for appointment: %w", err)
+		return fmt.Errorf("updating health history form for appointment: %w", err)
 	}
 
 	if !out.Success {
