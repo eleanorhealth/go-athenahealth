@@ -43,8 +43,9 @@ func TestHTTPClient_UpdateHealthHistoryFormForAppointment(t *testing.T) {
 	hhfBytes, err := ioutil.ReadFile("./resources/GetHealthHistoryFormForAppointment.json")
 	assert.NoError(err)
 
-	var sections []json.RawMessage
-	err = json.Unmarshal(hhfBytes, &sections)
+	hhf := &HealthHistoryForm{}
+
+	err = json.Unmarshal(hhfBytes, hhf)
 	assert.NoError(err)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
@@ -59,10 +60,6 @@ func TestHTTPClient_UpdateHealthHistoryFormForAppointment(t *testing.T) {
 
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
-
-	hhf := &HealthHistoryForm{}
-	err = hhf.fromSections(sections)
-	assert.NoError(err)
 
 	err = athenaClient.UpdateHealthHistoryFormForAppointment(context.Background(), apptID, formID, hhf)
 	assert.NoError(err)

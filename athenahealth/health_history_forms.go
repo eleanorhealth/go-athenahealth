@@ -217,9 +217,15 @@ type HealthHistoryForm struct {
 	Family     []*HealthHistoryFormSection[FamilySectionFieldData, FamilySectionQuestion]
 }
 
-func (h *HealthHistoryForm) fromSections(sections []json.RawMessage) error {
+func (h *HealthHistoryForm) UnmarshalJSON(data []byte) error {
 	type section struct {
 		Type string `json:"type"`
+	}
+
+	var sections []json.RawMessage
+	err := json.Unmarshal(data, &sections)
+	if err != nil {
+		return fmt.Errorf("unmarshal data to sections: %w", err)
 	}
 
 	for _, secBytes := range sections {
@@ -294,17 +300,11 @@ func (h *HealthHistoryForm) fromSections(sections []json.RawMessage) error {
 // GET /v1/{practiceid}/appointments/{appointmentid}/healthhistoryforms/{formid}
 // https://docs.athenahealth.com/api/api-ref/appointment-health-history-form#Get-specific-health-history-forms-for-given-appointment
 func (h *HTTPClient) GetHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string) (*HealthHistoryForm, error) {
-	var out []json.RawMessage
+	var hhf *HealthHistoryForm
 
-	_, err := h.Get(ctx, fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", url.QueryEscape(appointmentID), url.QueryEscape(formID)), nil, &out)
+	_, err := h.Get(ctx, fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", url.QueryEscape(appointmentID), url.QueryEscape(formID)), nil, hhf)
 	if err != nil {
 		return nil, fmt.Errorf("fetching health history form for appointment: %w", err)
-	}
-
-	hhf := &HealthHistoryForm{}
-	err = hhf.fromSections(out)
-	if err != nil {
-		return nil, fmt.Errorf("health history form from sections: %w", err)
 	}
 
 	return hhf, nil
