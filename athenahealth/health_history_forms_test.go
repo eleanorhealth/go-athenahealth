@@ -61,7 +61,7 @@ func TestHTTPClient_UpdateHealthHistoryFormForAppointment(t *testing.T) {
 	defer ts.Close()
 
 	hhf := &HealthHistoryForm{}
-	err = hhf.FromSections(sections)
+	err = hhf.fromSections(sections)
 	assert.NoError(err)
 
 	err = athenaClient.UpdateHealthHistoryFormForAppointment(context.Background(), apptID, formID, hhf)

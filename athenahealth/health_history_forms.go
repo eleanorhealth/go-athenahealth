@@ -217,7 +217,7 @@ type HealthHistoryForm struct {
 	Family     []*HealthHistoryFormSection[FamilySectionFieldData, FamilySectionQuestion]
 }
 
-func (h *HealthHistoryForm) FromSections(sections []json.RawMessage) error {
+func (h *HealthHistoryForm) fromSections(sections []json.RawMessage) error {
 	type section struct {
 		Type string `json:"type"`
 	}
@@ -302,7 +302,7 @@ func (h *HTTPClient) GetHealthHistoryFormForAppointment(ctx context.Context, app
 	}
 
 	hhf := &HealthHistoryForm{}
-	err = hhf.FromSections(out)
+	err = hhf.fromSections(out)
 	if err != nil {
 		return nil, fmt.Errorf("health history form from sections: %w", err)
 	}
