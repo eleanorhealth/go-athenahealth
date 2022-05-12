@@ -300,7 +300,7 @@ func (h *HealthHistoryForm) UnmarshalJSON(data []byte) error {
 // GET /v1/{practiceid}/appointments/{appointmentid}/healthhistoryforms/{formid}
 // https://docs.athenahealth.com/api/api-ref/appointment-health-history-form#Get-specific-health-history-forms-for-given-appointment
 func (h *HTTPClient) GetHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string) (*HealthHistoryForm, error) {
-	var hhf *HealthHistoryForm
+	hhf := &HealthHistoryForm{}
 
 	_, err := h.Get(ctx, fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", url.QueryEscape(appointmentID), url.QueryEscape(formID)), nil, hhf)
 	if err != nil {
