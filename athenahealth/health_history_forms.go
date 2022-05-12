@@ -217,6 +217,79 @@ type HealthHistoryForm struct {
 	Family     []*HealthHistoryFormSection[FamilySectionFieldData, FamilySectionQuestion]
 }
 
+func (h *HealthHistoryForm) FromSections(sections []json.RawMessage) error {
+	type section struct {
+		Type string `json:"type"`
+	}
+
+	for _, secBytes := range sections {
+		sec := &section{}
+
+		err := json.Unmarshal(secBytes, sec)
+		if err != nil {
+			return fmt.Errorf("unmarshaling health history section: %w", err)
+		}
+
+		switch sec.Type {
+		case "ALLERGY":
+			allergySec := &HealthHistoryFormSection[AllergySectionFieldData, AllergySectionQuestion]{}
+			err = json.Unmarshal(secBytes, allergySec)
+			if err != nil {
+				return fmt.Errorf("unmarshaling allergy section: %w", err)
+			}
+
+			h.Allergy = append(h.Allergy, allergySec)
+
+		case "MEDICATION":
+			medicationSec := &HealthHistoryFormSection[MedicationSectionFieldData, MedicationSectionQuestion]{}
+			err = json.Unmarshal(secBytes, medicationSec)
+			if err != nil {
+				return fmt.Errorf("unmarshaling medication section: %w", err)
+			}
+
+			h.Medication = append(h.Medication, medicationSec)
+
+		case "SOCIAL":
+			socialSec := &HealthHistoryFormSection[SocialSectionFieldData, SocialSectionQuestion]{}
+			err = json.Unmarshal(secBytes, socialSec)
+			if err != nil {
+				return fmt.Errorf("unmarshaling social section: %w", err)
+			}
+
+			h.Social = append(h.Social, socialSec)
+
+		case "SURGICAL":
+			surgicalSec := &HealthHistoryFormSection[SurgicalSectionFieldData, SurgicalSectionQuestion]{}
+			err = json.Unmarshal(secBytes, surgicalSec)
+			if err != nil {
+				return fmt.Errorf("unmarshaling surgical section: %w", err)
+			}
+
+			h.Surgical = append(h.Surgical, surgicalSec)
+
+		case "MEDICAL":
+			medicalSec := &HealthHistoryFormSection[MedicalSectionFieldData, MedicalSectionQuestion]{}
+			err = json.Unmarshal(secBytes, medicalSec)
+			if err != nil {
+				return fmt.Errorf("unmarshaling medical section: %w", err)
+			}
+
+			h.Medical = append(h.Medical, medicalSec)
+
+		case "FAMILY":
+			familySec := &HealthHistoryFormSection[FamilySectionFieldData, FamilySectionQuestion]{}
+			err = json.Unmarshal(secBytes, familySec)
+			if err != nil {
+				return fmt.Errorf("unmarshaling family section: %w", err)
+			}
+
+			h.Family = append(h.Family, familySec)
+		}
+	}
+
+	return nil
+}
+
 // Get specific health history form for given appointment
 // GET /v1/{practiceid}/appointments/{appointmentid}/healthhistoryforms/{formid}
 // https://docs.athenahealth.com/api/api-ref/appointment-health-history-form#Get-specific-health-history-forms-for-given-appointment
@@ -228,75 +301,10 @@ func (h *HTTPClient) GetHealthHistoryFormForAppointment(ctx context.Context, app
 		return nil, fmt.Errorf("fetching health history form for appointment: %w", err)
 	}
 
-	type section struct {
-		Type string `json:"type"`
-	}
-
 	hhf := &HealthHistoryForm{}
-
-	for _, secBytes := range out {
-		sec := &section{}
-
-		err = json.Unmarshal(secBytes, sec)
-		if err != nil {
-			return nil, fmt.Errorf("unmarshaling health history section: %w", err)
-		}
-
-		switch sec.Type {
-		case "ALLERGY":
-			allergySec := &HealthHistoryFormSection[AllergySectionFieldData, AllergySectionQuestion]{}
-			err = json.Unmarshal(secBytes, allergySec)
-			if err != nil {
-				return nil, fmt.Errorf("unmarshaling allergy section: %w", err)
-			}
-
-			hhf.Allergy = append(hhf.Allergy, allergySec)
-
-		case "MEDICATION":
-			medicationSec := &HealthHistoryFormSection[MedicationSectionFieldData, MedicationSectionQuestion]{}
-			err = json.Unmarshal(secBytes, medicationSec)
-			if err != nil {
-				return nil, fmt.Errorf("unmarshaling medication section: %w", err)
-			}
-
-			hhf.Medication = append(hhf.Medication, medicationSec)
-
-		case "SOCIAL":
-			socialSec := &HealthHistoryFormSection[SocialSectionFieldData, SocialSectionQuestion]{}
-			err = json.Unmarshal(secBytes, socialSec)
-			if err != nil {
-				return nil, fmt.Errorf("unmarshaling social section: %w", err)
-			}
-
-			hhf.Social = append(hhf.Social, socialSec)
-
-		case "SURGICAL":
-			surgicalSec := &HealthHistoryFormSection[SurgicalSectionFieldData, SurgicalSectionQuestion]{}
-			err = json.Unmarshal(secBytes, surgicalSec)
-			if err != nil {
-				return nil, fmt.Errorf("unmarshaling surgical section: %w", err)
-			}
-
-			hhf.Surgical = append(hhf.Surgical, surgicalSec)
-
-		case "MEDICAL":
-			medicalSec := &HealthHistoryFormSection[MedicalSectionFieldData, MedicalSectionQuestion]{}
-			err = json.Unmarshal(secBytes, medicalSec)
-			if err != nil {
-				return nil, fmt.Errorf("unmarshaling medical section: %w", err)
-			}
-
-			hhf.Medical = append(hhf.Medical, medicalSec)
-
-		case "FAMILY":
-			familySec := &HealthHistoryFormSection[FamilySectionFieldData, FamilySectionQuestion]{}
-			err = json.Unmarshal(secBytes, familySec)
-			if err != nil {
-				return nil, fmt.Errorf("unmarshaling family section: %w", err)
-			}
-
-			hhf.Family = append(hhf.Family, familySec)
-		}
+	err = hhf.FromSections(out)
+	if err != nil {
+		return nil, fmt.Errorf("health history form from sections: %w", err)
 	}
 
 	return hhf, nil
