@@ -70,6 +70,9 @@ type Client interface {
 
 	AddPatientDriversLicenseDocument(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentOptions) (*AddPatientDriversLicenseDocumentResult, error)
 
+	GetHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string) (*HealthHistoryForm, error)
+	UpdateHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string, form *HealthHistoryForm) error
+
 	SearchAllergies(ctx context.Context, searchVal string) ([]*Allergy, error)
 	SearchMedications(ctx context.Context, searchVal string) ([]*Medication, error)
 }
