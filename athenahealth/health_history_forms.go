@@ -122,6 +122,14 @@ type MedicationSectionFieldData struct {
 }
 
 type MedicationSectionQuestion struct {
+	MedicationID       string `json:"medicationid"`
+	Name               string `json:"name"`
+	Frequency          string `json:"frequency"`
+	DosageQuantity     string `json:"dosagequantity"`
+	RXNormName         string `json:"rxnormname"`
+	RXNormID           string `json:"rxnormid"`
+	DisplayDosageUnits string `json:"displaydosageunits"`
+	RXNormType         string `json:"rxnormtype"`
 }
 
 type SocialSectionFieldData struct {
