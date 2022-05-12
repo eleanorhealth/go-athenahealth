@@ -217,7 +217,7 @@ func (h *HTTPClient) GetHealthHistoryFormForAppointment(ctx context.Context, app
 
 	_, err := h.Get(ctx, fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", url.QueryEscape(appointmentID), url.QueryEscape(formID)), nil, &out)
 	if err != nil {
-		return nil, fmt.Errorf("fetching healthy history form for appointment: %w", err)
+		return nil, fmt.Errorf("fetching health history form for appointment: %w", err)
 	}
 
 	type section struct {
@@ -345,7 +345,7 @@ func (h *HTTPClient) UpdateHealthHistoryFormForAppointment(ctx context.Context, 
 
 	_, err = h.PutForm(ctx, fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", url.QueryEscape(appointmentID), url.QueryEscape(formID)), payload, out)
 	if err != nil {
-		return fmt.Errorf("updating healthy history form for appointment: %w", err)
+		return fmt.Errorf("updating health history form for appointment: %w", err)
 	}
 
 	if !out.Success {
