@@ -188,12 +188,13 @@ type FamilySectionFieldData struct {
 }
 
 type FamilySectionQuestion struct {
-	Fields                       []interface{} `json:"fields"`
-	PortalFormQuestionID         string        `json:"portalformquestionid"`
-	Text                         string        `json:"text"`
-	SNOMEDFamilyHistoryProblemID string        `json:"snomedfamilyhistoryproblemid"`
-	SNOMEDCode                   string        `json:"snomedcode"`
-	OrigText                     string        `json:"origtext"`
+	Fields []struct {
+		Default       string `json:"default"`       // Y/N checkbox that says whether this person has this problem.
+		Relation      string `json:"relation"`      // relation this person has with the patient (Mother, Sister, etc.).
+		RelationKeyID string `json:"relationkeyid"` // ID of the particular relation. Each relation type has its own keyspace. This means you can have a Brother 1, Brother 2, Sister 1, etc.
+	} `json:"fields"`
+	PortalFormQuestionID string `json:"portalformquestionid"`
+	Text                 string `json:"text"`
 }
 
 type HealthHistoryForm struct {
