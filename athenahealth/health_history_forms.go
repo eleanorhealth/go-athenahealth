@@ -8,6 +8,7 @@ import (
 	"net/url"
 )
 
+// https://docs.athenahealth.com/api/workflows/health-history-forms-checkin
 type HealthHistoryFormSection[FieldDataT, QuestionsT any] struct {
 	FieldData           FieldDataT   `json:"fielddata"`
 	PopulatedFrom       string       `json:"populatedfrom"`
@@ -154,14 +155,16 @@ type SurgicalSectionFieldData struct {
 	} `json:"surgerydate"`
 }
 
-type SurgicalSectionQuestion struct {
-	Fields struct {
-		Default string `json:"default"`
-	} `json:"fields"`
+type SurgicalSectionQuestionFields struct {
+	Default     string   `json:"default"`     // Y/N checkbox which says whether they've had this surgery before.
+	SurgeryDate []string `json:"surgerydate"` // optional list of surgery dates as an approximate date: A date in either YYYY, MM/YYYY, or MM/DD/YYYY format. Even one surgery date should be submitted as a (singleton) list.
+}
 
-	PortalFormQuestionID       string `json:"portalformquestionid"`
-	Text                       string `json:"text"`
-	SurgicalHistoryProcedureID string `json:"surgicalhistoryprocedureid"`
+type SurgicalSectionQuestion struct {
+	Fields                     SurgicalSectionQuestionFields `json:"fields"`
+	PortalFormQuestionID       string                        `json:"portalformquestionid"`
+	SurgicalHistoryProcedureID string                        `json:"surgicalhistoryprocedureid"`
+	Text                       string                        `json:"text"`
 }
 
 type MedicalSectionFieldData struct {
