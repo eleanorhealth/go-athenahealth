@@ -2,7 +2,6 @@ package athenahealth
 
 import (
 	"context"
-	"errors"
 	"net/url"
 )
 
@@ -25,10 +24,6 @@ func (h *HTTPClient) SearchAllergies(ctx context.Context, searchVal string) ([]*
 	_, err := h.Get(ctx, "/reference/allergies", q, &out)
 	if err != nil {
 		return nil, err
-	}
-
-	if len(out) == 0 {
-		return nil, errors.New("unexpected length returned")
 	}
 
 	return out, nil
