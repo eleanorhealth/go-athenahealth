@@ -27,7 +27,7 @@ type Provider struct {
 	SchedulingName              string `json:"schedulingname"`
 	Sex                         string `json:"sex"`
 	Specialty                   string `json:"specialty"`
-	SpecialtyID                 int    `json:"specialtyid"`
+	SpecialtyID                 string `json:"specialtyid"`
 	SupervisingProviderID       int    `json:"supervisingproviderid"`
 	SupervisingProviderUsername string `json:"supervisingproviderusername"`
 }
