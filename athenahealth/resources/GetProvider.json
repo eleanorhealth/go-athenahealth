@@ -2,7 +2,7 @@
     {
         "firstname": "Jane",
         "specialty": "Psychiatry",
-        "specialtyid": "26",
+        "specialtyid": "026",
         "schedulingname": "Doe_Jane",
         "providertypeid": "MD",
         "billable": true,
