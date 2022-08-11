@@ -2,8 +2,8 @@ package athenahealth
 
 import (
 	"context"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +17,7 @@ func TestHTTPClient_SearchAllergies(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(searchVal, r.URL.Query().Get("searchvalue"))
 
-		b, _ := ioutil.ReadFile("./resources/SearchAllergies.json")
+		b, _ := os.ReadFile("./resources/SearchAllergies.json")
 		w.Write(b)
 	}
 

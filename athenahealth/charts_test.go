@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,7 +17,7 @@ func TestHTTPClient_ListSocialHistoryTemplates(t *testing.T) {
 	assert := assert.New(t)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		b, _ := ioutil.ReadFile("./resources/ListSocialHistoryTemplates.json")
+		b, _ := os.ReadFile("./resources/ListSocialHistoryTemplates.json")
 		w.Write(b)
 	}
 
@@ -38,7 +39,7 @@ func TestHTTPClient_GetPatientSocialHistory(t *testing.T) {
 		assert.Equal("true", r.URL.Query().Get("shownotperformedquestions"))
 		assert.Equal("true", r.URL.Query().Get("showunansweredquestions"))
 
-		b, _ := ioutil.ReadFile("./resources/GetPatientSocialHistory.json")
+		b, _ := os.ReadFile("./resources/GetPatientSocialHistory.json")
 		w.Write(b)
 	}
 
@@ -72,7 +73,7 @@ func TestHTTPClient_UpdatePatientSocialHistory(t *testing.T) {
 
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
-		reqBody, _ := ioutil.ReadAll(r.Body)
+		reqBody, _ := io.ReadAll(r.Body)
 		defer r.Body.Close()
 
 		assert.Contains(string(reqBody), "departmentid=2")

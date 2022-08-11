@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,7 +21,7 @@ func TestHTTPClient_GetHealthHistoryFormForAppointment(t *testing.T) {
 		assert.Equal(http.MethodGet, r.Method)
 		assert.Equal(fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", apptID, formID), r.URL.String())
 
-		b, _ := ioutil.ReadFile("./resources/GetHealthHistoryFormForAppointment.json")
+		b, _ := os.ReadFile("./resources/GetHealthHistoryFormForAppointment.json")
 		w.Write(b)
 	}
 
@@ -40,7 +40,7 @@ func TestHTTPClient_UpdateHealthHistoryFormForAppointment(t *testing.T) {
 	apptID := "123"
 	formID := "1"
 
-	hhfBytes, err := ioutil.ReadFile("./resources/GetHealthHistoryFormForAppointment.json")
+	hhfBytes, err := os.ReadFile("./resources/GetHealthHistoryFormForAppointment.json")
 	assert.NoError(err)
 
 	hhf := &HealthHistoryForm{}
@@ -54,7 +54,7 @@ func TestHTTPClient_UpdateHealthHistoryFormForAppointment(t *testing.T) {
 		assert.Equal(fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", apptID, formID), r.URL.String())
 		assert.Equal(string(hhfBytes), r.FormValue("healthhistoryform"))
 
-		b, _ := ioutil.ReadFile("./resources/UpdateHealthHistoryFormForAppointment.json")
+		b, _ := os.ReadFile("./resources/UpdateHealthHistoryFormForAppointment.json")
 		w.Write(b)
 	}
 

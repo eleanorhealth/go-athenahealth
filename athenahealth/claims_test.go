@@ -3,8 +3,8 @@ package athenahealth
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
@@ -95,7 +95,7 @@ func TestHTTPClient_CreateClaim(t *testing.T) {
 		assert.Equal(r.Form.Get("servicedate"), opts.ServiceDate.Format("01/02/2006"))
 		assert.Equal(r.Form.Get("supervisingproviderid"), opts.SupervisingProviderID)
 
-		b, _ := ioutil.ReadFile("./resources/CreateClaim.json")
+		b, _ := os.ReadFile("./resources/CreateClaim.json")
 		w.Write(b)
 	}
 
@@ -135,7 +135,7 @@ func TestHTTPClient_ListClaims(t *testing.T) {
 		assert.Equal(r.URL.Query().Get("serviceenddate"), endDate.Format("01/02/2006"))
 		assert.Equal(r.URL.Query().Get("showcustomfields"), "true")
 
-		b, _ := ioutil.ReadFile("./resources/ListClaims.json")
+		b, _ := os.ReadFile("./resources/ListClaims.json")
 		w.Write(b)
 	}
 

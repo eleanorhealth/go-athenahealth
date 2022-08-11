@@ -7,7 +7,7 @@
       "firstname": "John",
       "specialty": "Licensed Clinical Social Worker",
       "homedepartment": "Boston",
-      "specialtyid": 80,
+      "specialtyid": "80",
       "schedulingname": "Smith_John",
       "providertypeid": "LICSW",
       "billable": true,

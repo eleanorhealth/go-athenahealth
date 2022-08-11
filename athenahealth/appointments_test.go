@@ -2,8 +2,9 @@ package athenahealth
 
 import (
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
@@ -14,7 +15,7 @@ func TestHTTPClient_GetAppointment(t *testing.T) {
 	assert := assert.New(t)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		b, _ := ioutil.ReadFile("./resources/GetAppointment.json")
+		b, _ := os.ReadFile("./resources/GetAppointment.json")
 		w.Write(b)
 	}
 
@@ -31,7 +32,7 @@ func TestHTTPClient_ListAppointmentCustomFields(t *testing.T) {
 	assert := assert.New(t)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		b, _ := ioutil.ReadFile("./resources/ListAppointmentCustomFields.json")
+		b, _ := os.ReadFile("./resources/ListAppointmentCustomFields.json")
 		w.Write(b)
 	}
 
@@ -53,7 +54,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 		assert.Equal("06/03/2020", r.URL.Query().Get("enddate"))
 		assert.Equal("x", r.URL.Query().Get("appointmentstatus"))
 
-		b, _ := ioutil.ReadFile("./resources/ListBookedAppointments.json")
+		b, _ := os.ReadFile("./resources/ListBookedAppointments.json")
 		w.Write(b)
 	}
 
@@ -84,7 +85,7 @@ func TestHTTPClient_ListChangedAppointments(t *testing.T) {
 		assert.Equal("06/01/2020 15:30:45", r.URL.Query().Get("showprocessedstartdatetime"))
 		assert.Equal("06/02/2020 12:30:45", r.URL.Query().Get("showprocessedenddatetime"))
 
-		b, _ := ioutil.ReadFile("./resources/ListChangedAppointments.json")
+		b, _ := os.ReadFile("./resources/ListChangedAppointments.json")
 		w.Write(b)
 	}
 
@@ -108,7 +109,7 @@ func TestHTTPClient_CreateAppointmentNote(t *testing.T) {
 
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
-		reqBody, _ := ioutil.ReadAll(r.Body)
+		reqBody, _ := io.ReadAll(r.Body)
 		defer r.Body.Close()
 
 		assert.Contains(string(reqBody), "notetext=test+note")
@@ -136,7 +137,7 @@ func TestHTTPClient_ListAppointmentNotes(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal("1", r.URL.Query().Get("appointmentid"))
 
-		b, _ := ioutil.ReadFile("./resources/ListAppointmentNotes.json")
+		b, _ := os.ReadFile("./resources/ListAppointmentNotes.json")
 		w.Write(b)
 	}
 
@@ -158,7 +159,7 @@ func TestHTTPClient_UpdateAppointmentNote(t *testing.T) {
 
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
-		reqBody, _ := ioutil.ReadAll(r.Body)
+		reqBody, _ := io.ReadAll(r.Body)
 		defer r.Body.Close()
 
 		assert.Contains(string(reqBody), "notetext=test+note")
@@ -187,7 +188,7 @@ func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
 
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
-		reqBody, _ := ioutil.ReadAll(r.Body)
+		reqBody, _ := io.ReadAll(r.Body)
 		defer r.Body.Close()
 
 		assert.Contains(string(reqBody), "noteid=1")

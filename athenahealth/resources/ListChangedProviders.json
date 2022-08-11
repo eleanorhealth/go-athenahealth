@@ -3,7 +3,7 @@
         {
             "firstname": "Jane",
             "specialty": "Psychiatry",
-            "specialtyid": 26,
+            "specialtyid": "26",
             "schedulingname": "Doe_Jane",
             "providertypeid": "MD",
             "billable": true,

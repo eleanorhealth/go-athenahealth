@@ -2,8 +2,8 @@ package athenahealth
 
 import (
 	"context"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
@@ -18,7 +18,7 @@ func TestHTTPClient_ListProblems(t *testing.T) {
 		assert.Equal("p1", r.URL.Query().Get("patientid"))
 		assert.Equal("true", r.URL.Query().Get("showdiagnosisinfo"))
 
-		b, _ := ioutil.ReadFile("./resources/ListProblems.json")
+		b, _ := os.ReadFile("./resources/ListProblems.json")
 		w.Write(b)
 	}
 
@@ -46,7 +46,7 @@ func TestHTTPClient_ListChangedProblems(t *testing.T) {
 		assert.Equal("06/01/2020 15:30:45", r.URL.Query().Get("showprocessedstartdatetime"))
 		assert.Equal("06/02/2020 12:30:45", r.URL.Query().Get("showprocessedenddatetime"))
 
-		b, _ := ioutil.ReadFile("./resources/ListChangedProblems.json")
+		b, _ := os.ReadFile("./resources/ListChangedProblems.json")
 		w.Write(b)
 	}
 

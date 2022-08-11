@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"os"
 	"testing"
 	"time"
@@ -15,7 +14,7 @@ import (
 func TestFile_Get(t *testing.T) {
 	assert := assert.New(t)
 
-	file, err := ioutil.TempFile("", "go-athenahealth_*")
+	file, err := os.CreateTemp("", "go-athenahealth_*")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -27,7 +26,7 @@ func TestFile_Get(t *testing.T) {
 	}
 
 	b, _ := json.Marshal(c)
-	ioutil.WriteFile(file.Name(), b, 0644)
+	os.WriteFile(file.Name(), b, 0644)
 
 	cacher := NewFile(file.Name())
 
@@ -40,7 +39,7 @@ func TestFile_Get(t *testing.T) {
 func TestFile_Get_ErrTokenNotExist(t *testing.T) {
 	assert := assert.New(t)
 
-	file, err := ioutil.TempFile("", "go-athenahealth_*")
+	file, err := os.CreateTemp("", "go-athenahealth_*")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,7 +57,7 @@ func TestFile_Get_ErrTokenNotExist(t *testing.T) {
 func TestFile_Get_ErrTokenExpired(t *testing.T) {
 	assert := assert.New(t)
 
-	file, err := ioutil.TempFile("", "go-athenahealth_*")
+	file, err := os.CreateTemp("", "go-athenahealth_*")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -70,7 +69,7 @@ func TestFile_Get_ErrTokenExpired(t *testing.T) {
 	}
 
 	b, _ := json.Marshal(c)
-	ioutil.WriteFile(file.Name(), b, 0644)
+	os.WriteFile(file.Name(), b, 0644)
 
 	cacher := NewFile(file.Name())
 
@@ -84,7 +83,7 @@ func TestFile_Get_ErrTokenExpired(t *testing.T) {
 func TestFile_Set(t *testing.T) {
 	assert := assert.New(t)
 
-	file, err := ioutil.TempFile("", "go-athenahealth_*")
+	file, err := os.CreateTemp("", "go-athenahealth_*")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -97,7 +96,7 @@ func TestFile_Set(t *testing.T) {
 
 	err = cacher.Set(context.Background(), token, expiresAt)
 
-	b, _ := ioutil.ReadFile(file.Name())
+	b, _ := os.ReadFile(file.Name())
 	c := &fileCache{}
 	json.Unmarshal(b, c)
 
