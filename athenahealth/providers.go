@@ -10,26 +10,26 @@ import (
 )
 
 type Provider struct {
-	ANSINameCode                string `json:"ansinamecode"`
-	ANSISpecialtyCode           string `json:"ansispecialtycode"`
-	Billable                    bool   `json:"billable"`
-	CreateEncounterOnCheckIn    bool   `json:"createencounteroncheckin"`
-	DisplayName                 string `json:"displayname"`
-	EntityType                  string `json:"entitytype"`
-	FirstName                   string `json:"firstname"`
-	HideInPortal                bool   `json:"hideinportal"`
-	LastName                    string `json:"lastname"`
-	NPI                         int    `json:"npi"`
-	ProviderID                  int    `json:"providerid"`
-	ProviderType                string `json:"providertype"`
-	ProviderTypeID              string `json:"providertypeid"`
-	ProviderUsername            string `json:"providerusername"`
-	SchedulingName              string `json:"schedulingname"`
-	Sex                         string `json:"sex"`
-	Specialty                   string `json:"specialty"`
-	SpecialtyID                 string `json:"specialtyid"`
-	SupervisingProviderID       int    `json:"supervisingproviderid"`
-	SupervisingProviderUsername string `json:"supervisingproviderusername"`
+	ANSINameCode                string       `json:"ansinamecode"`
+	ANSISpecialtyCode           string       `json:"ansispecialtycode"`
+	Billable                    bool         `json:"billable"`
+	CreateEncounterOnCheckIn    bool         `json:"createencounteroncheckin"`
+	DisplayName                 string       `json:"displayname"`
+	EntityType                  string       `json:"entitytype"`
+	FirstName                   string       `json:"firstname"`
+	HideInPortal                bool         `json:"hideinportal"`
+	LastName                    string       `json:"lastname"`
+	NPI                         int          `json:"npi"`
+	ProviderID                  int          `json:"providerid"`
+	ProviderType                string       `json:"providertype"`
+	ProviderTypeID              string       `json:"providertypeid"`
+	ProviderUsername            string       `json:"providerusername"`
+	SchedulingName              string       `json:"schedulingname"`
+	Sex                         string       `json:"sex"`
+	Specialty                   string       `json:"specialty"`
+	SpecialtyID                 NumberString `json:"specialtyid"`
+	SupervisingProviderID       int          `json:"supervisingproviderid"`
+	SupervisingProviderUsername string       `json:"supervisingproviderusername"`
 }
 
 // GetProvider - Get details about a single provider.
