@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -73,7 +73,7 @@ func (d *Default) Provide(ctx context.Context) (string, time.Time, error) {
 		return "", time.Now(), fmt.Errorf("%s", res.Status)
 	}
 
-	b, err := ioutil.ReadAll(res.Body)
+	b, err := io.ReadAll(res.Body)
 	if err != nil {
 		return "", time.Now(), err
 	}

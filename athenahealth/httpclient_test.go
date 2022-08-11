@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -310,7 +310,7 @@ func TestHTTPClient_Post(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPost, r.Method)
-		b, _ := ioutil.ReadAll(r.Body)
+		b, _ := io.ReadAll(r.Body)
 		r.Body.Close()
 		assert.True(len(b) > 0)
 
@@ -333,7 +333,7 @@ func TestHTTPClient_PostForm(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPost, r.Method)
-		b, _ := ioutil.ReadAll(r.Body)
+		b, _ := io.ReadAll(r.Body)
 		r.Body.Close()
 		assert.True(len(b) > 0)
 
@@ -361,7 +361,7 @@ func TestHTTPClient_Put(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPut, r.Method)
-		b, _ := ioutil.ReadAll(r.Body)
+		b, _ := io.ReadAll(r.Body)
 		r.Body.Close()
 		assert.True(len(b) > 0)
 
@@ -384,7 +384,7 @@ func TestHTTPClient_PutForm(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPut, r.Method)
-		b, _ := ioutil.ReadAll(r.Body)
+		b, _ := io.ReadAll(r.Body)
 		r.Body.Close()
 		assert.True(len(b) > 0)
 
@@ -412,7 +412,7 @@ func TestHTTPClient_Delete(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodDelete, r.Method)
-		b, _ := ioutil.ReadAll(r.Body)
+		b, _ := io.ReadAll(r.Body)
 		r.Body.Close()
 		assert.True(len(b) > 0)
 
@@ -437,7 +437,7 @@ func TestHTTPClient_DeleteForm(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodDelete, r.Method)
-		b, _ := ioutil.ReadAll(r.Body)
+		b, _ := io.ReadAll(r.Body)
 		r.Body.Close()
 		assert.True(len(b) > 0)
 

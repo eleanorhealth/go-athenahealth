@@ -3,8 +3,8 @@ package athenahealth
 import (
 	"context"
 	"encoding/base64"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
 	"testing"
 
@@ -18,7 +18,7 @@ func TestHTTPClient_ListAdminDocuments(t *testing.T) {
 		assert.Contains(r.URL.Path, "/patients/123/")
 		assert.Equal("3", r.URL.Query().Get("departmentid"))
 
-		b, _ := ioutil.ReadFile("./resources/ListAdminDocuments.json")
+		b, _ := os.ReadFile("./resources/ListAdminDocuments.json")
 		w.Write(b)
 	}
 
@@ -64,7 +64,7 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 		assert.Equal(internalNote, r.FormValue("internalnote"))
 		assert.Equal(strconv.Itoa(providerID), r.FormValue("providerid"))
 
-		b, _ := ioutil.ReadFile("./resources/AddDocument.json")
+		b, _ := os.ReadFile("./resources/AddDocument.json")
 		w.Write(b)
 	}
 

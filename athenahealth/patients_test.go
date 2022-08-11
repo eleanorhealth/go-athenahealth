@@ -3,8 +3,8 @@ package athenahealth
 import (
 	"context"
 	"encoding/base64"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"testing"
@@ -22,7 +22,7 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 		assert.Equal("true", r.URL.Query().Get("showportalstatus"))
 		assert.Equal("true", r.URL.Query().Get("showlocalpatientid"))
 
-		b, _ := ioutil.ReadFile("./resources/GetPatient.json")
+		b, _ := os.ReadFile("./resources/GetPatient.json")
 		w.Write(b)
 	}
 
@@ -51,7 +51,7 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 		assert.Equal("100", r.URL.Query().Get("departmentid"))
 		assert.Equal("i", r.URL.Query().Get("status"))
 
-		b, _ := ioutil.ReadFile("./resources/ListPatients.json")
+		b, _ := os.ReadFile("./resources/ListPatients.json")
 		w.Write(b)
 	}
 
@@ -123,7 +123,7 @@ func TestHTTPClient_ListChangedPatients(t *testing.T) {
 		assert.Equal("06/01/2020 15:30:45", r.URL.Query().Get("showprocessedstartdatetime"))
 		assert.Equal("06/02/2020 12:30:45", r.URL.Query().Get("showprocessedenddatetime"))
 
-		b, _ := ioutil.ReadFile("./resources/ListChangedPatients.json")
+		b, _ := os.ReadFile("./resources/ListChangedPatients.json")
 		w.Write(b)
 	}
 
@@ -174,7 +174,7 @@ func TestHTTPClient_UpdatePatientInformationVerificationDetails(t *testing.T) {
 		assert.Equal(signatureName, r.FormValue("signaturename"))
 		assert.Equal(signerRelationshipToPatientID, r.FormValue("signerrelationshiptopatientid"))
 
-		b, _ := ioutil.ReadFile("./resources/UpdatePatientInformationVerificationDetails.json")
+		b, _ := os.ReadFile("./resources/UpdatePatientInformationVerificationDetails.json")
 		w.Write(b)
 	}
 
@@ -208,7 +208,7 @@ func TestHTTPClient_GetPatientCustomFields(t *testing.T) {
 
 		assert.Equal(departmentID, r.URL.Query().Get("departmentid"))
 
-		b, _ := ioutil.ReadFile("./resources/GetPatientCustomFields.json")
+		b, _ := os.ReadFile("./resources/GetPatientCustomFields.json")
 		w.Write(b)
 	}
 
@@ -251,7 +251,7 @@ func TestHTTPClient_UpdatePatientCustomFields(t *testing.T) {
 
 		assert.Equal(departmentID, r.FormValue("departmentid"))
 		assert.Equal(`[{"customfieldid":"3","customfieldvalue":"foobar","optionid":"4"}]`, r.FormValue("customfields"))
-		b, _ := ioutil.ReadFile("./resources/UpdatePatientCustomFields.json")
+		b, _ := os.ReadFile("./resources/UpdatePatientCustomFields.json")
 		w.Write(b)
 	}
 
@@ -274,7 +274,7 @@ func TestHTTPClient_ListPatientsMatchingCustomField(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Contains(r.URL.Path, "/patients/customfields/"+opts.CustomFieldID+"/"+opts.CustomFieldValue)
 
-		b, _ := ioutil.ReadFile("./resources/ListPatientsMatchingCustomField.json")
+		b, _ := os.ReadFile("./resources/ListPatientsMatchingCustomField.json")
 		w.Write(b)
 	}
 
@@ -337,7 +337,7 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 			assert.Equal(r.Form.Get("bypasspatientmatching"), "true")
 		}
 
-		b, _ := ioutil.ReadFile("./resources/CreatePatient.json")
+		b, _ := os.ReadFile("./resources/CreatePatient.json")
 		w.Write(b)
 	}
 
@@ -437,7 +437,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("state"), *opts.State)
 		assert.Equal(r.Form.Get("zip"), *opts.Zip)
 
-		b, _ := ioutil.ReadFile("./resources/UpdatePatient.json")
+		b, _ := os.ReadFile("./resources/UpdatePatient.json")
 		w.Write(b)
 	}
 

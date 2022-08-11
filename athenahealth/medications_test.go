@@ -2,8 +2,8 @@ package athenahealth
 
 import (
 	"context"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +17,7 @@ func TestHTTPClient_SearchMedications(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(searchVal, r.URL.Query().Get("searchvalue"))
 
-		b, _ := ioutil.ReadFile("./resources/SearchMedications.json")
+		b, _ := os.ReadFile("./resources/SearchMedications.json")
 		w.Write(b)
 	}
 
@@ -30,7 +30,6 @@ func TestHTTPClient_SearchMedications(t *testing.T) {
 	assert.Len(medications, 2)
 	assert.NoError(err)
 }
-
 
 func TestHTTPClient_SearchMedications_None(t *testing.T) {
 	assert := assert.New(t)
@@ -53,4 +52,3 @@ func TestHTTPClient_SearchMedications_None(t *testing.T) {
 	assert.Len(meds, 0)
 	assert.NoError(err)
 }
-

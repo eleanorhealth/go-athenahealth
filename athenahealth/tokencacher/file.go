@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"sync"
 	"time"
@@ -37,13 +36,13 @@ func (f *File) Get(ctx context.Context) (string, error) {
 
 	_, err := os.Stat(f.path)
 	if os.IsNotExist(err) {
-		err = ioutil.WriteFile(f.path, nil, 0600)
+		err = os.WriteFile(f.path, nil, 0600)
 		if err != nil {
 			return "", err
 		}
 	}
 
-	contents, err := ioutil.ReadFile(f.path)
+	contents, err := os.ReadFile(f.path)
 	if err != nil {
 		return "", err
 	}
@@ -79,7 +78,7 @@ func (f *File) Set(ctx context.Context, token string, expiresAt time.Time) error
 		return err
 	}
 
-	err = ioutil.WriteFile(f.path, b, 0600)
+	err = os.WriteFile(f.path, b, 0600)
 	if err != nil {
 		return err
 	}

@@ -2,8 +2,9 @@ package athenahealth
 
 import (
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,7 +14,7 @@ func TestHTTPClient_GetSubscription(t *testing.T) {
 	assert := assert.New(t)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		b, _ := ioutil.ReadFile("./resources/GetSubscription.json")
+		b, _ := os.ReadFile("./resources/GetSubscription.json")
 		w.Write(b)
 	}
 
@@ -30,7 +31,7 @@ func TestHTTPClient_ListSubscriptionEvents(t *testing.T) {
 	assert := assert.New(t)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		b, _ := ioutil.ReadFile("./resources/ListSubscriptionEvents.json")
+		b, _ := os.ReadFile("./resources/ListSubscriptionEvents.json")
 		w.Write(b)
 	}
 
@@ -48,7 +49,7 @@ func TestHTTPClient_Subscribe(t *testing.T) {
 
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
-		reqBody, _ := ioutil.ReadAll(r.Body)
+		reqBody, _ := io.ReadAll(r.Body)
 		defer r.Body.Close()
 
 		assert.Contains(string(reqBody), "eventname=UpdateAppointment")
@@ -73,7 +74,7 @@ func TestHTTPClient_Unsubscribe(t *testing.T) {
 
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
-		reqBody, _ := ioutil.ReadAll(r.Body)
+		reqBody, _ := io.ReadAll(r.Body)
 		defer r.Body.Close()
 
 		assert.Contains(string(reqBody), "eventname=UpdateAppointment")

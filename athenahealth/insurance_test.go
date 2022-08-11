@@ -3,8 +3,9 @@ package athenahealth
 import (
 	"context"
 	"encoding/base64"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"testing"
 	"time"
@@ -37,7 +38,7 @@ func TestHTTPClient_CreatePatientInsurancePackage(t *testing.T) {
 		assert.Equal(r.Form.Get("insurancepolicyholdersex"), opts.InsurancePolicyHolderSex)
 		assert.Equal(r.Form.Get("sequencenumber"), strconv.Itoa(opts.SequenceNumber))
 
-		b, _ := ioutil.ReadFile("./resources/CreatePatientInsurancePackage.json")
+		b, _ := os.ReadFile("./resources/CreatePatientInsurancePackage.json")
 		w.Write(b)
 	}
 
@@ -78,7 +79,7 @@ func TestHTTPClient_UpdatePatientInsurancePackage(t *testing.T) {
 		assert.Equal(r.Form.Get("insurancepolicyholdersex"), *opts.InsurancePolicyHolderSex)
 		assert.Equal(r.Form.Get("newsequencenumber"), strconv.Itoa(*opts.NewSequenceNumber))
 
-		b, _ := ioutil.ReadFile("./resources/UpdatePatientInsurancePackage.json")
+		b, _ := os.ReadFile("./resources/UpdatePatientInsurancePackage.json")
 		w.Write(b)
 	}
 
@@ -96,14 +97,14 @@ func TestHTTPClient_DeletePatientInsurancePackage(t *testing.T) {
 
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
-		reqBody, _ := ioutil.ReadAll(r.Body)
+		reqBody, _ := io.ReadAll(r.Body)
 		defer r.Body.Close()
 
 		assert.Contains(string(reqBody), "cancellationnote=foo")
 
 		called = true
 
-		b, _ := ioutil.ReadFile("./resources/DeletePatientInsurancePackage.json")
+		b, _ := os.ReadFile("./resources/DeletePatientInsurancePackage.json")
 		w.Write(b)
 	}
 
@@ -130,7 +131,7 @@ func TestHTTPClient_ReactivatePatientInsurancePackage(t *testing.T) {
 		assert.NoError(r.ParseForm())
 		assert.Equal(r.Form.Get("expirationdate"), expDate.Format("01/02/2006"))
 
-		b, _ := ioutil.ReadFile("./resources/ReactivatePatientInsurancePackage.json")
+		b, _ := os.ReadFile("./resources/ReactivatePatientInsurancePackage.json")
 		w.Write(b)
 	}
 
@@ -155,7 +156,7 @@ func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {
 
 		assert.Equal(r.Form.Get("showcancelled"), "true")
 
-		b, _ := ioutil.ReadFile("./resources/ListPatientInsurancePackages.json")
+		b, _ := os.ReadFile("./resources/ListPatientInsurancePackages.json")
 		w.Write(b)
 	}
 
@@ -183,7 +184,7 @@ func TestHTTPClient_UploadPatientInsuranceCardImage(t *testing.T) {
 		assert.Equal(base64.StdEncoding.EncodeToString([]byte(image)), r.FormValue("image"))
 		assert.Equal(deptID, r.FormValue("departmentid"))
 
-		b, _ := ioutil.ReadFile("./resources/UploadPatientInsuranceCardImage.json")
+		b, _ := os.ReadFile("./resources/UploadPatientInsuranceCardImage.json")
 		w.Write(b)
 	}
 

@@ -2,8 +2,8 @@ package athenahealth
 
 import (
 	"context"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,7 +13,7 @@ func TestHTTPClient_GetDepartment(t *testing.T) {
 	assert := assert.New(t)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		b, _ := ioutil.ReadFile("./resources/GetDepartment.json")
+		b, _ := os.ReadFile("./resources/GetDepartment.json")
 		w.Write(b)
 	}
 
@@ -34,7 +34,7 @@ func TestHTTPClient_ListDepartments(t *testing.T) {
 		assert.Equal("1", r.URL.Query().Get("providerlist"))
 		assert.Equal("1", r.URL.Query().Get("showalldepartments"))
 
-		b, _ := ioutil.ReadFile("./resources/ListDepartments.json")
+		b, _ := os.ReadFile("./resources/ListDepartments.json")
 		w.Write(b)
 	}
 
