@@ -17,7 +17,7 @@ type SocialHistoryQuestion struct {
 	InputType  string        `json:"inputtype"`
 	Key        string        `json:"key"`
 	Options    []interface{} `json:"options"`
-	Ordering   int           `json:"ordering"`
+	Ordering   NumberString  `json:"ordering"`
 	Question   string        `json:"question"`
 	QuestionID NumberString  `json:"questionid"`
 }

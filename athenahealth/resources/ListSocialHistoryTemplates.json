@@ -5,7 +5,7 @@
         "questions": [
             {
                 "question": "Are you currently employed?",
-                "ordering": 1,
+                "ordering": "1",
                 "options": [],
                 "inputtype": "YESNO",
                 "questionid": 18,
