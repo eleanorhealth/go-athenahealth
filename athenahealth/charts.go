@@ -59,8 +59,8 @@ type GetPatientSocialHistoryResponse struct {
 	Questions   []*PatientSocialHistoryQuestion `json:"questions"`
 	SectionNote string                          `json:"sectionnote"`
 	Templates   []*struct {
-		TemplateID   json.Number `json:"templateid"`
-		TemplateName string      `json:"templatename"`
+		TemplateID   NumberString `json:"templateid"`
+		TemplateName string       `json:"templatename"`
 	} `json:"templates"`
 }
 
