@@ -9,15 +9,15 @@ import (
 
 type SocialHistoryTemplate struct {
 	Questions    []*SocialHistoryQuestion `json:"questions"`
-	TemplateID   json.Number              `json:"templateid"`
+	TemplateID   NumberString             `json:"templateid"`
 	Templatename string                   `json:"templatename"`
 }
 
 type SocialHistoryQuestion struct {
 	InputType  string        `json:"inputtype"`
-	Key        string        `json:"key"`
+	Key        NumberString  `json:"key"`
 	Options    []interface{} `json:"options"`
-	Ordering   int           `json:"ordering"`
+	Ordering   NumberString  `json:"ordering"`
 	Question   string        `json:"question"`
 	QuestionID NumberString  `json:"questionid"`
 }
@@ -37,15 +37,15 @@ func (h *HTTPClient) ListSocialHistoryTemplates(ctx context.Context) ([]*SocialH
 }
 
 type PatientSocialHistoryQuestion struct {
-	Answer              string      `json:"answer"`
-	Key                 string      `json:"key"`
-	Lastupdated         string      `json:"lastupdated"`
-	Note                string      `json:"note"`
-	NoteLastUpdatedDate string      `json:"notelastupdateddate"`
-	Ordering            int         `json:"ordering"`
-	Question            string      `json:"question"`
-	QuestionID          json.Number `json:"questionid"`
-	TemplateID          json.Number `json:"templateid"`
+	Answer              string       `json:"answer"`
+	Key                 NumberString `json:"key"`
+	Lastupdated         string       `json:"lastupdated"`
+	Note                string       `json:"note"`
+	NoteLastUpdatedDate string       `json:"notelastupdateddate"`
+	Ordering            NumberString `json:"ordering"`
+	Question            string       `json:"question"`
+	QuestionID          NumberString `json:"questionid"`
+	TemplateID          NumberString `json:"templateid"`
 }
 
 type GetPatientSocialHistoryOptions struct {
@@ -59,8 +59,8 @@ type GetPatientSocialHistoryResponse struct {
 	Questions   []*PatientSocialHistoryQuestion `json:"questions"`
 	SectionNote string                          `json:"sectionnote"`
 	Templates   []*struct {
-		TemplateID   json.Number `json:"templateid"`
-		TemplateName string      `json:"templatename"`
+		TemplateID   NumberString `json:"templateid"`
+		TemplateName string       `json:"templatename"`
 	} `json:"templates"`
 }
 
