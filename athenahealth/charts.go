@@ -9,7 +9,7 @@ import (
 
 type SocialHistoryTemplate struct {
 	Questions    []*SocialHistoryQuestion `json:"questions"`
-	TemplateID   json.Number              `json:"templateid"`
+	TemplateID   NumberString             `json:"templateid"`
 	Templatename string                   `json:"templatename"`
 }
 
