@@ -8,7 +8,7 @@
                 "ordering": 1,
                 "options": [],
                 "inputtype": "YESNO",
-                "questionid": "18",
+                "questionid": 18,
                 "key": "CURRENTEMPLOYMENT"
             }
         ]

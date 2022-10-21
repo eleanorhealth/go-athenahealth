@@ -19,7 +19,7 @@ type SocialHistoryQuestion struct {
 	Options    []interface{} `json:"options"`
 	Ordering   int           `json:"ordering"`
 	Question   string        `json:"question"`
-	QuestionID string        `json:"questionid"`
+	QuestionID NumberString  `json:"questionid"`
 }
 
 // ListPatientSocialHistoryTemplates - List of social history questions and templates configured by this practice.
