@@ -22,7 +22,7 @@
                 "ordering": 37,
                 "options": [],
                 "inputtype": "YESNO",
-                "questionid": 95,
+                "questionid": "95",
                 "key": "CORONAVIRUSVISITEDGENERIC"
             }
         ]
