@@ -305,6 +305,7 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 		LastName:              "Smith",
 		MiddleName:            "F",
 		MobilePhone:           "860-555-6666",
+		Notes:                 "Hello World!",
 		Sex:                   "M",
 		SSN:                   "111-11-1111",
 		State:                 "MA",
@@ -327,6 +328,7 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("lastname"), opts.LastName)
 		assert.Equal(r.Form.Get("middlename"), opts.MiddleName)
 		assert.Equal(r.Form.Get("mobilephone"), opts.MobilePhone)
+		assert.Equal(r.Form.Get("notes"), opts.Notes)
 		assert.Equal(r.Form.Get("sex"), opts.Sex)
 		assert.Equal(r.Form.Get("ssn"), opts.SSN)
 		assert.Equal(r.Form.Get("state"), opts.State)
@@ -374,6 +376,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 	Language6392Code := "321"
 	LastName := "Smith"
 	MobilePhone := "860-555-6666"
+	Notes := "Hello World!"
 	MaritalStatus := "Married"
 	OccupationCode := "123"
 	PreferredName := "John Smith"
@@ -404,6 +407,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		LastName:            &LastName,
 		MaritalStatus:       &MaritalStatus,
 		MobilePhone:         &MobilePhone,
+		Notes:               &Notes,
 		OccupationCode:      &OccupationCode,
 		PreferredName:       &PreferredName,
 		PreferredPronouns:   &PreferredPronouns,
@@ -430,6 +434,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("lastname"), *opts.LastName)
 		assert.Equal(r.Form.Get("maritalstatus"), *opts.MaritalStatus)
 		assert.Equal(r.Form.Get("mobilephone"), *opts.MobilePhone)
+		assert.Equal(r.Form.Get("notes"), *opts.Notes)
 		assert.Equal(r.Form.Get("occupationcode"), *opts.OccupationCode)
 		assert.Equal(r.Form.Get("preferredname"), *opts.PreferredName)
 		assert.Equal(r.Form.Get("preferredpronouns"), *opts.PreferredPronouns)
