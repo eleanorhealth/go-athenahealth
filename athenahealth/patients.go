@@ -93,6 +93,7 @@ type Patient struct {
 	MaritalStatus                      string             `json:"maritalstatus"`
 	MaritalStatusName                  string             `json:"maritalstatusname"`
 	MobilePhone                        string             `json:"mobilephone"`
+	Notes                              string             `json:"notes"`
 	OccupationCode                     string             `json:"occupationcode"`
 	OnlineStatementOnly                bool               `json:"onlinestatementonly"`
 	PatientID                          string             `json:"patientid"`
@@ -310,6 +311,7 @@ type UpdatePatientOptions struct {
 	LastName            *string
 	MaritalStatus       *string
 	MobilePhone         *string
+	Notes               *string
 	OccupationCode      *string
 	PreferredName       *string
 	PreferredPronouns   *string
@@ -417,6 +419,10 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 
 		if opts.MobilePhone != nil {
 			form.Add("mobilephone", *opts.MobilePhone)
+		}
+
+		if opts.Notes != nil {
+			form.Add("notes", *opts.Notes)
 		}
 
 		if opts.OccupationCode != nil {
@@ -740,6 +746,7 @@ type CreatePatientOptions struct {
 	LastName              string
 	MiddleName            string
 	MobilePhone           string
+	Notes                 string
 	Sex                   string
 	SSN                   string
 	State                 string
@@ -776,6 +783,7 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 	form.Add("lastname", opts.LastName)
 	form.Add("middlename", opts.MiddleName)
 	form.Add("mobilephone", opts.MobilePhone)
+	form.Add("notes", opts.Notes)
 	form.Add("sex", opts.Sex)
 	form.Add("ssn", opts.SSN)
 	form.Add("state", opts.State)
