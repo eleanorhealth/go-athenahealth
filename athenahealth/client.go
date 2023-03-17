@@ -74,7 +74,9 @@ type Client interface {
 	UpdateHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string, form *HealthHistoryForm) error
 
 	SearchAllergies(ctx context.Context, searchVal string) ([]*Allergy, error)
-	SearchMedications(ctx context.Context, searchVal string) ([]*Medication, error)
+
+	ListMedications(ctx context.Context, patientID string, opts *ListMedicationsOptions) (*ListMedicationsResult, error)
+	SearchMedications(ctx context.Context, searchVal string) ([]*SearchMedicationsResult, error)
 }
 
 type TokenProvider interface {

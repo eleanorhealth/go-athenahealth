@@ -1,0 +1,184 @@
+{
+  "patientneedsdownloadconsent": false,
+  "lastupdated": "03/16/2023",
+  "medications": [
+      [
+          {
+              "clinicalordertypeid": "193884",
+              "organclass": "NERVOUS SYSTEM (EXCEPT AUTONOMIC)",
+              "fdbmedicationid": "182394",
+              "medicationid": 231555,
+              "therapeuticclass": "OPIOID ANTAGONISTS",
+              "isdiscontinued": false,
+              "issafetorenew": true,
+              "medicationentryid": "H228145",
+              "structuredsig": {
+                  "dosagefrequencyvalue": 1,
+                  "dosageroute": "oral",
+                  "dosageaction": "TAKE",
+                  "dosagefrequencyunit": "per day",
+                  "dosagequantityunit": "tablet(s)",
+                  "dosagequantityvalue": 1,
+                  "dosagefrequencydescription": "every day",
+                  "dosagedurationunit": "day"
+              },
+              "medication": "naltrexone 50 mg tablet",
+              "unstructuredsig": "Take 1 tablet every day by oral route.",
+              "lastmodifiedby": "myathenausername",
+              "source": "Staff Stafferson",
+              "createdby": "myathenausername",
+              "isstructuredsig": true,
+              "events": [
+                  {
+                      "eventdate": "03/16/2023",
+                      "type": "HIDE"
+                  },
+                  {
+                      "eventdate": "03/16/2023",
+                      "type": "ENTER",
+                      "userdisplayname": "Staff Stafferson"
+                  },
+                  {
+                      "eventdate": "03/14/2023",
+                      "type": "END"
+                  }
+              ],
+              "lastmodifieddate": "03/16/2023"
+          }
+      ],
+      [
+          {
+              "clinicalordertypeid": "203784",
+              "organclass": "NERVOUS SYSTEM (EXCEPT AUTONOMIC)",
+              "fdbmedicationid": "226373",
+              "medicationid": 241444,
+              "therapeuticclass": "ANTI-ANXIETY - BENZODIAZEPINES",
+              "isdiscontinued": false,
+              "issafetorenew": true,
+              "medicationentryid": "H228147",
+              "medication": "Valium 2 mg tablet",
+              "source": "Staff Stafferson",
+              "createdby": "myathenausername",
+              "isstructuredsig": false,
+              "events": [
+                  {
+                      "eventdate": "03/14/2023",
+                      "type": "START"
+                  },
+                  {
+                      "eventdate": "03/16/2023",
+                      "type": "ENTER",
+                      "userdisplayname": "Staff Stafferson"
+                  }
+              ]
+          }
+      ],
+      [
+          {
+              "clinicalordertypeid": "205767",
+              "organclass": "NERVOUS SYSTEM (EXCEPT AUTONOMIC)",
+              "fdbmedicationid": "235411",
+              "medicationid": 243333,
+              "therapeuticclass": "ANTI-ANXIETY - BENZODIAZEPINES",
+              "isdiscontinued": false,
+              "issafetorenew": true,
+              "medicationentryid": "H228148",
+              "structuredsig": {
+                  "dosagefrequencyvalue": 1,
+                  "dosageroute": "oral",
+                  "dosageaction": "TAKE",
+                  "dosageadditionalinstructions": "with meals",
+                  "dosagedurationvalue": 30,
+                  "dosagefrequencyunit": "per day",
+                  "dosagequantityunit": "tablet(s)",
+                  "dosagequantityvalue": 2,
+                  "dosagefrequencydescription": "every day",
+                  "dosagedurationunit": "day"
+              },
+              "medication": "Xanax 0.25 mg tablet",
+              "unstructuredsig": "Take 2 tablets every day by oral route with meals for 30 days.",
+              "source": "Staff Stafferson",
+              "createdby": "myathenausername",
+              "isstructuredsig": true,
+              "providernote": "Medication note goes here!",
+              "events": [
+                  {
+                      "eventdate": "03/17/2023",
+                      "type": "START"
+                  },
+                  {
+                      "eventdate": "03/16/2023",
+                      "type": "ENTER",
+                      "userdisplayname": "Staff Stafferson"
+                  }
+              ]
+          }
+      ],
+      [
+          {
+              "clinicalordertypeid": "238718",
+              "organclass": "NERVOUS SYSTEM (EXCEPT AUTONOMIC)",
+              "fdbmedicationid": "445975",
+              "medicationid": 276333,
+              "therapeuticclass": "SELECTIVE SEROTONIN REUPTAKE INHIBITOR (SSRIS)",
+              "isdiscontinued": false,
+              "issafetorenew": true,
+              "medicationentryid": "H228146",
+              "medication": "Lexapro 10 mg tablet",
+              "unstructuredsig": "TAKE 1 TABLET (10 MG) BY ORAL ROUTE ONCE DAILY",
+              "source": "Staff Stafferson",
+              "createdby": "myathenausername",
+              "isstructuredsig": false,
+              "events": [
+                  {
+                      "eventdate": "03/16/2023",
+                      "type": "ENTER",
+                      "userdisplayname": "Staff Stafferson"
+                  }
+              ]
+          }
+      ],
+      [
+          {
+              "clinicalordertypeid": "353521",
+              "organclass": "AUTONOMIC NERVOUS SYSTEM",
+              "fdbmedicationid": "582580",
+              "medicationid": 375444,
+              "therapeuticclass": "ANTI-OBESITY-OPIOID ANTAG-NOREPI,DOPAMINE RU INHIB",
+              "isdiscontinued": false,
+              "issafetorenew": true,
+              "medicationentryid": "H228144",
+              "structuredsig": {
+                  "dosagefrequencyvalue": 2,
+                  "dosageroute": "oral",
+                  "dosageaction": "TAKE",
+                  "dosageadditionalinstructions": "with meals",
+                  "dosagedurationvalue": 30,
+                  "dosagefrequencyunit": "per day",
+                  "dosagequantityunit": "tablet(s)",
+                  "dosagequantityvalue": 2,
+                  "dosagefrequencydescription": "twice a day",
+                  "dosagedurationunit": "day"
+              },
+              "medication": "naltrexone 8 mg-bupropion 90 mg tablet,extended release",
+              "unstructuredsig": "Take 2 tablets twice a day by oral route with meals for 30 days.",
+              "source": "Staff Stafferson",
+              "createdby": "myathenausername",
+              "isstructuredsig": true,
+              "events": [
+                  {
+                      "eventdate": "03/16/2023",
+                      "type": "START"
+                  },
+                  {
+                      "eventdate": "03/16/2023",
+                      "type": "ENTER",
+                      "userdisplayname": "Staff Stafferson"
+                  }
+              ]
+          }
+      ]
+  ],
+  "patientdownloadconsent": true,
+  "nomedicationsreported": false
+}
