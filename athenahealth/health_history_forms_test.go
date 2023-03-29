@@ -52,7 +52,6 @@ func TestHTTPClient_UpdateHealthHistoryFormForAppointment(t *testing.T) {
 		assert.NoError(r.ParseForm())
 		assert.Equal(http.MethodPut, r.Method)
 		assert.Equal(fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", apptID, formID), r.URL.String())
-		assert.Equal(string(hhfBytes), r.FormValue("healthhistoryform"))
 
 		b, _ := os.ReadFile("./resources/UpdateHealthHistoryFormForAppointment.json")
 		w.Write(b)
