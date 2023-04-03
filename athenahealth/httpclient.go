@@ -14,6 +14,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/stats"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
@@ -256,6 +257,8 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		return res, err
 	}
 	res.Body.Close()
+
+	spew.Dump(path)
 
 	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
 

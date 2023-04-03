@@ -402,3 +402,35 @@ func (h *HTTPClient) DeleteAppointmentNote(ctx context.Context, appointmentID, n
 
 	return nil
 }
+
+type AppointmentReason struct {
+	Description        string `json:"description"`
+	Reason             string `json:"reason"`
+	ReasonID           int    `json:"reasonid"`
+	ReasonType         string `json:"reasontype"`
+	SchedulingMaxDays  int    `json:"schedulingmaxdays"`
+	SchedulingMinHours int    `json:"schedulingminhours"`
+}
+
+type listAppointmentReasonsResponse struct {
+	Reasons []*AppointmentReason `json:"patientappointmentreasons"`
+}
+
+// ListAppointmentReasons - Get list of appointment reasons.
+// GET /v1/{practiceid}/patientappointmentreasons
+// https://docs.athenahealth.com/api/api-ref/appointment-reasons#Get-list-of-appointment-reasons
+func (h *HTTPClient) ListAppointmentReasons(ctx context.Context, departmentID, providerID string) ([]*AppointmentReason, error) {
+	out := &listAppointmentReasonsResponse{}
+
+	q := url.Values{}
+
+	q.Add("departmentid", departmentID)
+	q.Add("providerid", providerID)
+
+	_, err := h.Get(ctx, "/patientappointmentreasons", q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Reasons, nil
+}
