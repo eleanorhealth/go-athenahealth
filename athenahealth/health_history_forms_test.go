@@ -40,21 +40,21 @@ func TestHTTPClient_UpdateHealthHistoryFormForAppointment(t *testing.T) {
 	apptID := "123"
 	formID := "1"
 
-	hhfBytes, err := os.ReadFile("./resources/GetHealthHistoryFormForAppointment.json")
+	hhfRequestBytes, err := os.ReadFile("./resources/UpdateHealthHistoryFormForAppointmentRequest.json")
 	assert.NoError(err)
 
 	hhf := &HealthHistoryForm{}
 
-	err = json.Unmarshal(hhfBytes, hhf)
+	err = json.Unmarshal(hhfRequestBytes, hhf)
 	assert.NoError(err)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.NoError(r.ParseForm())
 		assert.Equal(http.MethodPut, r.Method)
 		assert.Equal(fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", apptID, formID), r.URL.String())
-		assert.Equal(string(hhfBytes), r.FormValue("healthhistoryform"))
+		assert.Equal(string(hhfRequestBytes), r.FormValue("healthhistoryform"))
 
-		b, _ := os.ReadFile("./resources/UpdateHealthHistoryFormForAppointment.json")
+		b, _ := os.ReadFile("./resources/UpdateHealthHistoryFormForAppointmentResponse.json")
 		w.Write(b)
 	}
 
