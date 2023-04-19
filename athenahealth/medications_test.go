@@ -14,10 +14,11 @@ func TestHTTPClient_ListMedications(t *testing.T) {
 
 	patientID := "123"
 	departmentID := "789"
-	opts := &ListMedicationsOptions{DepartmentID: departmentID}
+	opts := &ListMedicationsOptions{DepartmentID: departmentID, MedicationType: MedicationTypeActive}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(departmentID, r.URL.Query().Get("departmentid"))
+		assert.Equal(MedicationTypeActive, r.URL.Query().Get("medicationtype"))
 
 		b, _ := os.ReadFile("./resources/ListMedications.json")
 		w.Write(b)
