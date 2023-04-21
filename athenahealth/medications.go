@@ -51,6 +51,7 @@ type Medication struct {
 	MedicationEntryID   string                  `json:"medicationentryid"`
 	MedicationID        NumberString            `json:"medicationid"`
 	OrganClass          string                  `json:"organclass"`
+	Pharmacy            string                  `json:"pharmacy"`
 	PrescribedBy        string                  `json:"prescribedby"`
 	Source              string                  `json:"source"`
 	StructuredSig       MedicationStructuredSig `json:"structuredsig,omitempty"`

@@ -32,6 +32,7 @@ func TestHTTPClient_ListMedications(t *testing.T) {
 	assert.NotNil(medicationsResult)
 	assert.Len(medicationsResult.Medications, 5)
 	assert.Equal("Staff Stafferson", medicationsResult.Medications[0][0].PrescribedBy)
+	assert.Equal("ONE TREE CHERRY HILL", medicationsResult.Medications[0][0].Pharmacy)
 	assert.NoError(err)
 }
 
