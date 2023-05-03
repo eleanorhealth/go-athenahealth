@@ -305,13 +305,12 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 }
 
 func (h *HTTPClient) log() *zerolog.Logger {
-	logger := h.logger
-	if logger == nil {
+	if h.logger == nil {
 		noplogger := zerolog.Nop()
-		logger = &noplogger
+		h.logger = &noplogger
 	}
 
-	return logger
+	return h.logger
 }
 
 func (h *HTTPClient) WithLogger(logger *zerolog.Logger) *HTTPClient {
