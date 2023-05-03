@@ -180,7 +180,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		if errors.Is(err, ratelimiter.ErrRateExceeded) {
 			select {
 			case <-ctx.Done():
-				return nil, fmt.Errorf("waiting for rate limit timeout: %w", ctx.Err())
+				return nil, fmt.Errorf("waiting for rate limit retry interval: %w", ctx.Err())
 
 			case <-time.After(retryAfter):
 				ctx = context.WithValue(ctx, ctxKeyRateLimitEncountered, struct{}{})
