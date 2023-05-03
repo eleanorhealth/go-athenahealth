@@ -154,6 +154,12 @@ func (h *HTTPClient) setBaseURL() {
 	}
 }
 
+type ctxKey string
+
+const (
+	ctxKeyRateLimitEncountered ctxKey = "rateLimitEncountered"
+)
+
 func (h *HTTPClient) request(ctx context.Context, method, path string, body io.Reader, headers http.Header, out interface{}) (*http.Response, error) {
 	if _, ok := ctx.Deadline(); !ok {
 		var cancel context.CancelFunc
@@ -172,8 +178,15 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		h.requestLock.Unlock()
 
 		if errors.Is(err, ratelimiter.ErrRateExceeded) {
-			time.Sleep(retryAfter)
-			return h.request(ctx, method, path, body, headers, out)
+			select {
+			case <-ctx.Done():
+				return nil, fmt.Errorf("waiting for rate limit timeout: %w", ctx.Err())
+
+			case <-time.After(retryAfter):
+				ctx = context.WithValue(ctx, ctxKeyRateLimitEncountered, struct{}{})
+
+				return h.request(ctx, method, path, body, headers, out)
+			}
 		}
 
 		return nil, err
@@ -230,6 +243,10 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	res, err := h.httpClient.Do(req)
 	if err != nil {
+		if v := ctx.Value(ctxKeyRateLimitEncountered); v != nil {
+			return res, fmt.Errorf("prior rate limit encountered: %w", err)
+		}
+
 		return res, err
 	}
 
