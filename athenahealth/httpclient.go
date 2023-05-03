@@ -154,12 +154,6 @@ func (h *HTTPClient) setBaseURL() {
 	}
 }
 
-type ctxKey string
-
-const (
-	ctxKeyRateLimitEncountered ctxKey = "rateLimitEncountered"
-)
-
 func (h *HTTPClient) request(ctx context.Context, method, path string, body io.Reader, headers http.Header, out interface{}) (*http.Response, error) {
 	if _, ok := ctx.Deadline(); !ok {
 		var cancel context.CancelFunc
@@ -173,18 +167,28 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	h.requestLock.Lock()
 
+	if !strings.HasPrefix(path, "/") {
+		path = fmt.Sprintf("/%s", path)
+	}
+
+	reqURL := fmt.Sprintf("%s%s", h.baseURL, path)
+
 	retryAfter, err := h.rateLimiter.Allowed(ctx, h.preview)
 	if err != nil {
 		h.requestLock.Unlock()
 
 		if errors.Is(err, ratelimiter.ErrRateExceeded) {
+			h.log().Info().
+				Str("method", method).
+				Str("url", reqURL).
+				Err(err).
+				Msg("athenahealth API request rate limited")
+
 			select {
 			case <-ctx.Done():
 				return nil, fmt.Errorf("waiting for rate limit retry interval: %w", ctx.Err())
 
 			case <-time.After(retryAfter):
-				ctx = context.WithValue(ctx, ctxKeyRateLimitEncountered, struct{}{})
-
 				return h.request(ctx, method, path, body, headers, out)
 			}
 		}
@@ -216,12 +220,6 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	h.requestLock.Unlock()
 
-	if !strings.HasPrefix(path, "/") {
-		path = fmt.Sprintf("/%s", path)
-	}
-
-	reqURL := fmt.Sprintf("%s%s", h.baseURL, path)
-
 	req, err := http.NewRequestWithContext(ctx, method, reqURL, body)
 	if err != nil {
 		return nil, err
@@ -234,19 +232,13 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	req.Header.Add("User-Agent", userAgent)
 
-	if h.logger != nil {
-		h.logger.Info().
-			Str("method", method).
-			Str("url", reqURL).
-			Msg("athenahealth API request")
-	}
+	h.log().Info().
+		Str("method", method).
+		Str("url", reqURL).
+		Msg("athenahealth API request")
 
 	res, err := h.httpClient.Do(req)
 	if err != nil {
-		if v := ctx.Value(ctxKeyRateLimitEncountered); v != nil {
-			return res, fmt.Errorf("prior rate limit encountered: %w", err)
-		}
-
 		return res, err
 	}
 
@@ -276,14 +268,12 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
 
-	if h.logger != nil {
-		h.logger.Info().
-			Str("method", method).
-			Str("url", reqURL).
-			Int("statusCode", res.StatusCode).
-			Int("bodyLength", len(resBody)).
-			Msg("athenahealth API response")
-	}
+	h.log().Info().
+		Str("method", method).
+		Str("url", reqURL).
+		Int("statusCode", res.StatusCode).
+		Int("bodyLength", len(resBody)).
+		Msg("athenahealth API response")
 
 	if responseError {
 		err := &APIError{}
@@ -296,12 +286,11 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 		err.HTTPResponse = res
 
-		if h.logger != nil {
-			h.logger.Info().
-				Str("athenaError", err.AthenaError).
-				Str("athenaDetailedMessage", err.AthenaDetailedMessage).
-				Msg("athenahealth API error")
-		}
+		h.log().Info().
+			Str("athenaError", err.AthenaError).
+			Str("athenaDetailedMessage", err.AthenaDetailedMessage).
+			Msg("athenahealth API error")
+
 		return res, err
 	}
 
@@ -313,6 +302,16 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	}
 
 	return res, nil
+}
+
+func (h *HTTPClient) log() *zerolog.Logger {
+	logger := h.logger
+	if logger == nil {
+		noplogger := zerolog.Nop()
+		logger = &noplogger
+	}
+
+	return logger
 }
 
 func (h *HTTPClient) WithLogger(logger *zerolog.Logger) *HTTPClient {
