@@ -126,6 +126,8 @@ func makePaginationResult(nextURL, previousURL string, totalCount int) *Paginati
 func NewHTTPClient(httpClient *http.Client, practiceID, clientID, secret string) *HTTPClient {
 	preview := true
 
+	noplogger := zerolog.Nop()
+
 	c := &HTTPClient{
 		httpClient: httpClient,
 
@@ -139,6 +141,7 @@ func NewHTTPClient(httpClient *http.Client, practiceID, clientID, secret string)
 		tokenCacher:   tokencacher.NewDefault(),
 		rateLimiter:   ratelimiter.NewDefault(),
 		stats:         stats.NewDefault(),
+		logger:        &noplogger,
 	}
 
 	c.setBaseURL()
@@ -178,7 +181,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		h.requestLock.Unlock()
 
 		if errors.Is(err, ratelimiter.ErrRateExceeded) {
-			h.log().Info().
+			h.logger.Info().
 				Str("method", method).
 				Str("url", reqURL).
 				Err(err).
@@ -232,7 +235,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	req.Header.Add("User-Agent", userAgent)
 
-	h.log().Info().
+	h.logger.Info().
 		Str("method", method).
 		Str("url", reqURL).
 		Msg("athenahealth API request")
@@ -268,7 +271,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
 
-	h.log().Info().
+	h.logger.Info().
 		Str("method", method).
 		Str("url", reqURL).
 		Int("statusCode", res.StatusCode).
@@ -286,7 +289,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 		err.HTTPResponse = res
 
-		h.log().Info().
+		h.logger.Info().
 			Str("athenaError", err.AthenaError).
 			Str("athenaDetailedMessage", err.AthenaDetailedMessage).
 			Msg("athenahealth API error")
@@ -302,15 +305,6 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	}
 
 	return res, nil
-}
-
-func (h *HTTPClient) log() *zerolog.Logger {
-	if h.logger == nil {
-		noplogger := zerolog.Nop()
-		h.logger = &noplogger
-	}
-
-	return h.logger
 }
 
 func (h *HTTPClient) WithLogger(logger *zerolog.Logger) *HTTPClient {
