@@ -259,7 +259,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	res.Body.Close()
 
 	spew.Dump(path)
-
+	spew.Dump(string(resBody))
 	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
 
 	if h.logger != nil {
