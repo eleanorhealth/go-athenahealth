@@ -26,6 +26,7 @@
               "unstructuredsig": "Take 1 tablet every day by oral route.",
               "lastmodifiedby": "myathenausername",
               "source": "Staff Stafferson",
+              "prescribedby": "Staff Stafferson",
               "createdby": "myathenausername",
               "isstructuredsig": true,
               "events": [
@@ -43,6 +44,8 @@
                       "type": "END"
                   }
               ],
+              "pharmacyncpdpid": "3407435",
+              "pharmacy": "ONE TREE CHERRY HILL",
               "lastmodifieddate": "03/16/2023"
           }
       ],

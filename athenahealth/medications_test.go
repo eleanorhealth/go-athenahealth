@@ -14,10 +14,11 @@ func TestHTTPClient_ListMedications(t *testing.T) {
 
 	patientID := "123"
 	departmentID := "789"
-	opts := &ListMedicationsOptions{DepartmentID: departmentID}
+	opts := &ListMedicationsOptions{DepartmentID: departmentID, MedicationType: MedicationTypeActive}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(departmentID, r.URL.Query().Get("departmentid"))
+		assert.Equal(MedicationTypeActive, r.URL.Query().Get("medicationtype"))
 
 		b, _ := os.ReadFile("./resources/ListMedications.json")
 		w.Write(b)
@@ -30,6 +31,8 @@ func TestHTTPClient_ListMedications(t *testing.T) {
 
 	assert.NotNil(medicationsResult)
 	assert.Len(medicationsResult.Medications, 5)
+	assert.Equal("Staff Stafferson", medicationsResult.Medications[0][0].PrescribedBy)
+	assert.Equal("ONE TREE CHERRY HILL", medicationsResult.Medications[0][0].Pharmacy)
 	assert.NoError(err)
 }
 

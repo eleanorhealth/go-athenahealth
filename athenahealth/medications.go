@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
 )
@@ -50,6 +51,8 @@ type Medication struct {
 	MedicationEntryID   string                  `json:"medicationentryid"`
 	MedicationID        NumberString            `json:"medicationid"`
 	OrganClass          string                  `json:"organclass"`
+	Pharmacy            string                  `json:"pharmacy"`
+	PrescribedBy        string                  `json:"prescribedby"`
 	Source              string                  `json:"source"`
 	StructuredSig       MedicationStructuredSig `json:"structuredsig,omitempty"`
 	UnstructuredSig     string                  `json:"unstructuredsig,omitempty"`
@@ -63,8 +66,15 @@ type ListMedicationsResult struct {
 	PatientNeedsDownloadConsent bool           `json:"patientneedsdownloadconsent"`
 }
 
+const (
+	MedicationTypeActive     string = "ACTIVE"
+	MedicationTypeHistorical string = "HISTORICAL"
+	MedicationTypeDenied     string = "DENIED"
+)
+
 type ListMedicationsOptions struct {
-	DepartmentID string
+	DepartmentID   string
+	MedicationType string
 }
 
 type SearchMedicationsResult struct {
@@ -81,6 +91,12 @@ func (h *HTTPClient) ListMedications(ctx context.Context, patientID string, opts
 	q := url.Values{}
 	if len(opts.DepartmentID) > 0 {
 		q.Add("departmentid", opts.DepartmentID)
+	}
+	if len(opts.MedicationType) > 0 {
+		if opts.MedicationType != MedicationTypeActive && opts.MedicationType != MedicationTypeHistorical && opts.MedicationType != MedicationTypeDenied {
+			return nil, errors.New("invalid medication type parameter")
+		}
+		q.Add("medicationtype", opts.MedicationType)
 	}
 
 	_, err := h.Get(ctx, fmt.Sprintf("/chart/%s/medications", patientID), q, &out)
