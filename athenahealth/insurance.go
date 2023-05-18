@@ -319,6 +319,7 @@ type GetPatientInsuranceCardImageResult struct {
 
 // GetPatientInsuranceCardImage - Gets the patient's insurance card image
 // GET /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/image
+// ERR: athenahealth.ErrNotFound if there's no image
 // https://docs.athenahealth.com/api/api-ref/insurance-card-image#Get-patient's-insurance-card-image
 func (h *HTTPClient) GetPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string) (*GetPatientInsuranceCardImageResult, error) {
 	out := &getPatientInsuranceCardImageResponse{}
