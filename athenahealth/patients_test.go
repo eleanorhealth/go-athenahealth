@@ -366,6 +366,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 	ContactMobilePhone := "321-321-4321"
 	ContactHomePhone := "123-123-1234"
 	ContactRelationship := "SPOUSE"
+	DepartmentID := "4"
 	DOB := dob.Format("01/02/2006")
 	Email := "john.smith@example.com"
 	EthnicityCode := "Slavic"
@@ -381,6 +382,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 	OccupationCode := "123"
 	PreferredName := "John Smith"
 	PreferredPronouns := "He/His"
+	PrimaryDepartmentID := "9"
 	Race := []string{"White", "Black"}
 	State := "MA"
 	Zip := "02210"
@@ -396,6 +398,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		ContactMobilePhone:  &ContactMobilePhone,
 		ContactHomePhone:    &ContactHomePhone,
 		ContactRelationship: &ContactRelationship,
+		DepartmentID:        &DepartmentID,
 		DOB:                 &DOB,
 		Email:               &Email,
 		EthnicityCode:       &EthnicityCode,
@@ -411,6 +414,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		OccupationCode:      &OccupationCode,
 		PreferredName:       &PreferredName,
 		PreferredPronouns:   &PreferredPronouns,
+		PrimaryDepartmentID: &PrimaryDepartmentID,
 		Race:                Race,
 		State:               &State,
 		Zip:                 &Zip,
@@ -423,6 +427,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("address2"), *opts.Address2)
 		assert.Equal(r.Form.Get("altfirstname"), *opts.AltFirstName)
 		assert.Equal(r.Form.Get("city"), *opts.City)
+		assert.Equal(r.Form.Get("departmentid"), *opts.DepartmentID)
 		assert.Equal(r.Form.Get("dob"), *opts.DOB)
 		assert.Equal(r.Form.Get("email"), *opts.Email)
 		assert.Equal(r.Form.Get("ethnicitycode"), *opts.EthnicityCode)
@@ -438,6 +443,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("occupationcode"), *opts.OccupationCode)
 		assert.Equal(r.Form.Get("preferredname"), *opts.PreferredName)
 		assert.Equal(r.Form.Get("preferredpronouns"), *opts.PreferredPronouns)
+		assert.Equal(r.Form.Get("primarydepartmentid"), *opts.PrimaryDepartmentID)
 		assert.Equal(r.Form.Get("race"), strings.Join(Race, "\t"))
 		assert.Equal(r.Form.Get("state"), *opts.State)
 		assert.Equal(r.Form.Get("zip"), *opts.Zip)
