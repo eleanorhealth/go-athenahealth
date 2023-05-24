@@ -304,11 +304,6 @@ func (h *HTTPClient) UploadPatientInsuranceCardImage(ctx context.Context, patien
 	}, nil
 }
 
-type GetPatientInsuranceCardImageOptions struct {
-	DepartmentID string
-	Image        []byte
-}
-
 type getPatientInsuranceCardImageResponse struct {
 	Image string `json:"image"` // base64 encoded image
 }
