@@ -361,6 +361,8 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 	AltFirstName := "Johnny"
 	AssignedSexAtBirth := "assignedSexAtBirth"
 	City := "Boston"
+	ConsentToCall := false
+	ConsentToText := true
 	ContactPreference := "MOBILE"
 	ContactName := "Jane Smith"
 	ContactMobilePhone := "321-321-4321"
@@ -373,6 +375,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 	FirstName := "John"
 	GenderIdentity := "genderIdentity"
 	GenderIdentityOther := "genderIdentityOther"
+	HasMobile := false
 	HomePhone := "860-111-2222"
 	Language6392Code := "321"
 	LastName := "Smith"
@@ -393,6 +396,8 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		AltFirstName:        &AltFirstName,
 		AssignedSexAtBirth:  &AssignedSexAtBirth,
 		City:                &City,
+		ConsentToCall:       &ConsentToCall,
+		ConsentToText:       &ConsentToText,
 		ContactPreference:   &ContactPreference,
 		ContactName:         &ContactName,
 		ContactMobilePhone:  &ContactMobilePhone,
@@ -405,6 +410,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		FirstName:           &FirstName,
 		GenderIdentity:      &GenderIdentity,
 		GenderIdentityOther: &GenderIdentityOther,
+		HasMobile:           &HasMobile,
 		HomePhone:           &HomePhone,
 		Language6392Code:    &Language6392Code,
 		LastName:            &LastName,
@@ -427,6 +433,8 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("address2"), *opts.Address2)
 		assert.Equal(r.Form.Get("altfirstname"), *opts.AltFirstName)
 		assert.Equal(r.Form.Get("city"), *opts.City)
+		assert.Equal(r.Form.Get("consenttocall"), "false")
+		assert.Equal(r.Form.Get("consenttotext"), "true")
 		assert.Equal(r.Form.Get("departmentid"), *opts.DepartmentID)
 		assert.Equal(r.Form.Get("dob"), *opts.DOB)
 		assert.Equal(r.Form.Get("email"), *opts.Email)
@@ -434,6 +442,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("genderidentity"), *opts.GenderIdentity)
 		assert.Equal(r.Form.Get("genderidentityother"), *opts.GenderIdentityOther)
 		assert.Equal(r.Form.Get("firstname"), *opts.FirstName)
+		assert.Equal(r.Form.Get("hasmobileyn"), "false")
 		assert.Equal(r.Form.Get("homephone"), *opts.HomePhone)
 		assert.Equal(r.Form.Get("language6392code"), *opts.Language6392Code)
 		assert.Equal(r.Form.Get("lastname"), *opts.LastName)

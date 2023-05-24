@@ -295,6 +295,8 @@ type UpdatePatientOptions struct {
 	AltFirstName        *string
 	AssignedSexAtBirth  *string
 	City                *string
+	ConsentToCall       *bool
+	ConsentToText       *bool
 	ContactHomePhone    *string
 	ContactMobilePhone  *string
 	ContactName         *string
@@ -307,6 +309,7 @@ type UpdatePatientOptions struct {
 	FirstName           *string
 	GenderIdentity      *string
 	GenderIdentityOther *string
+	HasMobile           *bool
 	HomePhone           *string
 	Language6392Code    *string
 	LastName            *string
@@ -355,6 +358,14 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 			form.Add("assignedsexatbirth", *opts.AssignedSexAtBirth)
 		}
 
+		if opts.ConsentToCall != nil {
+			form.Add("consenttocall", strconv.FormatBool(*opts.ConsentToCall))
+		}
+
+		if opts.ConsentToText != nil {
+			form.Add("consenttotext", strconv.FormatBool(*opts.ConsentToText))
+		}
+
 		if opts.ContactPreference != nil {
 			form.Add("contactpreference", *opts.ContactPreference)
 		}
@@ -365,6 +376,10 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 
 		if opts.ContactMobilePhone != nil {
 			form.Add("contactmobilephone", *opts.ContactMobilePhone)
+		}
+
+		if opts.HasMobile != nil {
+			form.Add("hasmobileyn", strconv.FormatBool(*opts.HasMobile))
 		}
 
 		if opts.ContactHomePhone != nil {
