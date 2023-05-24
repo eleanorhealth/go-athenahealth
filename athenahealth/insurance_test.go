@@ -210,7 +210,7 @@ func TestHTTPClient_GetPatientInsurancePackage(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		called = true
 		assert.Equal(http.MethodGet, r.Method)
-        assert.Equal("/patients/1/insurances/2/image", r.URL.String())
+		assert.Equal("/patients/1/insurances/2/image", r.URL.String())
 
 		b, _ := os.ReadFile("./resources/GetPatientInsuranceCardImage.json")
 		w.Write(b)
