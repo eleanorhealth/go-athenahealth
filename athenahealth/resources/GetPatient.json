@@ -107,7 +107,7 @@
         "contactpreference_billing_email": true,
         "mobilephone": "8608105503",
         "contactpreference_announcement_email": true,
-        "hasmobile": true,
+        "hasmobileyn": true,
         "registrationdate": "05/28/2020",
         "caresummarydeliverypreference": "PORTAL",
         "guarantorlastname": "Smithfoo",
