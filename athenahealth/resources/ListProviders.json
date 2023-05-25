@@ -25,7 +25,8 @@
       "entitytype": "Person",
       "npi": 12356789,
       "providertype": "LICENSED INDEPENDENT CLINICAL SOCIAL WORKER",
-      "createencounteroncheckin": true
+      "createencounteroncheckin": true,
+      "otherproviderids": ["200", "300"]
     }
   ]
 }

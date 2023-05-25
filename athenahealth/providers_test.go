@@ -58,6 +58,8 @@ func TestHTTPClient_ListProviders(t *testing.T) {
 	assert := assert.New(t)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal("true", r.URL.Query().Get("showallproviderids"))
+
 		b, _ := os.ReadFile("./resources/ListProviders.json")
 		w.Write(b)
 	}
@@ -65,7 +67,9 @@ func TestHTTPClient_ListProviders(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	opts := &ListProvidersOptions{}
+	opts := &ListProvidersOptions{
+		ShowAllProviderIDs: true,
+	}
 
 	res, err := athenaClient.ListProviders(context.Background(), opts)
 
