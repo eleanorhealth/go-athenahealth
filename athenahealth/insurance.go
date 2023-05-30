@@ -303,3 +303,28 @@ func (h *HTTPClient) UploadPatientInsuranceCardImage(ctx context.Context, patien
 		Success: out.Success,
 	}, nil
 }
+
+type getPatientInsuranceCardImageResponse struct {
+	Image string `json:"image"` // base64 encoded image
+}
+
+type GetPatientInsuranceCardImageResult struct {
+	Image string
+}
+
+// GetPatientInsuranceCardImage - Gets the patient's insurance card image
+// GET /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/image
+// ERR: athenahealth.ErrNotFound if there's no image
+// https://docs.athenahealth.com/api/api-ref/insurance-card-image#Get-patient's-insurance-card-image
+func (h *HTTPClient) GetPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string) (*GetPatientInsuranceCardImageResult, error) {
+	out := &getPatientInsuranceCardImageResponse{}
+
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s/insurances/%s/image", patientID, insuranceID), nil, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GetPatientInsuranceCardImageResult{
+		Image: out.Image,
+	}, nil
+}

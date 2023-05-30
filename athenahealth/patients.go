@@ -295,11 +295,12 @@ type UpdatePatientOptions struct {
 	AltFirstName        *string
 	AssignedSexAtBirth  *string
 	City                *string
-	ContactPreference   *string
-	ContactName         *string
-	ContactMobilePhone  *string
 	ContactHomePhone    *string
+	ContactMobilePhone  *string
+	ContactName         *string
+	ContactPreference   *string
 	ContactRelationship *string
+	DepartmentID        *string
 	DOB                 *string
 	Email               *string
 	EthnicityCode       *string
@@ -315,6 +316,7 @@ type UpdatePatientOptions struct {
 	OccupationCode      *string
 	PreferredName       *string
 	PreferredPronouns   *string
+	PrimaryDepartmentID *string
 	Race                []string
 	State               *string
 	Zip                 *string
@@ -377,6 +379,10 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 			form.Add("city", *opts.City)
 		}
 
+		if opts.DepartmentID != nil {
+			form.Add("departmentid", *opts.DepartmentID)
+		}
+
 		if opts.DOB != nil {
 			form.Add("dob", *opts.DOB)
 		}
@@ -435,6 +441,10 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 
 		if opts.PreferredPronouns != nil {
 			form.Add("preferredpronouns", *opts.PreferredPronouns)
+		}
+
+		if opts.PrimaryDepartmentID != nil {
+			form.Add("primarydepartmentid", *opts.PrimaryDepartmentID)
 		}
 
 		if opts.Race != nil {

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -200,4 +201,33 @@ func TestHTTPClient_UploadPatientInsuranceCardImage(t *testing.T) {
 	assert.NoError(err)
 
 	assert.True(result.Success)
+}
+
+func TestHTTPClient_GetPatientInsurancePackage(t *testing.T) {
+	assert := assert.New(t)
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		called = true
+		assert.Equal(http.MethodGet, r.Method)
+		assert.Equal("/patients/1/insurances/2/image", r.URL.String())
+
+		b, _ := os.ReadFile("./resources/GetPatientInsuranceCardImage.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	res, err := athenaClient.GetPatientInsuranceCardImage(context.Background(), "1", "2")
+	assert.NoError(err)
+
+	assert.True(called)
+
+	d := base64.NewDecoder(base64.StdEncoding, strings.NewReader(res.Image))
+	decoded := make([]byte, len(res.Image))
+	n, err := d.Read(decoded)
+	assert.NoError(err)
+
+	assert.Equal("Hello World!", string(decoded[:n]))
 }
