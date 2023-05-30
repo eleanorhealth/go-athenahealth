@@ -511,7 +511,7 @@ func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, departmentID 
 		}
 
 		if opts.BypassScheduleTimeChecks {
-			q.Add("bypassscheduletimeschecks", "true")
+			q.Add("bypassscheduletimechecks", "true")
 		}
 
 		if !opts.EndDate.IsZero() {

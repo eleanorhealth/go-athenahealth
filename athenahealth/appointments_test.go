@@ -218,8 +218,8 @@ func TestHTTPClient_ListAppointmentReasons(t *testing.T) {
 	providerID := "2"
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(deptID, r.URL.Query().Get("departmentid"))
-		assert.Equal(providerID, r.URL.Query().Get("providerid"))
+		assert.Equal("1", r.URL.Query().Get("departmentid"))
+		assert.Equal("2", r.URL.Query().Get("providerid"))
 
 		b, _ := os.ReadFile("./resources/ListAppointmentReasons.json")
 		w.Write(b)
@@ -257,6 +257,16 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(strconv.Itoa(deptID), r.URL.Query().Get("departmentid"))
+		assert.Equal("1", r.URL.Query().Get("appointmenttypeid"))
+		assert.Equal("2,3", r.URL.Query().Get("reasonid"))
+		assert.Equal("true", r.URL.Query().Get("bypassscheduletimechecks"))
+		assert.Equal(endDate.Format("01/02/2006"), r.URL.Query().Get("enddate"))
+		assert.Equal("4", r.URL.Query().Get("providerid"))
+		assert.Equal(startDate.Format("01/02/2006"), r.URL.Query().Get("startdate"))
+		assert.Equal("true", r.URL.Query().Get("ignoreschedulablepermission"))
+		assert.Equal("true", r.URL.Query().Get("showfrozenslots"))
+		assert.Equal("5", r.URL.Query().Get("limit"))
+		assert.Equal("6", r.URL.Query().Get("offset"))
 
 		b, _ := os.ReadFile("./resources/ListOpenAppointmentSlots.json")
 		w.Write(b)
@@ -277,16 +287,6 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 	patientID := 1
 	apptID := 2
 
-	h := func(w http.ResponseWriter, r *http.Request) {
-		// assert.Equal(strconv.Itoa(deptID), r.URL.Query().Get("departmentid"))
-
-		b, _ := os.ReadFile("./resources/BookAppointment.json")
-		w.Write(b)
-	}
-
-	athenaClient, ts := testClient(h)
-	defer ts.Close()
-
 	opts := &BookAppointmentOptions{
 		AppointmentTypeID:           3,
 		BookingNote:                 "Hello World!",
@@ -297,6 +297,26 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 		ReasonID:                    5,
 		Urgent:                      true,
 	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		reqBody, _ := io.ReadAll(r.Body)
+		defer r.Body.Close()
+
+		assert.Contains(string(reqBody), "appointmenttypeid=3")
+		assert.Contains(string(reqBody), "bookingnote=Hello+World%21")
+		assert.Contains(string(reqBody), "departmentid=4")
+		assert.Contains(string(reqBody), "donotsendconfirmationemail=true")
+		assert.Contains(string(reqBody), "ignoreschedulablepermission=true")
+		assert.Contains(string(reqBody), "nopatientcase=true")
+		assert.Contains(string(reqBody), "reasonid=5")
+		assert.Contains(string(reqBody), "urgent=true")
+
+		b, _ := os.ReadFile("./resources/BookAppointment.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
 
 	_, err := athenaClient.BookAppointment(context.Background(), patientID, apptID, opts)
 
