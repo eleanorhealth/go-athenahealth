@@ -20,6 +20,7 @@ type Provider struct {
 	HideInPortal                bool         `json:"hideinportal"`
 	LastName                    string       `json:"lastname"`
 	NPI                         int          `json:"npi"`
+	OtherProviderIDList         []string     `json:"otherprovideridlist"`
 	ProviderID                  int          `json:"providerid"`
 	ProviderType                string       `json:"providertype"`
 	ProviderTypeID              string       `json:"providertypeid"`
@@ -91,6 +92,8 @@ func (h *HTTPClient) ListChangedProviders(ctx context.Context, opts *ListChanged
 }
 
 type ListProvidersOptions struct {
+	ShowAllProviderIDs bool
+
 	Pagination *PaginationOptions
 }
 
@@ -115,6 +118,10 @@ func (h *HTTPClient) ListProviders(ctx context.Context, opts *ListProvidersOptio
 	q := url.Values{}
 
 	if opts != nil {
+		if opts.ShowAllProviderIDs {
+			q.Add("showallproviderids", "true")
+		}
+
 		if opts.Pagination != nil {
 			if opts.Pagination.Limit > 0 {
 				q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
