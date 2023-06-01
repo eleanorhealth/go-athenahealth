@@ -18,7 +18,9 @@ import (
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/stats"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
+	"github.com/google/uuid"
 	"github.com/rs/zerolog"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 const (
@@ -232,18 +234,30 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		req.Header = headers
 	}
 
+	xRequestID := uuid.NewString()
+
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	req.Header.Add("User-Agent", userAgent)
+	req.Header.Set("X-Request-Id", xRequestID)
+
+	if span, ok := tracer.SpanFromContext(ctx); ok {
+		span.SetTag("X-Request-Id", xRequestID)
+	}
 
 	h.logger.Info().
 		Str("method", method).
 		Str("url", reqURL).
+		Str("xRequestId", xRequestID).
 		Msg("athenahealth API request")
+
+	requestStart := time.Now()
 
 	res, err := h.httpClient.Do(req)
 	if err != nil {
 		return res, err
 	}
+
+	requestDuration := time.Since(requestStart)
 
 	err = h.stats.Request(method, path)
 	if err != nil {
@@ -276,6 +290,8 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		Str("url", reqURL).
 		Int("statusCode", res.StatusCode).
 		Int("bodyLength", len(resBody)).
+		Str("xRequestId", xRequestID).
+		Str("duration", requestDuration.String()).
 		Msg("athenahealth API response")
 
 	if responseError {
