@@ -1,0 +1,3560 @@
+{
+    "totalcount": 237,
+    "appointments": [
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204083,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204084,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204085,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204086,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204087,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204088,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204089,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204090,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204091,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204112,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204113,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204114,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204115,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204116,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204117,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204118,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204119,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204120,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204104,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204105,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204106,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/30\/2023",
+            "appointmentid": 2204107,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208657,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208658,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208659,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208660,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208661,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208662,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208663,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208664,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208665,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208666,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208667,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208668,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208669,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208670,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208673,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208674,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208675,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208676,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208677,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "05\/31\/2023",
+            "appointmentid": 2208678,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206143,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206144,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206145,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206146,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206147,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206176,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206177,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206178,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206179,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206180,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206181,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206182,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206183,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/01\/2023",
+            "appointmentid": 2206184,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211155,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211156,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211157,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211158,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211159,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211160,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211161,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211162,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211163,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211164,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211165,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211166,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211167,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211168,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211179,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211180,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211181,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/02\/2023",
+            "appointmentid": 2211182,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208689,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208690,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208691,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208692,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208693,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208694,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208695,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208696,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208697,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208698,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208699,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208700,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208701,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208702,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208705,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208706,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208707,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208708,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208709,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/05\/2023",
+            "appointmentid": 2208710,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204121,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204122,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204123,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204124,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204125,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204126,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204127,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204128,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204129,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204150,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204151,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204152,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204153,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204154,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204155,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204156,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204157,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204158,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204142,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204143,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204144,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/06\/2023",
+            "appointmentid": 2204145,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208721,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208722,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208723,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208724,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208725,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208726,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208727,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208728,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208729,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208730,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208731,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208732,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208733,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208734,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208737,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208738,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208739,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208740,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208741,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/07\/2023",
+            "appointmentid": 2208742,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206185,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206186,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206187,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206188,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206189,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206218,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206219,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206220,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206221,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206222,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206223,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206224,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206225,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/08\/2023",
+            "appointmentid": 2206226,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211187,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211188,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211189,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211190,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211191,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211192,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211193,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211194,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211195,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211196,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211197,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211198,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211199,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211200,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211211,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211212,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211213,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/09\/2023",
+            "appointmentid": 2211214,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208753,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208754,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208755,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208756,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208757,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208758,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208759,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208760,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208761,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208762,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208763,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208764,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208765,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208766,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208769,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208770,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208771,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208772,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208773,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/12\/2023",
+            "appointmentid": 2208774,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204159,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204160,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204161,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204162,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204163,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204164,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204165,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204166,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "10:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204167,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204188,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204189,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204190,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204191,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204192,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204193,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204194,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204195,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204196,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204180,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204181,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204182,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/13\/2023",
+            "appointmentid": 2204183,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "15:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208785,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208786,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208787,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208788,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208793,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208794,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208795,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208796,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "11:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208797,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208798,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "12:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208801,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208802,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208803,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "13:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208805,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/14\/2023",
+            "appointmentid": 2208806,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "14:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206227,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:00",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206228,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:15",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206229,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:30",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206230,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Template: Therapist",
+            "providerid": 40,
+            "starttime": "09:45",
+            "duration": 15,
+            "appointmenttypeid": 44,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Template: Therapist"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206231,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206260,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206262,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206263,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206264,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206265,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206266,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        },
+        {
+            "date": "06\/15\/2023",
+            "appointmentid": 2206267,
+            "departmentid": 5,
+            "localproviderid": 40,
+            "appointmenttype": "Group Therapy - Online",
+            "providerid": 40,
+            "starttime": "10:00",
+            "duration": 60,
+            "appointmenttypeid": 39,
+            "reasonid": [
+                "-1"
+            ],
+            "patientappointmenttypename": "Group Therapy - Online"
+        }
+    ]
+}

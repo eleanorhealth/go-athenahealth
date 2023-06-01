@@ -22,6 +22,9 @@ type Client interface {
 	GetAppointment(ctx context.Context, appointmentID string) (*Appointment, error)
 	ListBookedAppointments(context.Context, *ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error)
 	ListChangedAppointments(context.Context, *ListChangedAppointmentsOptions) ([]*BookedAppointment, error)
+	ListAppointmentReasons(ctx context.Context, departmentID, providerID string) ([]*AppointmentReason, error)
+	ListOpenAppointmentSlots(ctx context.Context, departmentID int, opts *ListOpenAppointmentSlotOptions) ([]*OpenAppointmentSlot, error)
+	BookAppointment(ctx context.Context, patientID, apptID int, opts *BookAppointmentOptions) (*BookedAppointment, error)
 
 	ListAppointmentCustomFields(context.Context) ([]*AppointmentCustomField, error)
 
