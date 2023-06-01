@@ -211,29 +211,6 @@ func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
 	assert.True(called)
 }
 
-func TestHTTPClient_ListAppointmentReasons(t *testing.T) {
-	assert := assert.New(t)
-
-	deptID := "1"
-	providerID := "2"
-
-	h := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal("1", r.URL.Query().Get("departmentid"))
-		assert.Equal("2", r.URL.Query().Get("providerid"))
-
-		b, _ := os.ReadFile("./resources/ListAppointmentReasons.json")
-		w.Write(b)
-	}
-
-	athenaClient, ts := testClient(h)
-	defer ts.Close()
-
-	reasons, err := athenaClient.ListAppointmentReasons(context.Background(), deptID, providerID)
-
-	assert.Len(reasons, 2)
-	assert.NoError(err)
-}
-
 func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 	assert := assert.New(t)
 
@@ -275,9 +252,9 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	slots, err := athenaClient.ListOpenAppointmentSlots(context.Background(), deptID, opts)
+	slotsRes, err := athenaClient.ListOpenAppointmentSlots(context.Background(), deptID, opts)
 
-	assert.Len(slots, 237)
+	assert.Len(slotsRes.Appointments, 237)
 	assert.NoError(err)
 }
 
