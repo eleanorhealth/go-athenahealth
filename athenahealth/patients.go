@@ -81,7 +81,7 @@ type Patient struct {
 	GuarantorState                     string             `json:"guarantorstate"`
 	GuarantorZip                       string             `json:"guarantorzip"`
 	GuarantorEmail                     string             `json:"guarantoremail"`
-	HasMobileYN                        bool               `json:"hasmobileyn"`
+	HasMobile                          bool               `json:"hasmobile"`
 	Homebound                          bool               `json:"homebound"`
 	HomePhone                          string             `json:"homephone"`
 	Insurances                         []Insurance        `json:"insurances"`
@@ -309,7 +309,7 @@ type UpdatePatientOptions struct {
 	FirstName           *string
 	GenderIdentity      *string
 	GenderIdentityOther *string
-	HasMobileYN         *bool
+	HasMobile           *bool
 	HomePhone           *string
 	Language6392Code    *string
 	LastName            *string
@@ -378,8 +378,8 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 			form.Add("contactmobilephone", *opts.ContactMobilePhone)
 		}
 
-		if opts.HasMobileYN != nil {
-			form.Add("hasmobileyn", strconv.FormatBool(*opts.HasMobileYN))
+		if opts.HasMobile != nil {
+			form.Add("hasmobileyn", strconv.FormatBool(*opts.HasMobile))
 		}
 
 		if opts.ContactHomePhone != nil {

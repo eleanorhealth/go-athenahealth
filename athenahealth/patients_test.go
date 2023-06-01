@@ -375,7 +375,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 	FirstName := "John"
 	GenderIdentity := "genderIdentity"
 	GenderIdentityOther := "genderIdentityOther"
-	HasMobileYN := false
+	HasMobile := false
 	HomePhone := "860-111-2222"
 	Language6392Code := "321"
 	LastName := "Smith"
@@ -410,7 +410,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		FirstName:           &FirstName,
 		GenderIdentity:      &GenderIdentity,
 		GenderIdentityOther: &GenderIdentityOther,
-		HasMobileYN:         &HasMobileYN,
+		HasMobile:           &HasMobile,
 		HomePhone:           &HomePhone,
 		Language6392Code:    &Language6392Code,
 		LastName:            &LastName,
