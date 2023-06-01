@@ -1,0 +1,17 @@
+{
+    "totalcount": 2,
+    "patientappointmentreasons": [
+        {
+            "reasontype": "existing",
+            "reason": "Follow Up",
+            "description": "I need to follow up with my provider about a condition or other issue I have.",
+            "reasonid": 2
+        },
+        {
+            "reasontype": "existing",
+            "reason": "Problem",
+            "description": "I need to see my provider regarding some other issue or concern.",
+            "reasonid": 6
+        }
+    ]
+}

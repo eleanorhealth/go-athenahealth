@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -401,4 +402,218 @@ func (h *HTTPClient) DeleteAppointmentNote(ctx context.Context, appointmentID, n
 	}
 
 	return nil
+}
+
+type AppointmentReason struct {
+	Description        string `json:"description"`
+	Reason             string `json:"reason"`
+	ReasonID           int    `json:"reasonid"`
+	ReasonType         string `json:"reasontype"`
+	SchedulingMaxDays  int    `json:"schedulingmaxdays"`
+	SchedulingMinHours int    `json:"schedulingminhours"`
+}
+
+type listAppointmentReasonsResponse struct {
+	Reasons []*AppointmentReason `json:"patientappointmentreasons"`
+}
+
+// ListAppointmentReasons - Get list of appointment reasons.
+// GET /v1/{practiceid}/patientappointmentreasons
+// https://docs.athenahealth.com/api/api-ref/appointment-reasons#Get-list-of-appointment-reasons
+func (h *HTTPClient) ListAppointmentReasons(ctx context.Context, departmentID, providerID string) ([]*AppointmentReason, error) {
+	out := &listAppointmentReasonsResponse{}
+
+	q := url.Values{}
+
+	q.Add("departmentid", departmentID)
+	q.Add("providerid", providerID)
+
+	_, err := h.Get(ctx, "/patientappointmentreasons", q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Reasons, nil
+}
+
+type ListOpenAppointmentSlotOptions struct {
+	// Normally, an appointment reason ID should be used which will map to the correct underlying appointment type in athenaNet. This field will ignore the practice's existing setup for what should be scheduled. Please consult with athenahealth before using. Either an appointmenttypeid or a reasonid must be specified or no results will be returned.
+	AppointmentTypeID int
+
+	// The athenaNet patient appointment reason ID, from GET /patientappointmentreasons. While this is not technically required due to some unusual use cases, it is highly recommended for most calls. We do allow a special value of -1 for the reasonid. This reasonid will return open, web-schedulable slots regardless of reason. However, slots returned using a search of -1 may return slots that are not bookable by any reason ID (they may be bookable by specific appointment type IDs instead). This argument allows multiple valid reason IDs to be specified (e.g. reasonid=1,2,3), so if you are looking for slots that match "any" reason, it is recommended that you enumerate the set of reasons you are looking for. Either a reasonid or an appointmenttypeid must be specified or no results will be returned. If a reasonid other than -1 is specified then a providerid must also be specified.
+	ReasonIDs []int
+
+	// Bypass checks that usually require returned appointments to be some amount of hours in the future (as configured by the practice, defaulting to 24 hours), and also ignores the setting that only shows appointments for a certain number of days in the future (also configurable by the practice, defaulting to 90 days).
+	BypassScheduleTimeChecks bool
+
+	// End of the appointment search date range (mm/dd/yyyy). Inclusive. Defaults to seven days from startdate.
+	EndDate time.Time
+
+	// 	The athenaNet provider ID. Required if a reasonid other than -1 is specified.
+	ProviderID int
+
+	// Start of the appointment search date range (mm/dd/yyyy). Inclusive. Defaults to today.
+	StartDate time.Time
+
+	// By default, we show only appointments that are are available to scheduled via the API. This flag allows you to bypass that restriction for viewing available appointments (but you still may not be able to schedule based on this permission!). This flag does not, however, show the full schedule (that is, appointments that are already booked).
+	IgnoreSchedulablePermission bool
+
+	// By default, we hide appointments that are frozen from being returned via the API. This flag allows you to show frozen slots in the set of results returned.
+	ShowFrozenSlots bool
+
+	// Number of entries to return (default 1000, max 10000)Please note that this endpoint has a different default and max than normal.
+	Limit int
+
+	// Starting point of entries; 0-indexed
+	Offset int
+}
+
+type OpenAppointmentSlot struct {
+	AppointmentID              int    `json:"appointmentid"`
+	AppointmentType            string `json:"appointmenttype"`
+	AppointmentTypeID          int    `json:"appointmenttypeid"`
+	Date                       string `json:"date"`
+	DepartmentID               int    `json:"departmentid"`
+	Duration                   int    `json:"duration"`
+	Frozen                     bool   `json:"frozen"`
+	LocalProviderID            int    `json:"localproviderid"`
+	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
+	ProviderID                 int    `json:"providerid"`
+	StartTime                  string `json:"starttime"`
+}
+
+type listOpenAppointmentSlotResponse struct {
+	Appointments []*OpenAppointmentSlot `json:"appointments"`
+}
+
+// ListOpenAppointmentSlots - Get list of open appointment slots.
+// GET /v1/{practiceid}/appointments/open
+// https://docs.athenahealth.com/api/api-ref/appointment-slot#Get-list-of-open-appointment-slots
+func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, departmentID int, opts *ListOpenAppointmentSlotOptions) ([]*OpenAppointmentSlot, error) {
+	out := &listOpenAppointmentSlotResponse{}
+
+	q := url.Values{}
+
+	q.Add("departmentid", strconv.Itoa(departmentID))
+
+	if opts != nil {
+		if opts.AppointmentTypeID > 0 {
+			q.Add("appointmenttypeid", strconv.Itoa(opts.AppointmentTypeID))
+		}
+
+		if len(opts.ReasonIDs) > 0 {
+			var reasonIDs []string
+			for _, reasonID := range opts.ReasonIDs {
+				reasonIDs = append(reasonIDs, strconv.Itoa(reasonID))
+			}
+
+			q.Add("reasonid", strings.Join(reasonIDs, ","))
+		}
+
+		if opts.BypassScheduleTimeChecks {
+			q.Add("bypassscheduletimechecks", "true")
+		}
+
+		if !opts.EndDate.IsZero() {
+			q.Add("enddate", opts.EndDate.Format("01/02/2006"))
+		}
+
+		if opts.ProviderID > 0 {
+			q.Add("providerid", strconv.Itoa(opts.ProviderID))
+		}
+
+		if !opts.StartDate.IsZero() {
+			q.Add("startdate", opts.StartDate.Format("01/02/2006"))
+		}
+
+		if opts.IgnoreSchedulablePermission {
+			q.Add("ignoreschedulablepermission", "true")
+		}
+
+		if opts.ShowFrozenSlots {
+			q.Add("showfrozenslots", "true")
+		}
+
+		if opts.Limit > 0 {
+			q.Add("limit", strconv.Itoa(opts.Limit))
+		}
+
+		if opts.Offset > 0 {
+			q.Add("offset", strconv.Itoa(opts.Offset))
+		}
+	}
+
+	_, err := h.Get(ctx, "/appointments/open", q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Appointments, nil
+}
+
+type BookAppointmentOptions struct {
+	AppointmentTypeID           int
+	BookingNote                 string
+	DepartmentID                int
+	DoNotSendConfirmationEmail  bool
+	IgnoreSchedulablePermission bool
+	NoPatientCase               bool
+	ReasonID                    int
+	Urgent                      bool
+}
+
+// BookAppointment - Create a single appointment for specific patient
+// PUT /v1/{practiceid}/appointments/{appointmentid}
+// https://docs.athenahealth.com/api/api-ref/appointment#Book-appointment
+func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID int, opts *BookAppointmentOptions) (*BookedAppointment, error) {
+	var out []*BookedAppointment
+
+	form := url.Values{}
+
+	form.Add("patientid", strconv.Itoa(patientID))
+
+	if opts != nil {
+		if opts.AppointmentTypeID > 0 {
+			form.Add("appointmenttypeid", strconv.Itoa(opts.AppointmentTypeID))
+		}
+
+		if len(opts.BookingNote) > 0 {
+			form.Add("bookingnote", opts.BookingNote)
+		}
+
+		if opts.DepartmentID > 0 {
+			form.Add("departmentid", strconv.Itoa(opts.DepartmentID))
+		}
+
+		if opts.DoNotSendConfirmationEmail {
+			form.Add("donotsendconfirmationemail", "true")
+		}
+
+		if opts.IgnoreSchedulablePermission {
+			form.Add("ignoreschedulablepermission", "true")
+		}
+
+		if opts.NoPatientCase {
+			form.Add("nopatientcase", "true")
+		}
+
+		if opts.ReasonID > 0 {
+			form.Add("reasonid", strconv.Itoa(opts.ReasonID))
+		}
+
+		if opts.Urgent {
+			form.Add("urgent", "true")
+		}
+	}
+
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%d", apptID), form, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(out) == 0 {
+		return nil, errors.New("unexpected length returned")
+	}
+
+	return out[0], nil
 }

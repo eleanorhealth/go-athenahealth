@@ -1,0 +1,19 @@
+[
+    {
+        "date": "05\/30\/2023",
+        "appointmentid": "2204083",
+        "starttime": "09:00",
+        "departmentid": "5",
+        "appointmentstatus": "f",
+        "patientid": "980",
+        "duration": 15,
+        "referringproviderid": "",
+        "renderingproviderid": "",
+        "appointmenttypeid": "44",
+        "appointmenttype": "Template: Therapist",
+        "providerid": "40",
+        "chargeentrynotrequired": false,
+        "supervisingproviderid": "",
+        "patientappointmenttypename": "Template: Therapist"
+    }
+]
