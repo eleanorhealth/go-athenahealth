@@ -404,38 +404,6 @@ func (h *HTTPClient) DeleteAppointmentNote(ctx context.Context, appointmentID, n
 	return nil
 }
 
-type AppointmentReason struct {
-	Description        string `json:"description"`
-	Reason             string `json:"reason"`
-	ReasonID           int    `json:"reasonid"`
-	ReasonType         string `json:"reasontype"`
-	SchedulingMaxDays  int    `json:"schedulingmaxdays"`
-	SchedulingMinHours int    `json:"schedulingminhours"`
-}
-
-type listAppointmentReasonsResponse struct {
-	Reasons []*AppointmentReason `json:"patientappointmentreasons"`
-}
-
-// ListAppointmentReasons - Get list of appointment reasons.
-// GET /v1/{practiceid}/patientappointmentreasons
-// https://docs.athenahealth.com/api/api-ref/appointment-reasons#Get-list-of-appointment-reasons
-func (h *HTTPClient) ListAppointmentReasons(ctx context.Context, departmentID, providerID string) ([]*AppointmentReason, error) {
-	out := &listAppointmentReasonsResponse{}
-
-	q := url.Values{}
-
-	q.Add("departmentid", departmentID)
-	q.Add("providerid", providerID)
-
-	_, err := h.Get(ctx, "/patientappointmentreasons", q, out)
-	if err != nil {
-		return nil, err
-	}
-
-	return out.Reasons, nil
-}
-
 type ListOpenAppointmentSlotOptions struct {
 	// Normally, an appointment reason ID should be used which will map to the correct underlying appointment type in athenaNet. This field will ignore the practice's existing setup for what should be scheduled. Please consult with athenahealth before using. Either an appointmenttypeid or a reasonid must be specified or no results will be returned.
 	AppointmentTypeID int
@@ -482,15 +450,23 @@ type OpenAppointmentSlot struct {
 	StartTime                  string `json:"starttime"`
 }
 
-type listOpenAppointmentSlotResponse struct {
+type listOpenAppointmentSlotsResponse struct {
 	Appointments []*OpenAppointmentSlot `json:"appointments"`
+
+	PaginationResponse
+}
+
+type ListOpenAppointmentSlotsResult struct {
+	Appointments []*OpenAppointmentSlot
+
+	Pagination *PaginationResult
 }
 
 // ListOpenAppointmentSlots - Get list of open appointment slots.
 // GET /v1/{practiceid}/appointments/open
 // https://docs.athenahealth.com/api/api-ref/appointment-slot#Get-list-of-open-appointment-slots
-func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, departmentID int, opts *ListOpenAppointmentSlotOptions) ([]*OpenAppointmentSlot, error) {
-	out := &listOpenAppointmentSlotResponse{}
+func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, departmentID int, opts *ListOpenAppointmentSlotOptions) (*ListOpenAppointmentSlotsResult, error) {
+	out := &listOpenAppointmentSlotsResponse{}
 
 	q := url.Values{}
 
@@ -548,7 +524,10 @@ func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, departmentID 
 		return nil, err
 	}
 
-	return out.Appointments, nil
+	return &ListOpenAppointmentSlotsResult{
+		Appointments: out.Appointments,
+		Pagination:   makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
 }
 
 type BookAppointmentOptions struct {
