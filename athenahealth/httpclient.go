@@ -20,7 +20,6 @@ import (
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 const (
@@ -35,6 +34,8 @@ const (
 
 	// defaultRequestTimeout defines the HTTP request's context deadline if one is not specified by the caller.
 	defaultRequestTimeout = 15 * time.Second
+
+	XRequestIDHeaderKey = "X-Request-Id"
 )
 
 var _ Client = (*HTTPClient)(nil)
@@ -238,11 +239,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	req.Header.Add("User-Agent", userAgent)
-	req.Header.Set("X-Request-Id", xRequestID)
-
-	if span, ok := tracer.SpanFromContext(ctx); ok {
-		span.SetTag("X-Request-Id", xRequestID)
-	}
+	req.Header.Set(XRequestIDHeaderKey, xRequestID)
 
 	h.logger.Info().
 		Str("method", method).
