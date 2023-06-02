@@ -35,6 +35,7 @@ const (
 	// defaultRequestTimeout defines the HTTP request's context deadline if one is not specified by the caller.
 	defaultRequestTimeout = 15 * time.Second
 
+	// XRequestIDHeaderKey https://docs.athenahealth.com/api/guides/best-practices
 	XRequestIDHeaderKey = "X-Request-Id"
 )
 
