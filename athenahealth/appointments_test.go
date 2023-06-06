@@ -224,12 +224,12 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 		ReasonIDs:                   []int{2, 3},
 		BypassScheduleTimeChecks:    true,
 		EndDate:                     endDate,
-		ProviderID:                  4,
+		ProviderIDs:                 []int{4, 5},
 		StartDate:                   startDate,
 		IgnoreSchedulablePermission: true,
 		ShowFrozenSlots:             true,
-		Limit:                       5,
-		Offset:                      6,
+		Limit:                       6,
+		Offset:                      7,
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
@@ -238,12 +238,12 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 		assert.Equal("2,3", r.URL.Query().Get("reasonid"))
 		assert.Equal("true", r.URL.Query().Get("bypassscheduletimechecks"))
 		assert.Equal(endDate.Format("01/02/2006"), r.URL.Query().Get("enddate"))
-		assert.Equal("4", r.URL.Query().Get("providerid"))
+		assert.Equal("4,5", r.URL.Query().Get("providerid"))
 		assert.Equal(startDate.Format("01/02/2006"), r.URL.Query().Get("startdate"))
 		assert.Equal("true", r.URL.Query().Get("ignoreschedulablepermission"))
 		assert.Equal("true", r.URL.Query().Get("showfrozenslots"))
-		assert.Equal("5", r.URL.Query().Get("limit"))
-		assert.Equal("6", r.URL.Query().Get("offset"))
+		assert.Equal("6", r.URL.Query().Get("limit"))
+		assert.Equal("7", r.URL.Query().Get("offset"))
 
 		b, _ := os.ReadFile("./resources/ListOpenAppointmentSlots.json")
 		w.Write(b)

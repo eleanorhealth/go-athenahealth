@@ -418,7 +418,7 @@ type ListOpenAppointmentSlotOptions struct {
 	EndDate time.Time
 
 	// 	The athenaNet provider ID. Required if a reasonid other than -1 is specified.
-	ProviderID int
+	ProviderIDs []int
 
 	// Start of the appointment search date range (mm/dd/yyyy). Inclusive. Defaults to today.
 	StartDate time.Time
@@ -494,8 +494,13 @@ func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, departmentID 
 			q.Add("enddate", opts.EndDate.Format("01/02/2006"))
 		}
 
-		if opts.ProviderID > 0 {
-			q.Add("providerid", strconv.Itoa(opts.ProviderID))
+		if len(opts.ProviderIDs) > 0 {
+			var providerIDs []string
+			for _, providerID := range opts.ProviderIDs {
+				providerIDs = append(providerIDs, strconv.Itoa(providerID))
+			}
+
+			q.Add("providerid", strings.Join(providerIDs, ","))
 		}
 
 		if !opts.StartDate.IsZero() {
