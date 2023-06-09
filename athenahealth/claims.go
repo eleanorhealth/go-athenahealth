@@ -175,7 +175,9 @@ type listClaimsResponse struct {
 }
 
 // ListClaims - Get list of claims
+//
 // GET /v1/{practiceid}/claims
+//
 // https://docs.athenahealth.com/api/api-ref/claim#Get-list-of-claim-details
 func (h *HTTPClient) ListClaims(ctx context.Context, opts *ListClaimsOptions) (*ListClaimsResult, error) {
 	if opts == nil {

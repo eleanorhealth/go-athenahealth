@@ -101,8 +101,10 @@ type addDocumentResponse struct {
 	DocumentID string `json:"documentid"`
 }
 
-// AddDocument - Add document to patient's chart.
+// AddDocument - Add document to patient's chart
+//
 // POST /v1/{practiceid}/patients/{patientid}/documents
+//
 // https://docs.athenahealth.com/api/api-ref/document#Add-document-to-patient's-chart
 // Document subclasses from https://docs.athenahealth.com/api/workflows/document-classification-guide:
 // ADMIN_BILLING

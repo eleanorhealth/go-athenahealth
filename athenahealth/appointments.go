@@ -478,8 +478,10 @@ type ListOpenAppointmentSlotsResult struct {
 	Pagination *PaginationResult
 }
 
-// ListOpenAppointmentSlots - Get list of open appointment slots.
+// ListOpenAppointmentSlots - Get list of open appointment slots
+//
 // GET /v1/{practiceid}/appointments/open
+//
 // https://docs.athenahealth.com/api/api-ref/appointment-slot#Get-list-of-open-appointment-slots
 func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, departmentID int, opts *ListOpenAppointmentSlotOptions) (*ListOpenAppointmentSlotsResult, error) {
 	out := &listOpenAppointmentSlotsResponse{}
@@ -563,7 +565,9 @@ type BookAppointmentOptions struct {
 }
 
 // BookAppointment - Create a single appointment for specific patient
+//
 // PUT /v1/{practiceid}/appointments/{appointmentid}
+//
 // https://docs.athenahealth.com/api/api-ref/appointment#Book-appointment
 func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID int, opts *BookAppointmentOptions) (*BookedAppointment, error) {
 	var out []*BookedAppointment

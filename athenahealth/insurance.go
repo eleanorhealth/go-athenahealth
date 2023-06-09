@@ -49,8 +49,10 @@ type InsurancePackage struct {
 	SequenceNumber                      int    `json:"sequencenumber"`
 }
 
-// CreatePatientInsurancePackage - Create patient's insurance package.
+// CreatePatientInsurancePackage - Create patient's insurance package
+//
 // POST /v1/{practiceid}/patients/{patientid}/insurances
+//
 // https://docs.athenahealth.com/api/api-ref/patient-insurance#Create-patient's-insurance-package
 func (h *HTTPClient) CreatePatientInsurancePackage(ctx context.Context, opts *CreatePatientInsurancePackageOptions) (*InsurancePackage, error) {
 	if opts == nil {
@@ -86,8 +88,10 @@ type reactivatePatientInsurancePackageResponse struct {
 	Message string `json:"message"`
 }
 
-// ReactivatePatientInsurancePackage - Reactivate a patient's insurance package.
+// ReactivatePatientInsurancePackage - Reactivate a patient's insurance package
+//
 // POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/reactivate
+//
 // https://docs.athenahealth.com/api/api-ref/patient-insurance#Reactivate-patient's-specific-insurance-package
 func (h *HTTPClient) ReactivatePatientInsurancePackage(ctx context.Context, patientID, insuranceID string, expirationDate *time.Time) error {
 	out := &reactivatePatientInsurancePackageResponse{}
@@ -128,8 +132,10 @@ type updatePatientInsurancePackageResponse struct {
 	Message string `json:"message"`
 }
 
-// UpdatePatientInsurancePackage - Update a patient's specific insurance package.
+// UpdatePatientInsurancePackage - Update a patient's specific insurance package
+//
 // PUT /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}
+//
 // https://docs.athenahealth.com/api/api-ref/patient-insurance#Update-patient's-specific-insurance-package
 func (h *HTTPClient) UpdatePatientInsurancePackage(ctx context.Context, opts *UpdatePatientInsurancePackageOptions) error {
 	if opts == nil {
@@ -185,8 +191,10 @@ type deletePatientInsurancePackageResponse struct {
 	Message string `json:"message"`
 }
 
-// DeletePatientInsurancePackage - Delete a patient's specific insurance package.
+// DeletePatientInsurancePackage - Delete a patient's specific insurance package
+//
 // DELETE /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}
+//
 // https://docs.athenahealth.com/api/api-ref/patient-insurance#Delete-patient's-specific-insurance-package
 func (h *HTTPClient) DeletePatientInsurancePackage(ctx context.Context, patientID, insuranceID, cancellationNote string) error {
 	out := &deletePatientInsurancePackageResponse{}
@@ -227,7 +235,9 @@ type ListPatientInsurancePackagesResult struct {
 }
 
 // ListPatientInsurancePackages - Get patient's insurance packages
+//
 // GET /v1/{practiceid}/patients/{patientid}/insurances
+//
 // https://docs.athenahealth.com/api/api-ref/patient-insurance#Get-patient's-insurance-packages
 func (h *HTTPClient) ListPatientInsurancePackages(ctx context.Context, opts *ListPatientInsurancePackagesOptions) (*ListPatientInsurancePackagesResult, error) {
 	if opts == nil {
@@ -277,7 +287,9 @@ type UploadPatientInsuranceCardImageResult struct {
 }
 
 // UploadPatientInsuranceCardImage - Uploads the patient's insurance card image
+//
 // POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/image
+//
 // https://docs.athenahealth.com/api/api-ref/insurance-card-image#Upload-patient's-insurance-card-image
 func (h *HTTPClient) UploadPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageOptions) (*UploadPatientInsuranceCardImageResult, error) {
 	if opts == nil {
@@ -313,8 +325,11 @@ type GetPatientInsuranceCardImageResult struct {
 }
 
 // GetPatientInsuranceCardImage - Gets the patient's insurance card image
+//
 // GET /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/image
+//
 // ERR: athenahealth.ErrNotFound if there's no image
+//
 // https://docs.athenahealth.com/api/api-ref/insurance-card-image#Get-patient's-insurance-card-image
 func (h *HTTPClient) GetPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string) (*GetPatientInsuranceCardImageResult, error) {
 	out := &getPatientInsuranceCardImageResponse{}
