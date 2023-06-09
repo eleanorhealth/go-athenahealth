@@ -25,9 +25,11 @@ type Appointment struct {
 	StartTime                  string `json:"starttime"`
 }
 
-// GetAppointment - Single appointment.
+// GetAppointment - Get single appointment
+//
 // GET /v1/{practiceid}/appointments/{appointmentid}
-// https://developer.athenahealth.com/docs/read/appointments/Appointments#section-1
+//
+// https://docs.athenahealth.com/api/api-ref/appointment#Get-appointment-details
 func (h *HTTPClient) GetAppointment(ctx context.Context, id string) (*Appointment, error) {
 	out := []*Appointment{}
 
@@ -61,9 +63,11 @@ type listAppointmentCustomFieldsResponse struct {
 	AppointmentCustomFields []*AppointmentCustomField `json:"appointmentcustomfields"`
 }
 
-// ListAppointmentCustomFields - List of appointment custom fields (practice specific).
+// ListAppointmentCustomFields - List of appointment custom fields (practice specific)
+//
 // GET /v1/{practiceid}/appointments/customfields
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Custom_Fields#section-0
+//
+// https://docs.athenahealth.com/api/api-ref/appointment-custom-fields#Get-the-list-of-appointment-custom-fields
 func (h *HTTPClient) ListAppointmentCustomFields(ctx context.Context) ([]*AppointmentCustomField, error) {
 	out := &listAppointmentCustomFieldsResponse{}
 
@@ -138,9 +142,11 @@ type listBookedAppointmentsResponse struct {
 	PaginationResponse
 }
 
-// ListBookedAppointments - Booked appointment slots.
+// ListBookedAppointments - Booked appointment slots
+//
 // GET /v1/{practiceid}/appointments/booked
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-3
+//
+// https://docs.athenahealth.com/api/api-ref/appointment#Get-list-of-booked-appointments
 func (h *HTTPClient) ListBookedAppointments(ctx context.Context, opts *ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error) {
 	out := &listBookedAppointmentsResponse{}
 
@@ -207,9 +213,11 @@ type listChangedAppointmentsResponse struct {
 	ChangedAppointments []*BookedAppointment `json:"appointments"`
 }
 
-// ListChangedAppointments - Changed appointment slots.
+// ListChangedAppointments - List of changes in appointment slots
+//
 // GET /v1/{practiceid}/appointments/changed
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-5
+//
+// https://docs.athenahealth.com/api/api-ref/appointment#Get-list-of-changes-in-appointment-slots-based-on-subscribed-events
 func (h *HTTPClient) ListChangedAppointments(ctx context.Context, opts *ListChangedAppointmentsOptions) ([]*BookedAppointment, error) {
 	out := &listChangedAppointmentsResponse{}
 
@@ -259,9 +267,11 @@ type CreateAppointmentNoteOptions struct {
 	NoteText          string
 }
 
-// CreateAppointmentNote - Notes for this appointment.
+// CreateAppointmentNote - Create note for specific appointment
+//
 // POST /v1/{practiceid}/appointments/{appointmentid}/notes
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-0
+//
+// https://docs.athenahealth.com/api/api-ref/appointment-notes#Create-appointment-note
 func (h *HTTPClient) CreateAppointmentNote(ctx context.Context, appointmentID string, opts *CreateAppointmentNoteOptions) error {
 	var form url.Values
 
@@ -306,9 +316,11 @@ type listAppointmentNotesResponse struct {
 	Notes []*AppointmentNote `json:"notes"`
 }
 
-// ListAppointmentNotes - Notes for this appointment.
+// ListAppointmentNotes - List all notes for specific appointment
+//
 // GET /v1/{practiceid}/appointments/{appointmentid}/notes
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-1
+//
+// https://docs.athenahealth.com/api/api-ref/appointment-notes#Get-all-appointment-notes
 func (h *HTTPClient) ListAppointmentNotes(ctx context.Context, appointmentID string, opts *ListAppointmentNotesOptions) ([]*AppointmentNote, error) {
 	out := &listAppointmentNotesResponse{}
 
@@ -339,9 +351,11 @@ type UpdateAppointmentNoteOptions struct {
 	NoteText          string
 }
 
-// UpdateAppointmentNote - Notes for this appointment.
+// UpdateAppointmentNote - Update note for specific appointment
+//
 // PUT /v1/{practiceid}/appointments/{appointmentid}/notes/{noteid}
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-3
+//
+// https://docs.athenahealth.com/api/api-ref/appointment-notes#Update-appointment-note
 func (h *HTTPClient) UpdateAppointmentNote(ctx context.Context, appointmentID, noteID string, opts *UpdateAppointmentNoteOptions) error {
 	var form url.Values
 
@@ -378,9 +392,11 @@ type DeleteAppointmentNoteOptions struct {
 	NoteID        string
 }
 
-// DeleteAppointmentNote - Notes for this appointment.
+// DeleteAppointmentNote - Delete note for specific appointment
+//
 // DELETE /v1/{practiceid}/appointments/{appointmentid}/notes/{noteid}
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Notes#section-0
+//
+// https://docs.athenahealth.com/api/api-ref/appointment-notes#Delete-appointment-note
 func (h *HTTPClient) DeleteAppointmentNote(ctx context.Context, appointmentID, noteID string, opts *DeleteAppointmentNoteOptions) error {
 	var form url.Values
 

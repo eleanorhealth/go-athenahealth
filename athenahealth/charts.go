@@ -22,9 +22,11 @@ type SocialHistoryQuestion struct {
 	QuestionID NumberString  `json:"questionid"`
 }
 
-// ListPatientSocialHistoryTemplates - List of social history questions and templates configured by this practice.
+// ListPatientSocialHistoryTemplates - List of social history questions and templates configured by this practice
+//
 // GET /v1/{practiceid}/chart/configuration/socialhistory
-// https://developer.athenahealth.com/docs/read/chart/Social_History#section-0
+//
+// https://docs.athenahealth.com/api/api-ref/social-history#Get-list-of-social-history-questions-and-templates-used-by-this-practice
 func (h *HTTPClient) ListSocialHistoryTemplates(ctx context.Context) ([]*SocialHistoryTemplate, error) {
 	out := []*SocialHistoryTemplate{}
 
@@ -64,9 +66,11 @@ type GetPatientSocialHistoryResponse struct {
 	} `json:"templates"`
 }
 
-// GetPatientSocialHistory - List of social history data for this patient.
+// GetPatientSocialHistory - List of social history data for this patient
+//
 // GET /v1/{practiceid}/chart/{patientid}/socialhistory
-// https://developer.athenahealth.com/docs/read/chart/Social_History#section-2
+//
+// https://docs.athenahealth.com/api/api-ref/social-history#Get-patient's-social-history-data
 func (h *HTTPClient) GetPatientSocialHistory(ctx context.Context, patientID string, opts *GetPatientSocialHistoryOptions) (*GetPatientSocialHistoryResponse, error) {
 	out := &GetPatientSocialHistoryResponse{}
 
@@ -112,9 +116,11 @@ type UpdatePatientSocialHistoryOptions struct {
 	SectionNote  string
 }
 
-// UpdatePatientSocialHistory - Update the set of social history questions for this patient.
+// UpdatePatientSocialHistory - Update the set of social history questions for this patient
+//
 // PUT /v1/{practiceid}/chart/{patientid}/socialhistory
-// https://developer.athenahealth.com/docs/read/chart/Social_History#section-2
+//
+// https://docs.athenahealth.com/api/api-ref/social-history#Update-patient's-social-history-data
 func (h *HTTPClient) UpdatePatientSocialHistory(ctx context.Context, patientID string, opts *UpdatePatientSocialHistoryOptions) error {
 	var form url.Values
 

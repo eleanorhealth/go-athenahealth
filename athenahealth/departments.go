@@ -38,9 +38,11 @@ type Department struct {
 	CommunicatorBrandID      string `json:"communicatorbrandid"`
 }
 
-// GetDepartment - Details about a single department.
+// GetDepartment - Details about a single department
+//
 // GET /v1/{practiceid}/departments/{departmentid}
-// https://developer.athenahealth.com/docs/read/administrative/Departments#section-1
+//
+// https://docs.athenahealth.com/api/api-ref/departments#Get-specific-department-information
 func (h *HTTPClient) GetDepartment(ctx context.Context, id string) (*Department, error) {
 	out := []*Department{}
 
@@ -77,8 +79,10 @@ type listDepartmentsResponse struct {
 }
 
 // ListDepartments - List of all departments available for this practice
+//
 // GET /v1/{practiceid}/departments
-// https://developer.athenahealth.com/docs/read/administrative/Departments#section-0
+//
+// https://docs.athenahealth.com/api/api-ref/departments-reference#Get-list-of-all-departments
 func (h *HTTPClient) ListDepartments(ctx context.Context, opts *ListDepartmentsOptions) (*ListDepartmentsResult, error) {
 	out := &listDepartmentsResponse{}
 

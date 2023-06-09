@@ -11,9 +11,11 @@ type Subscription struct {
 	Subscriptions []*SubscriptionEvent `json:"subscriptions"`
 }
 
-// GetSubscription - Handles managing subscriptions for changed appointment slots.
+// GetSubscription - List modified events appointment slots
+//
 // GET /v1/{practiceid}/appointments/changed/subscription
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-7
+//
+// https://docs.athenahealth.com/api/api-ref/appointment#Get-list-of-appointment-slot-change-subscription(s)
 func (h *HTTPClient) GetSubscription(ctx context.Context, feedType string) (*Subscription, error) {
 	out := &Subscription{}
 
@@ -33,9 +35,11 @@ type listSubscriptionEventsResponse struct {
 	Subscriptions []*SubscriptionEvent `json:"subscriptions"`
 }
 
-// ListSubscriptionEvents - Returns the list of events you can subscribe to for changed appointment slots.
-// GET /v1/{practiceid}/appointments/changed/subscription/events.
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-8
+// ListSubscriptionEvents - List events for appointments or appointment slots
+//
+// GET /v1/{practiceid}/appointments/changed/subscription/events
+//
+// https://docs.athenahealth.com/api/api-ref/appointment#Get-list-of-appointment-slot-change-events-to-which-you-can-subscribe
 func (h *HTTPClient) ListSubscriptionEvents(ctx context.Context, feedType string) ([]*SubscriptionEvent, error) {
 	out := &listSubscriptionEventsResponse{}
 
@@ -51,9 +55,11 @@ type SubscribeOptions struct {
 	EventName string
 }
 
-// Subscribe - Handles subscriptions for changed appointment slots.
+// Subscribe - Subscribes for changed appointment slots events
+//
 // POST /v1/{practiceid}/appointments/changed/subscription
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-6
+//
+// https://docs.athenahealth.com/api/api-ref/appointment#Subscribe-to-all/specific-change-events-for-appointment-slots
 func (h *HTTPClient) Subscribe(ctx context.Context, feedType string, opts *SubscribeOptions) error {
 	var form url.Values
 
@@ -74,9 +80,11 @@ type UnsubscribeOptions struct {
 	EventName string
 }
 
-// Unsubscribe - Handles subscriptions for changed appointment slots.
+// Unsubscribe - Unsubscribe to all/specific change events for appointment slots
+//
 // POST /v1/{practiceid}/appointments/changed/subscription
-// https://developer.athenahealth.com/docs/read/appointments/Appointment_Slots#section-6
+//
+// https://docs.athenahealth.com/api/api-ref/appointment#Unsubscribe-to-all/specific-change-events-for-appointment-slots
 func (h *HTTPClient) Unsubscribe(ctx context.Context, feedType string, opts *UnsubscribeOptions) error {
 	var form url.Values
 

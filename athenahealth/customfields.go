@@ -18,9 +18,11 @@ type CustomField struct {
 	Type           string `json:"type"`
 }
 
-// ListCustomFields - List of custom fields (practice specific).
+// ListCustomFields - List of custom fields for the practice
+//
 // GET /v1/{practiceid}/customfields
-// https://developer.athenahealth.com/docs/read/administrative/Custom_Fields_List#section-0
+//
+// https://docs.athenahealth.com/api/api-ref/custom-fields#Get-practice's-list-of-custom-fields
 func (h *HTTPClient) ListCustomFields(ctx context.Context) ([]*CustomField, error) {
 	var out []*CustomField
 

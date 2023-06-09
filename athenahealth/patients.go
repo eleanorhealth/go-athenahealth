@@ -183,9 +183,11 @@ type GetPatientOptions struct {
 	ShowLocalPatientID bool
 }
 
-// GetPatient - Full view/update of patient demographics.
+// GetPatient - Get data for specific patient
+//
 // GET /v1/{practiceid}/patients/{patientid}
-// https://developer.athenahealth.com/docs/read/patientinfo/Patient_Information#section-5
+//
+// https://docs.athenahealth.com/api/api-ref/patient#Get-specific-patient-record
 func (h *HTTPClient) GetPatient(ctx context.Context, id string, opts *GetPatientOptions) (*Patient, error) {
 	out := []*Patient{}
 
@@ -242,9 +244,11 @@ type listPatientsResponse struct {
 	PaginationResponse
 }
 
-// ListPatients - Gets a set of patients or creates a patient.
+// ListPatients - Retrieves a list of patients in the given practice based on search criteria
+//
 // GET /v1/{practiceid}/patients
-// https://developer.athenahealth.com/docs/read/patientinfo/Patient_Information#section-1
+//
+// https://docs.athenahealth.com/api/api-ref/patient#Get-list-of-patients-for-a-practice
 func (h *HTTPClient) ListPatients(ctx context.Context, opts *ListPatientsOptions) (*ListPatientsResult, error) {
 	out := &listPatientsResponse{}
 
@@ -334,7 +338,9 @@ type updatePatientResponse struct {
 }
 
 // UpdatePatient - Modifies data of a specific patient
+//
 // PUT /v1/{practiceid}/patients/{patientid}
+//
 // https://docs.athenahealth.com/api/api-ref/patient#Update-specific-patient-record
 func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *UpdatePatientOptions) (*UpdatePatientResult, error) {
 	out := []*updatePatientResponse{}
@@ -497,9 +503,11 @@ type patientPhoto struct {
 	Image string `json:"image"`
 }
 
-// GetPatientPhoto - Get a patient's photo.
+// GetPatientPhoto - Get a patient's photo
+//
 // GET /v1/{practiceid}/patients/{patientid}/photo
-// https://developer.athenahealth.com/docs/read/forms_and_documents/Patient_Photo#section-0
+//
+// https://docs.athenahealth.com/api/api-ref/patient-photo#Get-patient's-photo
 func (h *HTTPClient) GetPatientPhoto(ctx context.Context, patientID string, opts *GetPatientPhotoOptions) (string, error) {
 	out := &patientPhoto{}
 
@@ -520,8 +528,10 @@ func (h *HTTPClient) GetPatientPhoto(ctx context.Context, patientID string, opts
 }
 
 // UpdatePatientPhoto - Update a patient's photo.
+//
 // POST /v1/{practiceid}/patients/{patientid}/photo
-// https://developer.athenahealth.com/docs/read/forms_and_documents/Patient_Photo#section-1
+//
+// https://docs.athenahealth.com/api/api-ref/patient-photo#Update-patient's-photo
 func (h *HTTPClient) UpdatePatientPhoto(ctx context.Context, patientID string, data []byte) error {
 	form := url.Values{}
 	form.Add("image", base64.StdEncoding.EncodeToString(data))
@@ -544,9 +554,11 @@ type listChangedPatientsResponse struct {
 	ChangedPatients []*Patient `json:"patients"`
 }
 
-// ListChangedPatients - Gets changed patient records.
+// ListChangedPatients - Gets list of changes made to the patient record
+//
 // GET /v1/{practiceid}/patients/changed
-// https://developer.athenahealth.com/docs/read/patientinfo/Patients_Changed
+//
+// https://docs.athenahealth.com/api/api-ref/patient#Get-list-of-changes-in-patient-records
 func (h *HTTPClient) ListChangedPatients(ctx context.Context, opts *ListChangedPatientOptions) ([]*Patient, error) {
 	out := &listChangedPatientsResponse{}
 
@@ -606,9 +618,11 @@ type updatePatientInformationVerificationDetailsResponse struct {
 	Success bool `json:"success"`
 }
 
-// UpdatePatientInformationVerificationDetails - Update patient's privacy information verification details.
+// UpdatePatientInformationVerificationDetails - Update a patient's verified privacy information
+//
 // POST /v1/{practiceid}/patients/{patientid}/privacyinformationverified
-// https://developer.athenahealth.com/docs/read/patientinfo/Patients_Changed
+//
+// https://docs.athenahealth.com/api/api-ref/privacy-information-verification#Update-patient's-privacy-information-verification-details
 func (h *HTTPClient) UpdatePatientInformationVerificationDetails(ctx context.Context, patientID string, opts *UpdatePatientInformationVerificationDetailsOptions) error {
 	out := []*updatePatientInformationVerificationDetailsResponse{}
 	var form url.Values
@@ -658,8 +672,10 @@ func (h *HTTPClient) UpdatePatientInformationVerificationDetails(ctx context.Con
 	return nil
 }
 
-// GetPatientCustomFields - Retrieves custom fields information for a specific patient.
+// GetPatientCustomFields - Get custom fields information for a specific patient
+//
 // GET /v1/{practiceid}/patients/{patientid}/customfields
+//
 // https://docs.athenahealth.com/api/api-ref/patient-custom-fields#Get-custom-field-information-from-patient's-records
 func (h *HTTPClient) GetPatientCustomFields(ctx context.Context, patientID, departmentID string) ([]*CustomFieldValue, error) {
 	out := []*CustomFieldValue{}
@@ -681,8 +697,10 @@ type updatePatientCustomFieldsResponse struct {
 	DisallowedCount int  `json:"disallowedCount"`
 }
 
-// UpdatePatientCustomFields - Update custom-field information from patient's records.
+// UpdatePatientCustomFields - Update custom fields data for a specific patient
+//
 // PUT /v1/{practiceid}/patients/{patientid}/customfields
+//
 // https://docs.athenahealth.com/api/api-ref/patient-custom-fields#Update-custom-field-information-from-patient's-records
 func (h *HTTPClient) UpdatePatientCustomFields(ctx context.Context, patientID, departmentID string, customFields []*CustomFieldValue) error {
 	out := &updatePatientCustomFieldsResponse{}
@@ -727,8 +745,10 @@ type listPatientsMatchingCustomFieldResponse struct {
 	PaginationResponse
 }
 
-// ListPatientsMatchingCustomField - Get list of patients - matching custom-field criteria.
+// ListPatientsMatchingCustomField - Get matching patients based on custom field value
+//
 // GET /v1/{practiceid}/patients/customfields/{customfieldid}/{customfieldvalue}
+//
 // https://docs.athenahealth.com/api/api-ref/patient#Get-list-of-patients---matching-custom-field-criteria
 func (h *HTTPClient) ListPatientsMatchingCustomField(ctx context.Context, opts *ListPatientsMatchingCustomFieldOptions) (*ListPatientsMatchingCustomFieldResult, error) {
 	if opts == nil {
@@ -785,8 +805,10 @@ type createPatientResponse struct {
 	PatientID    string `json:"patientid"`
 }
 
-// CreatePatient - Create new patient record.
+// CreatePatient - Create new patient record
+//
 // POST /v1/{practiceid}/patients
+//
 // https://docs.athenahealth.com/api/api-ref/patient#Create-new-patient-record
 func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptions) (string, error) {
 	if opts == nil {
