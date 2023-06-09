@@ -47,3 +47,14 @@ Use `tokencacher.File` to cache API tokens to a file.
 client := athenahealth.NewHTTPClient(&http.Client{}, practiceID, key, secret).
     WithTokenCacher(tokencacher.NewFile("/tmp/athena_token.json"))
 ```
+
+## X-Request-Id
+
+Clients can obtain the X-Request-Id sent on the request to athena from the
+`X-Request-Id` header on the `http.Request` for use in tracing, logging, and debugging.
+
+```go
+xRequestId := req.Header.Get(athenahealth.XRequestIDHeaderKey))
+```
+
+See the athena [Best Practices](https://docs.athenahealth.com/api/guides/best-practices) guide for more details about X-Request-Id and other recommended  practices.
