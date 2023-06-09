@@ -49,9 +49,11 @@ type listAdminDocumentsResponse struct {
 	PaginationResponse
 }
 
-// ListAdminDocuments - Get admin documents.
+// ListAdminDocuments - Get list of patient's admin documents
+//
 // GET /v1/{practiceid}/patients/{patientid}/documents/admin
-// https://developer.athenahealth.com/docs/read/forms_and_documents/Document_Lists_By_Class#section-19
+//
+// https://docs.athenahealth.com/api/api-ref/document-type-admin-document#Get-list-of-patient's-admin-documents
 func (h *HTTPClient) ListAdminDocuments(ctx context.Context, patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error) {
 	out := &listAdminDocumentsResponse{}
 
@@ -99,8 +101,10 @@ type addDocumentResponse struct {
 	DocumentID string `json:"documentid"`
 }
 
-// AddDocument - Add document to patient's chart.
+// AddDocument - Add document to patient's chart
+//
 // POST /v1/{practiceid}/patients/{patientid}/documents
+//
 // https://docs.athenahealth.com/api/api-ref/document#Add-document-to-patient's-chart
 // Document subclasses from https://docs.athenahealth.com/api/workflows/document-classification-guide:
 // ADMIN_BILLING

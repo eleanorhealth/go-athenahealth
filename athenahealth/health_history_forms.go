@@ -8,7 +8,7 @@ import (
 	"net/url"
 )
 
-// https://docs.athenahealth.com/api/workflows/health-history-forms-checkin
+// https://docs.athenahealth.com/api/workflows/health-history-forms-check-in
 type HealthHistoryFormSection[FieldDataT, QuestionsT any] struct {
 	FieldData           FieldDataT   `json:"fielddata"`
 	PopulatedFrom       string       `json:"populatedfrom"`
@@ -297,7 +297,9 @@ func (h *HealthHistoryForm) UnmarshalJSON(data []byte) error {
 }
 
 // Get specific health history form for given appointment
+//
 // GET /v1/{practiceid}/appointments/{appointmentid}/healthhistoryforms/{formid}
+//
 // https://docs.athenahealth.com/api/api-ref/appointment-health-history-form-documents#Get-specific-health-history-forms-for-given-appointment
 func (h *HTTPClient) GetHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string) (*HealthHistoryForm, error) {
 	hhf := &HealthHistoryForm{}
@@ -316,7 +318,9 @@ type updateHealthHistoryFormResponse struct {
 }
 
 // Update specific health history form for given appointment
+//
 // PUT /v1/{practiceid}/appointments/{appointmentid}/healthhistoryforms/{formid}
+//
 // https://docs.athenahealth.com/api/api-ref/appointment-health-history-form-documents#Update-specific-health-history-forms-for-given-appointment
 func (h *HTTPClient) UpdateHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string, form *HealthHistoryForm) error {
 	if form == nil {
