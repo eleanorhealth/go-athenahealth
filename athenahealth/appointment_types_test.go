@@ -19,8 +19,9 @@ func TestHTTPClient_CreateAppointmentType(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	appointment, err := athenaClient.CreateAppointmentType(context.Background(), nil)
+	createAppointmentTypeResult, err := athenaClient.CreateAppointmentType(context.Background(), nil)
 
-	assert.NotNil(appointment)
+	assert.NotNil(createAppointmentTypeResult)
 	assert.NoError(err)
+	assert.Equal(5, createAppointmentTypeResult.AppointmentTypeID)
 }
