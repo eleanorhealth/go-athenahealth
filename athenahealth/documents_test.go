@@ -107,7 +107,7 @@ func TestHTTPClient_AddPatientCaseDocument(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.NoError(r.ParseForm())
 
-		assert.Equal("1", r.FormValue("autoclose"))
+		assert.Equal("true", r.FormValue("autoclose"))
 		assert.Equal("callback name", r.FormValue("callbackname"))
 		assert.Equal("callback number", r.FormValue("callbacknumber"))
 		assert.Equal("callback number type", r.FormValue("callbacknumbertype"))
@@ -115,7 +115,7 @@ func TestHTTPClient_AddPatientCaseDocument(t *testing.T) {
 		assert.Equal("source", r.FormValue("documentsource"))
 		assert.Equal("subclass", r.FormValue("documentsubclass"))
 		assert.Equal("note", r.FormValue("internalnote"))
-		assert.Equal("1", r.FormValue("outboundonly"))
+		assert.Equal("true", r.FormValue("outboundonly"))
 		assert.Equal("priority", r.FormValue("priority"))
 		assert.Equal("9", r.FormValue("providerid"))
 		assert.Equal("subject", r.FormValue("subject"))

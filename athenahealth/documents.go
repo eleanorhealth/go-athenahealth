@@ -206,7 +206,7 @@ func (h *HTTPClient) AddPatientCaseDocument(ctx context.Context, patientID strin
 		form = url.Values{}
 
 		if opts.AutoClose != nil && *opts.AutoClose {
-			form.Add("autoclose", "1")
+			form.Add("autoclose", "true")
 		}
 
 		if opts.CallbackName != nil {
@@ -231,7 +231,7 @@ func (h *HTTPClient) AddPatientCaseDocument(ctx context.Context, patientID strin
 		}
 
 		if opts.OutboundOnly != nil && *opts.OutboundOnly {
-			form.Add("outboundonly", "1")
+			form.Add("outboundonly", "true")
 		}
 
 		if opts.Priority != nil {

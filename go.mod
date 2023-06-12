@@ -5,7 +5,6 @@ go 1.18
 require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible
 	github.com/alicebob/miniredis v2.5.0+incompatible
-	github.com/davecgh/go-spew v1.1.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-redis/redis_rate/v9 v9.1.2
 	github.com/google/uuid v1.3.0
