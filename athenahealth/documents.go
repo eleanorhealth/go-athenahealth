@@ -176,3 +176,84 @@ func (h *HTTPClient) AddDocument(ctx context.Context, patientID string, opts *Ad
 
 	return res.DocumentID, nil
 }
+
+type AddPatientCaseDocumentOptions struct {
+	AutoClose          *bool
+	CallbackName       *string
+	CallbackNumber     *string
+	CallbackNumberType *string
+	DepartmentID       int
+	DocumentSource     string
+	DocumentSubclass   string
+	InternalNote       *string
+	OutboundOnly       *bool
+	Priority           *string
+	ProviderID         *int
+	Subject            *string
+}
+
+type addPatientCaseDocumentResponse struct {
+	PatientCaseID int `json:"patientcaseid"`
+}
+
+// AddDocument - Add patient case document for a patient
+// POST /v1/{practiceid}/patients/{patientid}/documents/patientcase
+// https://docs.athenahealth.com/api/api-ref/document-type-patient-case#Add-patient-case-document-for-a-patient
+func (h *HTTPClient) AddPatientCaseDocument(ctx context.Context, patientID string, opts *AddPatientCaseDocumentOptions) (int, error) {
+	var form url.Values
+
+	if opts != nil {
+		form = url.Values{}
+
+		if opts.AutoClose != nil && *opts.AutoClose {
+			form.Add("autoclose", "1")
+		}
+
+		if opts.CallbackName != nil {
+			form.Add("callbackname", *opts.CallbackName)
+		}
+
+		if opts.CallbackNumber != nil {
+			form.Add("callbacknumber", *opts.CallbackNumber)
+		}
+
+		if opts.CallbackNumberType != nil {
+			form.Add("callbacknumbertype", *opts.CallbackNumberType)
+		}
+
+		deptID := strconv.Itoa(opts.DepartmentID)
+		form.Add("departmentid", deptID)
+		form.Add("documentsource", opts.DocumentSource)
+		form.Add("documentsubclass", opts.DocumentSubclass)
+
+		if opts.InternalNote != nil {
+			form.Add("internalnote", *opts.InternalNote)
+		}
+
+		if opts.OutboundOnly != nil && *opts.OutboundOnly {
+			form.Add("outboundonly", "1")
+		}
+
+		if opts.Priority != nil {
+			form.Add("priority", *opts.Priority)
+		}
+
+		if opts.ProviderID != nil {
+			providerID := strconv.Itoa(*opts.ProviderID)
+			form.Add("providerid", providerID)
+		}
+
+		if opts.Subject != nil {
+			form.Add("subject", *opts.Subject)
+		}
+	}
+
+	res := &addPatientCaseDocumentResponse{}
+
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/documents/patientcase", patientID), form, res)
+	if err != nil {
+		return 0, err
+	}
+
+	return res.PatientCaseID, nil
+}

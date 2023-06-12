@@ -87,3 +87,63 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 	assert.Equal("100", documentID)
 	assert.NoError(err)
 }
+
+func TestHTTPClient_AddPatientCaseDocument(t *testing.T) {
+	assert := assert.New(t)
+
+	autoClose := true
+	callbackName := "callback name"
+	callbackNumber := "callback number"
+	callbackNumberType := "callback number type"
+	deptID := 5
+	documentSource := "source"
+	documentSubclass := "subclass"
+	internalNote := "note"
+	outboundOnly := true
+	priority := "priority"
+	providerID := 9
+	subject := "subject"
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal("1", r.FormValue("autoclose"))
+		assert.Equal("callback name", r.FormValue("callbackname"))
+		assert.Equal("callback number", r.FormValue("callbacknumber"))
+		assert.Equal("callback number type", r.FormValue("callbacknumbertype"))
+		assert.Equal("5", r.FormValue("departmentid"))
+		assert.Equal("source", r.FormValue("documentsource"))
+		assert.Equal("subclass", r.FormValue("documentsubclass"))
+		assert.Equal("note", r.FormValue("internalnote"))
+		assert.Equal("1", r.FormValue("outboundonly"))
+		assert.Equal("priority", r.FormValue("priority"))
+		assert.Equal("9", r.FormValue("providerid"))
+		assert.Equal("subject", r.FormValue("subject"))
+
+		b, _ := os.ReadFile("./resources/AddPatientCaseDocument.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &AddPatientCaseDocumentOptions{
+		AutoClose:          &autoClose,
+		CallbackName:       &callbackName,
+		CallbackNumber:     &callbackNumber,
+		CallbackNumberType: &callbackNumberType,
+		DepartmentID:       deptID,
+		DocumentSource:     documentSource,
+		DocumentSubclass:   documentSubclass,
+		InternalNote:       &internalNote,
+		OutboundOnly:       &outboundOnly,
+		Priority:           &priority,
+		ProviderID:         &providerID,
+		Subject:            &subject,
+	}
+
+	patientCaseID, err := athenaClient.AddPatientCaseDocument(context.Background(), "123", opts)
+
+	assert.Equal(491696, patientCaseID)
+	assert.NoError(err)
+}
