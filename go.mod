@@ -1,4 +1,4 @@
-module github.com/eleanorhealth/go-athenahealth
+module github.com/copilotiq/go-athenahealth
 
 go 1.18
 
