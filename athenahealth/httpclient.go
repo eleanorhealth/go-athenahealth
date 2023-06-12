@@ -14,10 +14,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
-	"github.com/eleanorhealth/go-athenahealth/athenahealth/stats"
-	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokencacher"
-	"github.com/eleanorhealth/go-athenahealth/athenahealth/tokenprovider"
+	"github.com/copilotiq/go-athenahealth/athenahealth/ratelimiter"
+	"github.com/copilotiq/go-athenahealth/athenahealth/stats"
+	"github.com/copilotiq/go-athenahealth/athenahealth/tokencacher"
+	"github.com/copilotiq/go-athenahealth/athenahealth/tokenprovider"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
 )
