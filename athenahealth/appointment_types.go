@@ -15,11 +15,15 @@ type CreateAppointmentTypeOptions struct {
 	TemplateTypeOnly bool   `json:"templatetypeonly"`
 }
 
+type CreateAppointmentTypeResult struct {
+	AppointmentTypeID int `json:"appointmenttypeid"`
+}
+
 // CreateAppointmentType creates an Appointment Type
 // POST /v1/{practiceid}/appointmenttypes
 // https://docs.athenahealth.com/api/api-ref/appointment-types
-func (h *HTTPClient) CreateAppointmentType(ctx context.Context, opts *CreateAppointmentTypeOptions) (int, error) {
-	out := 0
+func (h *HTTPClient) CreateAppointmentType(ctx context.Context, opts *CreateAppointmentTypeOptions) (*CreateAppointmentTypeResult, error) {
+	out := CreateAppointmentTypeResult{}
 
 	q := url.Values{}
 	if opts != nil {
@@ -45,5 +49,5 @@ func (h *HTTPClient) CreateAppointmentType(ctx context.Context, opts *CreateAppo
 
 	_, err := h.PostForm(ctx, "/appointmenttypes", q, &out)
 
-	return out, err
+	return &out, err
 }
