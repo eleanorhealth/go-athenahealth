@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"strconv"
 )
 
 type CreateAppointmentTypeOptions struct {
@@ -37,10 +38,10 @@ func (h *HTTPClient) CreateAppointmentType(ctx context.Context, opts *CreateAppo
 			q.Set("shortname", opts.ShortName)
 		}
 		if opts.Generic {
-			q.Set("generic", fmt.Sprintf("%v", opts.Generic))
+			q.Set("generic", strconv.FormatBool(opts.Generic))
 		}
 		if opts.Patient {
-			q.Set("patient", fmt.Sprintf("%v", opts.Patient))
+			q.Set("patient", strconv.FormatBool(opts.Patient))
 		}
 		if opts.TemplateTypeOnly {
 			q.Set("templatetypeonly", fmt.Sprintf("%v", opts.TemplateTypeOnly))
