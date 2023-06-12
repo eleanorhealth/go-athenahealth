@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/copilotiq/go-athenahealth/athenahealth/ratelimiter"
+	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
 	"github.com/stretchr/testify/assert"
 )
 

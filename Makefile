@@ -6,9 +6,6 @@ build:
 format:
 	go fmt ./...
 
-replace:
-	go mod edit -replace="github.com/eleanorhealth/go-athenahealth=github.com/copilotiq/go-athenahealth@@$(commit)"
-
 test:
 	go test ./...
 
