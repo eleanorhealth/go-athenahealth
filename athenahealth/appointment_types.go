@@ -8,11 +8,11 @@ import (
 
 type CreateAppointmentTypeOptions struct {
 	Duration         string `json:"duration"`
-	Generic          bool   `json:"generic"`
+	Generic          *bool  `json:"generic"`
 	Name             string `json:"name"`
 	Patient          bool   `json:"patient"`
 	ShortName        string `json:"shortname"`
-	TemplateTypeOnly bool   `json:"templatetypeonly"`
+	TemplateTypeOnly *bool  `json:"templatetypeonly"`
 }
 
 type CreateAppointmentTypeResult struct {
@@ -36,14 +36,14 @@ func (h *HTTPClient) CreateAppointmentType(ctx context.Context, opts *CreateAppo
 		if opts.ShortName != "" {
 			q.Set("shortname", opts.ShortName)
 		}
-		if opts.Generic {
-			q.Set("generic", strconv.FormatBool(opts.Generic))
+		if opts.Generic != nil && *opts.Generic {
+			q.Set("generic", strconv.FormatBool(*opts.Generic))
 		}
 		if opts.Patient {
 			q.Set("patient", strconv.FormatBool(opts.Patient))
 		}
-		if opts.TemplateTypeOnly {
-			q.Set("templatetypeonly", strconv.FormatBool(opts.TemplateTypeOnly))
+		if opts.TemplateTypeOnly != nil && *opts.TemplateTypeOnly {
+			q.Set("templatetypeonly", strconv.FormatBool(*opts.TemplateTypeOnly))
 		}
 	}
 
