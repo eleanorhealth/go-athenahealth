@@ -18,7 +18,7 @@ func TestHTTPClient_CreateAppointmentType(t *testing.T) {
 		Name:             "1001",
 		Patient:          true,
 		ShortName:        "11",
-		TemplateTypeOnly: func() *bool { a := true; return &a }(),
+		TemplateTypeOnly: func() *bool { a := false; return &a }(),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {

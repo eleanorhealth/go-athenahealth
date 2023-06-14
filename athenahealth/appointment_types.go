@@ -30,19 +30,22 @@ func (h *HTTPClient) CreateAppointmentType(ctx context.Context, opts *CreateAppo
 		if opts.Duration != "" {
 			q.Set("duration", opts.Duration)
 		}
+
+		if opts.Generic != nil {
+			q.Set("generic", strconv.FormatBool(*opts.Generic))
+		}
+
 		if opts.Name != "" {
 			q.Set("name", opts.Name)
 		}
+
+		q.Set("patient", strconv.FormatBool(opts.Patient))
+
 		if opts.ShortName != "" {
 			q.Set("shortname", opts.ShortName)
 		}
-		if opts.Generic != nil && *opts.Generic {
-			q.Set("generic", strconv.FormatBool(*opts.Generic))
-		}
-		if opts.Patient {
-			q.Set("patient", strconv.FormatBool(opts.Patient))
-		}
-		if opts.TemplateTypeOnly != nil && *opts.TemplateTypeOnly {
+
+		if opts.TemplateTypeOnly != nil {
 			q.Set("templatetypeonly", strconv.FormatBool(*opts.TemplateTypeOnly))
 		}
 	}
