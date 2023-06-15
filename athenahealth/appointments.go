@@ -621,3 +621,120 @@ func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID int,
 
 	return out[0], nil
 }
+
+type UseExpectedProcedureCodes struct {
+	// The ID of the code
+	ProcedureCode string `json:"procedurecode"`
+	// The description of the code
+	ProcedureCodeDescription string `json:"procedurecodedescription"`
+}
+
+type RescheduleAppointmentResult struct {
+	// Detailed information about the copay for this appointment. Gives more detail than the COPAY field. Note: this information is not yet available in all practices, we are rolling this out slowly.
+	AppointmentCopay string `json:"appointmentcopay"`
+	// Appointment ID of the booked appointment
+	AppointmentID string `json:"appointmentid"`
+	// The athenaNet appointment status. There are several possible statuses. x=cancelled f=future o=open. 2=checked in 3=checked out 4=charge entered
+	AppointmentStatus string `json:"appointmentstatus"`
+	// The practice-friendly (not patient friendly) name for this appointment type. Note that this may not be the same as the booked appointment because of "generic" slots.
+	AppointmentType string `json:"appointmenttype"`
+	// This is the ID for the appointment type. Note that this may not be the same as the booked appointment because of "generic" slots.
+	AppointmentTypeID string `json:"appointmenttypeid"`
+	// As detailed in /claims, if requested.
+	Claims []*Claim `json:"claims"`
+	// Expected copay for this appointment. Based on the appointment type, the patient's primary insurance, and any copays collected. To see the amounts used in this calculated value, see the APPOINTMENTCOPAY fields.
+	Copay string `json:"copay"`
+	// The appointment date.
+	Date string `json:"date"`
+	// The athenaNet department id
+	DepartmentID string `json:"departmentid"`
+	// In minutes
+	Duration int `json:"duration"`
+	// If true, this appointment slot is frozen
+	FrozenYN string `json:"frozenyn"`
+	// This is the raw provider ID that should be used ONLY if using this appointment in conjunction with an HL7 message and with athenahealth's prior guidance. It is only available in some situations.
+	HL7ProviderID int `json:"hl7providerid"`
+	// As detailed in /patients, if requested.
+	Patient string `json:"patient"`
+	// The patient-friendly name for this appointment type. Note that this may not be the same as the booked appointment because of "generic" slots.
+	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
+	// The athenaNet patient ID for this appointment
+	PatientID string `json:"patientid"`
+	// The athenaNet provider ID
+	ProviderID string `json:"providerid"`
+	// The referring provider ID.
+	ReferringProviderID string `json:"referringproviderid"`
+	// The rendering provider ID.
+	RenderingProviderID string `json:"renderingproviderid"`
+	// When an appointment is rescheduled, this is the ID of the replacement appointment.
+	RescheduledAppointmentID string `json:"rescheduledappointmentid"`
+	// The timestamp when the appointment started the check in process. If this is set while an appointment is still in status 'f', it means that the check-in process has begun but is not yet completed.
+	StartCheckIn string `json:"startcheckin"`
+	// As HH:MM (where HH is the 0-23 hour and MM is the minute). This time is local to the department.
+	StartTime string `json:"starttime"`
+	// The timestamp when the check-in process was finished for this appointment.
+	StopCheckIn string `json:"stopcheckin"`
+	// The supervising provider ID.
+	SupervisingProviderID string `json:"supervisingproviderid"`
+	// Urgent flag for the appointment.
+	UrgentYN string `json:"urgentyn"`
+	// An array of expected procedure codes attached to this appointment.
+	UseExpectedProcedureCodes []UseExpectedProcedureCodes `json:"useexpectedprocedurecodes"`
+	// Visit ID of the appointment. The VISITID property will only be visible if the following rollout toggle is ON : COLDEN_APPOINTMENT_WITH_VISITID_MDP_API
+	VisitID string `json:"visitid"`
+}
+
+type RescheduleAppointmentOptions struct {
+	// The appointment cancel reason id for cancellation of the original appointment. Use GET /appointmentcancelreasons to retrieve a list of cancel reasons.
+	AppointmentCancelReasonID *int `json:"appointmentcancelreasonid"`
+	// By default, we allow booking of appointments marked as schedulable via the web. This flag allows you to bypass that restriction for booking.
+	IgnoreSchedulablePermission *bool `json:"ignoreschedulablepermission"`
+	// The appointment ID of the new appointment. (The appointment ID in the URL is the ID of the currently scheduled appointment.)
+	NewAppointmentID int `json:"newappointmentid"`
+	// By default, we create a patient case upon booking an appointment for new patients. Setting this to true bypasses that patient case.
+	NoPatientCase *bool `json:"nopatientcase"`
+	// The athenaNet patient ID.
+	PatientID int `json:"patientid"`
+	// The appointment reason ID to be booked. If not provided, the same reason used in the original appointment will be used.
+	ReasonID *int `json:"reasonid"`
+	// A text explanation why the appointment is being rescheduled
+	RescheduleReason *string `json:"reschedulereason"`
+}
+
+// RescheduleAppointment - Reschedule an existing appointment
+// PUT /v1/{practiceid}/appointments/{appointmentid}/reschedule
+// https://docs.athenahealth.com/api/api-ref/appointment#Reschedule-appointment
+func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID int, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error) {
+	out := RescheduleAppointmentResult{}
+
+	q := url.Values{}
+	if opts != nil {
+		if opts.AppointmentCancelReasonID != nil {
+			q.Set("appointmentcancelreasonid", strconv.Itoa(*opts.AppointmentCancelReasonID))
+		}
+
+		if opts.IgnoreSchedulablePermission != nil {
+			q.Set("ignoreschedulablepermission", strconv.FormatBool(*opts.IgnoreSchedulablePermission))
+		}
+
+		q.Set("newappointmentid", strconv.Itoa(opts.NewAppointmentID))
+
+		if opts.NoPatientCase != nil {
+			q.Set("nopatientcase", strconv.FormatBool(*opts.NoPatientCase))
+		}
+
+		q.Set("patientid", strconv.Itoa(opts.PatientID))
+
+		if opts.ReasonID != nil {
+			q.Set("reasonid", strconv.Itoa(*opts.ReasonID))
+		}
+
+		if opts.RescheduleReason != nil {
+			q.Set("reschedulereason", *opts.RescheduleReason)
+		}
+	}
+
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%d/reschedule", apptID), q, &out)
+
+	return &out, err
+}
