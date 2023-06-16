@@ -705,7 +705,7 @@ type RescheduleAppointmentOptions struct {
 // PUT /v1/{practiceid}/appointments/{appointmentid}/reschedule
 // https://docs.athenahealth.com/api/api-ref/appointment#Reschedule-appointment
 func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID int, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error) {
-	out := RescheduleAppointmentResult{}
+	var out []*RescheduleAppointmentResult
 
 	q := url.Values{}
 	if opts != nil {
@@ -736,5 +736,9 @@ func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID int, opts
 
 	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%d/reschedule", apptID), q, &out)
 
-	return &out, err
+	if err != nil {
+		return nil, err
+	}
+
+	return out[0], nil
 }
