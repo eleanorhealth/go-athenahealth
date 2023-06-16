@@ -1,43 +1,45 @@
-{
-  "appointmentcopay": "25.00",
-  "appointmentid": "APT12345",
-  "appointmentstatus": "f",
-  "appointmenttype": "Checkup",
-  "appointmenttypeid": "ATT12345",
-  "claims": [
-    {
-      "claimid": "CL12345",
-      "procedures": [
-        {
-          "procedurecode": "PC12345",
-          "proceduredescription": "Checkup"
-        }
-      ]
-    }
-  ],
-  "copay": "25.00",
-  "date": "06/20/2023",
-  "departmentid": "DPT12345",
-  "duration": 30,
-  "frozenyn": "true",
-  "hl7providerid": 764012,
-  "patient": "John Doe",
-  "patientappointmenttypename": "Checkup",
-  "patientid": "P12345",
-  "providerid": "PR12345",
-  "referringproviderid": "RFP12345",
-  "renderingproviderid": "RNP12345",
-  "rescheduledappointmentid": "APT98765",
-  "startcheckin": "15:00",
-  "starttime": "15:30",
-  "stopcheckin": "15:10",
-  "supervisingproviderid": "SPP12345",
-  "urgentyn": "true",
-  "useexpectedprocedurecodes": [
-    {
-      "procedurecode": "PROC12345",
-      "procedurecodedescription": "Checkup"
-    }
-  ],
-  "visitid": "V12345"
-}
+[
+  {
+    "appointmentcopay": "25.00",
+    "appointmentid": "APT12345",
+    "appointmentstatus": "f",
+    "appointmenttype": "Checkup",
+    "appointmenttypeid": "ATT12345",
+    "claims": [
+      {
+        "claimid": "CL12345",
+        "procedures": [
+          {
+            "procedurecode": "PC12345",
+            "proceduredescription": "Checkup"
+          }
+        ]
+      }
+    ],
+    "copay": "25.00",
+    "date": "06/20/2023",
+    "departmentid": "DPT12345",
+    "duration": 30,
+    "frozenyn": "true",
+    "hl7providerid": 764012,
+    "patient": "John Doe",
+    "patientappointmenttypename": "Checkup",
+    "patientid": "P12345",
+    "providerid": "PR12345",
+    "referringproviderid": "RFP12345",
+    "renderingproviderid": "RNP12345",
+    "rescheduledappointmentid": "APT98765",
+    "startcheckin": "15:00",
+    "starttime": "15:30",
+    "stopcheckin": "15:10",
+    "supervisingproviderid": "SPP12345",
+    "urgentyn": "true",
+    "useexpectedprocedurecodes": [
+      {
+        "procedurecode": "PROC12345",
+        "procedurecodedescription": "Checkup"
+      }
+    ],
+    "visitid": "V12345"
+  }
+]
