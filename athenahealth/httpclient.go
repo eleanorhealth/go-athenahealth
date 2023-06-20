@@ -386,6 +386,32 @@ func (h *HTTPClient) PostForm(ctx context.Context, path string, v url.Values, ou
 	return h.request(ctx, http.MethodPost, path, body, headers, out)
 }
 
+func (h *HTTPClient) PostFormReader(ctx context.Context, path string, fue *formURLEncoder, out interface{}) (*http.Response, error) {
+	var body io.Reader
+	var headers = http.Header{}
+
+	if fue != nil {
+		pr, pw := io.Pipe()
+
+		go func() {
+			err := fue.Encode(pw)
+			if err != nil {
+				h.logger.Error().Err(err).Msg("encoding url form")
+			}
+
+			err = pw.Close()
+			if err != nil {
+				h.logger.Error().Err(err).Msg("closing pipe writer")
+			}
+		}()
+
+		body = pr
+		headers.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
+
+	return h.request(ctx, http.MethodPost, path, body, headers, out)
+}
+
 func (h *HTTPClient) Put(ctx context.Context, path string, body io.Reader, out interface{}) (*http.Response, error) {
 	return h.request(ctx, http.MethodPut, path, body, nil, out)
 }

@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"net/http"
@@ -83,6 +84,56 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 	}
 
 	documentID, err := athenaClient.AddDocument(context.Background(), "123", opts)
+
+	assert.Equal("100", documentID)
+	assert.NoError(err)
+}
+
+func TestHTTPClient_AddDocumentReader(t *testing.T) {
+	assert := assert.New(t)
+
+	actionNote := "test action note"
+	apptID := 1
+	attachmentContents := []byte("test attachment contents")
+	autoclose := "true"
+	deptID := 2
+	documentSubclass := "ADMIN_CONSENT"
+	internalNote := "test internal note"
+	providerID := 3
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Contains(r.URL.Path, "/patients/123/")
+
+		assert.Equal(actionNote, r.FormValue("actionnote"))
+		assert.Equal(strconv.Itoa(apptID), r.FormValue("appointmentid"))
+		assert.Equal(base64.StdEncoding.EncodeToString([]byte(attachmentContents)), r.FormValue("attachmentcontents"))
+		assert.Equal(autoclose, r.FormValue("autoclose"))
+		assert.Equal(strconv.Itoa(deptID), r.FormValue("departmentid"))
+		assert.Equal(documentSubclass, r.FormValue("documentsubclass"))
+		assert.Equal(internalNote, r.FormValue("internalnote"))
+		assert.Equal(strconv.Itoa(providerID), r.FormValue("providerid"))
+
+		b, _ := os.ReadFile("./resources/AddDocument.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &AddDocumentReaderOptions{
+		ActionNote:         &actionNote,
+		AppointmentID:      &apptID,
+		AttachmentContents: bytes.NewReader(attachmentContents),
+		AutoClose:          &autoclose,
+		DepartmentID:       &deptID,
+		DocumentSubclass:   documentSubclass,
+		InternalNote:       &internalNote,
+		ProviderID:         &providerID,
+	}
+
+	documentID, err := athenaClient.AddDocumentReader(context.Background(), "123", opts)
 
 	assert.Equal("100", documentID)
 	assert.NoError(err)
