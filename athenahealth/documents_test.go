@@ -102,7 +102,7 @@ func TestHTTPClient_AddClinicalDocument(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.NoError(r.ParseForm())
 
-		assert.Contains(r.URL.Path, "/patients/123/documents/clinicaldocument")
+		assert.Equal(r.URL.Path, "/patients/123/documents/clinicaldocument")
 
 		assert.Equal(base64.StdEncoding.EncodeToString([]byte(attachmentContents)), r.FormValue("attachmentcontents"))
 		assert.Equal(autoclose, r.FormValue("autoclose"))
@@ -122,16 +122,17 @@ func TestHTTPClient_AddClinicalDocument(t *testing.T) {
 	opts := &AddClinicalDocumentOptions{
 		AttachmentContents: attachmentContents,
 		AutoClose:          &autoclose,
-		DepartmentID:       &deptID,
+		DepartmentID:       deptID,
 		DocumentSubclass:   documentSubclass,
 		InternalNote:       &internalNote,
 		ProviderID:         &providerID,
 		DocumentTypeID:     &documentTypeId,
 	}
 
-	clinicalDocumentID, err := athenaClient.AddClinicalDocument(context.Background(), "123", opts)
+	res, err := athenaClient.AddClinicalDocument(context.Background(), "123", opts)
 
-	assert.Equal(101, clinicalDocumentID)
+	assert.Equal(101, res.ClinicalDocumentID)
+	assert.True(res.Success)
 	assert.NoError(err)
 }
 

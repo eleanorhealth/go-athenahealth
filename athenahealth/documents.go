@@ -182,25 +182,42 @@ func (h *HTTPClient) AddDocument(ctx context.Context, patientID string, opts *Ad
 }
 
 type AddClinicalDocumentOptions struct {
+	// The file contents that will be attached to this document. File must be Base64 encoded.
 	AttachmentContents []byte
 	AttachmentType     *string
 	AutoClose          *string
+	// The ID of the external provider/lab/pharmacy associated the document.
 	ClinicalProviderID *int
-	DepartmentID       *int
-	DocumentData       *string
-	DocumentSubclass   string
-	DocumentTypeID     *int
-	EntityID           *int
-	EntityType         *string
-	InternalNote       *string
-	ObservationDate    *string
-	ObservationTime    *string
-	OriginalFileName   *string
-	ProviderID         *int
+	// The athenaNet department ID associated with the uploaded document. Mandatory.
+	DepartmentID int
+	// Text data stored with document
+	DocumentData *string
+	// Subclasses for CLINICALDOCUMENT documents
+	DocumentSubclass string
+	// A specific document type identifier.
+	DocumentTypeID *int
+	// Identifier of entity creating the document. entitytype is required while passing entityid.
+	EntityID *int
+	// Type of entity creating the document. entityid is required while passing entitytype
+	EntityType *string
+	// An internal note for the provider or staff. Updating this will append to any previous notes.
+	InternalNote *string
+	// The date an observation was made (mm/dd/yyyy).
+	ObservationDate *string
+	// The time an observation was made (hh24:mi). 24 hour time.
+	ObservationTime *string
+	// The original file name of this document without the file extension. Filename should not exceed 200 characters.
+	OriginalFileName *string
+	// Priority of this result. 1 is high; 2 is normal.
+	Priority *string
+	// The ID of the ordering provider.
+	ProviderID *int
 }
 
 type AddClinicalDocumentResponse struct {
-	ClinicalDocumentID int `json:"clinicaldocumentid"`
+	ClinicalDocumentID int    `json:"clinicaldocumentid"`
+	ErrorMessage       string `json:"errormessage"`
+	Success            bool   `json:"success"`
 }
 
 // AddClinicalDocument - Add clinical document to patient's chart
@@ -208,7 +225,7 @@ type AddClinicalDocumentResponse struct {
 // POST /v1/{practiceid}/patients/{patientid}/documents/clinicaldocument
 //
 // https://docs.athenahealth.com/api/api-ref/document-type-clinical-document#Add-clinical-document-to-patient's-chart
-func (h *HTTPClient) AddClinicalDocument(ctx context.Context, patientID string, opts *AddClinicalDocumentOptions) (int, error) {
+func (h *HTTPClient) AddClinicalDocument(ctx context.Context, patientID string, opts *AddClinicalDocumentOptions) (*AddClinicalDocumentResponse, error) {
 	var form url.Values
 
 	if opts != nil {
@@ -225,14 +242,10 @@ func (h *HTTPClient) AddClinicalDocument(ctx context.Context, patientID string, 
 		}
 
 		if opts.ClinicalProviderID != nil {
-			clinicalProviderID := strconv.Itoa(*opts.ClinicalProviderID)
-			form.Add("clinicalproviderid", clinicalProviderID)
+			form.Add("clinicalproviderid", strconv.Itoa(*opts.ClinicalProviderID))
 		}
 
-		if opts.DepartmentID != nil {
-			deptID := strconv.Itoa(*opts.DepartmentID)
-			form.Add("departmentid", deptID)
-		}
+		form.Add("departmentid", strconv.Itoa(opts.DepartmentID))
 
 		if opts.DocumentData != nil {
 			form.Add("documentdata", *opts.DocumentData)
@@ -241,13 +254,11 @@ func (h *HTTPClient) AddClinicalDocument(ctx context.Context, patientID string, 
 		form.Add("documentsubclass", opts.DocumentSubclass)
 
 		if opts.DocumentTypeID != nil {
-			documentTypeID := strconv.Itoa(*opts.DocumentTypeID)
-			form.Add("documenttypeid", documentTypeID)
+			form.Add("documenttypeid", strconv.Itoa(*opts.DocumentTypeID))
 		}
 
 		if opts.EntityID != nil {
-			entityID := strconv.Itoa(*opts.EntityID)
-			form.Add("entityid", entityID)
+			form.Add("entityid", strconv.Itoa(*opts.EntityID))
 		}
 
 		if opts.EntityType != nil {
@@ -270,20 +281,23 @@ func (h *HTTPClient) AddClinicalDocument(ctx context.Context, patientID string, 
 			form.Add("originalfilename", *opts.OriginalFileName)
 		}
 
+		if opts.Priority != nil {
+			form.Add("priority", *opts.Priority)
+		}
+
 		if opts.ProviderID != nil {
-			providerID := strconv.Itoa(*opts.ProviderID)
-			form.Add("providerid", providerID)
+			form.Add("providerid", strconv.Itoa(*opts.ProviderID))
 		}
 	}
 
-	res := &addClinicalDocumentResponse{}
+	res := &AddClinicalDocumentResponse{}
 
 	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/documents/clinicaldocument", patientID), form, res)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	return res.ClinicalDocumentID, nil
+	return res, nil
 }
 
 type AddPatientCaseDocumentOptions struct {
