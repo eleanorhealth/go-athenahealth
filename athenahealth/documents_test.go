@@ -88,6 +88,53 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestHTTPClient_AddClinicalDocument(t *testing.T) {
+	assert := assert.New(t)
+
+	attachmentContents := []byte("test attachment contents")
+	autoclose := "true"
+	deptID := 2
+	documentSubclass := "CLINICALDOCUMENT"
+	internalNote := "test internal note"
+	providerID := 3
+	documentTypeId := 4
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Contains(r.URL.Path, "/patients/123/documents/clinicaldocument")
+
+		assert.Equal(base64.StdEncoding.EncodeToString([]byte(attachmentContents)), r.FormValue("attachmentcontents"))
+		assert.Equal(autoclose, r.FormValue("autoclose"))
+		assert.Equal(strconv.Itoa(deptID), r.FormValue("departmentid"))
+		assert.Equal(documentSubclass, r.FormValue("documentsubclass"))
+		assert.Equal(internalNote, r.FormValue("internalnote"))
+		assert.Equal(strconv.Itoa(providerID), r.FormValue("providerid"))
+		assert.Equal(strconv.Itoa(documentTypeId), r.FormValue("documenttypeid"))
+
+		b, _ := os.ReadFile("./resources/AddClinicalDocument.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &AddClinicalDocumentOptions{
+		AttachmentContents: attachmentContents,
+		AutoClose:          &autoclose,
+		DepartmentID:       &deptID,
+		DocumentSubclass:   documentSubclass,
+		InternalNote:       &internalNote,
+		ProviderID:         &providerID,
+		DocumentTypeID:     &documentTypeId,
+	}
+
+	clinicalDocumentID, err := athenaClient.AddClinicalDocument(context.Background(), "123", opts)
+
+	assert.Equal(101, clinicalDocumentID)
+	assert.NoError(err)
+}
+
 func TestHTTPClient_AddPatientCaseDocument(t *testing.T) {
 	assert := assert.New(t)
 

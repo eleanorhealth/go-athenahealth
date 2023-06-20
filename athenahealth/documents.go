@@ -181,6 +181,111 @@ func (h *HTTPClient) AddDocument(ctx context.Context, patientID string, opts *Ad
 	return res.DocumentID, nil
 }
 
+type AddClinicalDocumentOptions struct {
+	AttachmentContents []byte
+	AttachmentType     *string
+	AutoClose          *string
+	ClinicalProviderID *int
+	DepartmentID       *int
+	DocumentData       *string
+	DocumentSubclass   string
+	DocumentTypeID     *int
+	EntityID           *int
+	EntityType         *string
+	InternalNote       *string
+	ObservationDate    *string
+	ObservationTime    *string
+	OriginalFileName   *string
+	ProviderID         *int
+}
+
+type addClinicalDocumentResponse struct {
+	ClinicalDocumentID int `json:"clinicaldocumentid"`
+}
+
+// AddClinicalDocument - Add clinical document to patient's chart
+//
+// POST /v1/{practiceid}/patients/{patientid}/documents/clinicaldocument
+//
+// https://docs.athenahealth.com/api/api-ref/document-type-clinical-document#Add-clinical-document-to-patient's-chart
+func (h *HTTPClient) AddClinicalDocument(ctx context.Context, patientID string, opts *AddClinicalDocumentOptions) (int, error) {
+	var form url.Values
+
+	if opts != nil {
+		form = url.Values{}
+
+		form.Add("attachmentcontents", base64.StdEncoding.EncodeToString(opts.AttachmentContents))
+
+		if opts.AttachmentType != nil {
+			form.Add("attachmenttype", *opts.AttachmentType)
+		}
+
+		if opts.AutoClose != nil {
+			form.Add("autoclose", *opts.AutoClose)
+		}
+
+		if opts.ClinicalProviderID != nil {
+			clinicalProviderID := strconv.Itoa(*opts.ClinicalProviderID)
+			form.Add("clinicalproviderid", clinicalProviderID)
+		}
+
+		if opts.DepartmentID != nil {
+			deptID := strconv.Itoa(*opts.DepartmentID)
+			form.Add("departmentid", deptID)
+		}
+
+		if opts.DocumentData != nil {
+			form.Add("documentdata", *opts.DocumentData)
+		}
+
+		form.Add("documentsubclass", opts.DocumentSubclass)
+
+		if opts.DocumentTypeID != nil {
+			documentTypeID := strconv.Itoa(*opts.DocumentTypeID)
+			form.Add("documenttypeid", documentTypeID)
+		}
+
+		if opts.EntityID != nil {
+			entityID := strconv.Itoa(*opts.EntityID)
+			form.Add("entityid", entityID)
+		}
+
+		if opts.EntityType != nil {
+			form.Add("entitytype", *opts.EntityType)
+		}
+
+		if opts.InternalNote != nil {
+			form.Add("internalnote", *opts.InternalNote)
+		}
+
+		if opts.ObservationDate != nil {
+			form.Add("observationdate", *opts.ObservationDate)
+		}
+
+		if opts.ObservationTime != nil {
+			form.Add("observationtime", *opts.ObservationTime)
+		}
+
+		if opts.OriginalFileName != nil {
+			form.Add("originalfilename", *opts.OriginalFileName)
+		}
+
+		if opts.ProviderID != nil {
+			providerID := strconv.Itoa(*opts.ProviderID)
+			form.Add("providerid", providerID)
+		}
+	}
+
+	res := &addClinicalDocumentResponse{}
+
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/documents/clinicaldocument", patientID), form, res)
+	if err != nil {
+		return 0, err
+	}
+
+	return res.ClinicalDocumentID, nil
+}
+
 type AddPatientCaseDocumentOptions struct {
 	AutoClose          *bool
 	CallbackName       *string
