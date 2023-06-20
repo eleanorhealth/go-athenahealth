@@ -199,7 +199,7 @@ type AddClinicalDocumentOptions struct {
 	ProviderID         *int
 }
 
-type addClinicalDocumentResponse struct {
+type AddClinicalDocumentResponse struct {
 	ClinicalDocumentID int `json:"clinicaldocumentid"`
 }
 
