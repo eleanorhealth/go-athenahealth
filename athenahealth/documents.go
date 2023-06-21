@@ -181,6 +181,125 @@ func (h *HTTPClient) AddDocument(ctx context.Context, patientID string, opts *Ad
 	return res.DocumentID, nil
 }
 
+type AddClinicalDocumentOptions struct {
+	// The file contents that will be attached to this document. File must be Base64 encoded.
+	AttachmentContents []byte
+	AttachmentType     *string
+	AutoClose          *string
+	// The ID of the external provider/lab/pharmacy associated the document.
+	ClinicalProviderID *int
+	// The athenaNet department ID associated with the uploaded document. Mandatory.
+	DepartmentID int
+	// Text data stored with document
+	DocumentData *string
+	// Subclasses for CLINICALDOCUMENT documents
+	DocumentSubclass string
+	// A specific document type identifier.
+	DocumentTypeID *int
+	// Identifier of entity creating the document. entitytype is required while passing entityid.
+	EntityID *int
+	// Type of entity creating the document. entityid is required while passing entitytype
+	EntityType *string
+	// An internal note for the provider or staff. Updating this will append to any previous notes.
+	InternalNote *string
+	// The date an observation was made (mm/dd/yyyy).
+	ObservationDate *string
+	// The time an observation was made (hh24:mi). 24 hour time.
+	ObservationTime *string
+	// The original file name of this document without the file extension. Filename should not exceed 200 characters.
+	OriginalFileName *string
+	// Priority of this result. 1 is high; 2 is normal.
+	Priority *string
+	// The ID of the ordering provider.
+	ProviderID *int
+}
+
+type AddClinicalDocumentResponse struct {
+	ClinicalDocumentID int    `json:"clinicaldocumentid"`
+	ErrorMessage       string `json:"errormessage"`
+	Success            bool   `json:"success"`
+}
+
+// AddClinicalDocument - Add clinical document to patient's chart
+//
+// POST /v1/{practiceid}/patients/{patientid}/documents/clinicaldocument
+//
+// https://docs.athenahealth.com/api/api-ref/document-type-clinical-document#Add-clinical-document-to-patient's-chart
+func (h *HTTPClient) AddClinicalDocument(ctx context.Context, patientID string, opts *AddClinicalDocumentOptions) (*AddClinicalDocumentResponse, error) {
+	var form url.Values
+
+	if opts != nil {
+		form = url.Values{}
+
+		form.Add("attachmentcontents", base64.StdEncoding.EncodeToString(opts.AttachmentContents))
+
+		if opts.AttachmentType != nil {
+			form.Add("attachmenttype", *opts.AttachmentType)
+		}
+
+		if opts.AutoClose != nil {
+			form.Add("autoclose", *opts.AutoClose)
+		}
+
+		if opts.ClinicalProviderID != nil {
+			form.Add("clinicalproviderid", strconv.Itoa(*opts.ClinicalProviderID))
+		}
+
+		form.Add("departmentid", strconv.Itoa(opts.DepartmentID))
+
+		if opts.DocumentData != nil {
+			form.Add("documentdata", *opts.DocumentData)
+		}
+
+		form.Add("documentsubclass", opts.DocumentSubclass)
+
+		if opts.DocumentTypeID != nil {
+			form.Add("documenttypeid", strconv.Itoa(*opts.DocumentTypeID))
+		}
+
+		if opts.EntityID != nil {
+			form.Add("entityid", strconv.Itoa(*opts.EntityID))
+		}
+
+		if opts.EntityType != nil {
+			form.Add("entitytype", *opts.EntityType)
+		}
+
+		if opts.InternalNote != nil {
+			form.Add("internalnote", *opts.InternalNote)
+		}
+
+		if opts.ObservationDate != nil {
+			form.Add("observationdate", *opts.ObservationDate)
+		}
+
+		if opts.ObservationTime != nil {
+			form.Add("observationtime", *opts.ObservationTime)
+		}
+
+		if opts.OriginalFileName != nil {
+			form.Add("originalfilename", *opts.OriginalFileName)
+		}
+
+		if opts.Priority != nil {
+			form.Add("priority", *opts.Priority)
+		}
+
+		if opts.ProviderID != nil {
+			form.Add("providerid", strconv.Itoa(*opts.ProviderID))
+		}
+	}
+
+	res := &AddClinicalDocumentResponse{}
+
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/documents/clinicaldocument", patientID), form, res)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 type AddPatientCaseDocumentOptions struct {
 	AutoClose          *bool
 	CallbackName       *string
