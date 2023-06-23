@@ -33,9 +33,11 @@ type Provider struct {
 	SupervisingProviderUsername string       `json:"supervisingproviderusername"`
 }
 
-// GetProvider - Get details about a single provider.
+// GetProvider - Get information for the specific provider
+//
 // GET /v1/{practiceid}/providers/{providerid}
-// https://developer.athenahealth.com/docs/read/administrative/Providers#section-3
+//
+// https://docs.athenahealth.com/api/api-ref/provider#Get-information-of-given-provider
 func (h *HTTPClient) GetProvider(ctx context.Context, id string) (*Provider, error) {
 	out := []*Provider{}
 
@@ -61,9 +63,11 @@ type listChangedProvidersResponse struct {
 	ChangedProviders []*Provider `json:"providers"`
 }
 
-// ListChangedProviders - A list of all changes to providers.
+// ListChangedProviders - A list of all changes to providers
+//
 // GET /v1/{practiceid}/providers/changed
-// https://developer.athenahealth.com/docs/read/administrative/Providers#section-4
+//
+// https://docs.athenahealth.com/api/api-ref/provider#Get-list-of-changes-in-providers
 func (h *HTTPClient) ListChangedProviders(ctx context.Context, opts *ListChangedProviderOptions) ([]*Provider, error) {
 	out := &listChangedProvidersResponse{}
 
@@ -109,9 +113,11 @@ type ListProvidersResponse struct {
 	PaginationResponse
 }
 
-// ListProviders - List of all providers available for this practice (with details)
+// ListProviders - List all providers available in a specific practice
+//
 // GET /v1/{practiceid}/providers
-// https://developer.athenahealth.com/docs/read/administrative/Providers#section-1
+//
+// https://docs.athenahealth.com/api/api-ref/provider-reference#Get-list-of-all-providers
 func (h *HTTPClient) ListProviders(ctx context.Context, opts *ListProvidersOptions) (*ListProvidersResult, error) {
 	out := &ListProvidersResponse{}
 

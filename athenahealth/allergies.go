@@ -12,8 +12,10 @@ type Allergy struct {
 	AllergyID    int    `json:"allergyid"`
 }
 
-// SearchAllergies - Retrieves a list of allergies matching the search criteria.
+// SearchAllergies - Retrieves a list of allergies matching the search criteria
+//
 // GET /v1/{practiceid}/reference/allergies
+//
 // https://docs.athenahealth.com/api/api-ref/allergy#Search-for-available-allergies
 func (h *HTTPClient) SearchAllergies(ctx context.Context, searchVal string) ([]*Allergy, error) {
 	out := []*Allergy{}

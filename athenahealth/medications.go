@@ -83,7 +83,9 @@ type SearchMedicationsResult struct {
 }
 
 // ListMedications - Retrieves a list of medications for a given patient
+//
 // GET /v1/{practiceid}/chart/{patientid}/medications
+//
 // https://docs.athenahealth.com/api/api-ref/medication#Get-patient's-medication-list
 func (h *HTTPClient) ListMedications(ctx context.Context, patientID string, opts *ListMedicationsOptions) (*ListMedicationsResult, error) {
 	out := &ListMedicationsResult{}
@@ -107,8 +109,10 @@ func (h *HTTPClient) ListMedications(ctx context.Context, patientID string, opts
 	return out, nil
 }
 
-// SearchMedications - Retrieves a list of medications for a given search parameters.
+// SearchMedications - Retrieves a list of medications for a given search parameters
+//
 // GET /v1/{practiceid}/reference/medications
+//
 // https://docs.athenahealth.com/api/api-ref/medication#Search-for-available-medications
 func (h *HTTPClient) SearchMedications(ctx context.Context, searchVal string) ([]*SearchMedicationsResult, error) {
 	out := []*SearchMedicationsResult{}

@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -298,4 +299,67 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 	_, err := athenaClient.BookAppointment(context.Background(), patientID, apptID, opts)
 
 	assert.NoError(err)
+}
+
+func TestHTTPClient_RescheduleAppointment(t *testing.T) {
+	assert := assert.New(t)
+
+	opts := &RescheduleAppointmentOptions{
+		AppointmentCancelReasonID:   func() *int { a := 2; return &a }(),
+		IgnoreSchedulablePermission: func() *bool { a := true; return &a }(),
+		NewAppointmentID:            123,
+		NoPatientCase:               func() *bool { a := false; return &a }(),
+		PatientID:                   456,
+		ReasonID:                    func() *int { a := 3; return &a }(),
+		RescheduleReason:            func() *string { a := "Other commitments"; return &a }(),
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("appointmentcancelreasonid"), strconv.Itoa(*opts.AppointmentCancelReasonID))
+		assert.Equal(r.Form.Get("ignoreschedulablepermission"), strconv.FormatBool(*opts.IgnoreSchedulablePermission))
+		assert.Equal(r.Form.Get("newappointmentid"), strconv.Itoa(opts.NewAppointmentID))
+		assert.Equal(r.Form.Get("nopatientcase"), strconv.FormatBool(*opts.NoPatientCase))
+		assert.Equal(r.Form.Get("patientid"), strconv.Itoa(opts.PatientID))
+		assert.Equal(r.Form.Get("reasonid"), strconv.Itoa(*opts.ReasonID))
+		assert.Equal(r.Form.Get("reschedulereason"), *opts.RescheduleReason)
+		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/%d/reschedule", 998877))
+
+		b, _ := os.ReadFile("./resources/RescheduleAppointment.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	rescheduleAppointmentResult, err := athenaClient.RescheduleAppointment(context.Background(), 998877, opts)
+	assert.NotNil(rescheduleAppointmentResult)
+	assert.NoError(err)
+	assert.Equal("25.00", rescheduleAppointmentResult.AppointmentCopay)
+	assert.Equal("APT12345", rescheduleAppointmentResult.AppointmentID)
+	assert.Equal("f", rescheduleAppointmentResult.AppointmentStatus)
+	assert.Equal("Checkup", rescheduleAppointmentResult.AppointmentType)
+	assert.Equal("ATT12345", rescheduleAppointmentResult.AppointmentTypeID)
+	assert.Len(rescheduleAppointmentResult.Claims, 1)
+	assert.Equal("25.00", rescheduleAppointmentResult.Copay)
+	assert.Equal("06/20/2023", rescheduleAppointmentResult.Date)
+	assert.Equal("DPT12345", rescheduleAppointmentResult.DepartmentID)
+	assert.Equal(30, rescheduleAppointmentResult.Duration)
+	assert.Equal("true", rescheduleAppointmentResult.FrozenYN)
+	assert.Equal(764012, rescheduleAppointmentResult.HL7ProviderID)
+	assert.Equal("John Doe", rescheduleAppointmentResult.Patient)
+	assert.Equal("Checkup", rescheduleAppointmentResult.PatientAppointmentTypeName)
+	assert.Equal("P12345", rescheduleAppointmentResult.PatientID)
+	assert.Equal("PR12345", rescheduleAppointmentResult.ProviderID)
+	assert.Equal("RFP12345", rescheduleAppointmentResult.ReferringProviderID)
+	assert.Equal("RNP12345", rescheduleAppointmentResult.RenderingProviderID)
+	assert.Equal("APT98765", rescheduleAppointmentResult.RescheduledAppointmentID)
+	assert.Equal("15:00", rescheduleAppointmentResult.StartCheckIn)
+	assert.Equal("15:30", rescheduleAppointmentResult.StartTime)
+	assert.Equal("15:10", rescheduleAppointmentResult.StopCheckIn)
+	assert.Equal("SPP12345", rescheduleAppointmentResult.SupervisingProviderID)
+	assert.Equal("true", rescheduleAppointmentResult.UrgentYN)
+	assert.Len(rescheduleAppointmentResult.UseExpectedProcedureCodes, 1)
+	assert.Equal("V12345", rescheduleAppointmentResult.VisitID)
 }

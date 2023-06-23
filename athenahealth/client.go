@@ -25,6 +25,10 @@ type Client interface {
 	ListChangedAppointments(context.Context, *ListChangedAppointmentsOptions) ([]*BookedAppointment, error)
 	ListOpenAppointmentSlots(ctx context.Context, departmentID int, opts *ListOpenAppointmentSlotOptions) (*ListOpenAppointmentSlotsResult, error)
 	BookAppointment(ctx context.Context, patientID, apptID int, opts *BookAppointmentOptions) (*BookedAppointment, error)
+	RescheduleAppointment(ctx context.Context, apptID int, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error)
+
+	CreateAppointmentSlot(ctx context.Context, opts *CreateAppointmentSlotOptions) (*CreateAppointmentSlotResult, error)
+	CreateAppointmentType(ctx context.Context, options *CreateAppointmentTypeOptions) (*CreateAppointmentTypeResult, error)
 
 	ListAppointmentCustomFields(context.Context) ([]*AppointmentCustomField, error)
 
@@ -53,6 +57,7 @@ type Client interface {
 	ListAdminDocuments(ctx context.Context, patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error)
 	AddDocument(ctx context.Context, patientID string, opts *AddDocumentOptions) (string, error)
 	AddDocumentReader(ctx context.Context, patientID string, opts *AddDocumentReaderOptions) (string, error)
+	AddPatientCaseDocument(ctx context.Context, patientID string, opts *AddPatientCaseDocumentOptions) (int, error)
 
 	ListPatientsMatchingCustomField(ctx context.Context, opts *ListPatientsMatchingCustomFieldOptions) (*ListPatientsMatchingCustomFieldResult, error)
 

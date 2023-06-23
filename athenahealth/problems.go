@@ -72,8 +72,10 @@ type listProblemsResponse struct {
 	Problems []*Problem `json:"problems"`
 }
 
-// ListProblems - Gets patient problems.
+// ListProblems - List patient problems
+//
 // GET /v1/{practiceid}/chart/{patientid}/problems
+//
 // https://docs.athenahealth.com/api/api-ref/problems#Get-patient's-problem-list
 func (h *HTTPClient) ListProblems(ctx context.Context, patientID string, opts *ListProblemsOptions) ([]*Problem, error) {
 	out := &listProblemsResponse{}
@@ -114,7 +116,9 @@ type listChangedProblemsResponse struct {
 }
 
 // ListChangedProblems - Gets changed problems records
+//
 // GET /v1/{practiceid}/chart/healthhistory/problems/changed
+//
 // https://docs.athenahealth.com/api/api-ref/problems#Get-list-of-changes-in-problems-based-on-subscribed-events
 func (h *HTTPClient) ListChangedProblems(ctx context.Context, opts *ListChangedProblemsOptions) ([]*ChangedProblem, error) {
 	out := &listChangedProblemsResponse{}

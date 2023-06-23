@@ -23,7 +23,9 @@ type AddPatientDriversLicenseDocumentResult struct {
 }
 
 // AddPatientDriversLicenseDocument - Create a record of patient's driving license document
+//
 // POST /v1/{practiceid}/patients/{patientid}/driverslicense
+//
 // https://docs.athenahealth.com/api/api-ref/drivers-license#Add-patient's-driver's-license-document
 func (h *HTTPClient) AddPatientDriversLicenseDocument(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentOptions) (*AddPatientDriversLicenseDocumentResult, error) {
 	if opts == nil {
