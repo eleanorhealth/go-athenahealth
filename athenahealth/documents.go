@@ -397,6 +397,127 @@ func (h *HTTPClient) AddClinicalDocument(ctx context.Context, patientID string, 
 	return res, nil
 }
 
+type AddClinicalDocumentReaderOptions struct {
+	// The file contents that will be attached to this document. File must be Base64 encoded.
+	AttachmentContents io.Reader
+	AttachmentType     *string
+	AutoClose          *string
+	// The ID of the external provider/lab/pharmacy associated the document.
+	ClinicalProviderID *int
+	// The athenaNet department ID associated with the uploaded document. Mandatory.
+	DepartmentID int
+	// Text data stored with document
+	DocumentData *string
+	// Subclasses for CLINICALDOCUMENT documents
+	DocumentSubclass string
+	// A specific document type identifier.
+	DocumentTypeID *int
+	// Identifier of entity creating the document. entitytype is required while passing entityid.
+	EntityID *int
+	// Type of entity creating the document. entityid is required while passing entitytype
+	EntityType *string
+	// An internal note for the provider or staff. Updating this will append to any previous notes.
+	InternalNote *string
+	// The date an observation was made (mm/dd/yyyy).
+	ObservationDate *string
+	// The time an observation was made (hh24:mi). 24 hour time.
+	ObservationTime *string
+	// The original file name of this document without the file extension. Filename should not exceed 200 characters.
+	OriginalFileName *string
+	// Priority of this result. 1 is high; 2 is normal.
+	Priority *string
+	// The ID of the ordering provider.
+	ProviderID *int
+}
+
+type AddClinicalDocumentReaderResponse struct {
+	ClinicalDocumentID int    `json:"clinicaldocumentid"`
+	ErrorMessage       string `json:"errormessage"`
+	Success            bool   `json:"success"`
+}
+
+// AddClinicalDocumentReader - performs the same operation as AddClinicalDocument except is more memory efficient
+// by streaming the attachment contents into the request, assuming you haven't already read the
+// entire attachment contents into memory
+//
+// POST /v1/{practiceid}/patients/{patientid}/documents/clinicaldocument
+//
+// https://docs.athenahealth.com/api/api-ref/document-type-clinical-document#Add-clinical-document-to-patient's-chart
+func (h *HTTPClient) AddClinicalDocumentReader(ctx context.Context, patientID string, opts *AddClinicalDocumentReaderOptions) (*AddClinicalDocumentReaderResponse, error) {
+	var form *formURLEncoder
+
+	if opts != nil {
+		form = newFormURLEncoder()
+
+		form.Add("attachmentcontents", newBase64Reader(opts.AttachmentContents))
+
+		if opts.AttachmentType != nil {
+			form.Add("attachmenttype", strings.NewReader(*opts.AttachmentType))
+		}
+
+		if opts.AutoClose != nil {
+			form.Add("autoclose", strings.NewReader(*opts.AutoClose))
+		}
+
+		if opts.ClinicalProviderID != nil {
+			form.Add("clinicalproviderid", strings.NewReader(strconv.Itoa(*opts.ClinicalProviderID)))
+		}
+
+		form.Add("departmentid", strings.NewReader(strconv.Itoa(opts.DepartmentID)))
+
+		if opts.DocumentData != nil {
+			form.Add("documentdata", strings.NewReader(*opts.DocumentData))
+		}
+
+		form.Add("documentsubclass", strings.NewReader(opts.DocumentSubclass))
+
+		if opts.DocumentTypeID != nil {
+			form.Add("documenttypeid", strings.NewReader(strconv.Itoa(*opts.DocumentTypeID)))
+		}
+
+		if opts.EntityID != nil {
+			form.Add("entityid", strings.NewReader(strconv.Itoa(*opts.EntityID)))
+		}
+
+		if opts.EntityType != nil {
+			form.Add("entitytype", strings.NewReader(*opts.EntityType))
+		}
+
+		if opts.InternalNote != nil {
+			form.Add("internalnote", strings.NewReader(*opts.InternalNote))
+		}
+
+		if opts.ObservationDate != nil {
+			form.Add("observationdate", strings.NewReader(*opts.ObservationDate))
+		}
+
+		if opts.ObservationTime != nil {
+			form.Add("observationtime", strings.NewReader(*opts.ObservationTime))
+		}
+
+		if opts.OriginalFileName != nil {
+			form.Add("originalfilename", strings.NewReader(*opts.OriginalFileName))
+		}
+
+		if opts.Priority != nil {
+			form.Add("priority", strings.NewReader(*opts.Priority))
+		}
+
+		if opts.ProviderID != nil {
+			form.Add("providerid", strings.NewReader(strconv.Itoa(*opts.ProviderID)))
+		}
+	}
+
+	res := &AddClinicalDocumentReaderResponse{}
+
+	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/documents/clinicaldocument", patientID), form, res)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 type AddPatientCaseDocumentOptions struct {
 	AutoClose          *bool
 	CallbackName       *string
