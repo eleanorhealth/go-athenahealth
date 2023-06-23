@@ -460,7 +460,7 @@ func (h *HTTPClient) AddPatientCaseDocument(ctx context.Context, patientID strin
 
 		if opts.ProviderID != nil {
 			providerID := strconv.Itoa(*opts.ProviderID)
-			form.Add("priority", providerID)
+			form.Add("providerid", providerID)
 		}
 
 		if opts.Subject != nil {
