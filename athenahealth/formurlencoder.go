@@ -32,18 +32,21 @@ func (f *formURLEncoder) Encode(w io.Writer) error {
 	}
 	sort.Strings(keys)
 
-	count := 0
+	isFirstEntry := true
 	for _, key := range keys {
 		for _, reader := range f.entries[key] {
 
 			err := func() error {
-				keyEscaped := url.QueryEscape(key)
-				if count > 0 {
+				if isFirstEntry {
+					isFirstEntry = false
+				} else {
 					_, err := w.Write([]byte("&"))
 					if err != nil {
 						return err
 					}
 				}
+
+				keyEscaped := url.QueryEscape(key)
 				_, err := w.Write([]byte(keyEscaped))
 				if err != nil {
 					return err
@@ -89,8 +92,6 @@ func (f *formURLEncoder) Encode(w io.Writer) error {
 				if err := <-errCh; err != nil {
 					return err
 				}
-
-				count++
 
 				return nil
 			}()
