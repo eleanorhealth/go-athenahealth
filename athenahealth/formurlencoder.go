@@ -15,7 +15,7 @@ type formURLEncoder struct {
 	entries map[string][]io.Reader
 }
 
-func newFormURLEncoder() *formURLEncoder {
+func NewFormURLEncoder() *formURLEncoder {
 	return &formURLEncoder{
 		entries: make(map[string][]io.Reader),
 	}

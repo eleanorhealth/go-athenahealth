@@ -343,7 +343,7 @@ func (h *HTTPClient) UploadPatientInsuranceCardImageReader(ctx context.Context, 
 
 	out := &uploadPatientInsuranceCardImageReaderResponse{}
 
-	form := newFormURLEncoder()
+	form := NewFormURLEncoder()
 
 	if len(opts.DepartmentID) > 0 {
 		form.Add("departmentid", strings.NewReader(opts.DepartmentID))

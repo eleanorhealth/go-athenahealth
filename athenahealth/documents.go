@@ -234,7 +234,7 @@ func (h *HTTPClient) AddDocumentReader(ctx context.Context, patientID string, op
 	var form *formURLEncoder
 
 	if opts != nil {
-		form = newFormURLEncoder()
+		form = NewFormURLEncoder()
 
 		if opts.ActionNote != nil {
 			form.Add("actionnote", strings.NewReader(*opts.ActionNote))
@@ -447,7 +447,7 @@ func (h *HTTPClient) AddClinicalDocumentReader(ctx context.Context, patientID st
 	var form *formURLEncoder
 
 	if opts != nil {
-		form = newFormURLEncoder()
+		form = NewFormURLEncoder()
 
 		form.Add("attachmentcontents", newBase64Reader(opts.AttachmentContents))
 
