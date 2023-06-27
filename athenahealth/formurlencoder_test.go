@@ -25,33 +25,36 @@ func Test_formURLEncoder_Encode(t *testing.T) {
 	rand.Read(fileContents)
 
 	fileContentsBase64 := base64.StdEncoding.EncodeToString(fileContents)
-	fileContentsQueryEscaped := url.QueryEscape(fileContentsBase64)
+	fileContentsBase64AndQueryEscaped := url.QueryEscape(fileContentsBase64)
+
+	errBadRead := errors.New("bad read")
 
 	tests := []struct {
 		name    string
 		items   map[string][]io.Reader
 		wantW   string
-		wantErr bool
+		wantErr error
 	}{
 		{
 			name:    "empty",
 			items:   map[string][]io.Reader{},
 			wantW:   "",
-			wantErr: false,
+			wantErr: nil,
 		},
 		{
 			name: "multiple readers",
 			items: map[string][]io.Reader{
+				// output should be sorted by key
+				"str2": {
+					strings.NewReader("#$%#%^"),
+				},
 				"str1": {
 					strings.NewReader("test @#$"),
 					strings.NewReader("!@#%  ()*"),
 				},
-				"str2": {
-					strings.NewReader("#$%#%^"),
-				},
 			},
 			wantW:   "str1=test+%40%23%24&str1=%21%40%23%25++%28%29%2A&str2=%23%24%25%23%25%5E",
-			wantErr: false,
+			wantErr: nil,
 		},
 		{
 			name: "document",
@@ -60,14 +63,14 @@ func Test_formURLEncoder_Encode(t *testing.T) {
 					newBase64Reader(bytes.NewReader(fileContents)),
 				},
 			},
-			wantW:   fmt.Sprintf("document=%s", fileContentsQueryEscaped),
-			wantErr: false,
+			wantW:   fmt.Sprintf("document=%s", fileContentsBase64AndQueryEscaped),
+			wantErr: nil,
 		},
 		{
 			name: "error",
 			items: map[string][]io.Reader{
 				"error": {
-					&errorReader{errors.New("some error")},
+					&errorReader{errBadRead},
 				},
 				"str1": {
 					strings.NewReader("test @#$"),
@@ -78,7 +81,7 @@ func Test_formURLEncoder_Encode(t *testing.T) {
 				},
 			},
 			wantW:   "error=",
-			wantErr: true,
+			wantErr: errBadRead,
 		},
 	}
 	for _, tt := range tests {
@@ -87,7 +90,7 @@ func Test_formURLEncoder_Encode(t *testing.T) {
 				entries: tt.items,
 			}
 			w := &bytes.Buffer{}
-			if err := f.Encode(w); (err != nil) != tt.wantErr {
+			if err := f.Encode(w); !errors.Is(err, tt.wantErr) {
 				t.Errorf("formURLEncoder.Encode() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
