@@ -1,7 +1,6 @@
 package athenahealth
 
 import (
-	"errors"
 	"io"
 	"net/url"
 	"sort"
@@ -58,38 +57,28 @@ func (f *formURLEncoder) Encode(w io.Writer) error {
 				}
 
 				pr, pw := io.Pipe()
-				errCh := make(chan error, 1)
-				defer close(errCh)
 
 				go func() {
 					for {
 						buf := make([]byte, defaultFormURLEncoderBufferSize)
 						n, err := reader.Read(buf)
 						if err != nil {
-							if errors.Is(err, io.EOF) {
-								errCh <- nil
-								break
-							}
-							errCh <- err
-							break
+							//nolint
+							pw.CloseWithError(err)
+							return
 						}
 
 						_, err = pw.Write([]byte(url.QueryEscape(string(buf[:n]))))
 						if err != nil {
-							errCh <- err
-							break
+							//nolint
+							pw.CloseWithError(err)
+							return
 						}
 					}
-
-					pw.Close()
 				}()
 
 				_, err = io.Copy(w, pr)
 				if err != nil {
-					return err
-				}
-
-				if err := <-errCh; err != nil {
 					return err
 				}
 

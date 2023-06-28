@@ -430,12 +430,6 @@ type AddClinicalDocumentReaderOptions struct {
 	ProviderID *int
 }
 
-type AddClinicalDocumentReaderResponse struct {
-	ClinicalDocumentID int    `json:"clinicaldocumentid"`
-	ErrorMessage       string `json:"errormessage"`
-	Success            bool   `json:"success"`
-}
-
 // AddClinicalDocumentReader - performs the same operation as AddClinicalDocument except is more memory efficient
 // by streaming the attachment contents into the request, assuming you haven't already read the
 // entire attachment contents into memory
@@ -443,7 +437,7 @@ type AddClinicalDocumentReaderResponse struct {
 // POST /v1/{practiceid}/patients/{patientid}/documents/clinicaldocument
 //
 // https://docs.athenahealth.com/api/api-ref/document-type-clinical-document#Add-clinical-document-to-patient's-chart
-func (h *HTTPClient) AddClinicalDocumentReader(ctx context.Context, patientID string, opts *AddClinicalDocumentReaderOptions) (*AddClinicalDocumentReaderResponse, error) {
+func (h *HTTPClient) AddClinicalDocumentReader(ctx context.Context, patientID string, opts *AddClinicalDocumentReaderOptions) (*AddClinicalDocumentResponse, error) {
 	var form *formURLEncoder
 
 	if opts != nil {
@@ -508,7 +502,7 @@ func (h *HTTPClient) AddClinicalDocumentReader(ctx context.Context, patientID st
 		}
 	}
 
-	res := &AddClinicalDocumentReaderResponse{}
+	res := &AddClinicalDocumentResponse{}
 
 	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/documents/clinicaldocument", patientID), form, res)
 	if err != nil {

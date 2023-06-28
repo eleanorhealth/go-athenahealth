@@ -323,25 +323,17 @@ type UploadPatientInsuranceCardImageReaderOptions struct {
 	Image        io.Reader
 }
 
-type uploadPatientInsuranceCardImageReaderResponse struct {
-	Success bool `json:"success"`
-}
-
-type UploadPatientInsuranceCardImageReaderResult struct {
-	Success bool
-}
-
 // UploadPatientInsuranceCardImageReader - performs the same operation as UploadPatientInsuranceCardImage except is more memory efficient
 // by streaming the image into the request, assuming you haven't already read the
 // entire image into memory
 // POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/image
 // https://docs.athenahealth.com/api/api-ref/insurance-card-image#Upload-patient's-insurance-card-image
-func (h *HTTPClient) UploadPatientInsuranceCardImageReader(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageReaderOptions) (*UploadPatientInsuranceCardImageReaderResult, error) {
+func (h *HTTPClient) UploadPatientInsuranceCardImageReader(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageReaderOptions) (*UploadPatientInsuranceCardImageResult, error) {
 	if opts == nil {
 		panic("opts is nil")
 	}
 
-	out := &uploadPatientInsuranceCardImageReaderResponse{}
+	out := &uploadPatientInsuranceCardImageResponse{}
 
 	form := NewFormURLEncoder()
 
@@ -356,7 +348,7 @@ func (h *HTTPClient) UploadPatientInsuranceCardImageReader(ctx context.Context, 
 		return nil, err
 	}
 
-	return &UploadPatientInsuranceCardImageReaderResult{
+	return &UploadPatientInsuranceCardImageResult{
 		Success: out.Success,
 	}, nil
 }

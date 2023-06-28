@@ -395,14 +395,8 @@ func (h *HTTPClient) PostFormReader(ctx context.Context, path string, fue *formU
 
 		go func() {
 			err := fue.Encode(pw)
-			if err != nil {
-				h.logger.Error().Err(err).Msg("encoding form url encoder")
-			}
-
-			err = pw.Close()
-			if err != nil {
-				h.logger.Error().Err(err).Msg("closing pipe writer")
-			}
+			//nolint
+			pw.CloseWithError(err)
 		}()
 
 		body = pr

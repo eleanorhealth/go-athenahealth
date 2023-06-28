@@ -58,25 +58,17 @@ type AddPatientDriversLicenseDocumentReaderOptions struct {
 	Image        io.Reader
 }
 
-type addPatientDriversLicenseDocumentReaderResponse struct {
-	Success bool `json:"success"`
-}
-
-type AddPatientDriversLicenseDocumentReaderResult struct {
-	Success bool
-}
-
 // AddPatientDriversLicenseDocumentReader - performs the same operation as AddPatientDriversLicenseDocument except is more memory efficient
 // by streaming the image into the request, assuming you haven't already read the
 // entire image into memory
 // POST /v1/{practiceid}/patients/{patientid}/driverslicense
 // https://docs.athenahealth.com/api/api-ref/drivers-license#Add-patient's-driver's-license-document
-func (h *HTTPClient) AddPatientDriversLicenseDocumentReader(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentReaderOptions) (*AddPatientDriversLicenseDocumentReaderResult, error) {
+func (h *HTTPClient) AddPatientDriversLicenseDocumentReader(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentReaderOptions) (*AddPatientDriversLicenseDocumentResult, error) {
 	if opts == nil {
 		panic("opts is nil")
 	}
 
-	out := &addPatientDriversLicenseDocumentReaderResponse{}
+	out := &addPatientDriversLicenseDocumentResponse{}
 
 	form := NewFormURLEncoder()
 
@@ -91,7 +83,7 @@ func (h *HTTPClient) AddPatientDriversLicenseDocumentReader(ctx context.Context,
 		return nil, err
 	}
 
-	return &AddPatientDriversLicenseDocumentReaderResult{
+	return &AddPatientDriversLicenseDocumentResult{
 		Success: out.Success,
 	}, nil
 
