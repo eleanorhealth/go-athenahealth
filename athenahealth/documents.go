@@ -194,10 +194,6 @@ type AddDocumentReaderOptions struct {
 	ProviderID         *int
 }
 
-type addDocumentReaderResponse struct {
-	DocumentID string `json:"documentid"`
-}
-
 // AddDocumentReader - performs the same operation as AddDocument except is more memory efficient
 // by streaming the attachment contents into the request, assuming you haven't already read the
 // entire attachment contents into memory
@@ -268,7 +264,7 @@ func (h *HTTPClient) AddDocumentReader(ctx context.Context, patientID string, op
 		}
 	}
 
-	res := &addDocumentReaderResponse{}
+	res := &addDocumentResponse{}
 
 	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/documents", patientID), form, res)
 	if err != nil {
