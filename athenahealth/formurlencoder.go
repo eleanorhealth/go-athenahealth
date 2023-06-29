@@ -35,6 +35,8 @@ func (f *formURLEncoder) AddReader(key string, value io.Reader) {
 	f.entries[key] = append(f.entries[key], value)
 }
 
+// Encode encodes the values into “URL encoded” form
+// ("bar=baz&foo=quux") sorted by key.
 func (f *formURLEncoder) Encode(w io.Writer) error {
 	keys := make([]string, 0, len(f.entries))
 	for k := range f.entries {
