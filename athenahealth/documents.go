@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // AdminDocument represents an administrative document in athenahealth.
@@ -233,34 +232,32 @@ func (h *HTTPClient) AddDocumentReader(ctx context.Context, patientID string, op
 		form = NewFormURLEncoder()
 
 		if opts.ActionNote != nil {
-			form.Add("actionnote", strings.NewReader(*opts.ActionNote))
+			form.AddString("actionnote", *opts.ActionNote)
 		}
 
 		if opts.AppointmentID != nil {
 			apptID := strconv.Itoa(*opts.AppointmentID)
-			form.Add("appointmentid", strings.NewReader(apptID))
+			form.AddString("appointmentid", apptID)
 		}
 
-		form.Add("attachmentcontents", newBase64Reader(opts.AttachmentContents))
+		form.AddReader("attachmentcontents", newBase64Reader(opts.AttachmentContents))
 
 		if opts.AutoClose != nil {
-			form.Add("autoclose", strings.NewReader(*opts.AutoClose))
+			form.AddString("autoclose", *opts.AutoClose)
 		}
 
 		if opts.DepartmentID != nil {
-			deptID := strconv.Itoa(*opts.DepartmentID)
-			form.Add("departmentid", strings.NewReader(deptID))
+			form.AddInt("departmentid", *opts.DepartmentID)
 		}
 
-		form.Add("documentsubclass", strings.NewReader(opts.DocumentSubclass))
+		form.AddString("documentsubclass", opts.DocumentSubclass)
 
 		if opts.InternalNote != nil {
-			form.Add("internalnote", strings.NewReader(*opts.InternalNote))
+			form.AddString("internalnote", *opts.InternalNote)
 		}
 
 		if opts.ProviderID != nil {
-			providerID := strconv.Itoa(*opts.ProviderID)
-			form.Add("providerid", strings.NewReader(providerID))
+			form.AddInt("providerid", *opts.ProviderID)
 		}
 	}
 
@@ -439,62 +436,62 @@ func (h *HTTPClient) AddClinicalDocumentReader(ctx context.Context, patientID st
 	if opts != nil {
 		form = NewFormURLEncoder()
 
-		form.Add("attachmentcontents", newBase64Reader(opts.AttachmentContents))
+		form.AddReader("attachmentcontents", newBase64Reader(opts.AttachmentContents))
 
 		if opts.AttachmentType != nil {
-			form.Add("attachmenttype", strings.NewReader(*opts.AttachmentType))
+			form.AddString("attachmenttype", *opts.AttachmentType)
 		}
 
 		if opts.AutoClose != nil {
-			form.Add("autoclose", strings.NewReader(*opts.AutoClose))
+			form.AddString("autoclose", *opts.AutoClose)
 		}
 
 		if opts.ClinicalProviderID != nil {
-			form.Add("clinicalproviderid", strings.NewReader(strconv.Itoa(*opts.ClinicalProviderID)))
+			form.AddInt("clinicalproviderid", *opts.ClinicalProviderID)
 		}
 
-		form.Add("departmentid", strings.NewReader(strconv.Itoa(opts.DepartmentID)))
+		form.AddInt("departmentid", opts.DepartmentID)
 
 		if opts.DocumentData != nil {
-			form.Add("documentdata", strings.NewReader(*opts.DocumentData))
+			form.AddString("documentdata", *opts.DocumentData)
 		}
 
-		form.Add("documentsubclass", strings.NewReader(opts.DocumentSubclass))
+		form.AddString("documentsubclass", opts.DocumentSubclass)
 
 		if opts.DocumentTypeID != nil {
-			form.Add("documenttypeid", strings.NewReader(strconv.Itoa(*opts.DocumentTypeID)))
+			form.AddInt("documenttypeid", *opts.DocumentTypeID)
 		}
 
 		if opts.EntityID != nil {
-			form.Add("entityid", strings.NewReader(strconv.Itoa(*opts.EntityID)))
+			form.AddInt("entityid", *opts.EntityID)
 		}
 
 		if opts.EntityType != nil {
-			form.Add("entitytype", strings.NewReader(*opts.EntityType))
+			form.AddString("entitytype", *opts.EntityType)
 		}
 
 		if opts.InternalNote != nil {
-			form.Add("internalnote", strings.NewReader(*opts.InternalNote))
+			form.AddString("internalnote", *opts.InternalNote)
 		}
 
 		if opts.ObservationDate != nil {
-			form.Add("observationdate", strings.NewReader(*opts.ObservationDate))
+			form.AddString("observationdate", *opts.ObservationDate)
 		}
 
 		if opts.ObservationTime != nil {
-			form.Add("observationtime", strings.NewReader(*opts.ObservationTime))
+			form.AddString("observationtime", *opts.ObservationTime)
 		}
 
 		if opts.OriginalFileName != nil {
-			form.Add("originalfilename", strings.NewReader(*opts.OriginalFileName))
+			form.AddString("originalfilename", *opts.OriginalFileName)
 		}
 
 		if opts.Priority != nil {
-			form.Add("priority", strings.NewReader(*opts.Priority))
+			form.AddString("priority", *opts.Priority)
 		}
 
 		if opts.ProviderID != nil {
-			form.Add("providerid", strings.NewReader(strconv.Itoa(*opts.ProviderID)))
+			form.AddInt("providerid", *opts.ProviderID)
 		}
 	}
 

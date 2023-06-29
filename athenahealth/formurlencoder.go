@@ -1,9 +1,12 @@
 package athenahealth
 
 import (
+	"fmt"
 	"io"
 	"net/url"
+	"reflect"
 	"sort"
+	"strconv"
 )
 
 const (
@@ -11,16 +14,24 @@ const (
 )
 
 type formURLEncoder struct {
-	entries map[string][]io.Reader
+	entries map[string][]any
 }
 
 func NewFormURLEncoder() *formURLEncoder {
 	return &formURLEncoder{
-		entries: make(map[string][]io.Reader),
+		entries: make(map[string][]any),
 	}
 }
 
-func (f *formURLEncoder) Add(key string, value io.Reader) {
+func (f *formURLEncoder) AddString(key string, value string) {
+	f.entries[key] = append(f.entries[key], value)
+}
+
+func (f *formURLEncoder) AddInt(key string, value int) {
+	f.entries[key] = append(f.entries[key], value)
+}
+
+func (f *formURLEncoder) AddReader(key string, value io.Reader) {
 	f.entries[key] = append(f.entries[key], value)
 }
 
@@ -33,7 +44,7 @@ func (f *formURLEncoder) Encode(w io.Writer) error {
 
 	isFirstEntry := true
 	for _, key := range keys {
-		for _, reader := range f.entries[key] {
+		for _, val := range f.entries[key] {
 
 			err := func() error {
 				if isFirstEntry {
@@ -56,30 +67,48 @@ func (f *formURLEncoder) Encode(w io.Writer) error {
 					return err
 				}
 
-				pr, pw := io.Pipe()
+				switch v := val.(type) {
+				case io.Reader:
+					pr, pw := io.Pipe()
 
-				go func() {
-					for {
-						buf := make([]byte, defaultFormURLEncoderBufferSize)
-						n, err := reader.Read(buf)
-						if err != nil {
-							//nolint
-							pw.CloseWithError(err)
-							return
-						}
+					go func() {
+						for {
+							buf := make([]byte, defaultFormURLEncoderBufferSize)
+							n, err := v.Read(buf)
+							if err != nil {
+								//nolint
+								pw.CloseWithError(err)
+								return
+							}
 
-						_, err = pw.Write([]byte(url.QueryEscape(string(buf[:n]))))
-						if err != nil {
-							//nolint
-							pw.CloseWithError(err)
-							return
+							_, err = pw.Write([]byte(url.QueryEscape(string(buf[:n]))))
+							if err != nil {
+								//nolint
+								pw.CloseWithError(err)
+								return
+							}
 						}
+					}()
+
+					_, err = io.Copy(w, pr)
+					if err != nil {
+						return err
 					}
-				}()
 
-				_, err = io.Copy(w, pr)
-				if err != nil {
-					return err
+				case string:
+					_, err = w.Write([]byte(url.QueryEscape(v)))
+					if err != nil {
+						return err
+					}
+
+				case int:
+					_, err = w.Write([]byte(url.QueryEscape(strconv.Itoa(v))))
+					if err != nil {
+						return err
+					}
+
+				default:
+					return fmt.Errorf("invalid form url encoder value type '%s' for key %s", reflect.TypeOf(v).String(), key)
 				}
 
 				return nil

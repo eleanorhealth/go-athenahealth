@@ -8,7 +8,6 @@ import (
 	"io"
 	"net/url"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -338,10 +337,10 @@ func (h *HTTPClient) UploadPatientInsuranceCardImageReader(ctx context.Context, 
 	form := NewFormURLEncoder()
 
 	if len(opts.DepartmentID) > 0 {
-		form.Add("departmentid", strings.NewReader(opts.DepartmentID))
+		form.AddString("departmentid", opts.DepartmentID)
 	}
 
-	form.Add("image", newBase64Reader(opts.Image))
+	form.AddReader("image", newBase64Reader(opts.Image))
 
 	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/insurances/%s/image", patientID, insuranceID), form, &out)
 	if err != nil {

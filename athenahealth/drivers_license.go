@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/url"
-	"strings"
 )
 
 type AddPatientDriversLicenseDocumentOptions struct {
@@ -73,10 +72,10 @@ func (h *HTTPClient) AddPatientDriversLicenseDocumentReader(ctx context.Context,
 	form := NewFormURLEncoder()
 
 	if len(opts.DepartmentID) > 0 {
-		form.Add("departmentid", strings.NewReader(opts.DepartmentID))
+		form.AddString("departmentid", opts.DepartmentID)
 	}
 
-	form.Add("image", newBase64Reader(opts.Image))
+	form.AddReader("image", newBase64Reader(opts.Image))
 
 	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/driverslicense", patientID), form, &out)
 	if err != nil {
