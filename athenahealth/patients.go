@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/url"
 	"strconv"
 	"strings"
@@ -537,6 +538,19 @@ func (h *HTTPClient) UpdatePatientPhoto(ctx context.Context, patientID string, d
 	form.Add("image", base64.StdEncoding.EncodeToString(data))
 
 	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/photo", patientID), form, nil)
+	return err
+}
+
+// UpdatePatientPhotoReader - performs the same operation as UpdatePatientPhoto except is more memory efficient
+// by streaming the image contents into the request, assuming you haven't already read the
+// entire image contents into memory
+// POST /v1/{practiceid}/patients/{patientid}/photo
+// https://developer.athenahealth.com/docs/read/forms_and_documents/Patient_Photo#section-1
+func (h *HTTPClient) UpdatePatientPhotoReader(ctx context.Context, patientID string, r io.Reader) error {
+	form := NewFormURLEncoder()
+	form.AddReader("image", newBase64Reader(r))
+
+	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/photo", patientID), form, nil)
 	return err
 }
 

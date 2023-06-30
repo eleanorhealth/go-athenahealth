@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"net/http"
@@ -88,6 +89,50 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestHTTPClient_AddDocumentReader(t *testing.T) {
+	assert := assert.New(t)
+
+	actionNote := "test action note"
+	apptID := 1
+	attachmentContents := []byte("test attachment contents")
+	autoclose := "true"
+	deptID := 2
+	documentSubclass := "ADMIN_CONSENT"
+	internalNote := "test internal note"
+	providerID := 3
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Contains(r.URL.Path, "/patients/123/")
+
+		assert.Equal(actionNote, r.FormValue("actionnote"))
+		assert.Equal(strconv.Itoa(apptID), r.FormValue("appointmentid"))
+
+		b, _ := os.ReadFile("./resources/AddDocument.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &AddDocumentReaderOptions{
+		ActionNote:         &actionNote,
+		AppointmentID:      &apptID,
+		AttachmentContents: bytes.NewReader(attachmentContents),
+		AutoClose:          &autoclose,
+		DepartmentID:       &deptID,
+		DocumentSubclass:   documentSubclass,
+		InternalNote:       &internalNote,
+		ProviderID:         &providerID,
+	}
+
+	documentID, err := athenaClient.AddDocumentReader(context.Background(), "123", opts)
+	assert.NoError(err)
+
+	assert.Equal("100", documentID)
+}
+
 func TestHTTPClient_AddClinicalDocument(t *testing.T) {
 	assert := assert.New(t)
 
@@ -110,6 +155,7 @@ func TestHTTPClient_AddClinicalDocument(t *testing.T) {
 		assert.Equal(documentSubclass, r.FormValue("documentsubclass"))
 		assert.Equal(internalNote, r.FormValue("internalnote"))
 		assert.Equal(strconv.Itoa(providerID), r.FormValue("providerid"))
+
 		assert.Equal(strconv.Itoa(documentTypeId), r.FormValue("documenttypeid"))
 
 		b, _ := os.ReadFile("./resources/AddClinicalDocument.json")
@@ -130,10 +176,10 @@ func TestHTTPClient_AddClinicalDocument(t *testing.T) {
 	}
 
 	res, err := athenaClient.AddClinicalDocument(context.Background(), "123", opts)
+	assert.NoError(err)
 
 	assert.Equal(101, res.ClinicalDocumentID)
 	assert.True(res.Success)
-	assert.NoError(err)
 }
 
 func TestHTTPClient_AddPatientCaseDocument(t *testing.T) {
@@ -191,7 +237,7 @@ func TestHTTPClient_AddPatientCaseDocument(t *testing.T) {
 	}
 
 	patientCaseID, err := athenaClient.AddPatientCaseDocument(context.Background(), "123", opts)
+	assert.NoError(err)
 
 	assert.Equal(491696, patientCaseID)
-	assert.NoError(err)
 }

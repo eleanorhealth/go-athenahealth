@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"io"
 	"time"
 )
 
@@ -46,6 +47,7 @@ type Client interface {
 
 	GetPatientPhoto(ctx context.Context, patientID string, opts *GetPatientPhotoOptions) (string, error)
 	UpdatePatientPhoto(ctx context.Context, patientID string, data []byte) error
+	UpdatePatientPhotoReader(ctx context.Context, patientID string, r io.Reader) error
 
 	ListChangedPatients(context.Context, *ListChangedPatientOptions) ([]*Patient, error)
 	ListChangedProviders(context.Context, *ListChangedProviderOptions) ([]*Provider, error)
@@ -54,6 +56,9 @@ type Client interface {
 	ListProblems(ctx context.Context, patientID string, opts *ListProblemsOptions) ([]*Problem, error)
 	ListAdminDocuments(ctx context.Context, patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error)
 	AddDocument(ctx context.Context, patientID string, opts *AddDocumentOptions) (string, error)
+	AddDocumentReader(ctx context.Context, patientID string, opts *AddDocumentReaderOptions) (string, error)
+	AddClinicalDocument(ctx context.Context, patientID string, opts *AddClinicalDocumentOptions) (*AddClinicalDocumentResponse, error)
+	AddClinicalDocumentReader(ctx context.Context, patientID string, opts *AddClinicalDocumentReaderOptions) (*AddClinicalDocumentResponse, error)
 	AddPatientCaseDocument(ctx context.Context, patientID string, opts *AddPatientCaseDocumentOptions) (int, error)
 
 	ListPatientsMatchingCustomField(ctx context.Context, opts *ListPatientsMatchingCustomFieldOptions) (*ListPatientsMatchingCustomFieldResult, error)
@@ -74,9 +79,11 @@ type Client interface {
 	ReactivatePatientInsurancePackage(ctx context.Context, patientID, insuranceID string, expirationDate *time.Time) error
 
 	UploadPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageOptions) (*UploadPatientInsuranceCardImageResult, error)
+	UploadPatientInsuranceCardImageReader(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageReaderOptions) (*UploadPatientInsuranceCardImageResult, error)
 	GetPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string) (*GetPatientInsuranceCardImageResult, error)
 
 	AddPatientDriversLicenseDocument(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentOptions) (*AddPatientDriversLicenseDocumentResult, error)
+	AddPatientDriversLicenseDocumentReader(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentReaderOptions) (*AddPatientDriversLicenseDocumentResult, error)
 
 	GetHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string) (*HealthHistoryForm, error)
 	UpdateHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string, form *HealthHistoryForm) error
