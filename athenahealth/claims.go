@@ -10,6 +10,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+func (h *HTTPClient) CreateClaimNote(ctx context.Context, claimID string, claimNote string) error {
+	return nil
+}
+
 type ClaimCharge struct {
 	AllowableAmount     *json.Number `json:"allowableamount,omitempty"`
 	AllowableMax        *json.Number `json:"allowablemax,omitempty"`
@@ -122,6 +126,28 @@ func (h *HTTPClient) CreateFinancialClaim(ctx context.Context, opts *CreateClaim
 	return res.ClaimIDs, nil
 }
 
+type CreateAppointmentClaimOptions struct {
+	// List of charges for this claim. This should be a JSON string representing an array of charge objects. A primary ICD-10 code (e.g. ICD10CODE1) is required. ICD-9 codes may also be passed, in the rare case that the payer for the claim still needs that information. The /feeschedules/checkprocedure call may be used to verify a particular PROCEDURECODE is valid for a practice before attempting claim creation. Claims can only be created for appointments that do not already have a claim, are not already in status 4, and have already been checked in.
+	ClaimCharges string `json:"claimcharges"`
+	// 	Array of service type add-ons (STAOs) for the claim. Some claim level STAO fields do not support multiple values. These fields will save only the first value if more than one is passed in. The functionality behind this parameter is toggled by COLDEN_CLAIM_STAO_MDP_API. It is part of a feature that is scheduled to rollout in or before March 2023.
+	ServiceTypeAddons []string `json:"servicetypeaddons"`
+	// 	The supervising provider ID. Defaults to the supervising provider of the appointment.
+	SupervisingProviderID int `json:"supervisingproviderid"`
+}
+
+type CreateAppointmentClaimResult struct {
+	// If the operation succeeded, this will contain the IDs of any claims that were created.
+	ClaimIDs []string `json:"claimids"`
+	// If the operation failed, this will contain any error messages.
+	ErrorMessage string `json:"errormessage"`
+	// Whether the operation was successful.
+	Success string `json:"success"`
+}
+
+func (h *HTTPClient) CreateAppointmentClaim(ctx context.Context, apptID string, opts CreateAppointmentClaimOptions) (*CreateAppointmentClaimResult, error) {
+	return nil, nil
+}
+
 type ClaimProcedure struct {
 	ChargeAmount         string `json:"chargeamount"`
 	ProcedureDescription string `json:"proceduredescription"`
@@ -230,4 +256,32 @@ func (h *HTTPClient) ListClaims(ctx context.Context, opts *ListClaimsOptions) (*
 		Claims:     out.Claims,
 		Pagination: makePaginationResult(out.Next, out.Previous, out.TotalCount),
 	}, nil
+}
+
+type UpdateFinancialClaimOptions struct {
+	// List of charges for this claim whose allowable values should be updated. This should be a JSON string representing an array of charge objects.
+	ClaimCharges string `json:"claimcharges"`
+	// A list of custom field JSON objects to populate on creation of a claim.
+	CustomFields string `json:"customfields"`
+	// The ordering provider ID. 'Ordering Provider' service type add-on must be enabled. Default is no ordering provider ID. Any entry in this field will override any ordering provider ID in the service type add-ons field.
+	OrderingProviderID int `json:"orderingproviderid"`
+	// The referral authorization ID to associate with this claim.
+	ReferralAuthID int `json:"referralauthid"`
+	// The referring provider ID (not the same from /providers) associated with this claim.
+	ReferringProviderID int `json:"referringproviderid"`
+	// Array of service type add-ons (STAOs) for the claim. Some claim level STAO fields do not support multiple values. These fields will save only the first value if more than one is passed in. The functionality behind this parameter is toggled by COLDEN_CLAIM_STAO_MDP_API. It is part of a feature that is scheduled to rollout in or before March 2023.
+	ServiceTypeAddons []string `json:"servicetypeaddons"`
+}
+
+type UpdateFinancialClaimResult struct {
+	// Number of custom fields updated.
+	CustomFields int `json:"customfields"`
+	// Whether the operation was successful.
+	Success string `json:"success"`
+	// Number of transactions with allowables information updated. Note that this does not include transactions that had Service type add-on information updated.
+	Transactions int `json:"transactions"`
+}
+
+func (h *HTTPClient) UpdateFinancialClaim(ctx context.Context, claimID string, opts *UpdateFinancialClaimOptions) (*UpdateFinancialClaimResult, error) {
+	return nil, nil
 }
