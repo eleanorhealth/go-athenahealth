@@ -75,13 +75,13 @@ type GetRequiredCheckInFieldsResult struct {
 // GetRequiredCheckInFields gets the fields required in order to perform check in per practice
 // GET /v1/{practiceid}/departments/{departmentid}/checkinrequired
 // https://docs.athenahealth.com/api/api-ref/required-fields-check#Get-list-of-required-fields-for-patient-check-in
-func (h *HTTPClient) GetRequiredCheckInFields(ctx context.Context, departmentID string) (*GetRequiredCheckInFieldsResult, error) {
-	if departmentID == "" {
-		return nil, fmt.Errorf("cannot GetRequiredCheckInFields with empty departmentID [%s]", departmentID)
+func (h *HTTPClient) GetRequiredCheckInFields(ctx context.Context, deptID string) (*GetRequiredCheckInFieldsResult, error) {
+	if deptID == "" {
+		return nil, fmt.Errorf("cannot GetRequiredCheckInFields with empty deptID [%s]", deptID)
 	}
 
 	out := GetRequiredCheckInFieldsResult{}
-	_, err := h.Get(ctx, fmt.Sprintf("/departments/%s/checkinrequired", departmentID), nil, &out)
+	_, err := h.Get(ctx, fmt.Sprintf("/departments/%s/checkinrequired", deptID), nil, &out)
 	if err != nil {
 		return nil, err
 	}
