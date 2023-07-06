@@ -69,7 +69,7 @@ func (h *HTTPClient) CheckOutAppointment(ctx context.Context, appointmentID stri
 }
 
 type GetRequiredCheckInFieldsResult struct {
-	FieldList string `json:"fieldlist"`
+	FieldList []string `json:"fieldlist"`
 }
 
 // GetRequiredCheckInFields gets the fields required in order to perform check in per practice

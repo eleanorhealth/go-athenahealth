@@ -5,6 +5,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"os"
+	"reflect"
 	"testing"
 )
 
@@ -69,7 +70,7 @@ func TestHTTPClient_GetRequiredCheckInFields(t *testing.T) {
 	res, err := athenaClient.GetRequiredCheckInFields(context.Background(), departmentID)
 
 	assert.NoError(err)
-	assert.Equal(res.FieldList, "12345")
+	assert.True(reflect.DeepEqual(res.FieldList, []string{"1", "2", "3", "4", "5"}))
 }
 
 func TestHTTPClient_StartCheckInAppointment(t *testing.T) {
