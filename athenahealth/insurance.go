@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"net/url"
 	"strconv"
 	"time"
@@ -307,6 +308,41 @@ func (h *HTTPClient) UploadPatientInsuranceCardImage(ctx context.Context, patien
 	form.Add("image", base64.StdEncoding.EncodeToString(opts.Image))
 
 	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s/image", patientID, insuranceID), form, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &UploadPatientInsuranceCardImageResult{
+		Success: out.Success,
+	}, nil
+}
+
+type UploadPatientInsuranceCardImageReaderOptions struct {
+	DepartmentID string
+	Image        io.Reader
+}
+
+// UploadPatientInsuranceCardImageReader - performs the same operation as UploadPatientInsuranceCardImage except is more memory efficient
+// by streaming the image into the request, assuming you haven't already read the
+// entire image into memory
+// POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/image
+// https://docs.athenahealth.com/api/api-ref/insurance-card-image#Upload-patient's-insurance-card-image
+func (h *HTTPClient) UploadPatientInsuranceCardImageReader(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageReaderOptions) (*UploadPatientInsuranceCardImageResult, error) {
+	if opts == nil {
+		panic("opts is nil")
+	}
+
+	out := &uploadPatientInsuranceCardImageResponse{}
+
+	form := NewFormURLEncoder()
+
+	if len(opts.DepartmentID) > 0 {
+		form.AddString("departmentid", opts.DepartmentID)
+	}
+
+	form.AddReader("image", newBase64Reader(opts.Image))
+
+	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/insurances/%s/image", patientID, insuranceID), form, &out)
 	if err != nil {
 		return nil, err
 	}

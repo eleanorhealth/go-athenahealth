@@ -355,6 +355,34 @@ func TestHTTPClient_PostForm(t *testing.T) {
 	assert.True(called)
 }
 
+func TestHTTPClient_PostFormReader(t *testing.T) {
+	assert := assert.New(t)
+
+	called := false
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(http.MethodPost, r.Method)
+		b, _ := io.ReadAll(r.Body)
+		r.Body.Close()
+		assert.True(len(b) > 0)
+
+		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
+
+		called = true
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	values := NewFormURLEncoder()
+	values.AddString("foo", "bar")
+
+	res, err := athenaClient.PostFormReader(context.Background(), "/", values, nil)
+
+	assert.NotNil(res)
+	assert.NoError(err)
+	assert.True(called)
+}
+
 func TestHTTPClient_Put(t *testing.T) {
 	assert := assert.New(t)
 
