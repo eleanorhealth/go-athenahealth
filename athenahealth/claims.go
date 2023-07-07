@@ -3,14 +3,41 @@ package athenahealth
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
 )
 
+// CreateClaimNote
+// POST /v1/{practiceid}/claims/{claimid}/note
+// https://docs.athenahealth.com/api/api-ref/claim-note#Create-new-claim-notes
 func (h *HTTPClient) CreateClaimNote(ctx context.Context, claimID string, claimNote string) error {
+	if claimID == "" {
+		return fmt.Errorf("cannot CreateClaimNote with empty claimID [%s]", claimID)
+	}
+
+	if claimNote == "" {
+		return fmt.Errorf("cannot CreateClaimNote with empty claimNote [%s]", claimNote)
+	}
+
+	form := url.Values{}
+
+	form.Add("claimnote", claimNote)
+
+	out := MessageResponse{}
+	_, err := h.PostForm(ctx, fmt.Sprintf("/claims/%s/note", claimID), form, &out)
+	if err != nil {
+		return err
+	}
+
+	if !out.Success {
+		return fmt.Errorf("unexpected response with message: %s", out.Message)
+	}
+
 	return nil
 }
 
@@ -128,11 +155,11 @@ func (h *HTTPClient) CreateFinancialClaim(ctx context.Context, opts *CreateClaim
 
 type CreateAppointmentClaimOptions struct {
 	// List of charges for this claim. This should be a JSON string representing an array of charge objects. A primary ICD-10 code (e.g. ICD10CODE1) is required. ICD-9 codes may also be passed, in the rare case that the payer for the claim still needs that information. The /feeschedules/checkprocedure call may be used to verify a particular PROCEDURECODE is valid for a practice before attempting claim creation. Claims can only be created for appointments that do not already have a claim, are not already in status 4, and have already been checked in.
-	ClaimCharges string `json:"claimcharges"`
+	ClaimCharges []*ClaimCharge `json:"claimcharges"`
 	// 	Array of service type add-ons (STAOs) for the claim. Some claim level STAO fields do not support multiple values. These fields will save only the first value if more than one is passed in. The functionality behind this parameter is toggled by COLDEN_CLAIM_STAO_MDP_API. It is part of a feature that is scheduled to rollout in or before March 2023.
 	ServiceTypeAddons []string `json:"servicetypeaddons"`
 	// 	The supervising provider ID. Defaults to the supervising provider of the appointment.
-	SupervisingProviderID int `json:"supervisingproviderid"`
+	SupervisingProviderID *int `json:"supervisingproviderid"`
 }
 
 type CreateAppointmentClaimResult struct {
@@ -141,11 +168,44 @@ type CreateAppointmentClaimResult struct {
 	// If the operation failed, this will contain any error messages.
 	ErrorMessage string `json:"errormessage"`
 	// Whether the operation was successful.
-	Success string `json:"success"`
+	Success bool `json:"success"`
 }
 
-func (h *HTTPClient) CreateAppointmentClaim(ctx context.Context, apptID string, opts CreateAppointmentClaimOptions) (*CreateAppointmentClaimResult, error) {
-	return nil, nil
+// CreateAppointmentClaim
+// POST /v1/{practiceid}/appointments/{appointmentid}/claim
+// https://docs.athenahealth.com/api/api-ref/claim#Create-claim-for-an-appointment
+func (h *HTTPClient) CreateAppointmentClaim(ctx context.Context, apptID string, opts *CreateAppointmentClaimOptions) (*CreateAppointmentClaimResult, error) {
+	if apptID == "" {
+		return nil, fmt.Errorf("cannot CreateAppointmentClaim with empty apptID [%s]", apptID)
+	}
+
+	if len(opts.ClaimCharges) < 1 {
+		return nil, fmt.Errorf("cannot CreateAppointmentClaim without at least 1 ClaimCharge. Got [%d]", len(opts.ClaimCharges))
+	}
+
+	form := url.Values{}
+
+	claimChargesJSON, jsonErr := json.Marshal(opts.ClaimCharges)
+	if jsonErr != nil {
+		return nil, errors.Wrap(jsonErr, "marshaling claim charges")
+	}
+	form.Add("claimcharges", string(claimChargesJSON))
+
+	if len(opts.ServiceTypeAddons) > 0 {
+		form.Add("servicetypeaddons", strings.Join(opts.ServiceTypeAddons, ","))
+	}
+
+	if opts.SupervisingProviderID != nil {
+		form.Add("supervisingproviderid", strconv.Itoa(*opts.SupervisingProviderID))
+	}
+
+	out := CreateAppointmentClaimResult{}
+	_, err := h.PostForm(ctx, fmt.Sprintf("/appointments/%s/claim", apptID), form, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &out, nil
 }
 
 type ClaimProcedure struct {
@@ -201,9 +261,7 @@ type listClaimsResponse struct {
 }
 
 // ListClaims - Get list of claims
-//
 // GET /v1/{practiceid}/claims
-//
 // https://docs.athenahealth.com/api/api-ref/claim#Get-list-of-claim-details
 func (h *HTTPClient) ListClaims(ctx context.Context, opts *ListClaimsOptions) (*ListClaimsResult, error) {
 	if opts == nil {
@@ -260,15 +318,15 @@ func (h *HTTPClient) ListClaims(ctx context.Context, opts *ListClaimsOptions) (*
 
 type UpdateFinancialClaimOptions struct {
 	// List of charges for this claim whose allowable values should be updated. This should be a JSON string representing an array of charge objects.
-	ClaimCharges string `json:"claimcharges"`
+	ClaimCharges []*ClaimCharge `json:"claimcharges"`
 	// A list of custom field JSON objects to populate on creation of a claim.
-	CustomFields string `json:"customfields"`
+	CustomFields []*CustomFieldValue `json:"customfields"`
 	// The ordering provider ID. 'Ordering Provider' service type add-on must be enabled. Default is no ordering provider ID. Any entry in this field will override any ordering provider ID in the service type add-ons field.
-	OrderingProviderID int `json:"orderingproviderid"`
+	OrderingProviderID *int `json:"orderingproviderid"`
 	// The referral authorization ID to associate with this claim.
-	ReferralAuthID int `json:"referralauthid"`
+	ReferralAuthID *int `json:"referralauthid"`
 	// The referring provider ID (not the same from /providers) associated with this claim.
-	ReferringProviderID int `json:"referringproviderid"`
+	ReferringProviderID *int `json:"referringproviderid"`
 	// Array of service type add-ons (STAOs) for the claim. Some claim level STAO fields do not support multiple values. These fields will save only the first value if more than one is passed in. The functionality behind this parameter is toggled by COLDEN_CLAIM_STAO_MDP_API. It is part of a feature that is scheduled to rollout in or before March 2023.
 	ServiceTypeAddons []string `json:"servicetypeaddons"`
 }
@@ -282,6 +340,53 @@ type UpdateFinancialClaimResult struct {
 	Transactions int `json:"transactions"`
 }
 
+// UpdateFinancialClaim
+// PUT /v1/{practiceid}/claims/{claimid}
+// https://docs.athenahealth.com/api/api-ref/claim#Update-individual-claim-details
 func (h *HTTPClient) UpdateFinancialClaim(ctx context.Context, claimID string, opts *UpdateFinancialClaimOptions) (*UpdateFinancialClaimResult, error) {
-	return nil, nil
+	if claimID == "" {
+		return nil, fmt.Errorf("cannot UpdateFinancialClaim with empty claimID [%s]", claimID)
+	}
+
+	form := url.Values{}
+
+	if len(opts.ClaimCharges) > 0 {
+		claimChargesJSON, jsonErr := json.Marshal(opts.ClaimCharges)
+		if jsonErr != nil {
+			return nil, errors.Wrap(jsonErr, "marshaling claim charges")
+		}
+		form.Add("claimcharges", string(claimChargesJSON))
+	}
+
+	if len(opts.CustomFields) > 0 {
+		customFieldsJSON, jsonErr := json.Marshal(opts.CustomFields)
+		if jsonErr != nil {
+			return nil, errors.Wrap(jsonErr, "marshaling custom fields")
+		}
+		form.Add("customfields", string(customFieldsJSON))
+	}
+
+	if opts.OrderingProviderID != nil {
+		form.Add("orderingproviderid", strconv.Itoa(*opts.OrderingProviderID))
+	}
+
+	if opts.ReferralAuthID != nil {
+		form.Add("referralauthid", strconv.Itoa(*opts.ReferralAuthID))
+	}
+
+	if opts.ReferringProviderID != nil {
+		form.Add("referringproviderid", strconv.Itoa(*opts.ReferringProviderID))
+	}
+
+	if len(opts.ServiceTypeAddons) > 0 {
+		form.Add("servicetypeaddons", strings.Join(opts.ServiceTypeAddons, ","))
+	}
+
+	out := UpdateFinancialClaimResult{}
+	_, err := h.PostForm(ctx, fmt.Sprintf("/claims/%s", claimID), form, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &out, nil
 }

@@ -565,9 +565,7 @@ type BookAppointmentOptions struct {
 }
 
 // BookAppointment - Create a single appointment for specific patient
-//
 // PUT /v1/{practiceid}/appointments/{appointmentid}
-//
 // https://docs.athenahealth.com/api/api-ref/appointment#Book-appointment
 func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID string, opts *BookAppointmentOptions) (*BookedAppointment, error) {
 	var out []*BookedAppointment
