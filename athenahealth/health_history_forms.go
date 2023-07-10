@@ -296,10 +296,8 @@ func (h *HealthHistoryForm) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Get specific health history form for given appointment
-//
+// GetHealthHistoryFormForAppointment Get specific health history form for given appointment
 // GET /v1/{practiceid}/appointments/{appointmentid}/healthhistoryforms/{formid}
-//
 // https://docs.athenahealth.com/api/api-ref/appointment-health-history-form-documents#Get-specific-health-history-forms-for-given-appointment
 func (h *HTTPClient) GetHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string) (*HealthHistoryForm, error) {
 	hhf := &HealthHistoryForm{}
@@ -312,15 +310,8 @@ func (h *HTTPClient) GetHealthHistoryFormForAppointment(ctx context.Context, app
 	return hhf, nil
 }
 
-type updateHealthHistoryFormResponse struct {
-	ErrorMessage string `json:"errormessage"`
-	Success      bool   `json:"success"`
-}
-
-// Update specific health history form for given appointment
-//
+// UpdateHealthHistoryFormForAppointment Update specific health history form for given appointment
 // PUT /v1/{practiceid}/appointments/{appointmentid}/healthhistoryforms/{formid}
-//
 // https://docs.athenahealth.com/api/api-ref/appointment-health-history-form-documents#Update-specific-health-history-forms-for-given-appointment
 func (h *HTTPClient) UpdateHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string, form *HealthHistoryForm) error {
 	if form == nil {
@@ -361,7 +352,7 @@ func (h *HTTPClient) UpdateHealthHistoryFormForAppointment(ctx context.Context, 
 	payload := make(url.Values)
 	payload.Set("healthhistoryform", string(b))
 
-	out := &updateHealthHistoryFormResponse{}
+	out := &ErrorMessageResponse{}
 
 	_, err = h.PutForm(ctx, fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", url.QueryEscape(appointmentID), url.QueryEscape(formID)), payload, out)
 	if err != nil {
@@ -369,7 +360,7 @@ func (h *HTTPClient) UpdateHealthHistoryFormForAppointment(ctx context.Context, 
 	}
 
 	if !out.Success {
-		return fmt.Errorf("error returned from athena: %s", out.ErrorMessage)
+		return fmt.Errorf("error returned from athena: %s", out.Message)
 	}
 
 	return nil
