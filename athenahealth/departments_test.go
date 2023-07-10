@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHTTPClient_GetRequiredCheckInFields(t *testing.T) {
+func TestHTTPClient_DepartmentGetRequiredCheckInFields(t *testing.T) {
 	assert := assert.New(t)
 
 	departmentID := "45"
