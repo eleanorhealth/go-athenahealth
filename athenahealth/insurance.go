@@ -84,18 +84,11 @@ func (h *HTTPClient) CreatePatientInsurancePackage(ctx context.Context, opts *Cr
 	return out[0], nil
 }
 
-type reactivatePatientInsurancePackageResponse struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-}
-
 // ReactivatePatientInsurancePackage - Reactivate a patient's insurance package
-//
 // POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/reactivate
-//
 // https://docs.athenahealth.com/api/api-ref/patient-insurance#Reactivate-patient's-specific-insurance-package
 func (h *HTTPClient) ReactivatePatientInsurancePackage(ctx context.Context, patientID, insuranceID string, expirationDate *time.Time) error {
-	out := &reactivatePatientInsurancePackageResponse{}
+	out := &ErrorMessageResponse{}
 
 	form := url.Values{}
 
@@ -128,11 +121,6 @@ type UpdatePatientInsurancePackageOptions struct {
 	NewSequenceNumber              *int
 }
 
-type updatePatientInsurancePackageResponse struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-}
-
 // UpdatePatientInsurancePackage - Update a patient's specific insurance package
 //
 // PUT /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}
@@ -143,7 +131,7 @@ func (h *HTTPClient) UpdatePatientInsurancePackage(ctx context.Context, opts *Up
 		panic("opts is nil")
 	}
 
-	out := &updatePatientInsurancePackageResponse{}
+	out := &MessageResponse{}
 
 	form := url.Values{}
 
@@ -187,18 +175,11 @@ func (h *HTTPClient) UpdatePatientInsurancePackage(ctx context.Context, opts *Up
 	return nil
 }
 
-type deletePatientInsurancePackageResponse struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-}
-
 // DeletePatientInsurancePackage - Delete a patient's specific insurance package
-//
 // DELETE /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}
-//
 // https://docs.athenahealth.com/api/api-ref/patient-insurance#Delete-patient's-specific-insurance-package
 func (h *HTTPClient) DeletePatientInsurancePackage(ctx context.Context, patientID, insuranceID, cancellationNote string) error {
-	out := &deletePatientInsurancePackageResponse{}
+	out := &MessageResponse{}
 
 	form := url.Values{}
 
