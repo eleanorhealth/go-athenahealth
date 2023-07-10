@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestHTTPClient_CancelCheckInAppointment(t *testing.T) {
+func TestHTTPClient_AppointmentCancelCheckIn(t *testing.T) {
 	assert := assert.New(t)
 
 	appointmentID := "54"
@@ -29,7 +29,7 @@ func TestHTTPClient_CancelCheckInAppointment(t *testing.T) {
 	assert.NoError(err)
 }
 
-func TestHTTPClient_CheckInAppointment(t *testing.T) {
+func TestHTTPClient_AppointmentCheckIn(t *testing.T) {
 	assert := assert.New(t)
 
 	appointmentID := "54"
@@ -50,7 +50,7 @@ func TestHTTPClient_CheckInAppointment(t *testing.T) {
 	assert.NoError(err)
 }
 
-func TestHTTPClient_StartCheckInAppointment(t *testing.T) {
+func TestHTTPClient_AppointmentStartCheckIn(t *testing.T) {
 	assert := assert.New(t)
 
 	appointmentID := "54"
