@@ -3,13 +3,38 @@ package athenahealth
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestHTTPClient_ClaimCreateNote(t *testing.T) {
+	assert := assert.New(t)
+
+	claimID := "2"
+	opts := &ClaimCreateNoteOptions{ClaimNote: "Claim Note Here"}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("claimnote"), opts.ClaimNote)
+
+		b, _ := os.ReadFile("./resources/ClaimCreateNote.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	err := athenaClient.ClaimCreateNote(context.Background(), claimID, opts)
+	assert.NoError(err)
+}
 
 func TestHTTPClient_CreateClaim(t *testing.T) {
 	assert := assert.New(t)
@@ -149,4 +174,76 @@ func TestHTTPClient_ListClaims(t *testing.T) {
 	assert.Equal(res.Pagination.PreviousOffset, 10)
 	assert.Equal(res.Pagination.TotalCount, 1)
 	assert.NoError(err)
+}
+
+func TestHTTPClient_ClaimUpdateFinancial(t *testing.T) {
+	assert := assert.New(t)
+
+	claimID := "40"
+
+	opts := &ClaimUpdateFinancialOptions{
+		ClaimCharges: []*ClaimCharge{
+			{
+				AllowableAmount:     func() *json.Number { a := json.Number("1"); return &a }(),
+				AllowableMax:        func() *json.Number { a := json.Number("2"); return &a }(),
+				AllowableMin:        func() *json.Number { a := json.Number("3"); return &a }(),
+				AllowableScheduleID: func() *int { a := 4; return &a }(),
+				ICD10Code1:          "ICD10Code1",
+				ICD10Code2:          "ICD10Code2",
+				ICD10Code3:          "ICD10Code3",
+				ICD10Code4:          "ICD10Code4",
+				ICD9Code1:           "ICD9Code1",
+				ICD9Code2:           "ICD9Code2",
+				ICD9Code3:           "ICD9Code3",
+				ICD9Code4:           "ICD9Code4",
+				LineNote:            "LineNote",
+				ProcedureCode:       "ProcedureCode",
+				UnitAmount:          func() *json.Number { a := json.Number("5"); return &a }(),
+				Units:               6,
+			},
+		},
+		CustomFields: []*CustomFieldValue{
+			{
+				CustomFieldID:    "CustomFieldID",
+				CustomFieldValue: "CustomFieldValue",
+				OptionID:         "OptionID",
+			},
+		},
+		OrderingProviderID:  func() *int { a := 7; return &a }(),
+		ReferralAuthID:      func() *int { a := 8; return &a }(),
+		ReferringProviderID: func() *int { a := 9; return &a }(),
+		ServiceTypeAddons:   []string{"1", "2", "3"},
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		claimChargesJSON, jsonErr := json.Marshal(opts.ClaimCharges)
+		assert.Nil(jsonErr)
+
+		customFieldsJSON, jsonErr := json.Marshal(opts.CustomFields)
+		assert.Nil(jsonErr)
+
+		assert.Equal(r.Form.Get("claimcharges"), string(claimChargesJSON))
+		assert.Equal(r.Form.Get("customfields"), string(customFieldsJSON))
+		assert.Equal(r.Form.Get("orderingproviderid"), strconv.Itoa(*opts.OrderingProviderID))
+		assert.Equal(r.Form.Get("referralauthid"), strconv.Itoa(*opts.ReferralAuthID))
+		assert.Equal(r.Form.Get("referringproviderid"), strconv.Itoa(*opts.ReferringProviderID))
+		assert.Equal(r.Form.Get("servicetypeaddons"), strings.Join(opts.ServiceTypeAddons, ","))
+
+		assert.Contains(r.URL.Path, fmt.Sprintf("/claims/%s", claimID))
+
+		b, _ := os.ReadFile("./resources/ClaimUpdateFinancial.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	res, err := athenaClient.ClaimUpdateFinancial(context.Background(), claimID, opts)
+	assert.Nil(err)
+
+	assert.Equal(1, res.CustomFields)
+	assert.Equal(true, res.Success)
+	assert.Equal(2, res.Transactions)
 }

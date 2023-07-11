@@ -1,0 +1,9 @@
+{
+  "claimids": [
+    "1",
+    "2",
+    "3"
+  ],
+  "errormessage": "AppointmentCreateClaim.json",
+  "success": true
+}

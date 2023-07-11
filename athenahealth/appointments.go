@@ -2,8 +2,9 @@ package athenahealth
 
 import (
 	"context"
-	"errors"
+	"encoding/json"
 	"fmt"
+	"github.com/pkg/errors"
 	"net/url"
 	"strconv"
 	"strings"
@@ -618,6 +619,61 @@ func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID stri
 	}
 
 	return out[0], nil
+}
+
+type AppointmentCreateClaimOptions struct {
+	// List of charges for this claim. This should be a JSON string representing an array of charge objects. A primary ICD-10 code (e.g. ICD10CODE1) is required. ICD-9 codes may also be passed, in the rare case that the payer for the claim still needs that information. The /feeschedules/checkprocedure call may be used to verify a particular PROCEDURECODE is valid for a practice before attempting claim creation. Claims can only be created for appointments that do not already have a claim, are not already in status 4, and have already been checked in.
+	ClaimCharges []*ClaimCharge `json:"claimcharges"`
+	// 	Array of service type add-ons (STAOs) for the claim. Some claim level STAO fields do not support multiple values. These fields will save only the first value if more than one is passed in. The functionality behind this parameter is toggled by COLDEN_CLAIM_STAO_MDP_API. It is part of a feature that is scheduled to rollout in or before March 2023.
+	ServiceTypeAddons []string `json:"servicetypeaddons"`
+	// 	The supervising provider ID. Defaults to the supervising provider of the appointment.
+	SupervisingProviderID *int `json:"supervisingproviderid"`
+}
+
+type AppointmentCreateClaimsResult struct {
+	// If the operation succeeded, this will contain the IDs of any claims that were created.
+	ClaimIDs []string `json:"claimids"`
+	// If the operation failed, this will contain any error messages.
+	ErrorMessage string `json:"errormessage"`
+	// Whether the operation was successful.
+	Success bool `json:"success"`
+}
+
+// AppointmentCreateClaim
+// POST /v1/{practiceid}/appointments/{appointmentid}/claim
+// https://docs.athenahealth.com/api/api-ref/claim#Create-claim-for-an-appointment
+func (h *HTTPClient) AppointmentCreateClaim(ctx context.Context, apptID string, opts *AppointmentCreateClaimOptions) (*AppointmentCreateClaimsResult, error) {
+	if apptID == "" {
+		return nil, fmt.Errorf("cannot CreateAppointmentClaim with empty apptID [%s]", apptID)
+	}
+
+	if len(opts.ClaimCharges) < 1 {
+		return nil, fmt.Errorf("cannot CreateAppointmentClaim without at least 1 ClaimCharge. Got [%d]", len(opts.ClaimCharges))
+	}
+
+	form := url.Values{}
+
+	claimChargesJSON, jsonErr := json.Marshal(opts.ClaimCharges)
+	if jsonErr != nil {
+		return nil, errors.Wrap(jsonErr, "marshaling claim charges")
+	}
+	form.Add("claimcharges", string(claimChargesJSON))
+
+	if len(opts.ServiceTypeAddons) > 0 {
+		form.Add("servicetypeaddons", strings.Join(opts.ServiceTypeAddons, ","))
+	}
+
+	if opts.SupervisingProviderID != nil {
+		form.Add("supervisingproviderid", strconv.Itoa(*opts.SupervisingProviderID))
+	}
+
+	out := AppointmentCreateClaimsResult{}
+	_, err := h.PostForm(ctx, fmt.Sprintf("/appointments/%s/claim", apptID), form, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &out, nil
 }
 
 type UseExpectedProcedureCodes struct {

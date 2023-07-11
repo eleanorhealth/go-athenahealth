@@ -2,11 +2,14 @@ package athenahealth
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"reflect"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -299,6 +302,59 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 	_, err := athenaClient.BookAppointment(context.Background(), patientID, apptID, opts)
 
 	assert.NoError(err)
+}
+
+func TestHTTPClient_AppointmentCreateClaim(t *testing.T) {
+	assert := assert.New(t)
+
+	apptID := "4"
+	opts := &AppointmentCreateClaimOptions{
+		ClaimCharges: []*ClaimCharge{
+			{
+				AllowableAmount:     func() *json.Number { a := json.Number("1"); return &a }(),
+				AllowableMax:        func() *json.Number { a := json.Number("2"); return &a }(),
+				AllowableMin:        func() *json.Number { a := json.Number("3"); return &a }(),
+				AllowableScheduleID: func() *int { a := 4; return &a }(),
+				ICD10Code1:          "ICD10Code1",
+				ICD10Code2:          "ICD10Code2",
+				ICD10Code3:          "ICD10Code3",
+				ICD10Code4:          "ICD10Code4",
+				ICD9Code1:           "ICD9Code1",
+				ICD9Code2:           "ICD9Code2",
+				ICD9Code3:           "ICD9Code3",
+				ICD9Code4:           "ICD9Code4",
+				LineNote:            "LineNote",
+				ProcedureCode:       "ProcedureCode",
+				UnitAmount:          func() *json.Number { a := json.Number("5"); return &a }(),
+				Units:               6,
+			},
+		},
+		ServiceTypeAddons:     []string{"1", "2", "3"},
+		SupervisingProviderID: func() *int { a := 7; return &a }(),
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		claimChargesJSON, jsonErr := json.Marshal(opts.ClaimCharges)
+		assert.Nil(jsonErr)
+		assert.Equal(r.Form.Get("claimcharges"), string(claimChargesJSON))
+		assert.Equal(r.Form.Get("servicetypeaddons"), strings.Join(opts.ServiceTypeAddons, ","))
+		assert.Equal(r.Form.Get("supervisingproviderid"), strconv.Itoa(*opts.SupervisingProviderID))
+		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/%s/claim", apptID))
+
+		b, _ := os.ReadFile("./resources/AppointmentCreateClaim.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	res, err := athenaClient.AppointmentCreateClaim(context.Background(), apptID, opts)
+	assert.Nil(err)
+	assert.True(reflect.DeepEqual([]string{"1", "2", "3"}, res.ClaimIDs))
+	assert.Equal(true, res.Success)
+	assert.Equal("AppointmentCreateClaim.json", res.ErrorMessage)
 }
 
 func TestHTTPClient_RescheduleAppointment(t *testing.T) {
