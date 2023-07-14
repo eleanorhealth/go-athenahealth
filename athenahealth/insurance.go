@@ -88,7 +88,7 @@ func (h *HTTPClient) CreatePatientInsurancePackage(ctx context.Context, opts *Cr
 // POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/reactivate
 // https://docs.athenahealth.com/api/api-ref/patient-insurance#Reactivate-patient's-specific-insurance-package
 func (h *HTTPClient) ReactivatePatientInsurancePackage(ctx context.Context, patientID, insuranceID string, expirationDate *time.Time) error {
-	out := &ErrorMessageResponse{}
+	out := &MessageResponse{}
 
 	form := url.Values{}
 
