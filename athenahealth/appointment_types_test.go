@@ -35,7 +35,7 @@ func TestHTTPClient_CreateAppointmentType(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	createAppointmentTypeResult, err := athenaClient.CreateAppointmentType(context.Background(), opts)

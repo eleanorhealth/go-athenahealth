@@ -99,7 +99,7 @@ func TestHTTPClient_CreateClaim(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	claimIDs, err := athenaClient.CreateFinancialClaim(context.Background(), opts)
@@ -139,7 +139,7 @@ func TestHTTPClient_ListClaims(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	res, err := athenaClient.ListClaims(context.Background(), opts)

@@ -23,7 +23,7 @@ func TestHTTPClient_ListAdminDocuments(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListAdminDocumentsOptions{
@@ -69,7 +69,7 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &AddDocumentOptions{
@@ -113,7 +113,7 @@ func TestHTTPClient_AddDocumentReader(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &AddDocumentReaderOptions{
@@ -162,7 +162,7 @@ func TestHTTPClient_AddClinicalDocument(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &AddClinicalDocumentOptions{
@@ -218,7 +218,7 @@ func TestHTTPClient_AddPatientCaseDocument(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &AddPatientCaseDocumentOptions{

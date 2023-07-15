@@ -22,7 +22,7 @@ func TestHTTPClient_ListProblems(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListProblemsOptions{
@@ -50,7 +50,7 @@ func TestHTTPClient_ListChangedProblems(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListChangedProblemsOptions{

@@ -17,7 +17,7 @@ func TestHTTPClient_ListCustomFields(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	customFields, err := athenaClient.ListCustomFields(context.Background())

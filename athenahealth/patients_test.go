@@ -26,7 +26,7 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	id := "1"
@@ -55,7 +55,7 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListPatientsOptions{
@@ -80,7 +80,7 @@ func TestHTTPClient_GetPatientPhoto_JPEGOutputNotSupported(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	id := "1"
@@ -103,7 +103,7 @@ func TestHTTPClient_UpdatePatientPhoto(t *testing.T) {
 		assert.Equal(base64.StdEncoding.EncodeToString(data), r.Form.Get("image"))
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	id := "1"
@@ -127,7 +127,7 @@ func TestHTTPClient_ListChangedPatients(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListChangedPatientOptions{
@@ -178,7 +178,7 @@ func TestHTTPClient_UpdatePatientInformationVerificationDetails(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &UpdatePatientInformationVerificationDetailsOptions{
@@ -212,7 +212,7 @@ func TestHTTPClient_GetPatientCustomFields(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	customFields, err := athenaClient.GetPatientCustomFields(context.Background(), patientID, departmentID)
@@ -255,7 +255,7 @@ func TestHTTPClient_UpdatePatientCustomFields(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	err := athenaClient.UpdatePatientCustomFields(context.Background(), patientID, departmentID, customFields)
@@ -278,7 +278,7 @@ func TestHTTPClient_ListPatientsMatchingCustomField(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	res, err := athenaClient.ListPatientsMatchingCustomField(context.Background(), opts)
@@ -343,7 +343,7 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	actualPatientID, err := athenaClient.CreatePatient(context.Background(), opts)
@@ -461,7 +461,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	result, err := athenaClient.UpdatePatient(context.Background(), "100", opts)

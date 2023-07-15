@@ -18,7 +18,7 @@ func TestHTTPClient_GetSubscription(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	subscription, err := athenaClient.GetSubscription(context.Background(), "appointments")
@@ -35,7 +35,7 @@ func TestHTTPClient_ListSubscriptionEvents(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	events, err := athenaClient.ListSubscriptionEvents(context.Background(), "appointments")
@@ -57,7 +57,7 @@ func TestHTTPClient_Subscribe(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &SubscribeOptions{
@@ -82,7 +82,7 @@ func TestHTTPClient_Unsubscribe(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &UnsubscribeOptions{

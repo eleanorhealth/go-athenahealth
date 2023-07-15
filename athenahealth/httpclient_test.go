@@ -2,12 +2,10 @@ package athenahealth
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
-	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
@@ -16,91 +14,6 @@ import (
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
 	"github.com/stretchr/testify/assert"
 )
-
-const testPracticeID = "123456"
-const testAPIKey = "api-key"
-const testAPISecret = "api-secret"
-const testToken = "token"
-
-func testClient(h http.HandlerFunc) (*HTTPClient, *httptest.Server) {
-	if h == nil {
-		h = func(w http.ResponseWriter, r *http.Request) {
-			b, _ := json.Marshal(nil)
-			w.Header().Add("Content-Type", "application/json")
-			w.Write(b)
-		}
-	}
-
-	ts := httptest.NewServer(h)
-
-	athenaClient := NewHTTPClient(ts.Client(), testPracticeID, testAPIKey, testAPISecret).
-		WithTokenProvider(&testTokenProvider{}).
-		WithTokenCacher(&testTokenCacher{})
-
-	athenaClient.baseURL = ts.URL
-
-	return athenaClient, ts
-}
-
-type testTokenProvider struct {
-}
-
-func (t *testTokenProvider) Provide(ctx context.Context) (string, time.Time, error) {
-	return testToken, time.Now().Add(time.Minute * 1), nil
-}
-
-type testTokenCacher struct {
-}
-
-func (t *testTokenCacher) Get(ctx context.Context) (string, error) {
-	return testToken, nil
-}
-
-func (t *testTokenCacher) Set(context.Context, string, time.Time) error {
-	return nil
-}
-
-type testRateLimiter struct {
-	AllowedFunc func(preview bool) (time.Duration, error)
-}
-
-func (t *testRateLimiter) Allowed(ctx context.Context, preview bool) (time.Duration, error) {
-	if t.AllowedFunc != nil {
-		return t.AllowedFunc(preview)
-	}
-
-	return 0, nil
-}
-
-type testStats struct {
-	RequestFunc         func(method, path string) error
-	ResponseSuccessFunc func() error
-	ResponseErrorFunc   func() error
-}
-
-func (t *testStats) Request(method, path string) error {
-	if t.RequestFunc != nil {
-		return t.RequestFunc(method, path)
-	}
-
-	return nil
-}
-
-func (t *testStats) ResponseSuccess() error {
-	if t.ResponseSuccessFunc != nil {
-		return t.ResponseSuccessFunc()
-	}
-
-	return nil
-}
-
-func (t *testStats) ResponseError() error {
-	if t.ResponseErrorFunc != nil {
-		return t.ResponseErrorFunc()
-	}
-
-	return nil
-}
 
 func TestNewHTTPClient(t *testing.T) {
 	assert := assert.New(t)
@@ -167,7 +80,7 @@ func TestHTTPClient_request(t *testing.T) {
 		w.Write([]byte(`{"msg":"Hello World!"}`))
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	var out map[string]string
@@ -185,7 +98,7 @@ func TestHTTPClient_request_error(t *testing.T) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	res, err := athenaClient.request(context.Background(), "GET", "/", nil, nil, nil)
@@ -213,7 +126,7 @@ func TestHTTPClient_rate_limit(t *testing.T) {
 		return 100 * time.Millisecond, ratelimiter.ErrRateExceeded
 	}
 
-	athenaClient, ts := testClient(nil)
+	athenaClient, ts := TestClient(nil)
 	athenaClient.WithRateLimiter(rateLimiter)
 
 	defer ts.Close()
@@ -291,7 +204,7 @@ func TestHTTPClient_Get(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	var query = url.Values{}
@@ -317,7 +230,7 @@ func TestHTTPClient_Post(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	res, err := athenaClient.Post(context.Background(), "/", strings.NewReader("foo"), nil)
@@ -342,7 +255,7 @@ func TestHTTPClient_PostForm(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	var values = url.Values{}
@@ -370,7 +283,7 @@ func TestHTTPClient_PostFormReader(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	values := NewFormURLEncoder()
@@ -396,7 +309,7 @@ func TestHTTPClient_Put(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	res, err := athenaClient.Put(context.Background(), "/", strings.NewReader("foo"), nil)
@@ -421,7 +334,7 @@ func TestHTTPClient_PutForm(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	var values = url.Values{}
@@ -447,7 +360,7 @@ func TestHTTPClient_Delete(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	athenaClient.baseURL = ts.URL
@@ -474,7 +387,7 @@ func TestHTTPClient_DeleteForm(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	var values = url.Values{}

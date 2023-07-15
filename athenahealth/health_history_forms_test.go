@@ -25,7 +25,7 @@ func TestHTTPClient_GetHealthHistoryFormForAppointment(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	hhf, err := athenaClient.GetHealthHistoryFormForAppointment(context.Background(), apptID, formID)
@@ -58,7 +58,7 @@ func TestHTTPClient_UpdateHealthHistoryFormForAppointment(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	err = athenaClient.UpdateHealthHistoryFormForAppointment(context.Background(), apptID, formID, hhf)

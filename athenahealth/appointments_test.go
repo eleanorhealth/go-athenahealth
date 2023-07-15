@@ -21,7 +21,7 @@ func TestHTTPClient_GetAppointment(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	appointment, err := athenaClient.GetAppointment(context.Background(), "1")
@@ -38,7 +38,7 @@ func TestHTTPClient_ListAppointmentCustomFields(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	customFields, err := athenaClient.ListAppointmentCustomFields(context.Background())
@@ -60,7 +60,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListBookedAppointmentsOptions{
@@ -91,7 +91,7 @@ func TestHTTPClient_ListChangedAppointments(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListChangedAppointmentsOptions{
@@ -119,7 +119,7 @@ func TestHTTPClient_CreateAppointmentNote(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &CreateAppointmentNoteOptions{
@@ -143,7 +143,7 @@ func TestHTTPClient_ListAppointmentNotes(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListAppointmentNotesOptions{
@@ -170,7 +170,7 @@ func TestHTTPClient_UpdateAppointmentNote(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &UpdateAppointmentNoteOptions{
@@ -198,7 +198,7 @@ func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &DeleteAppointmentNoteOptions{
@@ -250,7 +250,7 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	slotsRes, err := athenaClient.ListOpenAppointmentSlots(context.Background(), deptID, opts)
@@ -293,7 +293,7 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	_, err := athenaClient.BookAppointment(context.Background(), patientID, apptID, opts)
@@ -330,7 +330,7 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	rescheduleAppointmentResult, err := athenaClient.RescheduleAppointment(context.Background(), 998877, opts)

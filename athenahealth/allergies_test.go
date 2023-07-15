@@ -21,7 +21,7 @@ func TestHTTPClient_SearchAllergies(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	allergies, err := athenaClient.SearchAllergies(context.Background(), searchVal)
@@ -43,7 +43,7 @@ func TestHTTPClient_SearchAllergies_None(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	allergies, err := athenaClient.SearchAllergies(context.Background(), searchVal)

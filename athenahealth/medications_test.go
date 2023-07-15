@@ -24,7 +24,7 @@ func TestHTTPClient_ListMedications(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	medicationsResult, err := athenaClient.ListMedications(context.Background(), patientID, opts)
@@ -51,7 +51,7 @@ func TestHTTPClient_ListMedications_None(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	medicationsResult, err := athenaClient.ListMedications(context.Background(), patientID, opts)
@@ -73,7 +73,7 @@ func TestHTTPClient_SearchMedications(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	medications, err := athenaClient.SearchMedications(context.Background(), searchVal)
@@ -95,7 +95,7 @@ func TestHTTPClient_SearchMedications_None(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	meds, err := athenaClient.SearchAllergies(context.Background(), searchVal)

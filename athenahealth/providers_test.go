@@ -18,7 +18,7 @@ func TestHTTPClient_GetProvider(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	provider, err := athenaClient.GetProvider(context.Background(), "1")
@@ -39,7 +39,7 @@ func TestHTTPClient_ListChangedProviders(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListChangedProviderOptions{
@@ -64,7 +64,7 @@ func TestHTTPClient_ListProviders(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListProvidersOptions{

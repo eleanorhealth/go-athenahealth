@@ -36,7 +36,7 @@ func TestHTTPClient_CreateAppointmentSlot(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	createAppointmentSlotResult, err := athenaClient.CreateAppointmentSlot(context.Background(), opts)

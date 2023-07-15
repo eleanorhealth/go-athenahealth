@@ -43,7 +43,7 @@ func TestHTTPClient_CreatePatientInsurancePackage(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	_, err := athenaClient.CreatePatientInsurancePackage(context.Background(), opts)
@@ -84,7 +84,7 @@ func TestHTTPClient_UpdatePatientInsurancePackage(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	err := athenaClient.UpdatePatientInsurancePackage(context.Background(), opts)
@@ -109,7 +109,7 @@ func TestHTTPClient_DeletePatientInsurancePackage(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	err := athenaClient.DeletePatientInsurancePackage(context.Background(), "1", "2", cancellationNote)
@@ -136,7 +136,7 @@ func TestHTTPClient_ReactivatePatientInsurancePackage(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	err := athenaClient.ReactivatePatientInsurancePackage(context.Background(), patientID, insuranceID, &expDate)
@@ -161,7 +161,7 @@ func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	res, err := athenaClient.ListPatientInsurancePackages(context.Background(), opts)
@@ -189,7 +189,7 @@ func TestHTTPClient_UploadPatientInsuranceCardImage(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &UploadPatientInsuranceCardImageOptions{
@@ -216,7 +216,7 @@ func TestHTTPClient_GetPatientInsurancePackage(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	res, err := athenaClient.GetPatientInsuranceCardImage(context.Background(), "1", "2")

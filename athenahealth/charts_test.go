@@ -21,7 +21,7 @@ func TestHTTPClient_ListSocialHistoryTemplates(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	templates, err := athenaClient.ListSocialHistoryTemplates(context.Background())
@@ -43,7 +43,7 @@ func TestHTTPClient_GetPatientSocialHistory(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &GetPatientSocialHistoryOptions{
@@ -83,7 +83,7 @@ func TestHTTPClient_UpdatePatientSocialHistory(t *testing.T) {
 		called = true
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &UpdatePatientSocialHistoryOptions{

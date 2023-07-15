@@ -17,7 +17,7 @@ func TestHTTPClient_GetDepartment(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	department, err := athenaClient.GetDepartment(context.Background(), "1")
@@ -38,7 +38,7 @@ func TestHTTPClient_ListDepartments(t *testing.T) {
 		w.Write(b)
 	}
 
-	athenaClient, ts := testClient(h)
+	athenaClient, ts := TestClient(h)
 	defer ts.Close()
 
 	opts := &ListDepartmentsOptions{
