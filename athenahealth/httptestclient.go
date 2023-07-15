@@ -19,7 +19,7 @@ func TestClient(h http.HandlerFunc) (*HTTPClient, *httptest.Server) {
 		h = func(w http.ResponseWriter, r *http.Request) {
 			b, _ := json.Marshal(nil)
 			w.Header().Add("Content-Type", "application/json")
-			w.Write(b)
+			_, _ = w.Write(b)
 		}
 	}
 
@@ -54,11 +54,11 @@ func (t *testTokenCacher) Set(context.Context, string, time.Time) error {
 	return nil
 }
 
-type testRateLimiter struct {
+type testRateLimiter struct { //nolint:unused
 	AllowedFunc func(preview bool) (time.Duration, error)
 }
 
-func (t *testRateLimiter) Allowed(ctx context.Context, preview bool) (time.Duration, error) {
+func (t *testRateLimiter) Allowed(ctx context.Context, preview bool) (time.Duration, error) { //nolint:unused
 	if t.AllowedFunc != nil {
 		return t.AllowedFunc(preview)
 	}
@@ -66,13 +66,13 @@ func (t *testRateLimiter) Allowed(ctx context.Context, preview bool) (time.Durat
 	return 0, nil
 }
 
-type testStats struct {
+type testStats struct { //nolint: unused
 	RequestFunc         func(method, path string) error
 	ResponseSuccessFunc func() error
 	ResponseErrorFunc   func() error
 }
 
-func (t *testStats) Request(method, path string) error {
+func (t *testStats) Request(method, path string) error { // nolint: unused
 	if t.RequestFunc != nil {
 		return t.RequestFunc(method, path)
 	}
@@ -80,7 +80,7 @@ func (t *testStats) Request(method, path string) error {
 	return nil
 }
 
-func (t *testStats) ResponseSuccess() error {
+func (t *testStats) ResponseSuccess() error { // nolint: unused
 	if t.ResponseSuccessFunc != nil {
 		return t.ResponseSuccessFunc()
 	}
@@ -88,7 +88,7 @@ func (t *testStats) ResponseSuccess() error {
 	return nil
 }
 
-func (t *testStats) ResponseError() error {
+func (t *testStats) ResponseError() error { // nolint: unused
 	if t.ResponseErrorFunc != nil {
 		return t.ResponseErrorFunc()
 	}
