@@ -1,4 +1,4 @@
-## {{Ticket Link or Heading}}
+## {{Descriptive Heading}}
 
 Please include a brief description of changes made and rationale here.
 
