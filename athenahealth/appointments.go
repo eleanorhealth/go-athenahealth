@@ -569,12 +569,12 @@ type BookAppointmentOptions struct {
 // PUT /v1/{practiceid}/appointments/{appointmentid}
 //
 // https://docs.athenahealth.com/api/api-ref/appointment#Book-appointment
-func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID int, opts *BookAppointmentOptions) (*BookedAppointment, error) {
+func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID string, opts *BookAppointmentOptions) (*BookedAppointment, error) {
 	var out []*BookedAppointment
 
 	form := url.Values{}
 
-	form.Add("patientid", strconv.Itoa(patientID))
+	form.Add("patientid", patientID)
 
 	if opts != nil {
 		if opts.AppointmentTypeID > 0 {
@@ -610,7 +610,7 @@ func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID int,
 		}
 	}
 
-	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%d", apptID), form, &out)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%s", apptID), form, &out)
 	if err != nil {
 		return nil, err
 	}
