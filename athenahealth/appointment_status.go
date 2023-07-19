@@ -31,7 +31,11 @@ func (as AppointmentStatus) Int() int {
 }
 
 func (as AppointmentStatus) String() string {
-	return string(as)
+	if as.Valid() {
+		return string(as)
+	}
+
+	return ""
 }
 
 func (as AppointmentStatus) Valid() bool {

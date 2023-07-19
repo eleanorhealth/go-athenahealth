@@ -37,7 +37,7 @@ func TestAppointmentStatus_String(t *testing.T) {
 		{AppointmentStatusCheckedOut, "3"},
 		{AppointmentStatusFuture, "f"},
 		{AppointmentStatusOpen, "o"},
-		{"does not exist", "does not exist"},
+		{"does not exist", ""},
 	}
 
 	for _, tt := range tests {
