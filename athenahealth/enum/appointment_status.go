@@ -2,6 +2,7 @@ package enum
 
 import "strconv"
 
+// AppointmentStatus is derived from https://docs.athenahealth.com/api/api-ref/appointment#Book-appointment
 type AppointmentStatus string
 
 const (
