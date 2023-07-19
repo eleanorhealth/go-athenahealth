@@ -3,7 +3,6 @@ package athenahealth
 import (
 	"context"
 	"fmt"
-	"github.com/eleanorhealth/go-athenahealth/athenahealth/enum"
 	"io"
 	"net/http"
 	"os"
@@ -339,7 +338,7 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 	assert.NoError(err)
 	assert.Equal("25.00", rescheduleAppointmentResult.AppointmentCopay)
 	assert.Equal("APT12345", rescheduleAppointmentResult.AppointmentID)
-	assert.Equal(enum.Future, rescheduleAppointmentResult.AppointmentStatus)
+	assert.Equal(AppointmentStatusFuture, rescheduleAppointmentResult.AppointmentStatus)
 	assert.Equal("Checkup", rescheduleAppointmentResult.AppointmentType)
 	assert.Equal("ATT12345", rescheduleAppointmentResult.AppointmentTypeID)
 	assert.Len(rescheduleAppointmentResult.Claims, 1)

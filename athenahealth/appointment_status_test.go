@@ -1,4 +1,4 @@
-package enum
+package athenahealth
 
 import (
 	"github.com/stretchr/testify/assert"
@@ -10,12 +10,12 @@ func TestAppointmentStatus_Int(t *testing.T) {
 		status      AppointmentStatus
 		expectedInt int
 	}{
-		{Cancelled, -1},
-		{ChargeEntered, 4},
-		{CheckedIn, 2},
-		{CheckedOut, 3},
-		{Future, -1},
-		{Open, -1},
+		{AppointmentStatusCancelled, -1},
+		{AppointmentStatusChargeEntered, 4},
+		{AppointmentStatusCheckedIn, 2},
+		{AppointmentStatusCheckedOut, 3},
+		{AppointmentStatusFuture, -1},
+		{AppointmentStatusOpen, -1},
 		{"unknown", -1},
 	}
 
@@ -31,13 +31,13 @@ func TestAppointmentStatus_String(t *testing.T) {
 		status      AppointmentStatus
 		expectedStr string
 	}{
-		{Cancelled, "x"},
-		{ChargeEntered, "4"},
-		{CheckedIn, "2"},
-		{CheckedOut, "3"},
-		{Future, "f"},
-		{Open, "o"},
-		{"does not exist", ""},
+		{AppointmentStatusCancelled, "x"},
+		{AppointmentStatusChargeEntered, "4"},
+		{AppointmentStatusCheckedIn, "2"},
+		{AppointmentStatusCheckedOut, "3"},
+		{AppointmentStatusFuture, "f"},
+		{AppointmentStatusOpen, "o"},
+		{"does not exist", "does not exist"},
 	}
 
 	for _, tt := range tests {
@@ -52,12 +52,12 @@ func TestAppointmentStatus_Valid(t *testing.T) {
 		status AppointmentStatus
 		valid  bool
 	}{
-		{Cancelled, true},
-		{ChargeEntered, true},
-		{CheckedIn, true},
-		{CheckedOut, true},
-		{Future, true},
-		{Open, true},
+		{AppointmentStatusCancelled, true},
+		{AppointmentStatusChargeEntered, true},
+		{AppointmentStatusCheckedIn, true},
+		{AppointmentStatusCheckedOut, true},
+		{AppointmentStatusFuture, true},
+		{AppointmentStatusOpen, true},
 		{"does not exist", false},
 	}
 
