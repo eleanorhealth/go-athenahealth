@@ -622,6 +622,48 @@ func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID stri
 	return out[0], nil
 }
 
+type UpdateBookedAppointmentOptions struct {
+	// New appointment type ID for this appointment.
+	AppointmentTypeID *string `json:"appointmenttypeid"`
+	// New department ID for this appointment.
+	DepartmentID *string `json:"departmentid"`
+	// New provider ID for this appointment.
+	ProviderID *string `json:"providerid"`
+	// New supervisingprovider ID for this appointment.
+	SupervisingProviderID *string `json:"supervisingproviderid"`
+}
+
+// UpdateBookedAppointment
+// PUT /v1/{practiceid}/appointments/booked/{appointmentid}
+// https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
+func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) (*StatusResponse, error) {
+	form := url.Values{}
+
+	if opts.AppointmentTypeID != nil {
+		form.Add("appointmenttypeid", *opts.AppointmentTypeID)
+	}
+
+	if opts.DepartmentID != nil {
+		form.Add("departmentid", *opts.DepartmentID)
+	}
+
+	if opts.ProviderID != nil {
+		form.Add("providerid", *opts.ProviderID)
+	}
+
+	if opts.SupervisingProviderID != nil {
+		form.Add("supervisingproviderid", *opts.SupervisingProviderID)
+	}
+
+	out := &StatusResponse{}
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/booked/%s", apptID), form, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
 type UseExpectedProcedureCodes struct {
 	// The ID of the code
 	ProcedureCode string `json:"procedurecode"`
