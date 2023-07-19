@@ -262,8 +262,8 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 func TestHTTPClient_BookAppointment(t *testing.T) {
 	assert := assert.New(t)
 
-	patientID := 1
-	apptID := 2
+	patientID := "1"
+	apptID := "2"
 
 	opts := &BookAppointmentOptions{
 		AppointmentTypeID:           3,

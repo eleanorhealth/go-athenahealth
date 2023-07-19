@@ -8,6 +8,27 @@ import (
 	"strconv"
 )
 
+type GetRequiredCheckInFieldsResult struct {
+	FieldList []string `json:"fieldlist"`
+}
+
+// DepartmentGetRequiredCheckInFields gets the fields required in order to perform check in per practice
+// GET /v1/{practiceid}/departments/{departmentid}/checkinrequired
+// https://docs.athenahealth.com/api/api-ref/required-fields-check#Get-list-of-required-fields-for-patient-check-in
+func (h *HTTPClient) DepartmentGetRequiredCheckInFields(ctx context.Context, deptID string) (*GetRequiredCheckInFieldsResult, error) {
+	if deptID == "" {
+		return nil, fmt.Errorf("cannot DepartmentGetRequiredCheckInFields with empty deptID [%s]", deptID)
+	}
+
+	out := GetRequiredCheckInFieldsResult{}
+	_, err := h.Get(ctx, fmt.Sprintf("/departments/%s/checkinrequired", deptID), nil, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &out, nil
+}
+
 type Department struct {
 	MedicationHistoryConsent bool   `json:"medicationhistoryconsent"`
 	TimeZoneOffset           int    `json:"timezoneoffset"`

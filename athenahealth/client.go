@@ -8,6 +8,7 @@ import (
 
 // Client describes a client for the athenahealth API.
 type Client interface {
+	DepartmentGetRequiredCheckInFields(ctx context.Context, deptID string) (*GetRequiredCheckInFieldsResult, error)
 	GetDepartment(ctx context.Context, departmentID string) (*Department, error)
 	ListDepartments(context.Context, *ListDepartmentsOptions) (*ListDepartmentsResult, error)
 
@@ -24,8 +25,13 @@ type Client interface {
 	ListBookedAppointments(context.Context, *ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error)
 	ListChangedAppointments(context.Context, *ListChangedAppointmentsOptions) ([]*BookedAppointment, error)
 	ListOpenAppointmentSlots(ctx context.Context, departmentID int, opts *ListOpenAppointmentSlotOptions) (*ListOpenAppointmentSlotsResult, error)
-	BookAppointment(ctx context.Context, patientID, apptID int, opts *BookAppointmentOptions) (*BookedAppointment, error)
+	BookAppointment(ctx context.Context, patientID, apptID string, opts *BookAppointmentOptions) (*BookedAppointment, error)
 	RescheduleAppointment(ctx context.Context, apptID int, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error)
+
+	AppointmentCancelCheckIn(ctx context.Context, apptID string) error
+	AppointmentCheckIn(ctx context.Context, apptID string) error
+	AppointmentCheckOut(ctx context.Context, apptID string) error
+	AppointmentStartCheckIn(ctx context.Context, apptID string) error
 
 	CreateAppointmentSlot(ctx context.Context, opts *CreateAppointmentSlotOptions) (*CreateAppointmentSlotResult, error)
 	CreateAppointmentType(ctx context.Context, options *CreateAppointmentTypeOptions) (*CreateAppointmentTypeResult, error)
