@@ -2,8 +2,8 @@ package athenahealth
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/pkg/errors"
 	"strconv"
 )
 
@@ -17,18 +17,13 @@ type ErrorMessageResponse struct {
 	Success bool   `json:"success"`
 }
 
-type StrInt struct {
-	IntVal int
-	StrVal string
-}
-
-func (is *StrInt) GetError() error {
-	if is.IntVal == 0 && is.StrVal == "" {
-		return errors.Errorf("StrInt is neither an int [%d] or a string [%s]", is.IntVal, is.StrVal)
+func (sr *StatusResponse) GetError() error {
+	if !sr.IsValid {
+		return fmt.Errorf("StatusResponse is neither an int [%d] or a string [%s]", sr.IntVal, sr.StrVal)
 	}
 
-	if is.StrVal != "" && is.IntVal == 0 {
-		return errors.Errorf("Athena API Error message: [%s]", is.StrVal)
+	if sr.IsError {
+		return errors.New(sr.StrVal)
 	}
 
 	return nil
@@ -38,31 +33,46 @@ func (is *StrInt) GetError() error {
 // https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
 // * This subroutine will return 1 on success, and will otherwise return an error message.
 type StatusResponse struct {
-	Status StrInt `json:"status"`
+	StrVal  string
+	IntVal  int
+	IsValid bool
+	IsError bool
 }
 
-func (is *StrInt) UnmarshalJSON(data []byte) error {
-	var tmp json.RawMessage
-	if err := json.Unmarshal(data, &tmp); err != nil {
-		return err
-	}
+type statusResponseInt struct {
+	Status int `json:"status"`
+}
 
-	strErr := json.Unmarshal(tmp, &is.StrVal)
-	intErr := json.Unmarshal(tmp, &is.IntVal)
+type statusResponseStr struct {
+	Status string `json:"status"`
+}
 
-	if strErr != nil && intErr != nil {
-		return fmt.Errorf("failed to unmarshal JSON string: [%+v] [%+v]", strErr, intErr)
+func (sr *StatusResponse) UnmarshalJSON(data []byte) error {
+	tempSRInt := &statusResponseInt{}
+	tempSRStr := &statusResponseStr{}
+	intErr := json.Unmarshal(data, tempSRInt)
+	strErr := json.Unmarshal(data, tempSRStr)
+
+	if intErr == nil {
+		sr.IntVal = tempSRInt.Status
+		sr.IsError = false
+		sr.IsValid = true
+		sr.StrVal = strconv.Itoa(sr.IntVal)
+		return nil
 	}
 
 	if strErr == nil {
-		if intValue, err := strconv.Atoi(is.StrVal); err == nil {
-			is.IntVal = intValue
+		sr.StrVal = tempSRStr.Status
+		intVal, convErr := strconv.Atoi(sr.StrVal)
+		sr.IntVal = intVal
+		sr.IsValid = true
+		if convErr != nil {
+			sr.IsError = true
+		} else {
+			sr.IsError = false
 		}
+		return nil
 	}
 
-	if intErr == nil {
-		is.StrVal = strconv.Itoa(is.IntVal)
-	}
-
-	return nil
+	return fmt.Errorf("StatusResponse is neither an int [%s] or a string [%s]", intErr.Error(), strErr.Error())
 }

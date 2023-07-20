@@ -330,11 +330,8 @@ func TestHTTPClient_UpdateBookedAppointment_IntResponse(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	updateRes, updateErr := athenaClient.UpdateBookedAppointment(context.Background(), apptID, opts)
+	updateErr := athenaClient.UpdateBookedAppointment(context.Background(), apptID, opts)
 	assert.NoError(updateErr)
-
-	assert.Equal(1, updateRes.Status.IntVal)
-	assert.Equal("1", updateRes.Status.StrVal)
 }
 
 func TestHTTPClient_UpdateBookedAppointment_StringResponse(t *testing.T) {
@@ -366,12 +363,9 @@ func TestHTTPClient_UpdateBookedAppointment_StringResponse(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	updateRes, updateErr := athenaClient.UpdateBookedAppointment(context.Background(), apptID, opts)
+	updateErr := athenaClient.UpdateBookedAppointment(context.Background(), apptID, opts)
 	assert.Error(updateErr)
-
-	assert.Equal("Athena API Error message: [My name is Athena and I don't understand JSON types]", updateErr.Error())
-	assert.Equal("My name is Athena and I don't understand JSON types", updateRes.Status.StrVal)
-	assert.Equal(0, updateRes.Status.IntVal)
+	assert.Equal(updateErr.Error(), "My name is Athena and I don't understand JSON types")
 }
 
 func TestHTTPClient_RescheduleAppointment(t *testing.T) {

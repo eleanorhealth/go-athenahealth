@@ -636,7 +636,7 @@ type UpdateBookedAppointmentOptions struct {
 // UpdateBookedAppointment
 // PUT /v1/{practiceid}/appointments/booked/{appointmentid}
 // https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
-func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) (*StatusResponse, error) {
+func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) error {
 	form := url.Values{}
 
 	if opts.AppointmentTypeID != nil {
@@ -658,15 +658,10 @@ func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string,
 	out := &StatusResponse{}
 	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/booked/%s", apptID), form, out)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	secondaryErr := out.Status.GetError()
-	if secondaryErr != nil {
-		return out, secondaryErr
-	}
-
-	return out, nil
+	return out.GetError()
 }
 
 type UseExpectedProcedureCodes struct {
