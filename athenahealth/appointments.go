@@ -655,13 +655,17 @@ func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string,
 		form.Add("supervisingproviderid", *opts.SupervisingProviderID)
 	}
 
-	out := &StatusResponse{}
-	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/booked/%s", apptID), form, out)
+	outNum := 0
+	res, err := h.PutForm(ctx, fmt.Sprintf("/appointments/booked/%s", apptID), form, &outNum)
 	if err != nil {
+		if strings.Contains(err.Error(), "cannot unmarshal string into Go value of type int") {
+			return BodyToErrorString(res.Body)
+		}
+
 		return err
 	}
 
-	return out.GetError()
+	return nil
 }
 
 type UseExpectedProcedureCodes struct {
