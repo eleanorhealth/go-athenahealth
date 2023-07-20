@@ -1,7 +1,5 @@
 package athenahealth
 
-import "strconv"
-
 // AppointmentStatus is derived from https://docs.athenahealth.com/api/api-ref/appointment#Book-appointment
 // The athenaNet appointment status. There are several possible statuses.
 // x=cancelled
@@ -21,35 +19,22 @@ const (
 	AppointmentStatusOpen          AppointmentStatus = "o"
 )
 
-func (as AppointmentStatus) Int() int {
-	intVal, convErr := strconv.Atoi(string(as))
-	if convErr != nil {
-		return -1
-	}
-
-	return intVal
+var appointmentStatuses = []AppointmentStatus{
+	AppointmentStatusCancelled,
+	AppointmentStatusChargeEntered,
+	AppointmentStatusCheckedIn,
+	AppointmentStatusCheckedOut,
+	AppointmentStatusFuture,
+	AppointmentStatusOpen,
 }
 
 func (as AppointmentStatus) String() string {
-	if as.Valid() {
-		return string(as)
-	}
-
-	return ""
+	return string(as)
 }
 
 func (as AppointmentStatus) Valid() bool {
-	appointmentStatuses := []AppointmentStatus{
-		AppointmentStatusCancelled,
-		AppointmentStatusChargeEntered,
-		AppointmentStatusCheckedIn,
-		AppointmentStatusCheckedOut,
-		AppointmentStatusFuture,
-		AppointmentStatusOpen,
-	}
-
 	for _, currentAS := range appointmentStatuses {
-		if string(currentAS) == string(as) {
+		if currentAS == as {
 			return true
 		}
 	}
