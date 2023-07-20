@@ -25,7 +25,6 @@ When you're finished with the changes, create a pull request (PR).
 - Fill out the [pull request template](./pull_request_template.md) so that we can review your PR. This template helps reviewers understand your changes as well as the purpose of your pull request. Note that any breaking changes should be called out in your pull request description.
 - We may ask for changes to be made before a PR can be merged, either using suggested changes or pull request comments.
 - As you update your PR and apply changes, mark each conversation as resolved.
-- If someone has requested changes on your pull request and you believe you have made all necessary changes you can re-request review from that person using the "Reviewers" feature.
 
 ### Your PR is merged!
 
