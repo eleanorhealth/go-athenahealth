@@ -19,13 +19,13 @@ const (
 	AppointmentStatusOpen          AppointmentStatus = "o"
 )
 
-var appointmentStatuses = []AppointmentStatus{
-	AppointmentStatusCancelled,
-	AppointmentStatusChargeEntered,
-	AppointmentStatusCheckedIn,
-	AppointmentStatusCheckedOut,
-	AppointmentStatusFuture,
-	AppointmentStatusOpen,
+var appointmentStatuses = map[AppointmentStatus]bool{
+	AppointmentStatusCancelled:     true,
+	AppointmentStatusChargeEntered: true,
+	AppointmentStatusCheckedIn:     true,
+	AppointmentStatusCheckedOut:    true,
+	AppointmentStatusFuture:        true,
+	AppointmentStatusOpen:          true,
 }
 
 func (as AppointmentStatus) String() string {
@@ -33,10 +33,5 @@ func (as AppointmentStatus) String() string {
 }
 
 func (as AppointmentStatus) Valid() bool {
-	for _, currentAS := range appointmentStatuses {
-		if currentAS == as {
-			return true
-		}
-	}
-	return false
+	return appointmentStatuses[as]
 }
