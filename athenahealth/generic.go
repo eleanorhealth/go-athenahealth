@@ -3,6 +3,7 @@ package athenahealth
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/pkg/errors"
 	"strconv"
 )
 
@@ -21,28 +22,16 @@ type StrInt struct {
 	StrVal string
 }
 
-func (is *StrInt) IsError() bool {
+func (is *StrInt) GetError() error {
 	if is.IntVal == 0 && is.StrVal == "" {
-		return true
+		return errors.Errorf("StrInt is neither an int [%d] or a string [%s]", is.IntVal, is.StrVal)
 	}
 
 	if is.StrVal != "" && is.IntVal == 0 {
-		return true
+		return errors.Errorf("Athena API Error message: [%s]", is.StrVal)
 	}
 
-	return false
-}
-
-func (is *StrInt) Error() string {
-	if is.IntVal == 0 && is.StrVal == "" {
-		return fmt.Sprintf("StrInt is neither an int [%d] or a string [%s]", is.IntVal, is.StrVal)
-	}
-
-	if is.StrVal != "" && is.IntVal == 0 {
-		return fmt.Sprintf("StrInt holds an Athena API Error message: [%s]", is.StrVal)
-	}
-
-	return ""
+	return nil
 }
 
 // StatusResponse

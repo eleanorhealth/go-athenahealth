@@ -367,8 +367,9 @@ func TestHTTPClient_UpdateBookedAppointment_StringResponse(t *testing.T) {
 	defer ts.Close()
 
 	updateRes, updateErr := athenaClient.UpdateBookedAppointment(context.Background(), apptID, opts)
-	assert.NoError(updateErr)
+	assert.Error(updateErr)
 
+	assert.Equal("Athena API Error message: [My name is Athena and I don't understand JSON types]", updateErr.Error())
 	assert.Equal("My name is Athena and I don't understand JSON types", updateRes.Status.StrVal)
 	assert.Equal(0, updateRes.Status.IntVal)
 }

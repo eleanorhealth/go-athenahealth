@@ -661,6 +661,11 @@ func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string,
 		return nil, err
 	}
 
+	secondaryErr := out.Status.GetError()
+	if secondaryErr != nil {
+		return out, secondaryErr
+	}
+
 	return out, nil
 }
 
