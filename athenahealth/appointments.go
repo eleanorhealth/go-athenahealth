@@ -175,6 +175,8 @@ func (h *HTTPClient) ListBookedAppointments(ctx context.Context, opts *ListBooke
 
 		if opts.AppointmentStatus.Valid() {
 			q.Add("appointmentstatus", opts.AppointmentStatus.String())
+		} else {
+			return nil, fmt.Errorf("invalid AppointmentStatus [%s]", opts.AppointmentStatus.String())
 		}
 
 		if opts.Pagination != nil {
