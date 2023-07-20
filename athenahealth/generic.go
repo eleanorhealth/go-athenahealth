@@ -39,22 +39,18 @@ type StatusResponse struct {
 	IsError bool
 }
 
-type statusResponseInt struct {
-	Status int `json:"status"`
-}
-
 type statusResponseStr struct {
 	Status string `json:"status"`
 }
 
 func (sr *StatusResponse) UnmarshalJSON(data []byte) error {
-	tempSRInt := &statusResponseInt{}
+	tempInt := 0
 	tempSRStr := &statusResponseStr{}
-	intErr := json.Unmarshal(data, tempSRInt)
+	intErr := json.Unmarshal(data, &tempInt)
 	strErr := json.Unmarshal(data, tempSRStr)
 
 	if intErr == nil {
-		sr.IntVal = tempSRInt.Status
+		sr.IntVal = tempInt
 		sr.IsError = false
 		sr.IsValid = true
 		sr.StrVal = strconv.Itoa(sr.IntVal)

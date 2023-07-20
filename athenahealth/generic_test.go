@@ -30,20 +30,21 @@ func TestUnmarshalIntStr(t *testing.T) {
 			returnsError: false,
 		},
 		{
-			name:       "Success case - number as a string",
+			name:       "Success case - raw integer",
+			input:      `42`,
 			errorValue: nil,
-			input:      `{"status": "42"}`,
 			expected: StatusResponse{
-				IntVal:  42,
-				IsError: false,
-				IsValid: true,
 				StrVal:  "42",
+				IntVal:  42,
+				IsValid: true,
+				IsError: false,
 			},
 			returnsError: false,
 		},
 		{
-			name:  "Success case - number as a number",
-			input: `{"status": 42}`,
+			name:       "Success case - number as a string",
+			errorValue: nil,
+			input:      `{"status": "42"}`,
 			expected: StatusResponse{
 				IntVal:  42,
 				IsError: false,
