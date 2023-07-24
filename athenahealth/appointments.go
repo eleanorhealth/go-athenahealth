@@ -22,6 +22,7 @@ type Appointment struct {
 	EncounterID                string `json:"encounterid"`
 	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
 	ProviderID                 string `json:"providerid"`
+	RenderingProviderID        string `json:"renderingproviderid"`
 	StartTime                  string `json:"starttime"`
 }
 
@@ -94,12 +95,12 @@ type BookedAppointment struct {
 	AppointmentStatus          string `json:"appointmentstatus"`
 	AppointmentType            string `json:"appointmenttype"`
 	AppointmentTypeID          string `json:"appointmenttypeid"`
-	CancelledBy                string `json:"cancelledby"`
-	CancelledDatetime          string `json:"cancelleddatetime"`
 	CancelReasonID             string `json:"cancelreasonid"`
 	CancelReasonName           string `json:"cancelreasonname"`
 	CancelReasonNoShow         bool   `json:"cancelreasonnoshow"`
 	CancelReasonSlotAvailable  bool   `json:"cancelreasonslotavailable"`
+	CancelledBy                string `json:"cancelledby"`
+	CancelledDatetime          string `json:"cancelleddatetime"`
 	ChargeEntryNotRequired     bool   `json:"chargeentrynotrequired"`
 	CoordinatorEnterprise      bool   `json:"coordinatorenterprise"`
 	Copay                      int    `json:"copay"`
@@ -113,6 +114,7 @@ type BookedAppointment struct {
 	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
 	PatientID                  string `json:"patientid"`
 	ProviderID                 string `json:"providerid"`
+	RenderingProviderID        string `json:"renderingproviderid"`
 	ScheduledBy                string `json:"scheduledby"`
 	ScheduledDatetime          string `json:"scheduleddatetime"`
 	StartTime                  string `json:"starttime"`
@@ -121,6 +123,7 @@ type BookedAppointment struct {
 }
 
 type ListBookedAppointmentsOptions struct {
+	AppointmentTypeID string
 	DepartmentID      string
 	EndDate           time.Time
 	PatientID         string
