@@ -21,6 +21,7 @@ type Appointment struct {
 	Duration                   int    `json:"duration"`
 	EncounterID                string `json:"encounterid"`
 	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
+	PatientID                  string `json:"patientid"`
 	ProviderID                 string `json:"providerid"`
 	RenderingProviderID        string `json:"renderingproviderid"`
 	StartTime                  string `json:"starttime"`
