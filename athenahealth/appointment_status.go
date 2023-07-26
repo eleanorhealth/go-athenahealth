@@ -19,13 +19,13 @@ const (
 	AppointmentStatusOpen          AppointmentStatus = "o"
 )
 
-var appointmentStatuses = map[AppointmentStatus]bool{
-	AppointmentStatusCancelled:     true,
-	AppointmentStatusChargeEntered: true,
-	AppointmentStatusCheckedIn:     true,
-	AppointmentStatusCheckedOut:    true,
-	AppointmentStatusFuture:        true,
-	AppointmentStatusOpen:          true,
+var appointmentStatuses = map[AppointmentStatus]struct{}{
+	AppointmentStatusCancelled:     {},
+	AppointmentStatusChargeEntered: {},
+	AppointmentStatusCheckedIn:     {},
+	AppointmentStatusCheckedOut:    {},
+	AppointmentStatusFuture:        {},
+	AppointmentStatusOpen:          {},
 }
 
 func (as AppointmentStatus) String() string {
@@ -33,5 +33,6 @@ func (as AppointmentStatus) String() string {
 }
 
 func (as AppointmentStatus) Valid() bool {
-	return appointmentStatuses[as]
+	_, exists := appointmentStatuses[as]
+	return exists
 }
