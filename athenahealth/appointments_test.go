@@ -54,7 +54,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 		assert.Equal("1", r.URL.Query().Get("providerid"))
 		assert.Equal("06/01/2020", r.URL.Query().Get("startdate"))
 		assert.Equal("06/03/2020", r.URL.Query().Get("enddate"))
-		assert.Equal("x", r.URL.Query().Get("appointmentstatus"))
+		assert.Equal(AppointmentStatusCancelled.String(), r.URL.Query().Get("appointmentstatus"))
 
 		b, _ := os.ReadFile("./resources/ListBookedAppointments.json")
 		w.Write(b)
@@ -67,7 +67,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 		ProviderID:        "1",
 		StartDate:         time.Date(2020, 6, 1, 0, 0, 0, 0, time.UTC),
 		EndDate:           time.Date(2020, 6, 3, 0, 0, 0, 0, time.UTC),
-		AppointmentStatus: "x",
+		AppointmentStatus: AppointmentStatusCancelled,
 	}
 
 	res, err := athenaClient.ListBookedAppointments(context.Background(), opts)
@@ -338,7 +338,7 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 	assert.NoError(err)
 	assert.Equal("25.00", rescheduleAppointmentResult.AppointmentCopay)
 	assert.Equal("APT12345", rescheduleAppointmentResult.AppointmentID)
-	assert.Equal("f", rescheduleAppointmentResult.AppointmentStatus)
+	assert.Equal(AppointmentStatusFuture, rescheduleAppointmentResult.AppointmentStatus)
 	assert.Equal("Checkup", rescheduleAppointmentResult.AppointmentType)
 	assert.Equal("ATT12345", rescheduleAppointmentResult.AppointmentTypeID)
 	assert.Len(rescheduleAppointmentResult.Claims, 1)

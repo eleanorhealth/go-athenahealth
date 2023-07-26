@@ -11,18 +11,18 @@ import (
 )
 
 type Appointment struct {
-	AppointmentID              string `json:"appointmentid"`
-	AppointmentStatus          string `json:"appointmentstatus"`
-	AppointmentType            string `json:"appointmenttype"`
-	AppointmentTypeID          string `json:"appointmenttypeid"`
-	ChargeEntryNotRequired     bool   `json:"chargeentrynotrequired"`
-	Date                       string `json:"date"`
-	DepartmentID               string `json:"departmentid"`
-	Duration                   int    `json:"duration"`
-	EncounterID                string `json:"encounterid"`
-	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
-	ProviderID                 string `json:"providerid"`
-	StartTime                  string `json:"starttime"`
+	AppointmentID              string            `json:"appointmentid"`
+	AppointmentStatus          AppointmentStatus `json:"appointmentstatus"`
+	AppointmentType            string            `json:"appointmenttype"`
+	AppointmentTypeID          string            `json:"appointmenttypeid"`
+	ChargeEntryNotRequired     bool              `json:"chargeentrynotrequired"`
+	Date                       string            `json:"date"`
+	DepartmentID               string            `json:"departmentid"`
+	Duration                   int               `json:"duration"`
+	EncounterID                string            `json:"encounterid"`
+	PatientAppointmentTypeName string            `json:"patientappointmenttypename"`
+	ProviderID                 string            `json:"providerid"`
+	StartTime                  string            `json:"starttime"`
 }
 
 // GetAppointment - Get single appointment
@@ -91,33 +91,33 @@ type BookedAppointment struct {
 		Text              string `json:"text"`
 		ID                int    `json:"id"`
 	} `json:"appointmentnotes"`
-	AppointmentStatus          string `json:"appointmentstatus"`
-	AppointmentType            string `json:"appointmenttype"`
-	AppointmentTypeID          string `json:"appointmenttypeid"`
-	CancelledBy                string `json:"cancelledby"`
-	CancelledDatetime          string `json:"cancelleddatetime"`
-	CancelReasonID             string `json:"cancelreasonid"`
-	CancelReasonName           string `json:"cancelreasonname"`
-	CancelReasonNoShow         bool   `json:"cancelreasonnoshow"`
-	CancelReasonSlotAvailable  bool   `json:"cancelreasonslotavailable"`
-	ChargeEntryNotRequired     bool   `json:"chargeentrynotrequired"`
-	CoordinatorEnterprise      bool   `json:"coordinatorenterprise"`
-	Copay                      int    `json:"copay"`
-	Date                       string `json:"date"`
-	DepartmentID               string `json:"departmentid"`
-	Duration                   int    `json:"duration"`
-	EncounterID                string `json:"encounterid"`
-	HL7ProviderID              int    `json:"hl7providerid"`
-	LastModified               string `json:"lastmodified"`
-	LastModifiedBy             string `json:"lastmodifiedby"`
-	PatientAppointmentTypeName string `json:"patientappointmenttypename"`
-	PatientID                  string `json:"patientid"`
-	ProviderID                 string `json:"providerid"`
-	ScheduledBy                string `json:"scheduledby"`
-	ScheduledDatetime          string `json:"scheduleddatetime"`
-	StartTime                  string `json:"starttime"`
-	TemplateAppointmentID      string `json:"templateappointmentid"`
-	TemplateAppointmentTypeID  string `json:"templateappointmenttypeid"`
+	AppointmentStatus          AppointmentStatus `json:"appointmentstatus"`
+	AppointmentType            string            `json:"appointmenttype"`
+	AppointmentTypeID          string            `json:"appointmenttypeid"`
+	CancelledBy                string            `json:"cancelledby"`
+	CancelledDatetime          string            `json:"cancelleddatetime"`
+	CancelReasonID             string            `json:"cancelreasonid"`
+	CancelReasonName           string            `json:"cancelreasonname"`
+	CancelReasonNoShow         bool              `json:"cancelreasonnoshow"`
+	CancelReasonSlotAvailable  bool              `json:"cancelreasonslotavailable"`
+	ChargeEntryNotRequired     bool              `json:"chargeentrynotrequired"`
+	CoordinatorEnterprise      bool              `json:"coordinatorenterprise"`
+	Copay                      int               `json:"copay"`
+	Date                       string            `json:"date"`
+	DepartmentID               string            `json:"departmentid"`
+	Duration                   int               `json:"duration"`
+	EncounterID                string            `json:"encounterid"`
+	HL7ProviderID              int               `json:"hl7providerid"`
+	LastModified               string            `json:"lastmodified"`
+	LastModifiedBy             string            `json:"lastmodifiedby"`
+	PatientAppointmentTypeName string            `json:"patientappointmenttypename"`
+	PatientID                  string            `json:"patientid"`
+	ProviderID                 string            `json:"providerid"`
+	ScheduledBy                string            `json:"scheduledby"`
+	ScheduledDatetime          string            `json:"scheduleddatetime"`
+	StartTime                  string            `json:"starttime"`
+	TemplateAppointmentID      string            `json:"templateappointmentid"`
+	TemplateAppointmentTypeID  string            `json:"templateappointmenttypeid"`
 }
 
 type ListBookedAppointmentsOptions struct {
@@ -126,7 +126,7 @@ type ListBookedAppointmentsOptions struct {
 	PatientID         string
 	ProviderID        string
 	StartDate         time.Time
-	AppointmentStatus string
+	AppointmentStatus AppointmentStatus
 
 	Pagination *PaginationOptions
 }
@@ -173,8 +173,10 @@ func (h *HTTPClient) ListBookedAppointments(ctx context.Context, opts *ListBooke
 			q.Add("enddate", opts.EndDate.Format("01/02/2006"))
 		}
 
-		if len(opts.AppointmentStatus) > 0 {
-			q.Add("appointmentstatus", opts.AppointmentStatus)
+		if opts.AppointmentStatus.Valid() {
+			q.Add("appointmentstatus", opts.AppointmentStatus.String())
+		} else {
+			return nil, fmt.Errorf("invalid AppointmentStatus [%s]", opts.AppointmentStatus.String())
 		}
 
 		if opts.Pagination != nil {
@@ -635,7 +637,7 @@ type RescheduleAppointmentResult struct {
 	// Appointment ID of the booked appointment
 	AppointmentID string `json:"appointmentid"`
 	// The athenaNet appointment status. There are several possible statuses. x=cancelled f=future o=open. 2=checked in 3=checked out 4=charge entered
-	AppointmentStatus string `json:"appointmentstatus"`
+	AppointmentStatus AppointmentStatus `json:"appointmentstatus"`
 	// The practice-friendly (not patient friendly) name for this appointment type. Note that this may not be the same as the booked appointment because of "generic" slots.
 	AppointmentType string `json:"appointmenttype"`
 	// This is the ID for the appointment type. Note that this may not be the same as the booked appointment because of "generic" slots.
