@@ -280,6 +280,18 @@ func TestHTTPClient_WithStats(t *testing.T) {
 	assert.Equal(stats, athenaClient.stats)
 }
 
+func TestHTTPClient_WithRequestTimeout(t *testing.T) {
+	assert := assert.New(t)
+
+	athenaClient := NewHTTPClient(&http.Client{}, "", "", "")
+	assert.Equal(defaultRequestTimeout, athenaClient.requestTimeout)
+
+	requestTimeout := time.Minute
+	athenaClient.WithRequestTimeout(requestTimeout)
+
+	assert.Equal(requestTimeout, athenaClient.requestTimeout)
+}
+
 func TestHTTPClient_Get(t *testing.T) {
 	assert := assert.New(t)
 

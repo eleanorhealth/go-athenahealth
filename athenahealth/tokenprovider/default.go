@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -68,19 +67,14 @@ func (d *Default) Provide(ctx context.Context) (string, time.Time, error) {
 	if err != nil {
 		return "", time.Now(), err
 	}
+	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
 		return "", time.Now(), fmt.Errorf("%s", res.Status)
 	}
 
-	b, err := io.ReadAll(res.Body)
-	if err != nil {
-		return "", time.Now(), err
-	}
-	res.Body.Close()
-
 	authRes := &authResponse{}
-	err = json.Unmarshal(b, authRes)
+	err = json.NewDecoder(res.Body).Decode(authRes)
 	if err != nil {
 		return "", time.Now(), err
 	}
