@@ -637,11 +637,13 @@ type UpdateBookedAppointmentOptions struct {
 	SupervisingProviderID *string `json:"supervisingproviderid"`
 }
 
+// https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
+// status	string	This subroutine will return 1 on success, and will otherwise return an error message.
+var successfulResponse = "1"
+
 // UpdateBookedAppointment
 // PUT /v1/{practiceid}/appointments/booked/{appointmentid}
 // https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
-// Output Parameters
-// status	string	This subroutine will return 1 on success, and will otherwise return an error message.
 func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) error {
 	form := url.Values{}
 
@@ -667,7 +669,7 @@ func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string,
 		return err
 	}
 
-	if string(statusRes) != SuccessfulResponse {
+	if string(statusRes) != successfulResponse {
 		return errors.New(string(statusRes))
 	}
 

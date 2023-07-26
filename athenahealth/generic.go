@@ -9,5 +9,3 @@ type ErrorMessageResponse struct {
 	Message string `json:"errormessage"`
 	Success bool   `json:"success"`
 }
-
-const SuccessfulResponse = "1"
