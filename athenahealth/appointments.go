@@ -641,7 +641,7 @@ type UpdateBookedAppointmentOptions struct {
 
 // https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
 // status	string	This subroutine will return 1 on success, and will otherwise return an error message.
-var successfulResponse = "1"
+var updateBookedApptSuccess = "1"
 
 // UpdateBookedAppointment
 // PUT /v1/{practiceid}/appointments/booked/{appointmentid}
@@ -671,7 +671,7 @@ func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string,
 		return err
 	}
 
-	if string(statusRes) != successfulResponse {
+	if string(statusRes) != updateBookedApptSuccess {
 		return errors.New(string(statusRes))
 	}
 
