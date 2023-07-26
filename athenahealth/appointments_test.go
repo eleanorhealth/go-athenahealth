@@ -365,7 +365,7 @@ func TestHTTPClient_UpdateBookedAppointment_StringResponse(t *testing.T) {
 
 	updateErr := athenaClient.UpdateBookedAppointment(context.Background(), apptID, opts)
 	assert.Error(updateErr)
-	assert.Equal(updateErr.Error(), "My name is Athena and I don't understand JSON types")
+	assert.Equal(updateErr.Error(), "Invalid PROVIDERID input")
 }
 
 func TestHTTPClient_RescheduleAppointment(t *testing.T) {

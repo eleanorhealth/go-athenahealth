@@ -640,6 +640,8 @@ type UpdateBookedAppointmentOptions struct {
 // UpdateBookedAppointment
 // PUT /v1/{practiceid}/appointments/booked/{appointmentid}
 // https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
+// Output Parameters
+// status	string	This subroutine will return 1 on success, and will otherwise return an error message.
 func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) error {
 	form := url.Values{}
 
@@ -659,14 +661,14 @@ func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string,
 		form.Add("supervisingproviderid", *opts.SupervisingProviderID)
 	}
 
-	outNum := 0
-	res, err := h.PutForm(ctx, fmt.Sprintf("/appointments/booked/%s", apptID), form, &outNum)
+	var statusRes NumberString
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/booked/%s", apptID), form, &statusRes)
 	if err != nil {
-		if strings.Contains(err.Error(), "cannot unmarshal string into Go value of type int") {
-			return BodyToErrorString(res.Body)
-		}
-
 		return err
+	}
+
+	if string(statusRes) != "1" {
+		return errors.New(string(statusRes))
 	}
 
 	return nil
