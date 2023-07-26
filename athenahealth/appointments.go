@@ -667,7 +667,7 @@ func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string,
 		return err
 	}
 
-	if string(statusRes) != "1" {
+	if string(statusRes) != SuccessfulResponse {
 		return errors.New(string(statusRes))
 	}
 
