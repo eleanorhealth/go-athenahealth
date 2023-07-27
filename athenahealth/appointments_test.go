@@ -64,10 +64,10 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 	defer ts.Close()
 
 	opts := &ListBookedAppointmentsOptions{
-		ProviderID:        "1",
+		ProviderID:        func() *string { a := "1"; return &a }(),
 		StartDate:         time.Date(2020, 6, 1, 0, 0, 0, 0, time.UTC),
 		EndDate:           time.Date(2020, 6, 3, 0, 0, 0, 0, time.UTC),
-		AppointmentStatus: AppointmentStatusCancelled,
+		AppointmentStatus: func() *AppointmentStatus { a := AppointmentStatusCancelled; return &a }(),
 	}
 
 	res, err := athenaClient.ListBookedAppointments(context.Background(), opts)
@@ -262,32 +262,32 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 func TestHTTPClient_BookAppointment(t *testing.T) {
 	assert := assert.New(t)
 
-	patientID := "1"
 	apptID := "2"
 
 	opts := &BookAppointmentOptions{
-		AppointmentTypeID:           3,
-		BookingNote:                 "Hello World!",
-		DepartmentID:                4,
-		DoNotSendConfirmationEmail:  true,
-		IgnoreSchedulablePermission: true,
-		NoPatientCase:               true,
-		ReasonID:                    5,
-		Urgent:                      true,
+		AppointmentTypeID:           PtrStr("3"),
+		BookingNote:                 PtrStr("Hello World!"),
+		DepartmentID:                PtrStr("4"),
+		DoNotSendConfirmationEmail:  PtrBool(true),
+		IgnoreSchedulablePermission: PtrBool(true),
+		NoPatientCase:               PtrBool(true),
+		PatientID:                   "1",
+		ReasonID:                    PtrStr("5"),
+		Urgent:                      PtrBool(true),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		reqBody, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
+		assert.NoError(r.ParseForm())
 
-		assert.Contains(string(reqBody), "appointmenttypeid=3")
-		assert.Contains(string(reqBody), "bookingnote=Hello+World%21")
-		assert.Contains(string(reqBody), "departmentid=4")
-		assert.Contains(string(reqBody), "donotsendconfirmationemail=true")
-		assert.Contains(string(reqBody), "ignoreschedulablepermission=true")
-		assert.Contains(string(reqBody), "nopatientcase=true")
-		assert.Contains(string(reqBody), "reasonid=5")
-		assert.Contains(string(reqBody), "urgent=true")
+		assert.Equal(r.Form.Get("appointmenttypeid"), *opts.AppointmentTypeID)
+		assert.Equal(r.Form.Get("bookingnote"), *opts.BookingNote)
+		assert.Equal(r.Form.Get("departmentid"), *opts.DepartmentID)
+		assert.Equal(r.Form.Get("donotsendconfirmationemail"), "true")
+		assert.Equal(r.Form.Get("ignoreschedulablepermission"), "true")
+		assert.Equal(r.Form.Get("nopatientcase"), "true")
+		assert.Equal(r.Form.Get("patientid"), "1")
+		assert.Equal(r.Form.Get("reasonid"), "5")
+		assert.Equal(r.Form.Get("urgent"), "true")
 
 		b, _ := os.ReadFile("./resources/BookAppointment.json")
 		w.Write(b)
@@ -296,7 +296,7 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	_, err := athenaClient.BookAppointment(context.Background(), patientID, apptID, opts)
+	_, err := athenaClient.BookAppointment(context.Background(), apptID, opts)
 
 	assert.NoError(err)
 }
@@ -372,24 +372,24 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 	assert := assert.New(t)
 
 	opts := &RescheduleAppointmentOptions{
-		AppointmentCancelReasonID:   func() *int { a := 2; return &a }(),
-		IgnoreSchedulablePermission: func() *bool { a := true; return &a }(),
-		NewAppointmentID:            123,
-		NoPatientCase:               func() *bool { a := false; return &a }(),
-		PatientID:                   456,
-		ReasonID:                    func() *int { a := 3; return &a }(),
-		RescheduleReason:            func() *string { a := "Other commitments"; return &a }(),
+		AppointmentCancelReasonID:   PtrStr("2"),
+		IgnoreSchedulablePermission: PtrBool(true),
+		NewAppointmentID:            "123",
+		NoPatientCase:               PtrBool(true),
+		PatientID:                   "456",
+		ReasonID:                    PtrStr("3"),
+		RescheduleReason:            PtrStr("other commitments"),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.NoError(r.ParseForm())
 
-		assert.Equal(r.Form.Get("appointmentcancelreasonid"), strconv.Itoa(*opts.AppointmentCancelReasonID))
-		assert.Equal(r.Form.Get("ignoreschedulablepermission"), strconv.FormatBool(*opts.IgnoreSchedulablePermission))
-		assert.Equal(r.Form.Get("newappointmentid"), strconv.Itoa(opts.NewAppointmentID))
-		assert.Equal(r.Form.Get("nopatientcase"), strconv.FormatBool(*opts.NoPatientCase))
-		assert.Equal(r.Form.Get("patientid"), strconv.Itoa(opts.PatientID))
-		assert.Equal(r.Form.Get("reasonid"), strconv.Itoa(*opts.ReasonID))
+		assert.Equal(r.Form.Get("appointmentcancelreasonid"), *opts.AppointmentCancelReasonID)
+		assert.Equal(r.Form.Get("ignoreschedulablepermission"), "true")
+		assert.Equal(r.Form.Get("newappointmentid"), opts.NewAppointmentID)
+		assert.Equal(r.Form.Get("nopatientcase"), "true")
+		assert.Equal(r.Form.Get("patientid"), opts.PatientID)
+		assert.Equal(r.Form.Get("reasonid"), *opts.ReasonID)
 		assert.Equal(r.Form.Get("reschedulereason"), *opts.RescheduleReason)
 		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/%d/reschedule", 998877))
 

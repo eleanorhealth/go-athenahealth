@@ -68,7 +68,7 @@ func (h *HTTPClient) AppointmentCheckOut(ctx context.Context, apptID string) err
 	return nil
 }
 
-// StartCheckInAppointment starts the check in process for the provider and patient who are previously booked for the appointment ID
+// AppointmentStartCheckIn starts the check in process for the provider and patient who are previously booked for the appointment ID
 // POST /v1/{practiceid}/appointments/{appointmentid}/startcheckin
 // https://docs.athenahealth.com/api/api-ref/appointment-check-in#Initiate-appointment-check-in-process
 func (h *HTTPClient) AppointmentStartCheckIn(ctx context.Context, apptID string) error {

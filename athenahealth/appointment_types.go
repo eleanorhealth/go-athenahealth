@@ -7,12 +7,18 @@ import (
 )
 
 type CreateAppointmentTypeOptions struct {
-	Duration         string `json:"duration"`
-	Generic          *bool  `json:"generic"`
-	Name             string `json:"name"`
-	Patient          bool   `json:"patient"`
-	ShortName        string `json:"shortname"`
-	TemplateTypeOnly *bool  `json:"templatetypeonly"`
+	// The expected duration, in minutes, of the appointment type. Note, this value cannot be changed after creation, so please choose carefully.
+	Duration string `json:"duration"`
+	// If set to true, this type serves as a "generic" type, that will match any type when searching. Defaults to false.
+	Generic *bool `json:"generic"`
+	// The name of the appointment type. Maximum length of 30 characters.
+	Name string `json:"name"`
+	// If set to true, this type serves as a "patient" type, meaning that is is a type that can be used for booking patients. If set to false, then it this type will not be used for patient (e.g. "Lunch" or "Vacation"). Non-patient types are mostly used to reserving time for providers to not see patients.
+	Patient bool `json:"patient"`
+	// The short name code of the appointment type. Maximum length of 4 characters. Used for making schedule templates. Note, this value cannot be changed after creation, so please choose carefully.
+	ShortName string `json:"shortname"`
+	// If set to true, this type serves as a "template-only" type, meaning that it can be used for building schedule templates, but cannot be used for booking appointments (i.e. another type must be chosen). Defaults to false.
+	TemplateTypeOnly *bool `json:"templatetypeonly"`
 }
 
 type CreateAppointmentTypeResult struct {

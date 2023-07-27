@@ -6,6 +6,16 @@ import (
 	"strconv"
 )
 
+// PtrStr mimics aws.String which helps shortcut getting a pointer to a string
+func PtrStr(input string) *string {
+	return &input
+}
+
+// PtrBool mimics aws.Bool which helps shortcut getting a pointer to a bool
+func PtrBool(input bool) *bool {
+	return &input
+}
+
 type NumberString string
 
 func (n *NumberString) UnmarshalJSON(data []byte) error {

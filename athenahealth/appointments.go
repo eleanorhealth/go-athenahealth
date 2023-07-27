@@ -124,13 +124,20 @@ type BookedAppointment struct {
 }
 
 type ListBookedAppointmentsOptions struct {
-	AppointmentTypeID string
-	DepartmentID      string
-	EndDate           time.Time
-	PatientID         string
-	ProviderID        string
-	StartDate         time.Time
-	AppointmentStatus AppointmentStatus
+	// Filter appointments by status.
+	AppointmentStatus *AppointmentStatus
+	// Filter by appointment type ID.
+	AppointmentTypeID *string
+	// The athenaNet department ID.
+	DepartmentID *string
+	// End of the appointment search date range (mm/dd/yyyy). Inclusive.
+	EndDate time.Time
+	// The athenaNet patient ID. If operating in a Provider Group Enterprise practice, this should be the enterprise patient ID.
+	PatientID *string
+	// The athenaNet provider ID. Multiple IDs (either as a comma delimited list or multiple POSTed values) are allowed.
+	ProviderID *string
+	// Start of the appointment search date range (mm/dd/yyyy). Inclusive.
+	StartDate time.Time
 
 	Pagination *PaginationOptions
 }
@@ -157,30 +164,40 @@ func (h *HTTPClient) ListBookedAppointments(ctx context.Context, opts *ListBooke
 	q := url.Values{}
 
 	if opts != nil {
-		if len(opts.ProviderID) > 0 {
-			q.Add("providerid", opts.ProviderID)
+		if opts.AppointmentStatus != nil {
+			if opts.AppointmentStatus.Valid() {
+				q.Add("appointmentstatus", opts.AppointmentStatus.String())
+			} else {
+				return nil, fmt.Errorf("invalid AppointmentStatus [%s]", opts.AppointmentStatus.String())
+			}
 		}
 
-		if len(opts.DepartmentID) > 0 {
-			q.Add("departmentid", opts.DepartmentID)
+		if opts.AppointmentTypeID != nil && *opts.AppointmentTypeID != "" {
+			q.Add("appointmenttypeid", *opts.AppointmentTypeID)
 		}
 
-		if len(opts.PatientID) > 0 {
-			q.Add("patientid", opts.PatientID)
+		if opts.DepartmentID != nil && *opts.DepartmentID != "" {
+			q.Add("departmentid", *opts.DepartmentID)
 		}
 
-		if !opts.StartDate.IsZero() {
-			q.Add("startdate", opts.StartDate.Format("01/02/2006"))
-		}
-
-		if !opts.EndDate.IsZero() {
+		if opts.EndDate.IsZero() {
+			return nil, fmt.Errorf("cannot ListBookedAppointments when StartDate is zero [%+v]", opts.EndDate)
+		} else {
 			q.Add("enddate", opts.EndDate.Format("01/02/2006"))
 		}
 
-		if opts.AppointmentStatus.Valid() {
-			q.Add("appointmentstatus", opts.AppointmentStatus.String())
+		if opts.PatientID != nil && *opts.PatientID != "" {
+			q.Add("patientid", *opts.PatientID)
+		}
+
+		if opts.ProviderID != nil && *opts.ProviderID != "" {
+			q.Add("providerid", *opts.ProviderID)
+		}
+
+		if opts.StartDate.IsZero() {
+			return nil, fmt.Errorf("cannot ListBookedAppointments when StartDate is zero [%+v]", opts.StartDate)
 		} else {
-			return nil, fmt.Errorf("invalid AppointmentStatus [%s]", opts.AppointmentStatus.String())
+			q.Add("startdate", opts.StartDate.Format("01/02/2006"))
 		}
 
 		if opts.Pagination != nil {
@@ -560,58 +577,66 @@ func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, departmentID 
 }
 
 type BookAppointmentOptions struct {
-	AppointmentTypeID           int
-	BookingNote                 string
-	DepartmentID                int
-	DoNotSendConfirmationEmail  bool
-	IgnoreSchedulablePermission bool
-	NoPatientCase               bool
-	ReasonID                    int
-	Urgent                      bool
+	// The appointment type to be booked. This field should never be used for booking appointments for web-based scheduling. The use of this field is reserved for digital check-in (aka "kiosk") or an application used by practice staff. One of this or reasonid is required.
+	AppointmentTypeID *string
+	// A note from the patient about why this appointment is being booked
+	BookingNote *string
+	// The athenaNet department ID.
+	DepartmentID *string
+	// For clients with athenaCommunicator, certain appointment types can be configured to have an appointment confirmation email sent to the patient at time of appointment booking. If this parameter is set to true, that email will not be sent. This should only be used if you plan on sending a confirmation email via another method.
+	DoNotSendConfirmationEmail *bool
+	// By default, we allow booking of appointments marked as schedulable via the web. This flag allows you to bypass that restriction for booking.
+	IgnoreSchedulablePermission *bool
+	// By default, we create a patient case upon booking an appointment for new patients. Setting this to true bypasses that patient case.
+	NoPatientCase *bool
+	// The athenaNet patient ID.
+	PatientID string
+	// The appointment reason ID to be booked. This field is required for booking appointments for web-based scheduling and is a reason that is retrieved from the /patientappointmentreasons call.
+	ReasonID *string
+	// Set this field in order to set the urgent flag in athena (if the practice settings allow for this).
+	Urgent *bool
 }
 
 // BookAppointment - Create a single appointment for specific patient
-//
 // PUT /v1/{practiceid}/appointments/{appointmentid}
-//
 // https://docs.athenahealth.com/api/api-ref/appointment#Book-appointment
-func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID string, opts *BookAppointmentOptions) (*BookedAppointment, error) {
+func (h *HTTPClient) BookAppointment(ctx context.Context, apptID string, opts *BookAppointmentOptions) (*BookedAppointment, error) {
 	var out []*BookedAppointment
 
 	form := url.Values{}
 
-	form.Add("patientid", patientID)
+	form.Add("patientid", opts.PatientID)
 
 	if opts != nil {
-		if opts.AppointmentTypeID > 0 {
-			form.Add("appointmenttypeid", strconv.Itoa(opts.AppointmentTypeID))
+		if opts.AppointmentTypeID != nil && *opts.AppointmentTypeID != "" {
+			form.Add("appointmenttypeid", *opts.AppointmentTypeID)
 		}
 
-		if len(opts.BookingNote) > 0 {
-			form.Add("bookingnote", opts.BookingNote)
+		if opts.BookingNote != nil && *opts.BookingNote != "" {
+			form.Add("bookingnote", *opts.BookingNote)
 		}
 
-		if opts.DepartmentID > 0 {
-			form.Add("departmentid", strconv.Itoa(opts.DepartmentID))
+		if opts.DepartmentID != nil && *opts.DepartmentID != "" {
+			form.Add("departmentid", *opts.DepartmentID)
 		}
 
-		if opts.DoNotSendConfirmationEmail {
+		if opts.DoNotSendConfirmationEmail != nil && *opts.DoNotSendConfirmationEmail {
 			form.Add("donotsendconfirmationemail", "true")
 		}
 
-		if opts.IgnoreSchedulablePermission {
+		if opts.IgnoreSchedulablePermission != nil && *opts.IgnoreSchedulablePermission {
 			form.Add("ignoreschedulablepermission", "true")
 		}
 
-		if opts.NoPatientCase {
+		if opts.NoPatientCase != nil && *opts.NoPatientCase {
 			form.Add("nopatientcase", "true")
 		}
 
-		if opts.ReasonID > 0 {
-			form.Add("reasonid", strconv.Itoa(opts.ReasonID))
+		if opts.ReasonID != nil && *opts.ReasonID != "" {
+			form.Add("reasonid", *opts.ReasonID)
 		}
 
-		if opts.Urgent {
+		if opts.Urgent != nil && *opts.Urgent {
 			form.Add("urgent", "true")
 		}
 	}
@@ -647,22 +672,25 @@ var updateBookedApptSuccess = "1"
 // PUT /v1/{practiceid}/appointments/booked/{appointmentid}
 // https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
 func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) error {
+
 	form := url.Values{}
 
-	if opts.AppointmentTypeID != nil {
-		form.Add("appointmenttypeid", *opts.AppointmentTypeID)
-	}
+	if opts != nil {
+		if opts.AppointmentTypeID != nil {
+			form.Add("appointmenttypeid", *opts.AppointmentTypeID)
+		}
 
-	if opts.DepartmentID != nil {
-		form.Add("departmentid", *opts.DepartmentID)
-	}
+		if opts.DepartmentID != nil {
+			form.Add("departmentid", *opts.DepartmentID)
+		}
 
-	if opts.ProviderID != nil {
-		form.Add("providerid", *opts.ProviderID)
-	}
+		if opts.ProviderID != nil {
+			form.Add("providerid", *opts.ProviderID)
+		}
 
-	if opts.SupervisingProviderID != nil {
-		form.Add("supervisingproviderid", *opts.SupervisingProviderID)
+		if opts.SupervisingProviderID != nil {
+			form.Add("supervisingproviderid", *opts.SupervisingProviderID)
+		}
 	}
 
 	var statusRes NumberString
@@ -742,17 +770,17 @@ type RescheduleAppointmentResult struct {
 
 type RescheduleAppointmentOptions struct {
 	// The appointment cancel reason id for cancellation of the original appointment. Use GET /appointmentcancelreasons to retrieve a list of cancel reasons.
-	AppointmentCancelReasonID *int `json:"appointmentcancelreasonid"`
+	AppointmentCancelReasonID *string `json:"appointmentcancelreasonid"`
 	// By default, we allow booking of appointments marked as schedulable via the web. This flag allows you to bypass that restriction for booking.
 	IgnoreSchedulablePermission *bool `json:"ignoreschedulablepermission"`
 	// The appointment ID of the new appointment. (The appointment ID in the URL is the ID of the currently scheduled appointment.)
-	NewAppointmentID int `json:"newappointmentid"`
+	NewAppointmentID string `json:"newappointmentid"`
 	// By default, we create a patient case upon booking an appointment for new patients. Setting this to true bypasses that patient case.
 	NoPatientCase *bool `json:"nopatientcase"`
 	// The athenaNet patient ID.
-	PatientID int `json:"patientid"`
+	PatientID string `json:"patientid"`
 	// The appointment reason ID to be booked. If not provided, the same reason used in the original appointment will be used.
-	ReasonID *int `json:"reasonid"`
+	ReasonID *string `json:"reasonid"`
 	// A text explanation why the appointment is being rescheduled
 	RescheduleReason *string `json:"reschedulereason"`
 }
@@ -764,28 +792,27 @@ func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID int, opts
 	var out []*RescheduleAppointmentResult
 
 	q := url.Values{}
+	q.Set("patientid", opts.PatientID)
+	q.Set("newappointmentid", opts.NewAppointmentID)
+
 	if opts != nil {
-		if opts.AppointmentCancelReasonID != nil {
-			q.Set("appointmentcancelreasonid", strconv.Itoa(*opts.AppointmentCancelReasonID))
+		if opts.AppointmentCancelReasonID != nil && *opts.AppointmentCancelReasonID != "" {
+			q.Set("appointmentcancelreasonid", *opts.AppointmentCancelReasonID)
 		}
 
-		if opts.IgnoreSchedulablePermission != nil {
-			q.Set("ignoreschedulablepermission", strconv.FormatBool(*opts.IgnoreSchedulablePermission))
+		if opts.IgnoreSchedulablePermission != nil && *opts.IgnoreSchedulablePermission {
+			q.Set("ignoreschedulablepermission", "true")
 		}
-
-		q.Set("newappointmentid", strconv.Itoa(opts.NewAppointmentID))
 
 		if opts.NoPatientCase != nil {
 			q.Set("nopatientcase", strconv.FormatBool(*opts.NoPatientCase))
 		}
 
-		q.Set("patientid", strconv.Itoa(opts.PatientID))
-
-		if opts.ReasonID != nil {
-			q.Set("reasonid", strconv.Itoa(*opts.ReasonID))
+		if opts.ReasonID != nil && *opts.ReasonID != "" {
+			q.Set("reasonid", *opts.ReasonID)
 		}
 
-		if opts.RescheduleReason != nil {
+		if opts.RescheduleReason != nil && *opts.RescheduleReason != "" {
 			q.Set("reschedulereason", *opts.RescheduleReason)
 		}
 	}
