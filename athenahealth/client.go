@@ -24,10 +24,10 @@ type Client interface {
 	GetAppointment(ctx context.Context, appointmentID string) (*Appointment, error)
 	ListBookedAppointments(context.Context, *ListBookedAppointmentsOptions) (*ListBookedAppointmentsResult, error)
 	ListChangedAppointments(context.Context, *ListChangedAppointmentsOptions) ([]*BookedAppointment, error)
-	ListOpenAppointmentSlots(ctx context.Context, departmentID int, opts *ListOpenAppointmentSlotOptions) (*ListOpenAppointmentSlotsResult, error)
+	ListOpenAppointmentSlots(ctx context.Context, opts *ListOpenAppointmentSlotOptions) (*ListOpenAppointmentSlotsResult, error)
 	BookAppointment(ctx context.Context, apptID string, opts *BookAppointmentOptions) (*BookedAppointment, error)
 	UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) error
-	RescheduleAppointment(ctx context.Context, apptID int, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error)
+	RescheduleAppointment(ctx context.Context, apptID string, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error)
 
 	AppointmentCancelCheckIn(ctx context.Context, apptID string) error
 	AppointmentCheckIn(ctx context.Context, apptID string) error

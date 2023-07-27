@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -215,36 +216,35 @@ func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
 func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 	assert := assert.New(t)
 
-	deptID := 1
-
 	endDate := time.Now()
 	startDate := time.Now()
 
 	opts := &ListOpenAppointmentSlotOptions{
-		AppointmentTypeID:           1,
-		ReasonIDs:                   []int{2, 3},
-		BypassScheduleTimeChecks:    true,
-		EndDate:                     endDate,
-		ProviderIDs:                 []int{4, 5},
-		StartDate:                   startDate,
-		IgnoreSchedulablePermission: true,
-		ShowFrozenSlots:             true,
+		AppointmentTypeID:           PtrStr("1"),
+		BypassScheduleTimeChecks:    PtrBool(true),
+		DepartmentIDs:               []string{"1"},
+		EndDate:                     &endDate,
+		IgnoreSchedulablePermission: PtrBool(true),
 		Limit:                       6,
 		Offset:                      7,
+		ProviderIDs:                 []string{"4", "5"},
+		ReasonIDs:                   []string{"2", "3"},
+		ShowFrozenSlots:             PtrBool(true),
+		StartDate:                   &startDate,
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(strconv.Itoa(deptID), r.URL.Query().Get("departmentid"))
-		assert.Equal("1", r.URL.Query().Get("appointmenttypeid"))
-		assert.Equal("2,3", r.URL.Query().Get("reasonid"))
-		assert.Equal("true", r.URL.Query().Get("bypassscheduletimechecks"))
-		assert.Equal(endDate.Format("01/02/2006"), r.URL.Query().Get("enddate"))
-		assert.Equal("4,5", r.URL.Query().Get("providerid"))
-		assert.Equal(startDate.Format("01/02/2006"), r.URL.Query().Get("startdate"))
-		assert.Equal("true", r.URL.Query().Get("ignoreschedulablepermission"))
-		assert.Equal("true", r.URL.Query().Get("showfrozenslots"))
-		assert.Equal("6", r.URL.Query().Get("limit"))
-		assert.Equal("7", r.URL.Query().Get("offset"))
+		assert.Equal(*opts.AppointmentTypeID, r.URL.Query().Get("appointmenttypeid"))
+		assert.Equal(strings.Join(opts.ReasonIDs, ","), r.URL.Query().Get("reasonid"))
+		assert.Equal(strings.Join(opts.DepartmentIDs, ","), r.URL.Query().Get("departmentid"))
+		assert.Equal(strconv.FormatBool(*opts.BypassScheduleTimeChecks), r.URL.Query().Get("bypassscheduletimechecks"))
+		assert.Equal((*opts.EndDate).Format("01/02/2006"), r.URL.Query().Get("enddate"))
+		assert.Equal(strings.Join(opts.ProviderIDs, ","), r.URL.Query().Get("providerid"))
+		assert.Equal((*opts.StartDate).Format("01/02/2006"), r.URL.Query().Get("startdate"))
+		assert.Equal(strconv.FormatBool(*opts.IgnoreSchedulablePermission), r.URL.Query().Get("ignoreschedulablepermission"))
+		assert.Equal(strconv.FormatBool(*opts.ShowFrozenSlots), r.URL.Query().Get("showfrozenslots"))
+		assert.Equal(strconv.Itoa(opts.Limit), r.URL.Query().Get("limit"))
+		assert.Equal(strconv.Itoa(opts.Offset), r.URL.Query().Get("offset"))
 
 		b, _ := os.ReadFile("./resources/ListOpenAppointmentSlots.json")
 		w.Write(b)
@@ -253,7 +253,7 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	slotsRes, err := athenaClient.ListOpenAppointmentSlots(context.Background(), deptID, opts)
+	slotsRes, err := athenaClient.ListOpenAppointmentSlots(context.Background(), opts)
 
 	assert.Len(slotsRes.Appointments, 237)
 	assert.NoError(err)
@@ -371,6 +371,8 @@ func TestHTTPClient_UpdateBookedAppointment_StringResponse(t *testing.T) {
 func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 	assert := assert.New(t)
 
+	apptID := "998877"
+
 	opts := &RescheduleAppointmentOptions{
 		AppointmentCancelReasonID:   PtrStr("2"),
 		IgnoreSchedulablePermission: PtrBool(true),
@@ -391,7 +393,7 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 		assert.Equal(r.Form.Get("patientid"), opts.PatientID)
 		assert.Equal(r.Form.Get("reasonid"), *opts.ReasonID)
 		assert.Equal(r.Form.Get("reschedulereason"), *opts.RescheduleReason)
-		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/%d/reschedule", 998877))
+		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/%s/reschedule", apptID))
 
 		b, _ := os.ReadFile("./resources/RescheduleAppointment.json")
 		w.Write(b)
@@ -400,7 +402,7 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	rescheduleAppointmentResult, err := athenaClient.RescheduleAppointment(context.Background(), 998877, opts)
+	rescheduleAppointmentResult, err := athenaClient.RescheduleAppointment(context.Background(), apptID, opts)
 	assert.NotNil(rescheduleAppointmentResult)
 	assert.NoError(err)
 	assert.Equal("25.00", rescheduleAppointmentResult.AppointmentCopay)
