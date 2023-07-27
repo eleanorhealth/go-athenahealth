@@ -225,24 +225,26 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 		DepartmentIDs:               []string{"1"},
 		EndDate:                     &endDate,
 		IgnoreSchedulablePermission: PtrBool(true),
-		Limit:                       6,
-		Offset:                      7,
 		ProviderIDs:                 []string{"4", "5"},
 		ReasonIDs:                   []string{"2", "3"},
 		ShowFrozenSlots:             PtrBool(true),
 		StartDate:                   &startDate,
+
+		Limit:  6,
+		Offset: 7,
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(*opts.AppointmentTypeID, r.URL.Query().Get("appointmenttypeid"))
-		assert.Equal(strings.Join(opts.ReasonIDs, ","), r.URL.Query().Get("reasonid"))
-		assert.Equal(strings.Join(opts.DepartmentIDs, ","), r.URL.Query().Get("departmentid"))
 		assert.Equal(strconv.FormatBool(*opts.BypassScheduleTimeChecks), r.URL.Query().Get("bypassscheduletimechecks"))
+		assert.Equal(strings.Join(opts.DepartmentIDs, ","), r.URL.Query().Get("departmentid"))
 		assert.Equal((*opts.EndDate).Format("01/02/2006"), r.URL.Query().Get("enddate"))
-		assert.Equal(strings.Join(opts.ProviderIDs, ","), r.URL.Query().Get("providerid"))
-		assert.Equal((*opts.StartDate).Format("01/02/2006"), r.URL.Query().Get("startdate"))
 		assert.Equal(strconv.FormatBool(*opts.IgnoreSchedulablePermission), r.URL.Query().Get("ignoreschedulablepermission"))
+		assert.Equal(strings.Join(opts.ProviderIDs, ","), r.URL.Query().Get("providerid"))
+		assert.Equal(strings.Join(opts.ReasonIDs, ","), r.URL.Query().Get("reasonid"))
 		assert.Equal(strconv.FormatBool(*opts.ShowFrozenSlots), r.URL.Query().Get("showfrozenslots"))
+		assert.Equal((*opts.StartDate).Format("01/02/2006"), r.URL.Query().Get("startdate"))
+
 		assert.Equal(strconv.Itoa(opts.Limit), r.URL.Query().Get("limit"))
 		assert.Equal(strconv.Itoa(opts.Offset), r.URL.Query().Get("offset"))
 
@@ -282,12 +284,12 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 		assert.Equal(r.Form.Get("appointmenttypeid"), *opts.AppointmentTypeID)
 		assert.Equal(r.Form.Get("bookingnote"), *opts.BookingNote)
 		assert.Equal(r.Form.Get("departmentid"), *opts.DepartmentID)
-		assert.Equal(r.Form.Get("donotsendconfirmationemail"), "true")
-		assert.Equal(r.Form.Get("ignoreschedulablepermission"), "true")
-		assert.Equal(r.Form.Get("nopatientcase"), "true")
+		assert.Equal(r.Form.Get("donotsendconfirmationemail"), strconv.FormatBool(*opts.DoNotSendConfirmationEmail))
+		assert.Equal(r.Form.Get("ignoreschedulablepermission"), strconv.FormatBool(*opts.IgnoreSchedulablePermission))
+		assert.Equal(r.Form.Get("nopatientcase"), strconv.FormatBool(*opts.NoPatientCase))
 		assert.Equal(r.Form.Get("patientid"), "1")
 		assert.Equal(r.Form.Get("reasonid"), "5")
-		assert.Equal(r.Form.Get("urgent"), "true")
+		assert.Equal(r.Form.Get("urgent"), strconv.FormatBool(*opts.Urgent))
 
 		b, _ := os.ReadFile("./resources/BookAppointment.json")
 		w.Write(b)
@@ -387,9 +389,9 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 		assert.NoError(r.ParseForm())
 
 		assert.Equal(r.Form.Get("appointmentcancelreasonid"), *opts.AppointmentCancelReasonID)
-		assert.Equal(r.Form.Get("ignoreschedulablepermission"), "true")
+		assert.Equal(r.Form.Get("ignoreschedulablepermission"), strconv.FormatBool(*opts.IgnoreSchedulablePermission))
 		assert.Equal(r.Form.Get("newappointmentid"), opts.NewAppointmentID)
-		assert.Equal(r.Form.Get("nopatientcase"), "true")
+		assert.Equal(r.Form.Get("nopatientcase"), strconv.FormatBool(*opts.NoPatientCase))
 		assert.Equal(r.Form.Get("patientid"), opts.PatientID)
 		assert.Equal(r.Form.Get("reasonid"), *opts.ReasonID)
 		assert.Equal(r.Form.Get("reschedulereason"), *opts.RescheduleReason)
