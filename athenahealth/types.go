@@ -7,12 +7,12 @@ import (
 )
 
 // ptrStr mimics aws.String which helps shortcut getting a pointer to a string
-func ptrStr(input string) *string {
+func ptrStr(input string) *string { // nolint
 	return &input
 }
 
 // ptrBool mimics aws.Bool which helps shortcut getting a pointer to a bool
-func ptrBool(input bool) *bool {
+func ptrBool(input bool) *bool { // nolint
 	return &input
 }
 
