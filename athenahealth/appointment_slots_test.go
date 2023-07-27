@@ -15,10 +15,10 @@ func TestHTTPClient_CreateAppointmentSlot(t *testing.T) {
 	opts := &CreateAppointmentSlotOptions{
 		AppointmentDate:   "03/22/1945",
 		AppointmentTime:   []string{"21:42", "01:59"},
-		AppointmentTypeID: PtrStr("7"),
+		AppointmentTypeID: ptrStr("7"),
 		DepartmentID:      "27",
 		ProviderID:        "99",
-		ReasonID:          PtrStr("8"),
+		ReasonID:          ptrStr("8"),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {

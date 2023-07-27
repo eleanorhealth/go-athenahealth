@@ -6,13 +6,13 @@ import (
 	"strconv"
 )
 
-// PtrStr mimics aws.String which helps shortcut getting a pointer to a string
-func PtrStr(input string) *string {
+// ptrStr mimics aws.String which helps shortcut getting a pointer to a string
+func ptrStr(input string) *string {
 	return &input
 }
 
-// PtrBool mimics aws.Bool which helps shortcut getting a pointer to a bool
-func PtrBool(input bool) *bool {
+// ptrBool mimics aws.Bool which helps shortcut getting a pointer to a bool
+func ptrBool(input bool) *bool {
 	return &input
 }
 

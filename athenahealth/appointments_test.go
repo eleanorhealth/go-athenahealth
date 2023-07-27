@@ -65,7 +65,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 	defer ts.Close()
 
 	opts := &ListBookedAppointmentsOptions{
-		ProviderID:        PtrStr("1"),
+		ProviderID:        ptrStr("1"),
 		StartDate:         time.Date(2020, 6, 1, 0, 0, 0, 0, time.UTC),
 		EndDate:           time.Date(2020, 6, 3, 0, 0, 0, 0, time.UTC),
 		AppointmentStatus: func() *AppointmentStatus { a := AppointmentStatusCancelled; return &a }(),
@@ -220,14 +220,14 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 	startDate := time.Now()
 
 	opts := &ListOpenAppointmentSlotOptions{
-		AppointmentTypeID:           PtrStr("1"),
-		BypassScheduleTimeChecks:    PtrBool(true),
+		AppointmentTypeID:           ptrStr("1"),
+		BypassScheduleTimeChecks:    ptrBool(true),
 		DepartmentIDs:               []string{"1"},
 		EndDate:                     &endDate,
-		IgnoreSchedulablePermission: PtrBool(false),
+		IgnoreSchedulablePermission: ptrBool(false),
 		ProviderIDs:                 []string{"4", "5"},
 		ReasonIDs:                   []string{"2", "3"},
-		ShowFrozenSlots:             PtrBool(true),
+		ShowFrozenSlots:             ptrBool(true),
 		StartDate:                   &startDate,
 
 		Limit:  6,
@@ -267,15 +267,15 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 	apptID := "2"
 
 	opts := &BookAppointmentOptions{
-		AppointmentTypeID:           PtrStr("3"),
-		BookingNote:                 PtrStr("Hello World!"),
-		DepartmentID:                PtrStr("4"),
-		DoNotSendConfirmationEmail:  PtrBool(true),
-		IgnoreSchedulablePermission: PtrBool(false),
-		NoPatientCase:               PtrBool(true),
+		AppointmentTypeID:           ptrStr("3"),
+		BookingNote:                 ptrStr("Hello World!"),
+		DepartmentID:                ptrStr("4"),
+		DoNotSendConfirmationEmail:  ptrBool(true),
+		IgnoreSchedulablePermission: ptrBool(false),
+		NoPatientCase:               ptrBool(true),
 		PatientID:                   "1",
-		ReasonID:                    PtrStr("5"),
-		Urgent:                      PtrBool(false),
+		ReasonID:                    ptrStr("5"),
+		Urgent:                      ptrBool(false),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
@@ -309,10 +309,10 @@ func TestHTTPClient_UpdateBookedAppointment_IntResponse(t *testing.T) {
 	apptID := "1230322"
 
 	opts := &UpdateBookedAppointmentOptions{
-		AppointmentTypeID:     PtrStr("*opts.AppointmentTypeID"),
-		DepartmentID:          PtrStr("*opts.DepartmentID"),
-		ProviderID:            PtrStr("*opts.ProviderID"),
-		SupervisingProviderID: PtrStr("*opts.SupervisingProviderID"),
+		AppointmentTypeID:     ptrStr("*opts.AppointmentTypeID"),
+		DepartmentID:          ptrStr("*opts.DepartmentID"),
+		ProviderID:            ptrStr("*opts.ProviderID"),
+		SupervisingProviderID: ptrStr("*opts.SupervisingProviderID"),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
@@ -342,10 +342,10 @@ func TestHTTPClient_UpdateBookedAppointment_StringResponse(t *testing.T) {
 	apptID := "1230322"
 
 	opts := &UpdateBookedAppointmentOptions{
-		AppointmentTypeID:     PtrStr("opts.AppointmentTypeID"),
-		DepartmentID:          PtrStr("opts.DepartmentID"),
-		ProviderID:            PtrStr("opts.ProviderID"),
-		SupervisingProviderID: PtrStr("opts.SupervisingProviderID"),
+		AppointmentTypeID:     ptrStr("opts.AppointmentTypeID"),
+		DepartmentID:          ptrStr("opts.DepartmentID"),
+		ProviderID:            ptrStr("opts.ProviderID"),
+		SupervisingProviderID: ptrStr("opts.SupervisingProviderID"),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
@@ -376,13 +376,13 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 	apptID := "998877"
 
 	opts := &RescheduleAppointmentOptions{
-		AppointmentCancelReasonID:   PtrStr("2"),
-		IgnoreSchedulablePermission: PtrBool(true),
+		AppointmentCancelReasonID:   ptrStr("2"),
+		IgnoreSchedulablePermission: ptrBool(true),
 		NewAppointmentID:            "123",
-		NoPatientCase:               PtrBool(false),
+		NoPatientCase:               ptrBool(false),
 		PatientID:                   "456",
-		ReasonID:                    PtrStr("3"),
-		RescheduleReason:            PtrStr("other commitments"),
+		ReasonID:                    ptrStr("3"),
+		RescheduleReason:            ptrStr("other commitments"),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
