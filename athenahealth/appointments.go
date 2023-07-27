@@ -224,10 +224,10 @@ func (h *HTTPClient) ListBookedAppointments(ctx context.Context, opts *ListBooke
 
 type ListChangedAppointmentsOptions struct {
 	DepartmentID               string
-	LeaveUnprocessed           bool
+	LeaveUnprocessed           *bool
 	PatientID                  string
 	ProviderID                 string
-	ShowPatientDetail          bool
+	ShowPatientDetail          *bool
 	ShowProcessedEndDatetime   time.Time
 	ShowProcessedStartDatetime time.Time
 }
@@ -247,20 +247,24 @@ func (h *HTTPClient) ListChangedAppointments(ctx context.Context, opts *ListChan
 	q := url.Values{}
 
 	if opts != nil {
-		if len(opts.ProviderID) > 0 {
-			q.Add("providerid", opts.ProviderID)
-		}
-
 		if len(opts.DepartmentID) > 0 {
 			q.Add("departmentid", opts.DepartmentID)
+		}
+
+		if opts.LeaveUnprocessed != nil {
+			q.Add("leaveunprocessed", strconv.FormatBool(*opts.LeaveUnprocessed))
 		}
 
 		if len(opts.PatientID) > 0 {
 			q.Add("patientid", opts.PatientID)
 		}
 
-		if opts.ShowPatientDetail {
-			q.Add("showpatientdetail", strconv.FormatBool(opts.ShowPatientDetail))
+		if len(opts.ProviderID) > 0 {
+			q.Add("providerid", opts.ProviderID)
+		}
+
+		if opts.ShowPatientDetail != nil {
+			q.Add("showpatientdetail", strconv.FormatBool(*opts.ShowPatientDetail))
 		}
 
 		if !opts.ShowProcessedEndDatetime.IsZero() {
@@ -271,9 +275,6 @@ func (h *HTTPClient) ListChangedAppointments(ctx context.Context, opts *ListChan
 			q.Add("showprocessedstartdatetime", opts.ShowProcessedStartDatetime.Format("01/02/2006 15:04:05"))
 		}
 
-		if opts.LeaveUnprocessed {
-			q.Add("leaveunprocessed", strconv.FormatBool(opts.LeaveUnprocessed))
-		}
 	}
 
 	_, err := h.Get(ctx, "/appointments/changed", q, out)
@@ -286,7 +287,7 @@ func (h *HTTPClient) ListChangedAppointments(ctx context.Context, opts *ListChan
 
 type CreateAppointmentNoteOptions struct {
 	AppointmentID     string
-	DisplayOnSchedule bool
+	DisplayOnSchedule *bool
 	NoteText          string
 }
 
@@ -303,8 +304,8 @@ func (h *HTTPClient) CreateAppointmentNote(ctx context.Context, appointmentID st
 			form.Add("appointmentid", opts.AppointmentID)
 		}
 
-		if opts.DisplayOnSchedule {
-			form.Add("displayonschedule", strconv.FormatBool(opts.DisplayOnSchedule))
+		if opts.DisplayOnSchedule != nil {
+			form.Add("displayonschedule", strconv.FormatBool(*opts.DisplayOnSchedule))
 		}
 
 		if len(opts.NoteText) > 0 {
@@ -330,7 +331,7 @@ type AppointmentNote struct {
 
 type ListAppointmentNotesOptions struct {
 	AppointmentID string
-	ShowDeleted   bool
+	ShowDeleted   *bool
 }
 
 type listAppointmentNotesResponse struct {
@@ -352,8 +353,8 @@ func (h *HTTPClient) ListAppointmentNotes(ctx context.Context, appointmentID str
 			q.Add("appointmentid", opts.AppointmentID)
 		}
 
-		if opts.ShowDeleted {
-			q.Add("showdeleted", strconv.FormatBool(opts.ShowDeleted))
+		if opts.ShowDeleted != nil {
+			q.Add("showdeleted", strconv.FormatBool(*opts.ShowDeleted))
 		}
 	}
 
@@ -367,7 +368,7 @@ func (h *HTTPClient) ListAppointmentNotes(ctx context.Context, appointmentID str
 
 type UpdateAppointmentNoteOptions struct {
 	AppointmentID     string
-	DisplayOnSchedule bool
+	DisplayOnSchedule *bool
 	NoteID            string
 	NoteText          string
 }
@@ -385,8 +386,8 @@ func (h *HTTPClient) UpdateAppointmentNote(ctx context.Context, appointmentID, n
 			form.Add("appointmentid", opts.AppointmentID)
 		}
 
-		if opts.DisplayOnSchedule {
-			form.Add("displayonschedule", strconv.FormatBool(opts.DisplayOnSchedule))
+		if opts.DisplayOnSchedule != nil {
+			form.Add("displayonschedule", strconv.FormatBool(*opts.DisplayOnSchedule))
 		}
 
 		if len(opts.NoteID) > 0 {
