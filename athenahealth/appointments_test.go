@@ -67,7 +67,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 		ProviderID:        "1",
 		StartDate:         time.Date(2020, 6, 1, 0, 0, 0, 0, time.UTC),
 		EndDate:           time.Date(2020, 6, 3, 0, 0, 0, 0, time.UTC),
-		AppointmentStatus: AppointmentStatusCancelled,
+		AppointmentStatus: func() *AppointmentStatus { a := AppointmentStatusCancelled; return &a }(),
 	}
 
 	res, err := athenaClient.ListBookedAppointments(context.Background(), opts)
