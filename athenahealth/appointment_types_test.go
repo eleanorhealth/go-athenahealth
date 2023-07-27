@@ -14,11 +14,11 @@ func TestHTTPClient_CreateAppointmentType(t *testing.T) {
 
 	opts := &CreateAppointmentTypeOptions{
 		Duration:         "99",
-		Generic:          func() *bool { a := true; return &a }(),
+		Generic:          PtrBool(true),
 		Name:             "1001",
 		Patient:          true,
 		ShortName:        "11",
-		TemplateTypeOnly: func() *bool { a := false; return &a }(),
+		TemplateTypeOnly: PtrBool(true),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {

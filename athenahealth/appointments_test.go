@@ -65,7 +65,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 	defer ts.Close()
 
 	opts := &ListBookedAppointmentsOptions{
-		ProviderID:        func() *string { a := "1"; return &a }(),
+		ProviderID:        PtrStr("1"),
 		StartDate:         time.Date(2020, 6, 1, 0, 0, 0, 0, time.UTC),
 		EndDate:           time.Date(2020, 6, 3, 0, 0, 0, 0, time.UTC),
 		AppointmentStatus: func() *AppointmentStatus { a := AppointmentStatusCancelled; return &a }(),
@@ -307,10 +307,10 @@ func TestHTTPClient_UpdateBookedAppointment_IntResponse(t *testing.T) {
 	apptID := "1230322"
 
 	opts := &UpdateBookedAppointmentOptions{
-		AppointmentTypeID:     func() *string { a := "opts.AppointmentTypeID"; return &a }(),
-		DepartmentID:          func() *string { a := "opts.DepartmentID"; return &a }(),
-		ProviderID:            func() *string { a := "opts.ProviderID"; return &a }(),
-		SupervisingProviderID: func() *string { a := "opts.SupervisingProviderID"; return &a }(),
+		AppointmentTypeID:     PtrStr("*opts.AppointmentTypeID"),
+		DepartmentID:          PtrStr("*opts.DepartmentID"),
+		ProviderID:            PtrStr("*opts.ProviderID"),
+		SupervisingProviderID: PtrStr("*opts.SupervisingProviderID"),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
@@ -340,10 +340,10 @@ func TestHTTPClient_UpdateBookedAppointment_StringResponse(t *testing.T) {
 	apptID := "1230322"
 
 	opts := &UpdateBookedAppointmentOptions{
-		AppointmentTypeID:     func() *string { a := "opts.AppointmentTypeID"; return &a }(),
-		DepartmentID:          func() *string { a := "opts.DepartmentID"; return &a }(),
-		ProviderID:            func() *string { a := "opts.ProviderID"; return &a }(),
-		SupervisingProviderID: func() *string { a := "opts.SupervisingProviderID"; return &a }(),
+		AppointmentTypeID:     PtrStr("opts.AppointmentTypeID"),
+		DepartmentID:          PtrStr("opts.DepartmentID"),
+		ProviderID:            PtrStr("opts.ProviderID"),
+		SupervisingProviderID: PtrStr("opts.SupervisingProviderID"),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
