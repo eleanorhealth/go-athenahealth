@@ -511,8 +511,8 @@ func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, opts *ListOpe
 			q.Add("appointmenttypeid", *opts.AppointmentTypeID)
 		}
 
-		if opts.BypassScheduleTimeChecks != nil && *opts.BypassScheduleTimeChecks {
-			q.Add("bypassscheduletimechecks", "true")
+		if opts.BypassScheduleTimeChecks != nil {
+			q.Add("bypassscheduletimechecks", strconv.FormatBool(*opts.BypassScheduleTimeChecks))
 		}
 
 		if len(opts.DepartmentIDs) > 0 {
@@ -523,8 +523,8 @@ func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, opts *ListOpe
 			q.Add("enddate", opts.EndDate.Format("01/02/2006"))
 		}
 
-		if opts.IgnoreSchedulablePermission != nil && *opts.IgnoreSchedulablePermission {
-			q.Add("ignoreschedulablepermission", "true")
+		if opts.IgnoreSchedulablePermission != nil {
+			q.Add("ignoreschedulablepermission", strconv.FormatBool(*opts.IgnoreSchedulablePermission))
 		}
 
 		if len(opts.ProviderIDs) > 0 {
@@ -539,8 +539,8 @@ func (h *HTTPClient) ListOpenAppointmentSlots(ctx context.Context, opts *ListOpe
 			q.Add("startdate", opts.StartDate.Format("01/02/2006"))
 		}
 
-		if opts.ShowFrozenSlots != nil && *opts.ShowFrozenSlots {
-			q.Add("showfrozenslots", "true")
+		if opts.ShowFrozenSlots != nil {
+			q.Add("showfrozenslots", strconv.FormatBool(*opts.ShowFrozenSlots))
 		}
 
 		if opts.Limit > 0 {
@@ -607,24 +607,24 @@ func (h *HTTPClient) BookAppointment(ctx context.Context, apptID string, opts *B
 			form.Add("departmentid", *opts.DepartmentID)
 		}
 
-		if opts.DoNotSendConfirmationEmail != nil && *opts.DoNotSendConfirmationEmail {
-			form.Add("donotsendconfirmationemail", "true")
+		if opts.DoNotSendConfirmationEmail != nil {
+			form.Add("donotsendconfirmationemail", strconv.FormatBool(*opts.DoNotSendConfirmationEmail))
 		}
 
-		if opts.IgnoreSchedulablePermission != nil && *opts.IgnoreSchedulablePermission {
-			form.Add("ignoreschedulablepermission", "true")
+		if opts.IgnoreSchedulablePermission != nil {
+			form.Add("ignoreschedulablepermission", strconv.FormatBool(*opts.IgnoreSchedulablePermission))
 		}
 
-		if opts.NoPatientCase != nil && *opts.NoPatientCase {
-			form.Add("nopatientcase", "true")
+		if opts.NoPatientCase != nil {
+			form.Add("nopatientcase", strconv.FormatBool(*opts.NoPatientCase))
 		}
 
 		if opts.ReasonID != nil && *opts.ReasonID != "" {
 			form.Add("reasonid", *opts.ReasonID)
 		}
 
-		if opts.Urgent != nil && *opts.Urgent {
-			form.Add("urgent", "true")
+		if opts.Urgent != nil {
+			form.Add("urgent", strconv.FormatBool(*opts.Urgent))
 		}
 	}
 
@@ -785,7 +785,7 @@ func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID string, o
 			q.Set("appointmentcancelreasonid", *opts.AppointmentCancelReasonID)
 		}
 
-		if opts.IgnoreSchedulablePermission != nil && *opts.IgnoreSchedulablePermission {
+		if opts.IgnoreSchedulablePermission != nil {
 			q.Set("ignoreschedulablepermission", "true")
 		}
 

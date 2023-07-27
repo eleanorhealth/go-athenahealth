@@ -224,7 +224,7 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 		BypassScheduleTimeChecks:    PtrBool(true),
 		DepartmentIDs:               []string{"1"},
 		EndDate:                     &endDate,
-		IgnoreSchedulablePermission: PtrBool(true),
+		IgnoreSchedulablePermission: PtrBool(false),
 		ProviderIDs:                 []string{"4", "5"},
 		ReasonIDs:                   []string{"2", "3"},
 		ShowFrozenSlots:             PtrBool(true),
@@ -271,11 +271,11 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 		BookingNote:                 PtrStr("Hello World!"),
 		DepartmentID:                PtrStr("4"),
 		DoNotSendConfirmationEmail:  PtrBool(true),
-		IgnoreSchedulablePermission: PtrBool(true),
+		IgnoreSchedulablePermission: PtrBool(false),
 		NoPatientCase:               PtrBool(true),
 		PatientID:                   "1",
 		ReasonID:                    PtrStr("5"),
-		Urgent:                      PtrBool(true),
+		Urgent:                      PtrBool(false),
 	}
 
 	h := func(w http.ResponseWriter, r *http.Request) {
@@ -379,7 +379,7 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 		AppointmentCancelReasonID:   PtrStr("2"),
 		IgnoreSchedulablePermission: PtrBool(true),
 		NewAppointmentID:            "123",
-		NoPatientCase:               PtrBool(true),
+		NoPatientCase:               PtrBool(false),
 		PatientID:                   "456",
 		ReasonID:                    PtrStr("3"),
 		RescheduleReason:            PtrStr("other commitments"),
