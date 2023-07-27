@@ -780,7 +780,7 @@ func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID string, o
 		}
 
 		if opts.IgnoreSchedulablePermission != nil {
-			form.Set("ignoreschedulablepermission", "true")
+			form.Set("ignoreschedulablepermission", strconv.FormatBool(*opts.IgnoreSchedulablePermission))
 		}
 
 		form.Set("newappointmentid", opts.NewAppointmentID)
