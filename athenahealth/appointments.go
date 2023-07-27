@@ -21,7 +21,9 @@ type Appointment struct {
 	Duration                   int               `json:"duration"`
 	EncounterID                string            `json:"encounterid"`
 	PatientAppointmentTypeName string            `json:"patientappointmenttypename"`
+	PatientID                  string            `json:"patientid"`
 	ProviderID                 string            `json:"providerid"`
+	RenderingProviderID        string            `json:"renderingproviderid"`
 	StartTime                  string            `json:"starttime"`
 }
 
@@ -94,12 +96,12 @@ type BookedAppointment struct {
 	AppointmentStatus          AppointmentStatus `json:"appointmentstatus"`
 	AppointmentType            string            `json:"appointmenttype"`
 	AppointmentTypeID          string            `json:"appointmenttypeid"`
-	CancelledBy                string            `json:"cancelledby"`
-	CancelledDatetime          string            `json:"cancelleddatetime"`
 	CancelReasonID             string            `json:"cancelreasonid"`
 	CancelReasonName           string            `json:"cancelreasonname"`
 	CancelReasonNoShow         bool              `json:"cancelreasonnoshow"`
 	CancelReasonSlotAvailable  bool              `json:"cancelreasonslotavailable"`
+	CancelledBy                string            `json:"cancelledby"`
+	CancelledDatetime          string            `json:"cancelleddatetime"`
 	ChargeEntryNotRequired     bool              `json:"chargeentrynotrequired"`
 	CoordinatorEnterprise      bool              `json:"coordinatorenterprise"`
 	Copay                      int               `json:"copay"`
@@ -113,6 +115,7 @@ type BookedAppointment struct {
 	PatientAppointmentTypeName string            `json:"patientappointmenttypename"`
 	PatientID                  string            `json:"patientid"`
 	ProviderID                 string            `json:"providerid"`
+	RenderingProviderID        string            `json:"renderingproviderid"`
 	ScheduledBy                string            `json:"scheduledby"`
 	ScheduledDatetime          string            `json:"scheduleddatetime"`
 	StartTime                  string            `json:"starttime"`
@@ -121,6 +124,7 @@ type BookedAppointment struct {
 }
 
 type ListBookedAppointmentsOptions struct {
+	AppointmentTypeID string
 	DepartmentID      string
 	EndDate           time.Time
 	PatientID         string
@@ -622,6 +626,56 @@ func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID stri
 	}
 
 	return out[0], nil
+}
+
+type UpdateBookedAppointmentOptions struct {
+	// New appointment type ID for this appointment.
+	AppointmentTypeID *string `json:"appointmenttypeid"`
+	// New department ID for this appointment.
+	DepartmentID *string `json:"departmentid"`
+	// New provider ID for this appointment.
+	ProviderID *string `json:"providerid"`
+	// New supervisingprovider ID for this appointment.
+	SupervisingProviderID *string `json:"supervisingproviderid"`
+}
+
+// https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
+// status	string	This subroutine will return 1 on success, and will otherwise return an error message.
+var updateBookedApptSuccess = "1"
+
+// UpdateBookedAppointment
+// PUT /v1/{practiceid}/appointments/booked/{appointmentid}
+// https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
+func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) error {
+	form := url.Values{}
+
+	if opts.AppointmentTypeID != nil {
+		form.Add("appointmenttypeid", *opts.AppointmentTypeID)
+	}
+
+	if opts.DepartmentID != nil {
+		form.Add("departmentid", *opts.DepartmentID)
+	}
+
+	if opts.ProviderID != nil {
+		form.Add("providerid", *opts.ProviderID)
+	}
+
+	if opts.SupervisingProviderID != nil {
+		form.Add("supervisingproviderid", *opts.SupervisingProviderID)
+	}
+
+	var statusRes NumberString
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/booked/%s", apptID), form, &statusRes)
+	if err != nil {
+		return err
+	}
+
+	if string(statusRes) != updateBookedApptSuccess {
+		return errors.New(string(statusRes))
+	}
+
+	return nil
 }
 
 type UseExpectedProcedureCodes struct {

@@ -301,6 +301,73 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestHTTPClient_UpdateBookedAppointment_IntResponse(t *testing.T) {
+	assert := assert.New(t)
+
+	apptID := "1230322"
+
+	opts := &UpdateBookedAppointmentOptions{
+		AppointmentTypeID:     func() *string { a := "opts.AppointmentTypeID"; return &a }(),
+		DepartmentID:          func() *string { a := "opts.DepartmentID"; return &a }(),
+		ProviderID:            func() *string { a := "opts.ProviderID"; return &a }(),
+		SupervisingProviderID: func() *string { a := "opts.SupervisingProviderID"; return &a }(),
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("appointmenttypeid"), *opts.AppointmentTypeID)
+		assert.Equal(r.Form.Get("departmentid"), *opts.DepartmentID)
+		assert.Equal(r.Form.Get("providerid"), *opts.ProviderID)
+		assert.Equal(r.Form.Get("supervisingproviderid"), *opts.SupervisingProviderID)
+
+		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/booked/%s", apptID))
+
+		b, _ := os.ReadFile("./resources/UpdateBookedAppointment_IntResponse.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	updateErr := athenaClient.UpdateBookedAppointment(context.Background(), apptID, opts)
+	assert.NoError(updateErr)
+}
+
+func TestHTTPClient_UpdateBookedAppointment_StringResponse(t *testing.T) {
+	assert := assert.New(t)
+
+	apptID := "1230322"
+
+	opts := &UpdateBookedAppointmentOptions{
+		AppointmentTypeID:     func() *string { a := "opts.AppointmentTypeID"; return &a }(),
+		DepartmentID:          func() *string { a := "opts.DepartmentID"; return &a }(),
+		ProviderID:            func() *string { a := "opts.ProviderID"; return &a }(),
+		SupervisingProviderID: func() *string { a := "opts.SupervisingProviderID"; return &a }(),
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(r.Form.Get("appointmenttypeid"), *opts.AppointmentTypeID)
+		assert.Equal(r.Form.Get("departmentid"), *opts.DepartmentID)
+		assert.Equal(r.Form.Get("providerid"), *opts.ProviderID)
+		assert.Equal(r.Form.Get("supervisingproviderid"), *opts.SupervisingProviderID)
+
+		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/booked/%s", apptID))
+
+		b, _ := os.ReadFile("./resources/UpdateBookedAppointment_StringResponse.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	updateErr := athenaClient.UpdateBookedAppointment(context.Background(), apptID, opts)
+	assert.Error(updateErr)
+	assert.Equal(updateErr.Error(), "Invalid PROVIDERID input")
+}
+
 func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 	assert := assert.New(t)
 
