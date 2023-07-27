@@ -130,7 +130,7 @@ type ListBookedAppointmentsOptions struct {
 	PatientID         string
 	ProviderID        string
 	StartDate         time.Time
-	AppointmentStatus AppointmentStatus
+	AppointmentStatus *AppointmentStatus
 
 	Pagination *PaginationOptions
 }
@@ -177,10 +177,12 @@ func (h *HTTPClient) ListBookedAppointments(ctx context.Context, opts *ListBooke
 			q.Add("enddate", opts.EndDate.Format("01/02/2006"))
 		}
 
-		if opts.AppointmentStatus.Valid() {
-			q.Add("appointmentstatus", opts.AppointmentStatus.String())
-		} else {
-			return nil, fmt.Errorf("invalid AppointmentStatus [%s]", opts.AppointmentStatus.String())
+		if opts.AppointmentStatus != nil {
+			if opts.AppointmentStatus.Valid() {
+				q.Add("appointmentstatus", opts.AppointmentStatus.String())
+			} else {
+				return nil, fmt.Errorf("invalid AppointmentStatus [%s]", opts.AppointmentStatus.String())
+			}
 		}
 
 		if opts.Pagination != nil {
