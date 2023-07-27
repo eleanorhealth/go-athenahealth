@@ -33,7 +33,7 @@ type Appointment struct {
 //
 // https://docs.athenahealth.com/api/api-ref/appointment#Get-appointment-details
 func (h *HTTPClient) GetAppointment(ctx context.Context, id string) (*Appointment, error) {
-	out := []*Appointment{}
+	var out []*Appointment
 
 	_, err := h.Get(ctx, fmt.Sprintf("/appointments/%s", id), nil, &out)
 	if err != nil {
@@ -296,11 +296,9 @@ type CreateAppointmentNoteOptions struct {
 //
 // https://docs.athenahealth.com/api/api-ref/appointment-notes#Create-appointment-note
 func (h *HTTPClient) CreateAppointmentNote(ctx context.Context, appointmentID string, opts *CreateAppointmentNoteOptions) error {
-	var form url.Values
+	form := url.Values{}
 
 	if opts != nil {
-		form = url.Values{}
-
 		if len(opts.AppointmentID) > 0 {
 			form.Add("appointmentid", opts.AppointmentID)
 		}
@@ -380,11 +378,9 @@ type UpdateAppointmentNoteOptions struct {
 //
 // https://docs.athenahealth.com/api/api-ref/appointment-notes#Update-appointment-note
 func (h *HTTPClient) UpdateAppointmentNote(ctx context.Context, appointmentID, noteID string, opts *UpdateAppointmentNoteOptions) error {
-	var form url.Values
+	form := url.Values{}
 
 	if opts != nil {
-		form = url.Values{}
-
 		if len(opts.AppointmentID) > 0 {
 			form.Add("appointmentid", opts.AppointmentID)
 		}
@@ -421,11 +417,9 @@ type DeleteAppointmentNoteOptions struct {
 //
 // https://docs.athenahealth.com/api/api-ref/appointment-notes#Delete-appointment-note
 func (h *HTTPClient) DeleteAppointmentNote(ctx context.Context, appointmentID, noteID string, opts *DeleteAppointmentNoteOptions) error {
-	var form url.Values
+	form := url.Values{}
 
 	if opts != nil {
-		form = url.Values{}
-
 		if len(opts.AppointmentID) > 0 {
 			form.Add("appointmentid", opts.AppointmentID)
 		}
@@ -592,8 +586,6 @@ func (h *HTTPClient) BookAppointment(ctx context.Context, apptID string, opts *B
 
 	form := url.Values{}
 
-	form.Add("patientid", opts.PatientID)
-
 	if opts != nil {
 		if opts.AppointmentTypeID != nil && *opts.AppointmentTypeID != "" {
 			form.Add("appointmenttypeid", *opts.AppointmentTypeID)
@@ -618,6 +610,8 @@ func (h *HTTPClient) BookAppointment(ctx context.Context, apptID string, opts *B
 		if opts.NoPatientCase != nil {
 			form.Add("nopatientcase", strconv.FormatBool(*opts.NoPatientCase))
 		}
+
+		form.Add("patientid", opts.PatientID)
 
 		if opts.ReasonID != nil && *opts.ReasonID != "" {
 			form.Add("reasonid", *opts.ReasonID)
@@ -778,35 +772,35 @@ type RescheduleAppointmentOptions struct {
 func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID string, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error) {
 	var out []*RescheduleAppointmentResult
 
-	q := url.Values{}
+	form := url.Values{}
 
 	if opts != nil {
 		if opts.AppointmentCancelReasonID != nil && *opts.AppointmentCancelReasonID != "" {
-			q.Set("appointmentcancelreasonid", *opts.AppointmentCancelReasonID)
+			form.Set("appointmentcancelreasonid", *opts.AppointmentCancelReasonID)
 		}
 
 		if opts.IgnoreSchedulablePermission != nil {
-			q.Set("ignoreschedulablepermission", "true")
+			form.Set("ignoreschedulablepermission", "true")
 		}
 
-		q.Set("newappointmentid", opts.NewAppointmentID)
+		form.Set("newappointmentid", opts.NewAppointmentID)
 
 		if opts.NoPatientCase != nil {
-			q.Set("nopatientcase", strconv.FormatBool(*opts.NoPatientCase))
+			form.Set("nopatientcase", strconv.FormatBool(*opts.NoPatientCase))
 		}
 
-		q.Set("patientid", opts.PatientID)
+		form.Set("patientid", opts.PatientID)
 
 		if opts.ReasonID != nil && *opts.ReasonID != "" {
-			q.Set("reasonid", *opts.ReasonID)
+			form.Set("reasonid", *opts.ReasonID)
 		}
 
 		if opts.RescheduleReason != nil && *opts.RescheduleReason != "" {
-			q.Set("reschedulereason", *opts.RescheduleReason)
+			form.Set("reschedulereason", *opts.RescheduleReason)
 		}
 	}
 
-	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%s/reschedule", apptID), q, &out)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%s/reschedule", apptID), form, &out)
 
 	if err != nil {
 		return nil, err
