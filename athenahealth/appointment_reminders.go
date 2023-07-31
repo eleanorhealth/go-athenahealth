@@ -21,9 +21,18 @@ type ListAppointmentRemindersOptions struct {
 }
 
 type AppointmentReminder struct {
-	Note    string `json:"note"`
-	Status  string `json:"status"`
-	Deleted string `json:"deleted"`
+	AppointmentReminderID int    `json:"appointmentreminderid"`
+	Note                  string `json:"note"`
+	Status                string `json:"status"`
+	Deleted               string `json:"deleted"`
+	PatientID             int    `json:"patientid"`
+	ProviderID            int    `json:"providerid"`
+	EncounterID           int    `json:"encounterid"`
+	DepartmentID          int    `json:"departmentid"`
+	ApproximateDate       string `json:"approximatedate"`
+	AppointmentTypeID     int    `json:"appointmenttypeid"`
+	StaffInstructions     string `json:"staffinstructions"`
+	PatientInstructions   string `json:"patientinstructions"`
 }
 
 type ListAppointmentRemindersResult struct {

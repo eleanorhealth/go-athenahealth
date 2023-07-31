@@ -48,4 +48,14 @@ func TestHTTPClient_ListAppointmentReminders(t *testing.T) {
 	apppointmentRemindersResult, err := athenaClient.ListAppointmentReminders(context.Background(), opts)
 	assert.NoError(err)
 	assert.Len(apppointmentRemindersResult.Reminders, 2)
+	ar := apppointmentRemindersResult.Reminders[0]
+	assert.Equal(52601, ar.AppointmentReminderID)
+	assert.Equal(2398, ar.PatientID)
+	assert.Equal(5, ar.DepartmentID)
+	assert.Equal(342, ar.AppointmentTypeID)
+	assert.Equal(23, ar.ProviderID)
+	assert.Equal("Misc test notes", ar.Note)
+	assert.Equal("patient insttructionsss", ar.PatientInstructions)
+	assert.Equal("", ar.StaffInstructions)
+
 }
