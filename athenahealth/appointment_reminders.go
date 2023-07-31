@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"errors"
 	"net/url"
 	"strconv"
 	"time"
@@ -46,14 +47,23 @@ type ListAppointmentRemindersResult struct {
 //
 // GET /v1/{practiceid}/appointments/appointmentreminders
 //
-// https://docs.athenahealth.com/api/sandbox#/Appointments/getPracticeidAppointmentsAppointmentreminders
+// https://docs.athenahealth.com/api/api-ref/appointment-reminders#Get-list-of-appointment-reminders
 func (h *HTTPClient) ListAppointmentReminders(ctx context.Context, opts *ListAppointmentRemindersOptions) (*ListAppointmentRemindersResult, error) {
+	if len(opts.DepartmentID) == 0 {
+		return nil, errors.New("missing DepartmentID")
+	}
+	if opts.StartDate.IsZero() {
+		return nil, errors.New("missing StartDate")
+	}
+	if opts.EndDate.IsZero() {
+		return nil, errors.New("missing EndDate")
+	}
+
 	out := &ListAppointmentRemindersResult{}
 
 	q := url.Values{}
-	if len(opts.DepartmentID) > 0 {
-		q.Add("departmentid", opts.DepartmentID)
-	}
+
+	q.Add("departmentid", opts.DepartmentID)
 	q.Add("startdate", opts.StartDate.Format("01/02/2006"))
 	q.Add("enddate", opts.EndDate.Format("01/02/2006"))
 
