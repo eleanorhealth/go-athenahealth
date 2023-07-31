@@ -1,0 +1,23 @@
+{
+  "totalcount": 2,
+  "reminders": [
+    {
+      "departmentid": 5,
+      "patientinstructions": "patient insttructionsss",
+      "approximatedate": "07/07/2023",
+      "patientid": 2398,
+      "appointmentreminderid": 52601,
+      "appointmenttypeid": 342,
+      "providerid": 23,
+      "note": "Misc test notes"
+    },
+    {
+      "departmentid": 5,
+      "approximatedate": "07/07/2023",
+      "patientid": 2398,
+      "appointmentreminderid": 52602,
+      "providerid": 23,
+      "note": "Misc test notes"
+    }
+  ]
+}
