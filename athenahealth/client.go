@@ -29,6 +29,8 @@ type Client interface {
 	UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) error
 	RescheduleAppointment(ctx context.Context, apptID int, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error)
 
+	ListAppointmentReminders(ctx context.Context, opts *ListAppointmentRemindersOptions) (*ListAppointmentRemindersResult, error)
+
 	AppointmentCancelCheckIn(ctx context.Context, apptID string) error
 	AppointmentCheckIn(ctx context.Context, apptID string) error
 	AppointmentCheckOut(ctx context.Context, apptID string) error
