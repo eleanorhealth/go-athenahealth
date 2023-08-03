@@ -195,6 +195,54 @@ func TestHTTPClient_request_error(t *testing.T) {
 	assert.IsType(&APIError{}, err)
 }
 
+func TestHTTPClient_request_default_context_timeout(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case <-r.Context().Done():
+			return
+		case <-time.After(time.Millisecond * 100):
+			w.WriteHeader(http.StatusOK)
+		}
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+	athenaClient.WithRequestTimeout(time.Millisecond * 10)
+
+	res, err := athenaClient.request(context.Background(), "GET", "/", nil, nil, nil)
+
+	assert.Nil(res)
+	assert.NotNil(err)
+	assert.ErrorIs(err, context.DeadlineExceeded)
+}
+
+func TestHTTPClient_request_override_default_context_timeout(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case <-r.Context().Done():
+			return
+		case <-time.After(time.Millisecond * 100):
+			w.WriteHeader(http.StatusOK)
+		}
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+	athenaClient.WithRequestTimeout(time.Millisecond * 10)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*110)
+	defer cancel()
+
+	res, err := athenaClient.request(ctx, "GET", "/", nil, nil, nil)
+
+	assert.NotNil(res)
+	assert.Nil(err)
+}
+
 func TestHTTPClient_rate_limit(t *testing.T) {
 	assert := assert.New(t)
 
