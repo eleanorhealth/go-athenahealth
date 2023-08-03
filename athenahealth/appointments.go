@@ -41,7 +41,7 @@ func (h *HTTPClient) GetAppointment(ctx context.Context, id string) (*Appointmen
 	}
 
 	if len(out) == 0 {
-		return nil, errors.New("Unexpected length returned")
+		return nil, errors.New("unexpected length returned")
 	}
 
 	return out[0], nil

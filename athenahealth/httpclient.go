@@ -39,18 +39,15 @@ const (
 	XRequestIDHeaderKey = "X-Request-Id"
 )
 
-var _ Client = (*HTTPClient)(nil)
-
 type HTTPClient struct {
 	httpClient *http.Client
 
-	practiceID string
-	clientID   string
-	secret     string
-
-	preview bool
-
-	baseURL string
+	practiceID     string
+	clientID       string
+	secret         string
+	preview        bool
+	baseURL        string
+	requestTimeout time.Duration
 
 	tokenProvider TokenProvider
 	tokenCacher   TokenCacher
@@ -61,71 +58,7 @@ type HTTPClient struct {
 	requestLock sync.Mutex
 }
 
-var _ Client = &HTTPClient{}
-
-// APIError represents an error response from the athenahealth API.
-type APIError struct {
-	Err                   error  `json:"-"`
-	AthenaError           string `json:"error"`
-	AthenaDetailedMessage string `json:"detailedmessage"`
-
-	HTTPResponse *http.Response
-}
-
-func (a *APIError) Error() string {
-	details := "no detailed message"
-	if len(a.AthenaDetailedMessage) > 0 {
-		details = a.AthenaDetailedMessage
-	}
-
-	var status string
-	if a.HTTPResponse != nil {
-		status = a.HTTPResponse.Status
-	}
-
-	return fmt.Sprintf("athenahealth API error (%s): %s (%s)", status, a.AthenaError, details)
-}
-
-func (a *APIError) Unwrap() error {
-	return a.Err
-}
-
-type PaginationOptions struct {
-	Limit  int
-	Offset int
-}
-
-type PaginationResult struct {
-	NextOffset     int
-	PreviousOffset int
-	TotalCount     int
-}
-
-type PaginationResponse struct {
-	Previous   string `json:"previous"`
-	Next       string `json:"next"`
-	TotalCount int    `json:"totalcount"`
-}
-
-func makePaginationResult(nextURL, previousURL string, totalCount int) *PaginationResult {
-	var nextOffset, previousOffset int
-
-	next, err := url.Parse(nextURL)
-	if err == nil {
-		nextOffset, _ = strconv.Atoi(next.Query().Get("offset"))
-	}
-
-	previous, err := url.Parse(previousURL)
-	if err == nil {
-		previousOffset, _ = strconv.Atoi(previous.Query().Get("offset"))
-	}
-
-	return &PaginationResult{
-		NextOffset:     nextOffset,
-		PreviousOffset: previousOffset,
-		TotalCount:     totalCount,
-	}
-}
+var _ Client = (*HTTPClient)(nil)
 
 func NewHTTPClient(httpClient *http.Client, practiceID, clientID, secret string) *HTTPClient {
 	preview := true
@@ -135,11 +68,11 @@ func NewHTTPClient(httpClient *http.Client, practiceID, clientID, secret string)
 	c := &HTTPClient{
 		httpClient: httpClient,
 
-		practiceID: practiceID,
-		clientID:   clientID,
-		secret:     secret,
-
-		preview: preview,
+		practiceID:     practiceID,
+		clientID:       clientID,
+		secret:         secret,
+		preview:        preview,
+		requestTimeout: defaultRequestTimeout,
 
 		tokenProvider: tokenprovider.NewDefault(httpClient, clientID, secret, preview),
 		tokenCacher:   tokencacher.NewDefault(),
@@ -164,7 +97,7 @@ func (h *HTTPClient) setBaseURL() {
 func (h *HTTPClient) request(ctx context.Context, method, path string, body io.Reader, headers http.Header, out interface{}) (*http.Response, error) {
 	if _, ok := ctx.Deadline(); !ok {
 		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, defaultRequestTimeout)
+		ctx, cancel = context.WithTimeout(ctx, h.requestTimeout)
 		defer cancel()
 	}
 
@@ -254,6 +187,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	if err != nil {
 		return res, err
 	}
+	defer res.Body.Close()
 
 	requestDuration := time.Since(requestStart)
 
@@ -279,6 +213,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	if err != nil {
 		return res, err
 	}
+	// close original req.Body before before overwriting
 	res.Body.Close()
 
 	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
@@ -362,6 +297,12 @@ func (h *HTTPClient) WithStats(stats Stats) *HTTPClient {
 	return h
 }
 
+func (h *HTTPClient) WithRequestTimeout(requestTimeout time.Duration) *HTTPClient {
+	h.requestTimeout = requestTimeout
+
+	return h
+}
+
 func (h *HTTPClient) Get(ctx context.Context, path string, query url.Values, out interface{}) (*http.Response, error) {
 	if len(query) > 0 {
 		path = fmt.Sprintf("%s?%s", path, query.Encode())
@@ -436,4 +377,68 @@ func (h *HTTPClient) DeleteForm(ctx context.Context, path string, v url.Values, 
 	}
 
 	return h.request(ctx, http.MethodDelete, path, body, headers, out)
+}
+
+// APIError represents an error response from the athenahealth API.
+type APIError struct {
+	Err                   error  `json:"-"`
+	AthenaError           string `json:"error"`
+	AthenaDetailedMessage string `json:"detailedmessage"`
+
+	HTTPResponse *http.Response
+}
+
+func (a *APIError) Error() string {
+	details := "no detailed message"
+	if len(a.AthenaDetailedMessage) > 0 {
+		details = a.AthenaDetailedMessage
+	}
+
+	var status string
+	if a.HTTPResponse != nil {
+		status = a.HTTPResponse.Status
+	}
+
+	return fmt.Sprintf("athenahealth API error (%s): %s (%s)", status, a.AthenaError, details)
+}
+
+func (a *APIError) Unwrap() error {
+	return a.Err
+}
+
+type PaginationOptions struct {
+	Limit  int
+	Offset int
+}
+
+type PaginationResult struct {
+	NextOffset     int
+	PreviousOffset int
+	TotalCount     int
+}
+
+type PaginationResponse struct {
+	Previous   string `json:"previous"`
+	Next       string `json:"next"`
+	TotalCount int    `json:"totalcount"`
+}
+
+func makePaginationResult(nextURL, previousURL string, totalCount int) *PaginationResult {
+	var nextOffset, previousOffset int
+
+	next, err := url.Parse(nextURL)
+	if err == nil {
+		nextOffset, _ = strconv.Atoi(next.Query().Get("offset"))
+	}
+
+	previous, err := url.Parse(previousURL)
+	if err == nil {
+		previousOffset, _ = strconv.Atoi(previous.Query().Get("offset"))
+	}
+
+	return &PaginationResult{
+		NextOffset:     nextOffset,
+		PreviousOffset: previousOffset,
+		TotalCount:     totalCount,
+	}
 }
