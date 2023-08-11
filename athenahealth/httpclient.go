@@ -160,7 +160,8 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	h.requestLock.Unlock()
 
-	req, err := http.NewRequestWithContext(ctx, method, reqURL, body)
+	srBody := newSizeRecordingReader(body)
+	req, err := http.NewRequestWithContext(ctx, method, reqURL, srBody)
 	if err != nil {
 		return nil, err
 	}
@@ -178,6 +179,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	h.logger.Info().
 		Str("method", method).
 		Str("url", reqURL).
+		Int64("bodyLength", srBody.size).
 		Str("xRequestId", xRequestID).
 		Msg("athenahealth API request")
 
@@ -254,6 +256,24 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	}
 
 	return res, nil
+}
+
+type sizeRecordingReader struct {
+	r    io.Reader
+	size int64
+}
+
+func newSizeRecordingReader(r io.Reader) *sizeRecordingReader {
+	return &sizeRecordingReader{
+		r:    r,
+		size: 0,
+	}
+}
+
+func (srr *sizeRecordingReader) Read(p []byte) (int, error) {
+	n, err := srr.r.Read(p)
+	srr.size += int64(n)
+	return n, err
 }
 
 func (h *HTTPClient) WithLogger(logger *zerolog.Logger) *HTTPClient {
@@ -335,7 +355,7 @@ func (h *HTTPClient) PostFormReader(ctx context.Context, path string, fue *formU
 		pr, pw := io.Pipe()
 
 		go func() {
-			err := fue.Encode(pw)
+			err := fue.Encode(ctx, pw)
 			//nolint
 			pw.CloseWithError(err)
 		}()

@@ -2,12 +2,15 @@ package athenahealth
 
 import (
 	"bytes"
+	"context"
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"net/url"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -18,6 +21,21 @@ type errorReader struct {
 
 func (er *errorReader) Read(p []byte) (int, error) {
 	return 0, er.err
+}
+
+type slowReader struct {
+	r               io.Reader
+	maxBytesPerRead int64
+	sleepPerRead    time.Duration
+}
+
+func (sr *slowReader) Read(p []byte) (n int, err error) {
+	if int64(len(p)) > sr.maxBytesPerRead {
+		p = p[0:sr.maxBytesPerRead]
+	}
+	n, err = sr.r.Read(p)
+	time.Sleep(sr.sleepPerRead)
+	return
 }
 
 func Test_formURLEncoder_Encode_table(t *testing.T) {
@@ -34,6 +52,7 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 		fue     *formURLEncoder
 		wantW   string
 		wantErr error
+		ctxFn   func() (context.Context, func())
 	}{
 		{
 			name:    "empty",
@@ -76,11 +95,32 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 			wantW:   "error=",
 			wantErr: errBadRead,
 		},
+		{
+			name: "context cancellation",
+			fue: func() *formURLEncoder {
+				fue := NewFormURLEncoder()
+				fue.AddReader("file", &slowReader{
+					r:               newBase64Reader(bytes.NewReader(fileContents)),
+					maxBytesPerRead: 1,
+					sleepPerRead:    time.Second,
+				})
+				return fue
+			}(),
+			wantW:   "file=",
+			wantErr: context.DeadlineExceeded,
+			ctxFn:   func() (context.Context, func()) { return context.WithTimeout(context.Background(), time.Millisecond) },
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			ctx := context.Background()
+			if tt.ctxFn != nil {
+				var cancel func()
+				ctx, cancel = tt.ctxFn()
+				defer cancel()
+			}
 			w := &bytes.Buffer{}
-			if err := tt.fue.Encode(w); !errors.Is(err, tt.wantErr) {
+			if err := tt.fue.Encode(ctx, w); !errors.Is(err, tt.wantErr) {
 				t.Errorf("formURLEncoder.Encode() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
@@ -104,7 +144,7 @@ func Test_formURLEncoder_Encode(t *testing.T) {
 	fue.AddString("str!", "hello world!")
 
 	b := bytes.NewBuffer(nil)
-	err = fue.Encode(b)
+	err = fue.Encode(context.Background(), b)
 	assert.NoError(err)
 	assert.Equal(fmt.Sprintf("count=10&doc=%s&%s=%s", url.QueryEscape(string(docBytes)), url.QueryEscape("str!"), url.QueryEscape("hello world!")), b.String())
 }
