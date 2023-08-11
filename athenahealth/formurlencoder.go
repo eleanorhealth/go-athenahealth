@@ -1,6 +1,7 @@
 package athenahealth
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/url"
@@ -37,7 +38,7 @@ func (f *formURLEncoder) AddReader(key string, value io.Reader) {
 
 // Encode encodes the values into “URL encoded” form
 // ("bar=baz&foo=quux") sorted by key.
-func (f *formURLEncoder) Encode(w io.Writer) error {
+func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 	keys := make([]string, 0, len(f.entries))
 	for k := range f.entries {
 		keys = append(keys, k)
@@ -75,19 +76,26 @@ func (f *formURLEncoder) Encode(w io.Writer) error {
 
 					go func() {
 						for {
-							buf := make([]byte, defaultFormURLEncoderBufferSize)
-							n, err := v.Read(buf)
-							if err != nil {
-								//nolint
-								pw.CloseWithError(err)
+							select {
+							case <-ctx.Done():
+								pw.CloseWithError(ctx.Err())
 								return
-							}
 
-							_, err = pw.Write([]byte(url.QueryEscape(string(buf[:n]))))
-							if err != nil {
-								//nolint
-								pw.CloseWithError(err)
-								return
+							default:
+								buf := make([]byte, defaultFormURLEncoderBufferSize)
+								n, err := v.Read(buf)
+								if err != nil {
+									//nolint
+									pw.CloseWithError(err)
+									return
+								}
+
+								_, err = pw.Write([]byte(url.QueryEscape(string(buf[:n]))))
+								if err != nil {
+									//nolint
+									pw.CloseWithError(err)
+									return
+								}
 							}
 						}
 					}()
