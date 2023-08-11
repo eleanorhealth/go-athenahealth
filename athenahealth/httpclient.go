@@ -160,8 +160,10 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	h.requestLock.Unlock()
 
-	srBody := newSizeRecordingReader(body)
-	req, err := http.NewRequestWithContext(ctx, method, reqURL, srBody)
+	if body != nil {
+		body = newSizeRecordingReader(body)
+	}
+	req, err := http.NewRequestWithContext(ctx, method, reqURL, body)
 	if err != nil {
 		return nil, err
 	}
@@ -176,10 +178,15 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	req.Header.Add("User-Agent", userAgent)
 	req.Header.Set(XRequestIDHeaderKey, xRequestID)
 
+	var requestBodyLength int64
+	if srBody, ok := body.(*sizeRecordingReader); ok {
+		requestBodyLength = srBody.size
+	}
+
 	h.logger.Info().
 		Str("method", method).
 		Str("url", reqURL).
-		Int64("bodyLength", srBody.size).
+		Int64("bodyLength", requestBodyLength).
 		Str("xRequestId", xRequestID).
 		Msg("athenahealth API request")
 
