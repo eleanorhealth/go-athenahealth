@@ -106,8 +106,12 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 				return fue
 			}(),
 			wantW:   "file=",
-			wantErr: context.DeadlineExceeded,
-			ctxFn:   func() (context.Context, func()) { return context.WithTimeout(context.Background(), time.Millisecond) },
+			wantErr: context.Canceled,
+			ctxFn: func() (context.Context, func()) {
+				ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond)
+				cancel()
+				return ctx, cancel
+			},
 		},
 	}
 	for _, tt := range tests {
@@ -145,5 +149,5 @@ func Test_formURLEncoder_Encode(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	err = fue.Encode(context.Background(), b)
 	assert.NoError(err)
-	assert.Equal(fmt.Sprintf("count=10&doc=%s&%s=%s", url.QueryEscape(string(docBytes)), url.QueryEscape("str!"), url.QueryEscape("hello world!")), b.String())
+	assert.Equal(fmt.Sprintf("count=10&doc=%s&%s=%s", base64.RawURLEncoding.EncodeToString(docBytes), url.QueryEscape("str!"), url.QueryEscape("hello world!")), b.String())
 }
