@@ -42,8 +42,7 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 	fileContents := make([]byte, 10000)
 	rand.Read(fileContents)
 
-	fileContentsBase64 := base64.StdEncoding.EncodeToString(fileContents)
-	fileContentsBase64AndQueryEscaped := url.QueryEscape(fileContentsBase64)
+	fileContentsBase64 := base64.RawURLEncoding.EncodeToString(fileContents)
 
 	errBadRead := errors.New("bad read")
 
@@ -76,10 +75,10 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 			name: "document",
 			fue: func() *formURLEncoder {
 				fue := NewFormURLEncoder()
-				fue.AddReader("document", newBase64Reader(bytes.NewReader(fileContents)))
+				fue.AddReader("document", bytes.NewReader(fileContents))
 				return fue
 			}(),
-			wantW:   fmt.Sprintf("document=%s", fileContentsBase64AndQueryEscaped),
+			wantW:   fmt.Sprintf("document=%s", fileContentsBase64),
 			wantErr: nil,
 		},
 		{
@@ -100,7 +99,7 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 			fue: func() *formURLEncoder {
 				fue := NewFormURLEncoder()
 				fue.AddReader("file", &slowReader{
-					r:               newBase64Reader(bytes.NewReader(fileContents)),
+					r:               bytes.NewReader(fileContents),
 					maxBytesPerRead: 1,
 					sleepPerRead:    time.Second,
 				})

@@ -75,7 +75,7 @@ func (h *HTTPClient) AddPatientDriversLicenseDocumentReader(ctx context.Context,
 		form.AddString("departmentid", opts.DepartmentID)
 	}
 
-	form.AddReader("image", newBase64Reader(opts.Image))
+	form.AddReader("image", opts.Image)
 
 	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/driverslicense", patientID), form, &out)
 	if err != nil {

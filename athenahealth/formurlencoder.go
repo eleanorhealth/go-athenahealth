@@ -2,16 +2,14 @@ package athenahealth
 
 import (
 	"context"
+	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"net/url"
 	"reflect"
 	"sort"
 	"strconv"
-)
-
-const (
-	defaultFormURLEncoderBufferSize = 512
 )
 
 type formURLEncoder struct {
@@ -73,6 +71,7 @@ func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 				switch v := val.(type) {
 				case io.Reader:
 					pr, pw := io.Pipe()
+					encoder := base64.NewEncoder(base64.RawURLEncoding, pw)
 
 					go func() {
 						for {
@@ -82,19 +81,15 @@ func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 								return
 
 							default:
-								buf := make([]byte, defaultFormURLEncoderBufferSize)
-								n, err := v.Read(buf)
-								if err != nil {
-									//nolint
-									pw.CloseWithError(err)
-									return
-								}
+								_, err := io.Copy(encoder, v)
+								err = errors.Join(err, encoder.Close())
 
-								_, err = pw.Write([]byte(url.QueryEscape(string(buf[:n]))))
 								if err != nil {
 									//nolint
 									pw.CloseWithError(err)
-									return
+								} else {
+									//nolint
+									pw.Close()
 								}
 							}
 						}
