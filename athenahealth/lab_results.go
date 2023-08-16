@@ -58,6 +58,17 @@ type ListLabResultsResult struct {
 //
 // https://docs.athenahealth.com/api/api-ref/lab-result#Get-patient's-lab-results
 func (h *HTTPClient) ListLabResults(ctx context.Context, patientID string, departmentID string, opts *ListLabResultsOptions) (*ListLabResultsResult, error) {
+	var requiredParamErrors []error
+	if len(patientID) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("patientID is required"))
+	}
+	if len(departmentID) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("departmentID is required"))
+	}
+	if len(requiredParamErrors) > 0 {
+		return nil, errors.Join(requiredParamErrors...)
+	}
+
 	q := url.Values{}
 	q.Add("departmentid", departmentID)
 
@@ -145,6 +156,17 @@ type addLabResultDocumentResponse struct {
 //
 // https://docs.athenahealth.com/api/api-ref/document-type-lab-result#Add-lab-result-document-to-patient's-chart
 func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID string, departmentID string, opts *AddLabResultDocumentOptions) (int, error) {
+	var requiredParamErrors []error
+	if len(patientID) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("patientID is required"))
+	}
+	if len(departmentID) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("departmentID is required"))
+	}
+	if len(requiredParamErrors) > 0 {
+		return 0, errors.Join(requiredParamErrors...)
+	}
+
 	form := NewFormURLEncoder()
 
 	form.AddString("departmentid", departmentID)

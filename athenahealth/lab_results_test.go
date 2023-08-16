@@ -12,6 +12,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestHTTPClient_ListLabResults_required_params_empty(t *testing.T) {
+	assert := assert.New(t)
+
+	ctx := context.Background()
+
+	startDate := time.Date(2011, 9, 22, 0, 0, 0, 0, time.UTC)
+
+	h := func(w http.ResponseWriter, r *http.Request) {}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	_, err := athenaClient.ListLabResults(ctx, "", "", &ListLabResultsOptions{
+		StartDate: &startDate,
+	})
+	assert.Error(err)
+}
+
 func TestHTTPClient_ListLabResults(t *testing.T) {
 	assert := assert.New(t)
 
@@ -37,6 +55,25 @@ func TestHTTPClient_ListLabResults(t *testing.T) {
 	assert.NoError(err)
 	assert.Len(res.LabResults, 4)
 	assert.Equal(res.Pagination.TotalCount, 4)
+}
+
+func TestHTTPClient_AddLabResultDocument_required_params_empty(t *testing.T) {
+	assert := assert.New(t)
+
+	ctx := context.Background()
+
+	h := func(w http.ResponseWriter, r *http.Request) {}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	b := bytes.NewReader([]byte(`test bytes`))
+	_, err := athenaClient.AddLabResultDocumentReader(ctx, "", "", &AddLabResultDocumentOptions{
+		AttachmentContents: b,
+		AttachmentType:     LabResultAttachmentTypeJPG,
+	})
+
+	assert.Error(err)
 }
 
 func TestHTTPClient_AddLabResultDocument(t *testing.T) {
