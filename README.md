@@ -58,3 +58,104 @@ xRequestId := req.Header.Get(athenahealth.XRequestIDHeaderKey))
 ```
 
 See the athena [Best Practices](https://docs.athenahealth.com/api/guides/best-practices) guide for more details about X-Request-Id and other recommended  practices.
+
+## Method Signatures Required vs. Optional Fields
+
+All methods that perform network or filesystem IO will accept a context for idiomatic propagation.
+
+While not yet consistently applied across this repo, required fields should be surfaced as top-level arguments in method signatures (including path parameters, query parameters, and request body fields) while optional fields should be embedded as pointer fields in an optional pointer struct. The aim is to provide a clear, consistent, and self-documenting interface for required vs. optional fields as well as to add compile-time safety to required fields.
+
+### Required and Optional Fields
+
+Optional fields options struct should be the last argument in the method signature, preceded by top-level required fields.
+
+```go
+type CreatePatientOptions struct {
+	Address1              *string
+	Address2              *string
+	City                  *string
+	Email                 *string
+	HomePhone             *string
+	MiddleName            *string
+	MobilePhone           *string
+	Notes                 *string
+	Sex                   *string
+	SSN                   *string
+	State                 *string
+	Status                *string
+	Zip                   *string
+	BypassPatientMatching *bool
+}
+
+type Client interface {
+	// ...
+	CreatePatient(ctx context.Context, departmentID, firstName, lastName string, dob time.Time, opts *CreatePatientOptions) (string, error)
+	// ...
+}
+```
+
+> [samber/lo#toptr](https://github.com/samber/lo#toptr) or a custom rolled to-pointer helper is recommended to improve the ergonomics of passing the optional pointer fields
+> ```go
+> func ToPtr[T any](x T) *T { return &x }
+> ``` 
+
+Required fields should be checked for invalid zero values to prevent unnecessary error-prone calls to athena and surface clearer errors, relying on `errors.Join` to improve DX and prevent waterfalling errors.
+
+```go
+func (h *HTTPClient) CreatePatient(ctx context.Context, departmentID, firstName, lastName string, dob time.Time, opts *CreatePatientOptions) (string, error) {
+	var requiredParamErrors []error
+	if len(departmentID) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("department ID is required"))
+	}
+	if len(firstName) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("first name is required"))
+	}
+	if len(lastName) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("last name is required"))
+	}
+	if dob.IsZero() {
+		requiredParamErrors = append(requiredParamErrors, errors.New("date of birth is required"))
+	}
+	if len(requiredParamErrors) > 0 {
+		return nil, errors.Join(requiredParamErrors...)
+	}
+
+	// ...
+}
+```
+
+### Only Required Fields
+
+If there are only required fields, options struct is omitted.
+
+```go
+type Client interface {
+	// ...
+	SearchAllergies(ctx context.Context, searchVal string) ([]*Allergy, error)
+	// ...
+}
+```
+
+### Only Optional Fields
+
+If there are only optional fields, expect a standalone options struct.
+
+```go
+type Client interface {
+	// ...
+	ListChangedPatients(ctx context.Context, opts *ListChangedPatientOptions) ([]*Patient, error)
+	// ...
+}
+```
+
+### Neither Required or Optional Fields
+
+If neither required or optional fields are present, expect neither.
+
+```go
+type Client interface {
+	// ...
+	ListAppointmentCustomFields(context.Context) ([]*AppointmentCustomField, error)
+	// ...
+}
+```
