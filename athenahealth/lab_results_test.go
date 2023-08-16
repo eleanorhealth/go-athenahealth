@@ -90,7 +90,7 @@ func TestHTTPClient_ListChangedLabResults(t *testing.T) {
 	res, err := athenaClient.ListChangedLabResults(ctx, &ListChangedLabResultsOptions{
 		ShowPortalOnly: &showPortalOnly,
 	})
-	labResults := res.LabResults
+	labResults := res.ChangedLabResults
 
 	assert.NoError(err)
 	assert.Len(labResults, 3)

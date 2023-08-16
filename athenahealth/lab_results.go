@@ -205,7 +205,7 @@ type ListChangedLabResultsOptions struct {
 	Pagination *PaginationOptions
 }
 
-type ListChangedLabResultsChangedLabResult struct {
+type ChangedLabResult struct {
 	AppointmentID        int    `json:"appointmentid"`
 	AssignedTo           string `json:"assignedto"`
 	CreatedDate          string `json:"createddate"`
@@ -248,13 +248,13 @@ type ListChangedLabResultsChangedLabResult struct {
 }
 
 type listChangedLabResultsResponse struct {
-	LabResults []*ListChangedLabResultsChangedLabResult `json:"labresults"`
+	LabResults []*ChangedLabResult `json:"labresults"`
 
 	*PaginationResponse
 }
 
 type ListChangedLabResultsResult struct {
-	LabResults []*ListChangedLabResultsChangedLabResult `json:"labresults"`
+	ChangedLabResults []*ChangedLabResult `json:"changedlabresults"`
 
 	Pagination *PaginationResult
 }
@@ -275,10 +275,10 @@ func (h *HTTPClient) ListChangedLabResults(ctx context.Context, opts *ListChange
 			q.Add("leaveunprocessed", strconv.FormatBool(*opts.LeaveUnprocessed))
 		}
 		if !opts.ShowProcessedEndDateTime.IsZero() {
-			q.Add("ShowProcessedEndDateTime", opts.ShowProcessedEndDateTime.Format("01/02/2006 15:04:05"))
+			q.Add("showprocessedenddatetime", opts.ShowProcessedEndDateTime.Format("01/02/2006 15:04:05"))
 		}
 		if !opts.ShowProcessedStartDateTime.IsZero() {
-			q.Add("ShowProcessedStartDateTime", opts.ShowProcessedStartDateTime.Format("01/02/2006 15:04:05"))
+			q.Add("showprocessedstartdatetime", opts.ShowProcessedStartDateTime.Format("01/02/2006 15:04:05"))
 		}
 
 		if opts.Pagination != nil {
@@ -297,7 +297,7 @@ func (h *HTTPClient) ListChangedLabResults(ctx context.Context, opts *ListChange
 	_, err := h.Get(ctx, "labresults/changed", q, out)
 
 	return &ListChangedLabResultsResult{
-		LabResults: out.LabResults,
-		Pagination: makePaginationResult(out.Next, out.Previous, out.TotalCount),
+		ChangedLabResults: out.LabResults,
+		Pagination:        makePaginationResult(out.Next, out.Previous, out.TotalCount),
 	}, err
 }
