@@ -63,7 +63,7 @@ See the athena [Best Practices](https://docs.athenahealth.com/api/guides/best-pr
 
 All methods that perform network or filesystem IO will accept a context for idiomatic propagation.
 
-While not yet consistently applied across this repo, required fields should be surfaced as top-level arguments in method signatures (including path parameters, query parameters, and request body fields) while optional fields should be embedded as pointer fields in an optional pointer struct. The aim is to provide a consistent and natural pattern for interacting with this client interface as well as to add compile-time safety to required fields.
+While not yet consistently applied across this repo, required fields should be surfaced as top-level arguments in method signatures (including path parameters, query parameters, and request body fields) while optional fields should be embedded as pointer fields in an optional pointer struct. The aim is to provide a clear, consistent, and self-documenting interface for required vs. optional fields as well as to add compile-time safety to required fields.
 
 ### Required and Optional Fields
 
@@ -94,10 +94,35 @@ type Client interface {
 }
 ```
 
-> [samber/lo#toptr](https://github.com/samber/lo#toptr) or a custom rolled to-pointer helper is recommended to improve the ergonomics of passing the pointers
+> [samber/lo#toptr](https://github.com/samber/lo#toptr) or a custom rolled to-pointer helper is recommended to improve the ergonomics of passing the optional pointer fields
 > ```go
 > func ToPtr[T any](x T) *T { return &x }
 > ``` 
+
+Required fields should be checked for invalid zero values to prevent unnecessary error-prone calls to athena and surface clearer errors, relying on `errors.Join` to improve DX and prevent waterfalling errors.
+
+```go
+func (h *HTTPClient) CreatePatient(ctx context.Context, departmentID, firstName, lastName string, dob time.Time, opts *CreatePatientOptions) (string, error) {
+	var requiredParamErrors []error
+	if len(departmentID) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("department ID is required"))
+	}
+	if len(firstName) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("first name is required"))
+	}
+	if len(lastName) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("last name is required"))
+	}
+	if dob.IsZero() {
+		requiredParamErrors = append(requiredParamErrors, errors.New("date of birth is required"))
+	}
+	if len(requiredParamErrors) > 0 {
+		return nil, errors.Join(requiredParamErrors...)
+	}
+
+	// ...
+}
+```
 
 ### Only Required Fields
 
