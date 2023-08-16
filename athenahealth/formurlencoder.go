@@ -71,7 +71,7 @@ func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 				switch v := val.(type) {
 				case io.Reader:
 					pr, pw := io.Pipe()
-					encoder := base64.NewEncoder(base64.RawURLEncoding, pw)
+					encoder := base64.NewEncoder(base64.StdEncoding, pw)
 
 					go func() {
 						err := Copy(ctx, encoder, v)

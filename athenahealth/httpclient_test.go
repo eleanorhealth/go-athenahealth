@@ -455,7 +455,7 @@ func TestHTTPClient_PostFormReader_stream(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPost, r.Method)
 		r.ParseForm()
-		expectedStr := base64.RawURLEncoding.EncodeToString(buf.Bytes())
+		expectedStr := base64.StdEncoding.EncodeToString(buf.Bytes())
 		inputStr := r.Form.Get("file")
 		assert.Equal(len(expectedStr), len(inputStr))
 		assert.Equal(expectedStr, inputStr)
