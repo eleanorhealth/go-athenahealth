@@ -67,7 +67,7 @@ While not yet consistently applied across this repo, required fields should be s
 
 ### Required and Optional Fields
 
-Optional fields options struct should by the last argument in the method signature, preceded by top-level required fields.
+Optional fields options struct should be the last argument in the method signature, preceded by top-level required fields.
 
 ```go
 type CreatePatientOptions struct {
