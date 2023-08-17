@@ -1,0 +1,77 @@
+{
+  "totalcount": 4,
+  "results": [
+      {
+          "performinglabcity": "DURHAM",
+          "internalnote": "This is an internal note",
+          "labresultid": 1083579,
+          "priority": "2",
+          "labresultloinc": "49580-4",
+          "performinglabzip": "27707-2654",
+          "labresultnote": "This is a note to the patient",
+          "attachmentexists": false,
+          "orderid": 1083569,
+          "providerid": 412,
+          "labresultdate": "08/10/2023",
+          "createddatetime": "08/10/2023 14:56:52",
+          "createddate": "08/10/2023",
+          "performinglabstate": "NC",
+          "description": "HIV (1+2) Ab, rapid, unspecified specimen",
+          "performinglabaddress2": "Suite B",
+          "labresultdatetime": "08/10/2023 14:59:00",
+          "performinglabaddress1": "123 Main St.",
+          "performinglabname": "SomeLab",
+          "isreviewedbyprovider": "1",
+          "analytes": [
+              {
+                  "analytedate": "08/10/2023",
+                  "analytename": "Result",
+                  "description": "HIV (1+2) Ab, rapid, unspecified specimen",
+                  "analytedatetime": "08/10/2023 14:59:00",
+                  "value": "Nonreactive",
+                  "analyteid": 907435
+              }
+          ]
+      },
+      {
+          "labresultid": 1083509,
+          "priority": "2",
+          "attachmentexists": true,
+          "createddatetime": "08/10/2023 14:05:43",
+          "createddate": "08/10/2023",
+          "description": "lab result",
+          "analytes": []
+      },
+      {
+          "internalnote": "Submitted via internal EMR",
+          "labresultid": 1083552,
+          "priority": "2",
+          "attachmentexists": true,
+          "labresultdate": "08/07/2023",
+          "createddatetime": "08/07/2023 16:16:07",
+          "createddate": "08/07/2023",
+          "description": "lab result",
+          "labresultdatetime": "08/07/2023 00:00:00",
+          "analytes": []
+      },
+      {
+          "performinglabcity": "DURHAM",
+          "labresultid": 1083504,
+          "priority": "2",
+          "labresultloinc": "12286-1",
+          "performinglabzip": "27707-2654",
+          "attachmentexists": false,
+          "orderid": 1083593,
+          "providerid": 400,
+          "createddatetime": "08/04/2023 16:24:45",
+          "createddate": "08/04/2023",
+          "performinglabstate": "NC",
+          "description": "drug screen, urine",
+          "performinglabaddress2": "Suite B",
+          "performinglabaddress1": "123 Main St.",
+          "performinglabname": "SomeLab",
+          "isreviewedbyprovider": "1",
+          "analytes": []
+      }
+  ]
+}

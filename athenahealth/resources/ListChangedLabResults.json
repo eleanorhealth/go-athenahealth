@@ -1,0 +1,59 @@
+{
+  "labresults": [
+      {
+          "observationdatetime": "2023-08-10T14:42:00-04:00",
+          "labresultid": 1083590,
+          "patientid": 71111,
+          "status": "CLOSED",
+          "priority": "2",
+          "tietoorderid": 1083594,
+          "documentroute": "FAX",
+          "lastmodifieddatetime": "2023-08-10T14:53:55-04:00",
+          "departmentid": "5",
+          "providerid": 400,
+          "createddatetime": "2023-08-10T14:42:37-04:00",
+          "createddate": "08/10/2023",
+          "facilityid": 13781111,
+          "encounterid": "226419",
+          "lastmodifieddate": "08/10/2023",
+          "observationdate": "08/10/2023",
+          "documentsource": "MANUAL"
+      },
+      {
+          "observationdatetime": "2023-08-10T14:59:00-04:00",
+          "internalnote": "An internal note",
+          "labresultid": 1083591,
+          "patientid": 71111,
+          "status": "CLOSED",
+          "priority": "2",
+          "tietoorderid": 1083596,
+          "documentroute": "FAX",
+          "lastmodifieddatetime": "2023-08-10T15:33:07-04:00",
+          "departmentid": "5",
+          "providerid": 400,
+          "patientnote": "A note to patient",
+          "createddatetime": "2023-08-10T14:56:52-04:00",
+          "createddate": "08/10/2023",
+          "facilityid": 13781111,
+          "encounterid": "226421",
+          "lastmodifieddate": "08/10/2023",
+          "observationdate": "08/10/2023",
+          "documentsource": "MANUAL"
+      },
+      {
+          "internalnote": "Closing",
+          "labresultid": 1083592,
+          "patientid": 71111,
+          "status": "CLOSED",
+          "priority": "2",
+          "documentroute": "FAX",
+          "lastmodifieddatetime": "2023-08-10T16:08:28-04:00",
+          "departmentid": "5",
+          "createddatetime": "2023-08-07T15:21:25-04:00",
+          "createddate": "08/07/2023",
+          "lastmodifieddate": "08/10/2023",
+          "documentsource": "INTERFACE"
+      }
+  ],
+  "totalcount": 3
+}
