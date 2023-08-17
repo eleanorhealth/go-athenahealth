@@ -1,6 +1,6 @@
 module github.com/eleanorhealth/go-athenahealth
 
-go 1.18
+go 1.20 
 
 require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible

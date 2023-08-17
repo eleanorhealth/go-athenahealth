@@ -321,7 +321,7 @@ func (h *HTTPClient) UploadPatientInsuranceCardImageReader(ctx context.Context, 
 		form.AddString("departmentid", opts.DepartmentID)
 	}
 
-	form.AddReader("image", newBase64Reader(opts.Image))
+	form.AddReader("image", opts.Image)
 
 	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/insurances/%s/image", patientID, insuranceID), form, &out)
 	if err != nil {
