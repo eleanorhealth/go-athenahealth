@@ -548,7 +548,7 @@ func (h *HTTPClient) UpdatePatientPhoto(ctx context.Context, patientID string, d
 // https://developer.athenahealth.com/docs/read/forms_and_documents/Patient_Photo#section-1
 func (h *HTTPClient) UpdatePatientPhotoReader(ctx context.Context, patientID string, r io.Reader) error {
 	form := NewFormURLEncoder()
-	form.AddReader("image", newBase64Reader(r))
+	form.AddReader("image", r)
 
 	_, err := h.PostFormReader(ctx, fmt.Sprintf("/patients/%s/photo", patientID), form, nil)
 	return err

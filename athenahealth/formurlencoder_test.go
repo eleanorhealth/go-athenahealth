@@ -42,8 +42,7 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 	fileContents := make([]byte, 10000)
 	rand.Read(fileContents)
 
-	fileContentsBase64 := base64.StdEncoding.EncodeToString(fileContents)
-	fileContentsBase64AndQueryEscaped := url.QueryEscape(fileContentsBase64)
+	fileContentsBase64 := url.QueryEscape(base64.StdEncoding.EncodeToString(fileContents))
 
 	errBadRead := errors.New("bad read")
 
@@ -76,10 +75,10 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 			name: "document",
 			fue: func() *formURLEncoder {
 				fue := NewFormURLEncoder()
-				fue.AddReader("document", newBase64Reader(bytes.NewReader(fileContents)))
+				fue.AddReader("document", bytes.NewReader(fileContents))
 				return fue
 			}(),
-			wantW:   fmt.Sprintf("document=%s", fileContentsBase64AndQueryEscaped),
+			wantW:   fmt.Sprintf("document=%s", fileContentsBase64),
 			wantErr: nil,
 		},
 		{
@@ -100,15 +99,19 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 			fue: func() *formURLEncoder {
 				fue := NewFormURLEncoder()
 				fue.AddReader("file", &slowReader{
-					r:               newBase64Reader(bytes.NewReader(fileContents)),
+					r:               bytes.NewReader(fileContents),
 					maxBytesPerRead: 1,
 					sleepPerRead:    time.Second,
 				})
 				return fue
 			}(),
 			wantW:   "file=",
-			wantErr: context.DeadlineExceeded,
-			ctxFn:   func() (context.Context, func()) { return context.WithTimeout(context.Background(), time.Millisecond) },
+			wantErr: context.Canceled,
+			ctxFn: func() (context.Context, func()) {
+				ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond)
+				cancel()
+				return ctx, cancel
+			},
 		},
 	}
 	for _, tt := range tests {
@@ -146,5 +149,5 @@ func Test_formURLEncoder_Encode(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	err = fue.Encode(context.Background(), b)
 	assert.NoError(err)
-	assert.Equal(fmt.Sprintf("count=10&doc=%s&%s=%s", url.QueryEscape(string(docBytes)), url.QueryEscape("str!"), url.QueryEscape("hello world!")), b.String())
+	assert.Equal(fmt.Sprintf("count=10&doc=%s&%s=%s", url.QueryEscape(base64.StdEncoding.EncodeToString(docBytes)), url.QueryEscape("str!"), url.QueryEscape("hello world!")), b.String())
 }

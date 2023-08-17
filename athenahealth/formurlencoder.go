@@ -2,16 +2,14 @@ package athenahealth
 
 import (
 	"context"
+	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"net/url"
 	"reflect"
 	"sort"
 	"strconv"
-)
-
-const (
-	defaultFormURLEncoderBufferSize = 512
 )
 
 type formURLEncoder struct {
@@ -73,30 +71,18 @@ func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 				switch v := val.(type) {
 				case io.Reader:
 					pr, pw := io.Pipe()
+					encoder := base64.NewEncoder(base64.StdEncoding, &urlQueryEscapeWriter{pw})
 
 					go func() {
-						for {
-							select {
-							case <-ctx.Done():
-								pw.CloseWithError(ctx.Err())
-								return
+						err := Copy(ctx, encoder, v)
+						err = errors.Join(err, encoder.Close())
 
-							default:
-								buf := make([]byte, defaultFormURLEncoderBufferSize)
-								n, err := v.Read(buf)
-								if err != nil {
-									//nolint
-									pw.CloseWithError(err)
-									return
-								}
-
-								_, err = pw.Write([]byte(url.QueryEscape(string(buf[:n]))))
-								if err != nil {
-									//nolint
-									pw.CloseWithError(err)
-									return
-								}
-							}
+						if err != nil {
+							//nolint
+							pw.CloseWithError(err)
+						} else {
+							//nolint
+							pw.Close()
 						}
 					}()
 
@@ -130,4 +116,30 @@ func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 	}
 
 	return nil
+}
+
+type readerFunc func(p []byte) (n int, err error)
+
+func (rf readerFunc) Read(p []byte) (n int, err error) { return rf(p) }
+
+func Copy(ctx context.Context, dst io.Writer, src io.Reader) error {
+	_, err := io.Copy(dst, readerFunc(func(p []byte) (int, error) {
+		select {
+		case <-ctx.Done():
+			return 0, ctx.Err()
+		default:
+			return src.Read(p)
+		}
+	}))
+	return err
+}
+
+type urlQueryEscapeWriter struct {
+	io.Writer
+}
+
+func (w *urlQueryEscapeWriter) Write(p []byte) (int, error) {
+	escaped := url.QueryEscape(string(p))
+
+	return w.Writer.Write([]byte(escaped))
 }

@@ -240,7 +240,7 @@ func (h *HTTPClient) AddDocumentReader(ctx context.Context, patientID string, op
 			form.AddString("appointmentid", apptID)
 		}
 
-		form.AddReader("attachmentcontents", newBase64Reader(opts.AttachmentContents))
+		form.AddReader("attachmentcontents", opts.AttachmentContents)
 
 		if opts.AutoClose != nil {
 			form.AddString("autoclose", *opts.AutoClose)
@@ -436,7 +436,7 @@ func (h *HTTPClient) AddClinicalDocumentReader(ctx context.Context, patientID st
 	if opts != nil {
 		form = NewFormURLEncoder()
 
-		form.AddReader("attachmentcontents", newBase64Reader(opts.AttachmentContents))
+		form.AddReader("attachmentcontents", opts.AttachmentContents)
 
 		if opts.AttachmentType != nil {
 			form.AddString("attachmenttype", *opts.AttachmentType)
