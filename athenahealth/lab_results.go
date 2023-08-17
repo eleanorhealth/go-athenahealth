@@ -173,7 +173,7 @@ func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID s
 
 	if opts != nil {
 		if opts.AttachmentContents != nil {
-			form.AddReader("attachmentcontents", newBase64Reader(opts.AttachmentContents))
+			form.AddReader("attachmentcontents", opts.AttachmentContents)
 		}
 		if len(opts.AttachmentType) > 0 {
 			form.AddString("attachmenttype", string(opts.AttachmentType))
