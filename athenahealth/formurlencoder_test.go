@@ -42,7 +42,7 @@ func Test_formURLEncoder_Encode_table(t *testing.T) {
 	fileContents := make([]byte, 10000)
 	rand.Read(fileContents)
 
-	fileContentsBase64 := base64.StdEncoding.EncodeToString(fileContents)
+	fileContentsBase64 := url.QueryEscape(base64.StdEncoding.EncodeToString(fileContents))
 
 	errBadRead := errors.New("bad read")
 
@@ -149,5 +149,5 @@ func Test_formURLEncoder_Encode(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	err = fue.Encode(context.Background(), b)
 	assert.NoError(err)
-	assert.Equal(fmt.Sprintf("count=10&doc=%s&%s=%s", base64.StdEncoding.EncodeToString(docBytes), url.QueryEscape("str!"), url.QueryEscape("hello world!")), b.String())
+	assert.Equal(fmt.Sprintf("count=10&doc=%s&%s=%s", url.QueryEscape(base64.StdEncoding.EncodeToString(docBytes)), url.QueryEscape("str!"), url.QueryEscape("hello world!")), b.String())
 }

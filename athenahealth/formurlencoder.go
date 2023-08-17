@@ -71,7 +71,7 @@ func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 				switch v := val.(type) {
 				case io.Reader:
 					pr, pw := io.Pipe()
-					encoder := base64.NewEncoder(base64.StdEncoding, pw)
+					encoder := base64.NewEncoder(base64.StdEncoding, &urlQueryEscapeWriter{pw})
 
 					go func() {
 						err := Copy(ctx, encoder, v)
@@ -132,4 +132,14 @@ func Copy(ctx context.Context, dst io.Writer, src io.Reader) error {
 		}
 	}))
 	return err
+}
+
+type urlQueryEscapeWriter struct {
+	io.Writer
+}
+
+func (w *urlQueryEscapeWriter) Write(p []byte) (int, error) {
+	escaped := url.QueryEscape(string(p))
+
+	return w.Writer.Write([]byte(escaped))
 }

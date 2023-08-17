@@ -3,7 +3,7 @@ package athenahealth
 import (
 	"bytes"
 	"context"
-	"crypto/rand"
+	_ "embed"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -19,6 +19,9 @@ import (
 	"github.com/eleanorhealth/go-athenahealth/athenahealth/ratelimiter"
 	"github.com/stretchr/testify/assert"
 )
+
+//go:embed resources/test.jpg
+var testImg []byte
 
 const testPracticeID = "123456"
 const testAPIKey = "api-key"
@@ -449,16 +452,15 @@ func TestHTTPClient_PostFormReader(t *testing.T) {
 func TestHTTPClient_PostFormReader_stream(t *testing.T) {
 	assert := assert.New(t)
 
-	var buf bytes.Buffer
-
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPost, r.Method)
+
 		r.ParseForm()
-		expectedStr := base64.StdEncoding.EncodeToString(buf.Bytes())
 		inputStr := r.Form.Get("file")
-		assert.Equal(len(expectedStr), len(inputStr))
-		assert.Equal(expectedStr, inputStr)
+		fileBytes, err := base64.StdEncoding.DecodeString(inputStr)
+		assert.NoError(err)
+		assert.Equal(fileBytes, testImg)
 
 		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
 
@@ -468,22 +470,17 @@ func TestHTTPClient_PostFormReader_stream(t *testing.T) {
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	values := NewFormURLEncoder()
-	values.AddString("foo", "bar")
+	fue := NewFormURLEncoder()
+	fue.AddString("foo", "bar")
 
 	pr, pw := io.Pipe()
-	w := io.MultiWriter(pw, &buf)
 	go func() {
-		for i := 0; i < 10; i++ {
-			b := make([]byte, 512)
-			rand.Read(b)
-			w.Write(b)
-		}
-		pw.Close()
+		_, err := io.Copy(pw, bytes.NewReader(testImg))
+		pw.CloseWithError(err)
 	}()
-	values.AddReader("file", pr)
+	fue.AddReader("file", pr)
 
-	res, err := athenaClient.PostFormReader(context.Background(), "/", values, nil)
+	res, err := athenaClient.PostFormReader(context.Background(), "/", fue, nil)
 
 	assert.NotNil(res)
 	assert.NoError(err)
