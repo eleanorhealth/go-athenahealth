@@ -20,8 +20,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//go:embed resources/test.jpg
-var testImg []byte
+//go:embed resources/athena.jpg
+var athenaTestImgBytes []byte
 
 const testPracticeID = "123456"
 const testAPIKey = "api-key"
@@ -460,7 +460,7 @@ func TestHTTPClient_PostFormReader_stream(t *testing.T) {
 		inputStr := r.Form.Get("file")
 		fileBytes, err := base64.StdEncoding.DecodeString(inputStr)
 		assert.NoError(err)
-		assert.Equal(fileBytes, testImg)
+		assert.Equal(fileBytes, athenaTestImgBytes)
 
 		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
 
@@ -475,7 +475,7 @@ func TestHTTPClient_PostFormReader_stream(t *testing.T) {
 
 	pr, pw := io.Pipe()
 	go func() {
-		_, err := io.Copy(pw, bytes.NewReader(testImg))
+		_, err := io.Copy(pw, bytes.NewReader(athenaTestImgBytes))
 		pw.CloseWithError(err)
 	}()
 	fue.AddReader("file", pr)
