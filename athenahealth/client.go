@@ -101,6 +101,10 @@ type Client interface {
 
 	ListMedications(ctx context.Context, patientID string, opts *ListMedicationsOptions) (*ListMedicationsResult, error)
 	SearchMedications(ctx context.Context, searchVal string) ([]*SearchMedicationsResult, error)
+
+	AddLabResultDocumentReader(ctx context.Context, patientID string, departmentID string, opts *AddLabResultDocumentOptions) (int, error)
+	ListLabResults(ctx context.Context, patientID string, departmentID string, opts *ListLabResultsOptions) (*ListLabResultsResult, error)
+	ListChangedLabResults(ctx context.Context, opts *ListChangedLabResultsOptions) (*ListChangedLabResultsResult, error)
 }
 
 type TokenProvider interface {
