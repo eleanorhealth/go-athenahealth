@@ -183,13 +183,6 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		requestBodyLength = srBody.size
 	}
 
-	h.logger.Info().
-		Str("method", method).
-		Str("url", reqURL).
-		Int64("bodyLength", requestBodyLength).
-		Str("xRequestId", xRequestID).
-		Msg("athenahealth API request")
-
 	requestStart := time.Now()
 
 	res, err := h.httpClient.Do(req)
@@ -197,6 +190,14 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		return res, err
 	}
 	defer res.Body.Close()
+
+	h.logger.Info().
+		Str("method", method).
+		Str("url", reqURL).
+		Int64("bodyLength", requestBodyLength).
+		Int64("bodyContentLength", req.ContentLength).
+		Str("xRequestId", xRequestID).
+		Msg("athenahealth API request")
 
 	requestDuration := time.Since(requestStart)
 
