@@ -186,7 +186,6 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	h.logger.Info().
 		Str("method", method).
 		Str("url", reqURL).
-		Int64("bodyLength", requestBodyLength).
 		Str("xRequestId", xRequestID).
 		Msg("athenahealth API request")
 
@@ -231,7 +230,9 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		Str("method", method).
 		Str("url", reqURL).
 		Int("statusCode", res.StatusCode).
-		Int("bodyLength", len(resBody)).
+		Int("responseBodyLength", len(resBody)).
+		Int64("requestBodyLength", requestBodyLength).
+		Int64("requestContentLength", req.ContentLength).
 		Str("xRequestId", xRequestID).
 		Str("duration", requestDuration.String()).
 		Msg("athenahealth API response")
