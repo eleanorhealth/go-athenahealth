@@ -145,12 +145,12 @@ func NewObservationDate(t time.Time) *observationDateTime {
 
 type AddLabResultDocumentOptions struct {
 	// AttachmentContents must be Base64 encoded
-	AttachmentContents io.Reader
-	AttachmentType     LabResultAttachmentType
-	InternalNote       *string
-	NoteToPatient      *string
-	ObservedAt         *observationDateTime
-	OriginalFilename   *string
+	AttachmentContents  io.Reader
+	AttachmentType      LabResultAttachmentType
+	InternalNote        *string
+	NoteToPatient       *string
+	ObservationDateTime *observationDateTime
+	OriginalFilename    *string
 	// 1 = high, 2 = normal
 	Priority    *string
 	ResultNotes *string
@@ -199,10 +199,10 @@ func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID s
 		if opts.NoteToPatient != nil {
 			form.AddString("notetopatient", string(*opts.NoteToPatient))
 		}
-		if opts.ObservedAt != nil {
-			form.AddString("observationdate", opts.ObservedAt.t.Format("01/02/2006"))
-			if opts.ObservedAt.includeTime {
-				form.AddString("observationtime", opts.ObservedAt.t.Format("15:04"))
+		if opts.ObservationDateTime != nil {
+			form.AddString("observationdate", opts.ObservationDateTime.t.Format("01/02/2006"))
+			if opts.ObservationDateTime.includeTime {
+				form.AddString("observationtime", opts.ObservationDateTime.t.Format("15:04"))
 			}
 		}
 		if opts.OriginalFilename != nil {

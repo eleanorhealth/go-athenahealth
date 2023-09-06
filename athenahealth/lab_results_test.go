@@ -106,9 +106,9 @@ func TestHTTPClient_AddLabResultDocument(t *testing.T) {
 
 	b := bytes.NewReader([]byte(`test bytes`))
 	res, err := athenaClient.AddLabResultDocumentReader(ctx, patientID, departmentID, &AddLabResultDocumentOptions{
-		AttachmentContents: b,
-		AttachmentType:     LabResultAttachmentTypeJPG,
-		ObservedAt:         NewObservationDateTime(observedAt),
+		AttachmentContents:  b,
+		AttachmentType:      LabResultAttachmentTypeJPG,
+		ObservationDateTime: NewObservationDateTime(observedAt),
 	})
 
 	assert.NoError(err)
@@ -145,9 +145,9 @@ func TestHTTPClient_AddLabResultDocument_observation_without_time(t *testing.T) 
 
 	b := bytes.NewReader([]byte(`test bytes`))
 	res, err := athenaClient.AddLabResultDocumentReader(ctx, patientID, departmentID, &AddLabResultDocumentOptions{
-		AttachmentContents: b,
-		AttachmentType:     LabResultAttachmentTypeJPG,
-		ObservedAt:         NewObservationDate(observedAt),
+		AttachmentContents:  b,
+		AttachmentType:      LabResultAttachmentTypeJPG,
+		ObservationDateTime: NewObservationDate(observedAt),
 	})
 
 	assert.NoError(err)
