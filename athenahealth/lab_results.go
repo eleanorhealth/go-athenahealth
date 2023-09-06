@@ -133,10 +133,12 @@ type observationDateTime struct {
 	includeTime bool
 }
 
+// NewObservationDate sets `observationdate` & `observationtime`
 func NewObservationDateTime(t time.Time) *observationDateTime {
 	return &observationDateTime{t, true}
 }
 
+// NewObservationDate sets only `observationdate`
 func NewObservationDate(t time.Time) *observationDateTime {
 	return &observationDateTime{t, false}
 }
