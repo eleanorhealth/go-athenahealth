@@ -124,6 +124,7 @@ const (
 	LabResultAttachmentTypeJPG  LabResultAttachmentType = "JPG"
 	LabResultAttachmentTypeJPEG LabResultAttachmentType = "JPEG"
 	LabResultAttachmentTypePDF  LabResultAttachmentType = "PDF"
+	LabResultAttachmentTypePNG  LabResultAttachmentType = "PNG"
 	LabResultAttachmentTypeTIF  LabResultAttachmentType = "TIF"
 	LabResultAttachmentTypeTIFF LabResultAttachmentType = "TIFF"
 )
