@@ -30,12 +30,12 @@ type LabResult struct {
 }
 
 type ListLabResultsOptions struct {
-	StartDate           *time.Time `json:"startdate"`
-	LabResultStatus     *string    `json:"labresultstatus"`
-	ShowHidden          *bool      `json:"showhidden"`
-	ShowAbnormalDetails *bool      `json:"showabnormaldetails"`
-	EndDate             *time.Time `json:"enddate"`
-	HideDuplicate       *bool      `json:"hideduplicate"`
+	StartDate           *time.Time
+	LabResultStatus     *string
+	ShowHidden          *bool
+	ShowAbnormalDetails *bool
+	EndDate             *time.Time
+	HideDuplicate       *bool
 
 	Pagination *PaginationOptions
 }
@@ -130,18 +130,19 @@ const (
 
 type AddLabResultDocumentOptions struct {
 	// AttachmentContents must be Base64 encoded
-	AttachmentContents io.Reader               `json:"attachmentcontents"`
-	AttachmentType     LabResultAttachmentType `json:"attachmenttype"`
-	InternalNote       *string                 `json:"internalnote"`
-	NoteToPatient      *string                 `json:"notetopatient"`
-	ObservationDate    *time.Time              `json:"observationdate"`
-	OriginalFilename   *string                 `json:"originalfilename"`
+	AttachmentContents io.Reader
+	AttachmentType     LabResultAttachmentType
+	InternalNote       *string
+	NoteToPatient      *string
+	// Sets both observationdate and observationtime if not nil
+	ObservedAt       *time.Time
+	OriginalFilename *string
 	// 1 = high, 2 = normal
-	Priority    *string `json:"priority"`
-	ResultNotes *string `json:"resultnotes"`
+	Priority    *string
+	ResultNotes *string
 	// Final, Partial, Pending, Preliminary, Corrected, Cancelled
-	ResultStatus *string `json:"resultstatus"`
-	TieToOrderID *int    `json:"tietoorderid"`
+	ResultStatus *string
+	TieToOrderID *int
 }
 
 type addLabResultDocumentResponse struct {
@@ -184,8 +185,9 @@ func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID s
 		if opts.NoteToPatient != nil {
 			form.AddString("notetopatient", string(*opts.NoteToPatient))
 		}
-		if opts.ObservationDate != nil {
-			form.AddString("observationdate", opts.ObservationDate.Format("01/02/2006"))
+		if opts.ObservedAt != nil {
+			form.AddString("observationdate", opts.ObservedAt.Format("01/02/2006"))
+			form.AddString("observationtime", opts.ObservedAt.Format("15:04"))
 		}
 		if opts.OriginalFilename != nil {
 			form.AddString("originalfilename", string(*opts.OriginalFilename))
@@ -219,10 +221,10 @@ func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID s
 }
 
 type ListChangedLabResultsOptions struct {
-	ShowPortalOnly             *bool     `json:"showportalonly"`
-	LeaveUnprocessed           *bool     `json:"leaveunprocessed"`
-	ShowProcessedEndDateTime   time.Time `json:"showprocessedenddatetime"`
-	ShowProcessedStartDateTime time.Time `json:"showprocessedstartdatetime"`
+	ShowPortalOnly             *bool
+	LeaveUnprocessed           *bool
+	ShowProcessedEndDateTime   time.Time
+	ShowProcessedStartDateTime time.Time
 
 	Pagination *PaginationOptions
 }
