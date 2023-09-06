@@ -128,15 +128,27 @@ const (
 	LabResultAttachmentTypeTIFF LabResultAttachmentType = "TIFF"
 )
 
+type observationDateTime struct {
+	t           time.Time
+	includeTime bool
+}
+
+func NewObservationDateTime(t time.Time) *observationDateTime {
+	return &observationDateTime{t, true}
+}
+
+func NewObservationDate(t time.Time) *observationDateTime {
+	return &observationDateTime{t, false}
+}
+
 type AddLabResultDocumentOptions struct {
 	// AttachmentContents must be Base64 encoded
 	AttachmentContents io.Reader
 	AttachmentType     LabResultAttachmentType
 	InternalNote       *string
 	NoteToPatient      *string
-	// Sets both observationdate and observationtime if not nil
-	ObservedAt       *time.Time
-	OriginalFilename *string
+	ObservedAt         *observationDateTime
+	OriginalFilename   *string
 	// 1 = high, 2 = normal
 	Priority    *string
 	ResultNotes *string
@@ -186,8 +198,10 @@ func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID s
 			form.AddString("notetopatient", string(*opts.NoteToPatient))
 		}
 		if opts.ObservedAt != nil {
-			form.AddString("observationdate", opts.ObservedAt.Format("01/02/2006"))
-			form.AddString("observationtime", opts.ObservedAt.Format("15:04"))
+			form.AddString("observationdate", opts.ObservedAt.t.Format("01/02/2006"))
+			if opts.ObservedAt.includeTime {
+				form.AddString("observationtime", opts.ObservedAt.t.Format("15:04"))
+			}
 		}
 		if opts.OriginalFilename != nil {
 			form.AddString("originalfilename", string(*opts.OriginalFilename))

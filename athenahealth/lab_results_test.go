@@ -108,7 +108,46 @@ func TestHTTPClient_AddLabResultDocument(t *testing.T) {
 	res, err := athenaClient.AddLabResultDocumentReader(ctx, patientID, departmentID, &AddLabResultDocumentOptions{
 		AttachmentContents: b,
 		AttachmentType:     LabResultAttachmentTypeJPG,
-		ObservedAt:         &observedAt,
+		ObservedAt:         NewObservationDateTime(observedAt),
+	})
+
+	assert.NoError(err)
+	assert.Equal(res, 1083563)
+}
+
+func TestHTTPClient_AddLabResultDocument_observation_without_time(t *testing.T) {
+	assert := assert.New(t)
+
+	ctx := context.Background()
+
+	patientID := "123"
+	departmentID := "456"
+
+	observedAt := time.Date(2023, 9, 6, 16, 41, 3, 0, time.UTC)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		err := r.ParseForm()
+		assert.NoError(err)
+		assert.Equal(departmentID, r.Form.Get("departmentid"))
+		assert.Equal(string(LabResultAttachmentTypeJPG), r.Form.Get("attachmenttype"))
+
+		obsDate := r.Form.Get("observationdate")
+		assert.Equal("09/06/2023", obsDate)
+		obsTime := r.Form.Get("observationtime")
+		assert.Equal("", obsTime)
+
+		b, _ := os.ReadFile("./resources/AddLabResultDocument.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	b := bytes.NewReader([]byte(`test bytes`))
+	res, err := athenaClient.AddLabResultDocumentReader(ctx, patientID, departmentID, &AddLabResultDocumentOptions{
+		AttachmentContents: b,
+		AttachmentType:     LabResultAttachmentTypeJPG,
+		ObservedAt:         NewObservationDate(observedAt),
 	})
 
 	assert.NoError(err)
