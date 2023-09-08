@@ -336,9 +336,12 @@ func (h *HTTPClient) ListChangedLabResults(ctx context.Context, opts *ListChange
 	out := &listChangedLabResultsResponse{}
 
 	_, err := h.Get(ctx, "labresults/changed", q, out)
+	if err != nil {
+		return nil, err
+	}
 
 	return &ListChangedLabResultsResult{
 		ChangedLabResults: out.LabResults,
 		Pagination:        makePaginationResult(out.Next, out.Previous, out.TotalCount),
-	}, err
+	}, nil
 }
