@@ -5,17 +5,17 @@ import (
 	"errors"
 	"time"
 
-	"github.com/redis/go-redis/v9"
+	"github.com/go-redis/redis/v8"
 )
 
 const RedisDefaultKey = "athena_token"
 
 type Redis struct {
-	client redis.UniversalClient
+	client *redis.Client
 	key    string
 }
 
-func NewRedis(client redis.UniversalClient, key string) *Redis {
+func NewRedis(client *redis.Client, key string) *Redis {
 	if client == nil {
 		panic("client is nil")
 	}
