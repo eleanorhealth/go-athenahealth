@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/go-redis/redis_rate/v10"
-	"github.com/redis/go-redis/v9"
+	"github.com/go-redis/redis/v8"
+	"github.com/go-redis/redis_rate/v9"
 )
 
 const redisKeyPreview = "athena_rate_limit:preview"
@@ -15,14 +15,14 @@ const defaultRatePerSecPreview = 5
 const defaultRatePerSecProd = 100
 
 type Redis struct {
-	client  redis.UniversalClient
+	client  *redis.Client
 	limiter *redis_rate.Limiter
 
 	ratePreivew int
 	rateProd    int
 }
 
-func NewRedis(client redis.UniversalClient, ratePreview, rateProd int) *Redis {
+func NewRedis(client *redis.Client, ratePreview, rateProd int) *Redis {
 	if client == nil {
 		panic("client is nil")
 	}
