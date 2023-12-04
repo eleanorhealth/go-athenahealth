@@ -104,6 +104,7 @@ type Client interface {
 
 	AddLabResultDocumentReader(ctx context.Context, patientID string, departmentID string, opts *AddLabResultDocumentOptions) (int, error)
 	ListLabResults(ctx context.Context, patientID string, departmentID string, opts *ListLabResultsOptions) (*ListLabResultsResult, error)
+	SubscribeLabResults(ctx context.Context) (*ErrorMessageResponse, error)
 	ListChangedLabResults(ctx context.Context, opts *ListChangedLabResultsOptions) (*ListChangedLabResultsResult, error)
 }
 
