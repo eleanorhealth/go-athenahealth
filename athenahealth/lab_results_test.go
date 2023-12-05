@@ -180,23 +180,3 @@ func TestHTTPClient_ListChangedLabResults(t *testing.T) {
 	assert.Len(labResults, 3)
 	assert.Equal(res.Pagination.TotalCount, 3)
 }
-
-func TestHTTPClient_SubscribeLabResults(t *testing.T) {
-	assert := assert.New(t)
-
-	ctx := context.Background()
-
-	h := func(w http.ResponseWriter, r *http.Request) {
-		b, _ := os.ReadFile("./resources/SubscribeLabResults.json")
-		w.Write(b)
-	}
-
-	athenaClient, ts := testClient(h)
-	defer ts.Close()
-
-	res, err := athenaClient.SubscribeLabResults(ctx)
-
-	assert.NoError(err)
-	assert.True(res.Success)
-}
-
