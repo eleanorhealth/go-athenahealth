@@ -345,22 +345,3 @@ func (h *HTTPClient) ListChangedLabResults(ctx context.Context, opts *ListChange
 		Pagination:        makePaginationResult(out.Next, out.Previous, out.TotalCount),
 	}, nil
 }
-
-// SubscribeLabResults subscribes to lab result change events
-// Options of specific events and departments are supported, see docs.
-//
-// GET /v1/{practiceid}/labresults/changed/subscription
-//
-// https://docs.athenahealth.com/api/api-ref/document-type-lab-result#Subscribe-to-all/specific-change-events-for-lab-results
-func (h *HTTPClient) SubscribeLabResults(ctx context.Context) (*ErrorMessageResponse, error) {
-	form := NewFormURLEncoder()
-
-	out := &ErrorMessageResponse{}
-
-	_, err := h.PostFormReader(ctx, "labresults/changed/subscription", form, out)
-	if err != nil {
-		return nil, err
-	}
-
-	return out, nil
-}
