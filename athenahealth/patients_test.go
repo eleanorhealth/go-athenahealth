@@ -197,6 +197,39 @@ func TestHTTPClient_UpdatePatientInformationVerificationDetails(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestHTTPClient_UpdatePatientMedicationHistoryConsent(t *testing.T) {
+	assert := assert.New(t)
+
+	deptID := 1
+	signatureDatetime := time.Date(2022, 2, 25, 0, 0, 0, 0, time.UTC)
+	signatureName := "John Smith"
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Contains(r.URL.Path, "/patients/123/")
+
+		assert.Equal(strconv.Itoa(deptID), r.FormValue("departmentid"))
+		assert.Equal(signatureDatetime.Format("01/02/2006 15:04:05"), r.FormValue("signaturedatetime"))
+		assert.Equal(signatureName, r.FormValue("signaturename"))
+
+		b, _ := os.ReadFile("./resources/UpdatePatientMedicationHistoryConsent.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &UpdatePatientMedicationHistoryConsentOptions{
+		DepartmentID:      deptID,
+		SignatureDatetime: signatureDatetime,
+		SignatureName:     signatureName,
+	}
+
+	err := athenaClient.UpdatePatientMedicationHistoryConsent(context.Background(), "123", opts)
+	assert.NoError(err)
+}
+
 func TestHTTPClient_GetPatientCustomFields(t *testing.T) {
 	assert := assert.New(t)
 

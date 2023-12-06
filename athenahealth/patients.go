@@ -686,6 +686,46 @@ func (h *HTTPClient) UpdatePatientInformationVerificationDetails(ctx context.Con
 	return nil
 }
 
+type UpdatePatientMedicationHistoryConsentOptions struct {
+	DepartmentID      int
+	SignatureDatetime time.Time
+	SignatureName     string
+}
+
+type updatePatientMedicationHistoryConsentResponse struct {
+	Success bool `json:"success"`
+}
+
+// UpdatePatientMedicationHistoryConsent - Update patient's medication history consent flag as having been verified
+//
+// POST /v1/{practiceid}/patients/{patientid}/medicationhistoryconsentverified
+//
+// https://docs.athenahealth.com/api/api-ref/medication-history-consent
+func (h *HTTPClient) UpdatePatientMedicationHistoryConsent(ctx context.Context, patientID string, opts *UpdatePatientMedicationHistoryConsentOptions) error {
+	out := []*updatePatientMedicationHistoryConsentResponse{}
+	var form url.Values
+
+	if opts != nil {
+		form = url.Values{}
+
+		form.Add("departmentid", strconv.Itoa(opts.DepartmentID))
+
+		form.Add("signaturedatetime", opts.SignatureDatetime.Format("01/02/2006 15:04:05"))
+		form.Add("signaturename", opts.SignatureName)
+	}
+
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/medicationhistoryconsentverified", patientID), form, &out)
+	if err != nil {
+		return err
+	}
+
+	if len(out) != 1 || !out[0].Success {
+		return errors.New("unexpected response")
+	}
+
+	return nil
+}
+
 // GetPatientCustomFields - Get custom fields information for a specific patient
 //
 // GET /v1/{practiceid}/patients/{patientid}/customfields
