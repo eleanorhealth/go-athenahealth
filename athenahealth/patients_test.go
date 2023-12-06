@@ -201,7 +201,7 @@ func TestHTTPClient_UpdatePatientMedicationHistoryConsent(t *testing.T) {
 	assert := assert.New(t)
 
 	deptID := 1
-	signatureDatetime := time.Now()
+	signatureDatetime := time.Date(2022, 2, 25, 0, 0, 0, 0, time.UTC)
 	signatureName := "John Smith"
 
 	h := func(w http.ResponseWriter, r *http.Request) {
