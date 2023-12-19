@@ -693,7 +693,7 @@ type UpdatePatientMedicationHistoryConsentOptions struct {
 }
 
 type updatePatientMedicationHistoryConsentResponse struct {
-	Success bool `json:"success"`
+	Success string `json:"success"`
 }
 
 // UpdatePatientMedicationHistoryConsent - Update patient's medication history consent flag as having been verified
@@ -719,7 +719,7 @@ func (h *HTTPClient) UpdatePatientMedicationHistoryConsent(ctx context.Context, 
 		return err
 	}
 
-	if len(out) != 1 || !out[0].Success {
+	if len(out) != 1 || out[0].Success == "false" {
 		return errors.New("unexpected response")
 	}
 
