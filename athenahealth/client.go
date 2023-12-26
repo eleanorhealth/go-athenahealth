@@ -108,7 +108,7 @@ type Client interface {
 	ListLabResults(ctx context.Context, patientID string, departmentID string, opts *ListLabResultsOptions) (*ListLabResultsResult, error)
 	ListChangedLabResults(ctx context.Context, opts *ListChangedLabResultsOptions) (*ListChangedLabResultsResult, error)
 
-	GetPhysicalExam(ctx context.Context, opts *GetPhysicalExamOpts) (*PhysicalExam, error)
+	GetPhysicalExam(ctx context.Context, encounterID string, opts *GetPhysicalExamOpts) (*PhysicalExam, error)
 }
 
 type TokenProvider interface {

@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 )
 
@@ -28,8 +29,12 @@ type PhysicalExam struct {
 // GET /v1/{practiceid}/chart/encounter/{encounterid}/physicalexam
 //
 // https://docs.athenahealth.com/api/api-ref/physical-exam#Get-list-of-physical-exam-findings-and-notes-for-given-encounter
-func (h *HTTPClient) GetPhysicalExam(ctx context.Context, opts *GetPhysicalExamOpts) (*PhysicalExam, error) {
-	var out *PhysicalExam
+func (h *HTTPClient) GetPhysicalExam(ctx context.Context, encounterID string, opts *GetPhysicalExamOpts) (*PhysicalExam, error) {
+	var out PhysicalExam
+
+	if encounterID == "" {
+		return nil, fmt.Errorf("encounterID empty")
+	}
 
 	q := url.Values{}
 
@@ -47,10 +52,10 @@ func (h *HTTPClient) GetPhysicalExam(ctx context.Context, opts *GetPhysicalExamO
 		}
 	}
 
-	_, err := h.Get(ctx, "chart/encounter/{encounterid}/physicalexam", q, out)
+	_, err := h.Get(ctx, fmt.Sprintf("chart/encounter/%s/physicalexam", encounterID), q, &out)
 	if err != nil {
 		return nil, err
 	}
 
-	return out, nil
+	return &out, nil
 }
