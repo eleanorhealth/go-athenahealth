@@ -46,6 +46,7 @@ func customFields(ctx context.Context, client athenahealth.Client, patientID str
 	}
 
 	// test if inactive reasons appear in output
+	// anything under additional information are custom fields
 }
 
 func physicalExam(ctx context.Context, client athenahealth.Client, encounterID string) {
@@ -55,7 +56,7 @@ func physicalExam(ctx context.Context, client athenahealth.Client, encounterID s
 	}
 
 	spew.Dump(exam)
-	
+
 	// test if eh asam and loc appear in output
 }
 
