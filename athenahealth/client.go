@@ -73,6 +73,7 @@ type Client interface {
 
 	ListPatientsMatchingCustomField(ctx context.Context, opts *ListPatientsMatchingCustomFieldOptions) (*ListPatientsMatchingCustomFieldResult, error)
 
+	ListCustomFields(ctx context.Context) ([]*CustomField, error)
 	GetPatientCustomFields(ctx context.Context, patientID, departmentID string) ([]*CustomFieldValue, error)
 	UpdatePatientCustomFields(ctx context.Context, patientID, departmentID string, customFields []*CustomFieldValue) error
 
@@ -106,6 +107,8 @@ type Client interface {
 	AddLabResultDocumentReader(ctx context.Context, patientID string, departmentID string, opts *AddLabResultDocumentOptions) (int, error)
 	ListLabResults(ctx context.Context, patientID string, departmentID string, opts *ListLabResultsOptions) (*ListLabResultsResult, error)
 	ListChangedLabResults(ctx context.Context, opts *ListChangedLabResultsOptions) (*ListChangedLabResultsResult, error)
+
+	GetPhysicalExam(ctx context.Context, encounterID string, opts *GetPhysicalExamOpts) (*PhysicalExam, error)
 }
 
 type TokenProvider interface {
