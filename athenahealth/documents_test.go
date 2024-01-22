@@ -241,3 +241,23 @@ func TestHTTPClient_AddPatientCaseDocument(t *testing.T) {
 
 	assert.Equal(491696, patientCaseID)
 }
+
+func TestHTTPClient_DeleteClinicalDocument(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Contains(r.URL.Path, "/patients/123/documents/clinicaldocument/101")
+
+		b, _ := os.ReadFile("./resources/DeleteClinicalDocument.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	res, err := athenaClient.DeleteClinicalDocument(context.Background(), "123", "101")
+
+	assert.True(res.Success)
+	assert.Equal(res.ClinicalDocumentID, 101)
+	assert.NoError(err)
+}

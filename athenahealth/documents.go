@@ -585,3 +585,26 @@ func (h *HTTPClient) AddPatientCaseDocument(ctx context.Context, patientID strin
 
 	return res.PatientCaseID, nil
 }
+
+type DeleteClinicalDocumentResponse struct {
+	ClinicalDocumentID int    `json:"clinicaldocumentid"`
+	ErrorMessage       string `json:"errormessage"`
+	Success            bool   `json:"success"`
+}
+
+// DeleteClinicalDocument - Mark patient's clinical document as deleted
+//
+// DELETE /v1/{practiceid}/patients/{patientid}/documents/clinicaldocument/{clinicaldocumentid}
+//
+// https://docs.athenahealth.com/api/api-ref/document-type-clinical-document#Mark-patient's-clinical-document-as-deleted
+func (h *HTTPClient) DeleteClinicalDocument(ctx context.Context, patientID string, clinicalDocumentID string) (*DeleteClinicalDocumentResponse, error) {
+
+	res := &DeleteClinicalDocumentResponse{}
+
+	_, err := h.Delete(ctx, fmt.Sprintf("/patients/%s/documents/clinicaldocument/%s", patientID, clinicalDocumentID), nil, res)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
