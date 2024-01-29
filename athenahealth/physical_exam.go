@@ -21,7 +21,7 @@ type PhysicalExam struct {
 	SectionNoteLastModifiedDateTime string   `json:"sectionnotelastmodifieddatetime"`
 	SummaryText                     string   `json:"summarytext"`
 	TemplateData                    []string `json:"templatedata"`
-	Templates                       string   `json:"templates"`
+	Templates                       []string `json:"templates"`
 }
 
 // GetPhysicalExam - Get a physical exam
