@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"time"
 )
 
 type GetPhysicalExamOpts struct {
@@ -12,16 +13,21 @@ type GetPhysicalExamOpts struct {
 	TemplateIDS []string `,json:"templateids"`
 }
 
+type TemplateData struct {
+	TemplateID   int    `json:"templateid"`
+	TemplateName string `json:"templatename"`
+}
+
 type PhysicalExam struct {
-	LastModifiedBy                  string   `json:"lastmodifiedby"`
-	LastModifiedDateTime            string   `json:"lastmodifieddatetime"`
-	PhysicalExam                    []string `json:"physicalexam"`
-	SectionNote                     string   `json:"sectionnote"`
-	SectionNoteLastModifiedBy       string   `json:"sectionnotelastmodifiedby"`
-	SectionNoteLastModifiedDateTime string   `json:"sectionnotelastmodifieddatetime"`
-	SummaryText                     string   `json:"summarytext"`
-	TemplateData                    []string `json:"templatedata"`
-	Templates                       []string `json:"templates"`
+	LastModifiedBy                  string         `json:"lastmodifiedby"`
+	LastModifiedDateTime            time.Time      `json:"lastmodifieddatetime"`
+	PhysicalExam                    []string       `json:"physicalexam"`
+	SectionNote                     string         `json:"sectionnote"`
+	SectionNoteLastModifiedBy       string         `json:"sectionnotelastmodifiedby"`
+	SectionNoteLastModifiedDateTime string         `json:"sectionnotelastmodifieddatetime"`
+	SummaryText                     string         `json:"summarytext"`
+	TemplateData                    []TemplateData `json:"templatedata"`
+	Templates                       []string       `json:"templates"`
 }
 
 // GetPhysicalExam - Get a physical exam
