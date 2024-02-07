@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
@@ -13,21 +14,45 @@ type GetPhysicalExamOpts struct {
 	TemplateIDS []string `,json:"templateids"`
 }
 
-type TemplateData struct {
+type PhysicalExam struct {
+	LastModifiedBy                  string                     `json:"lastmodifiedby"`
+	LastModifiedDateTime            time.Time                  `json:"lastmodifieddatetime"`
+	PhysicalExam                    []PhysicalExamParagraph    `json:"physicalexam"`
+	SectionNote                     string                     `json:"sectionnote"`
+	SectionNoteLastModifiedBy       string                     `json:"sectionnotelastmodifiedby"`
+	SectionNoteLastModifiedDateTime string                     `json:"sectionnotelastmodifieddatetime"`
+	SummaryText                     string                     `json:"summarytext"`
+	TemplateData                    []PhysicalExamTemplateData `json:"templatedata"`
+	Templates                       []string                   `json:"templates"`
+}
+
+type PhysicalExamTemplateData struct {
 	TemplateID   int    `json:"templateid"`
 	TemplateName string `json:"templatename"`
 }
 
-type PhysicalExam struct {
-	LastModifiedBy                  string         `json:"lastmodifiedby"`
-	LastModifiedDateTime            time.Time      `json:"lastmodifieddatetime"`
-	PhysicalExam                    []string       `json:"physicalexam"`
-	SectionNote                     string         `json:"sectionnote"`
-	SectionNoteLastModifiedBy       string         `json:"sectionnotelastmodifiedby"`
-	SectionNoteLastModifiedDateTime string         `json:"sectionnotelastmodifieddatetime"`
-	SummaryText                     string         `json:"summarytext"`
-	TemplateData                    []TemplateData `json:"templatedata"`
-	Templates                       []string       `json:"templates"`
+type PhysicalExamParagraph struct {
+	ParagraphID   int                    `json:"paragraphid"`
+	ParagraphName string                 `json:"paragraphname"`
+	Sentences     []PhysicalExamSentence `json:"sentences"`
+}
+
+type PhysicalExamSentence struct {
+	SentenceID   int                   `json:"sentenceid"`
+	SentenceName string                `json:"sentencename"`
+	Findings     []PhysicalExamFinding `json:"findings"`
+}
+
+type PhysicalExamFinding struct {
+	MedcinID           int      `json:"medcinid"`
+	FindingName        string   `json:"findingname"`
+	ContradictionIDs   []string `json:"contradictionids"`
+	OptionLists        []string `json:"optionlists"`
+	FindingType        string   `json:"findingtype"`
+	GenericFindingName string   `json:"genericfindingname"`
+	SelectedOptions    []string `json:"selectedoptions"`
+	FindingID          int      `json:"findingid"`
+	Selected           bool     `json:"selected"`
 }
 
 // GetPhysicalExam - Get a physical exam
@@ -53,8 +78,13 @@ func (h *HTTPClient) GetPhysicalExam(ctx context.Context, encounterID string, op
 			q.Add("showstructured", "true")
 		}
 
-		for _, id := range opts.TemplateIDS {
-			q.Add("templateids", id)
+		if len(opts.TemplateIDS) > 0 {
+			s, err := json.Marshal(opts.TemplateIDS)
+			if err != nil {
+				return nil, err
+			}
+
+			q.Add("templateids", string(s))
 		}
 	}
 
