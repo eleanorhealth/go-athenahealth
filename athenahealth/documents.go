@@ -608,3 +608,83 @@ func (h *HTTPClient) DeleteClinicalDocument(ctx context.Context, patientID strin
 
 	return res, nil
 }
+
+type EncounterDocument struct {
+	AppointmentID        int    `json:"appointmentid"`
+	AssignedTo           string `json:"assignedto"`
+	CreatedDate          string `json:"createddate"`
+	CreatedDateTime      string `json:"createddatetime"`
+	DeclinedReasonText   string `json:"declinedreasontext"`
+	DepartmentID         string `json:"departmentid"`
+	DocumentSubClass     string `json:"documentsubclass"`
+	Description          string `json:"description"`
+	DocumentClass        string `json:"documentclass"`
+	DocumentDate         string `json:"documentdate"`
+	DocumentRoute        string `json:"documentroute"`
+	DocumentSource       string `json:"documentsource"`
+	DocumentTypeID       int    `json:"documenttypeid"`
+	InternalNote         string `json:"internalnote"`
+	LastModifiedDate     string `json:"lastmodifieddate"`
+	LastModifiedDatetime string `json:"lastmodifieddatetime"`
+	Priority             string `json:"priority"`
+	ProviderID           int    `json:"providerid"`
+	ProviderUsername     string `json:"providerusername"`
+	Status               string `json:"status"` // TODO: check these fields
+}
+
+type ListEncounterDocumentsOptions struct {
+	DepartmentID string
+
+	Pagination *PaginationOptions
+}
+
+type ListEncounterDocumentsResult struct {
+	EncounterDocuments []*EncounterDocument
+
+	Pagination *PaginationResult
+}
+
+type listEncounterDocumentsResponse struct {
+	EncounterDocuments []*EncounterDocument `json:"documents"` // TODO: confirm this is the correct field name
+
+	PaginationResponse
+}
+
+func (h *HTTPClient) ListEncounterDocuments(ctx context.Context, patientID string, opts *ListEncounterDocumentsOptions) (*ListEncounterDocumentsResult, error) {
+	out := &listEncounterDocumentsResponse{}
+
+	if opts == nil {
+		opts = &ListEncounterDocumentsOptions{}
+	}
+
+	if opts.DepartmentID == "" || patientID == "" {
+		return nil, fmt.Errorf("DepartmentID and patientID are required")
+	}
+
+	q := url.Values{}
+	if opts != nil {
+		if len(opts.DepartmentID) > 0 {
+			q.Add("departmentid", opts.DepartmentID)
+		}
+
+		if opts.Pagination != nil {
+			if opts.Pagination.Limit > 0 {
+				q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
+			}
+
+			if opts.Pagination.Offset > 0 {
+				q.Add("offset", strconv.Itoa(opts.Pagination.Offset))
+			}
+		}
+	}
+
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s/documents/encounterdocument", patientID), q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ListEncounterDocumentsResult{
+		EncounterDocuments: out.EncounterDocuments,
+		Pagination:         makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
+}
