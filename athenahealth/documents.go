@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/url"
 	"strconv"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 // AdminDocument represents an administrative document in athenahealth.
@@ -633,7 +635,9 @@ type EncounterDocument struct {
 }
 
 type ListEncounterDocumentsOptions struct {
-	DepartmentID string
+	DocumentSubclass string
+	ShowDeleted      bool
+	Encounterid      string
 
 	Pagination *PaginationOptions
 }
@@ -644,27 +648,37 @@ type ListEncounterDocumentsResult struct {
 	Pagination *PaginationResult
 }
 
-type listEncounterDocumentsResponse struct {
-	EncounterDocuments []*EncounterDocument `json:"documents"` // TODO: confirm this is the correct field name
+// type listEncounterDocumentsResponse struct {
+// 	EncounterDocuments []*EncounterDocument `json:"documents"`
 
-	PaginationResponse
-}
+// 	PaginationResponse
+// }
 
-func (h *HTTPClient) ListEncounterDocuments(ctx context.Context, patientID string, opts *ListEncounterDocumentsOptions) (*ListEncounterDocumentsResult, error) {
-	out := &listEncounterDocumentsResponse{}
+type temp any
 
-	if opts == nil {
-		opts = &ListEncounterDocumentsOptions{}
-	}
+func (h *HTTPClient) ListEncounterDocuments(ctx context.Context, departmentID, patientID string, opts *ListEncounterDocumentsOptions) (*ListEncounterDocumentsResult, error) {
+	var out *temp
 
-	if opts.DepartmentID == "" || patientID == "" {
+	if departmentID == "" || patientID == "" {
 		return nil, fmt.Errorf("DepartmentID and patientID are required")
 	}
 
 	q := url.Values{}
 	if opts != nil {
-		if len(opts.DepartmentID) > 0 {
-			q.Add("departmentid", opts.DepartmentID)
+		if len(departmentID) > 0 {
+			q.Add("departmentid", departmentID)
+		}
+
+		if opts.Encounterid != "" {
+			q.Add("encounterid", opts.Encounterid)
+		}
+
+		if opts.DocumentSubclass != "" {
+			q.Add("documentsubclass", opts.DocumentSubclass)
+		}
+
+		if opts.ShowDeleted {
+			q.Add("showdeleted", "true")
 		}
 
 		if opts.Pagination != nil {
@@ -683,8 +697,12 @@ func (h *HTTPClient) ListEncounterDocuments(ctx context.Context, patientID strin
 		return nil, err
 	}
 
-	return &ListEncounterDocumentsResult{
-		EncounterDocuments: out.EncounterDocuments,
-		Pagination:         makePaginationResult(out.Next, out.Previous, out.TotalCount),
-	}, nil
+	spew.Dump(out)
+
+	return nil,nil
+
+	// return &ListEncounterDocumentsResult{
+	// 	EncounterDocuments: out.EncounterDocuments,
+	// 	Pagination:         makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	// }, nil
 }
