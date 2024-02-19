@@ -7,8 +7,6 @@ import (
 	"io"
 	"net/url"
 	"strconv"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 // AdminDocument represents an administrative document in athenahealth.
@@ -612,26 +610,40 @@ func (h *HTTPClient) DeleteClinicalDocument(ctx context.Context, patientID strin
 }
 
 type EncounterDocument struct {
-	AppointmentID        int    `json:"appointmentid"`
-	AssignedTo           string `json:"assignedto"`
-	CreatedDate          string `json:"createddate"`
-	CreatedDateTime      string `json:"createddatetime"`
-	DeclinedReasonText   string `json:"declinedreasontext"`
-	DepartmentID         string `json:"departmentid"`
-	DocumentSubClass     string `json:"documentsubclass"`
+	AppointmentID      int    `json:"appointmentid"`
+	AssignedTo         string `json:"assignedto"`
+	ClinicalProviderID int    `json:"clinicalproviderid"`
+	// ContraindicationReason
+	CreatedDate        string `json:"createddate"`
+	CreatedDateTime    string `json:"createddatetime"`
+	DeclinedReasonText string `json:"declinedreasontext"`
+	DeletedDateTime    string `json:"deleteddatetime"`
+	DepartmentID       string `json:"departmentid"`
+	// DeclinedReason
 	Description          string `json:"description"`
 	DocumentClass        string `json:"documentclass"`
 	DocumentDate         string `json:"documentdate"`
 	DocumentRoute        string `json:"documentroute"`
 	DocumentSource       string `json:"documentsource"`
+	DocumentSubClass     string `json:"documentsubclass"`
+	DocumentType         string `json:"documenttype"`
 	DocumentTypeID       int    `json:"documenttypeid"`
+	Encounterdocumentid  int    `json:"encounterdocumentid"`
+	Encounterid          string `json:"encounterid"`
+	Externalaccessionid  string `json:"externalaccessionid"`
 	InternalNote         string `json:"internalnote"`
 	LastModifiedDate     string `json:"lastmodifieddate"`
 	LastModifiedDatetime string `json:"lastmodifieddatetime"`
-	Priority             string `json:"priority"`
+	Lastmodifieduser     string `json:"lastmodifieduser"`
+	Observationdatetime  string `json:"observationdatetime"`
+	Patientid            int    `json:"patientid"`
+	Priority             int    `json:"priority"`
 	ProviderID           int    `json:"providerid"`
 	ProviderUsername     string `json:"providerusername"`
-	Status               string `json:"status"` // TODO: check these fields
+	Receivernote         string `json:"receivernote"`
+	Status               string `json:"status"`
+	Subject              string `json:"subject"`
+	Tietoorderid         int    `json:"tietoorderid"`
 }
 
 type ListEncounterDocumentsOptions struct {
@@ -648,16 +660,14 @@ type ListEncounterDocumentsResult struct {
 	Pagination *PaginationResult
 }
 
-// type listEncounterDocumentsResponse struct {
-// 	EncounterDocuments []*EncounterDocument `json:"documents"`
+type listEncounterDocumentsResponse struct {
+	EncounterDocuments []*EncounterDocument `json:"encounterdocuments"`
 
-// 	PaginationResponse
-// }
-
-type temp any
+	PaginationResponse
+}
 
 func (h *HTTPClient) ListEncounterDocuments(ctx context.Context, departmentID, patientID string, opts *ListEncounterDocumentsOptions) (*ListEncounterDocumentsResult, error) {
-	var out *temp
+	out := &listEncounterDocumentsResponse{}
 
 	if departmentID == "" || patientID == "" {
 		return nil, fmt.Errorf("DepartmentID and patientID are required")
@@ -697,12 +707,8 @@ func (h *HTTPClient) ListEncounterDocuments(ctx context.Context, departmentID, p
 		return nil, err
 	}
 
-	spew.Dump(out)
-
-	return nil,nil
-
-	// return &ListEncounterDocumentsResult{
-	// 	EncounterDocuments: out.EncounterDocuments,
-	// 	Pagination:         makePaginationResult(out.Next, out.Previous, out.TotalCount),
-	// }, nil
+	return &ListEncounterDocumentsResult{
+		EncounterDocuments: out.EncounterDocuments,
+		Pagination:         makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
 }
