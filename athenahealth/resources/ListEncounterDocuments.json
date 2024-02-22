@@ -1,0 +1,41 @@
+{
+  "previous": "/foo?limit=10&offset=10",
+  "next": "/foo?limit=10&offset=30",
+  "totalcount": 1,
+  "encounterdocuments": [
+    {
+      "appointmentid": 0,
+      "assignedto": "sbaker200",
+      "clinicalproviderid": 0,
+      "createddate": "11/17/2020",
+      "createddatetime": "2020-11-17T12:33:37-05:00",
+      "declinedreasontext": "",
+      "deleteddatetime": "",
+      "departmentid": "5",
+      "description": "external records",
+      "documentclass": "ENCOUNTERDOCUMENT",
+      "documentdate": "11/17/2020",
+      "documentroute": "FAX",
+      "documentsource": "UPLOAD",
+      "documentsubclass": "ENCOUNTERDOCUMENT_PROCEDUREDOC",
+      "documenttype": "EXTERNAL",
+      "documenttypeid": 288737,
+      "encounterdocumentid": 44987,
+      "encounterid": "0",
+      "externalaccessionid": "",
+      "internalnote": "test",
+      "lastmodifieddate": "11/17/2020",
+      "lastmodifieddatetime": "2020-11-17T12:45:01-05:00",
+      "lastmodifieduser": "tribeiro12",
+      "observationdatetime": "",
+      "patientid": 0,
+      "priority": 2,
+      "providerid": 20,
+      "providerusername": "sbaker200",
+      "receivernote": "",
+      "status": "REVIEW",
+      "subject": "",
+      "tietoorderid": 0
+    }
+  ]
+}
