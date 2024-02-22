@@ -608,3 +608,107 @@ func (h *HTTPClient) DeleteClinicalDocument(ctx context.Context, patientID strin
 
 	return res, nil
 }
+
+type EncounterDocument struct {
+	AppointmentID      int    `json:"appointmentid"`
+	AssignedTo         string `json:"assignedto"`
+	ClinicalProviderID int    `json:"clinicalproviderid"`
+	// ContraindicationReason
+	CreatedDate        string `json:"createddate"`
+	CreatedDateTime    string `json:"createddatetime"`
+	DeclinedReasonText string `json:"declinedreasontext"`
+	DeletedDateTime    string `json:"deleteddatetime"`
+	DepartmentID       string `json:"departmentid"`
+	// DeclinedReason
+	Description          string `json:"description"`
+	DocumentClass        string `json:"documentclass"`
+	DocumentDate         string `json:"documentdate"`
+	DocumentRoute        string `json:"documentroute"`
+	DocumentSource       string `json:"documentsource"`
+	DocumentSubClass     string `json:"documentsubclass"`
+	DocumentType         string `json:"documenttype"`
+	DocumentTypeID       int    `json:"documenttypeid"`
+	Encounterdocumentid  int    `json:"encounterdocumentid"`
+	Encounterid          string `json:"encounterid"`
+	Externalaccessionid  string `json:"externalaccessionid"`
+	InternalNote         string `json:"internalnote"`
+	LastModifiedDate     string `json:"lastmodifieddate"`
+	LastModifiedDatetime string `json:"lastmodifieddatetime"`
+	Lastmodifieduser     string `json:"lastmodifieduser"`
+	Observationdatetime  string `json:"observationdatetime"`
+	Patientid            int    `json:"patientid"`
+	Priority             int    `json:"priority"`
+	ProviderID           int    `json:"providerid"`
+	ProviderUsername     string `json:"providerusername"`
+	Receivernote         string `json:"receivernote"`
+	Status               string `json:"status"`
+	Subject              string `json:"subject"`
+	Tietoorderid         int    `json:"tietoorderid"`
+}
+
+type ListEncounterDocumentsOptions struct {
+	DocumentSubclass string
+	ShowDeleted      bool
+	EncounterID      string
+
+	Pagination *PaginationOptions
+}
+
+type ListEncounterDocumentsResult struct {
+	EncounterDocuments []*EncounterDocument
+
+	Pagination *PaginationResult
+}
+
+type listEncounterDocumentsResponse struct {
+	EncounterDocuments []*EncounterDocument `json:"encounterdocuments"`
+
+	PaginationResponse
+}
+
+func (h *HTTPClient) ListEncounterDocuments(ctx context.Context, departmentID, patientID string, opts *ListEncounterDocumentsOptions) (*ListEncounterDocumentsResult, error) {
+	out := &listEncounterDocumentsResponse{}
+
+	if departmentID == "" || patientID == "" {
+		return nil, fmt.Errorf("DepartmentID and patientID are required")
+	}
+
+	q := url.Values{}
+	if opts != nil {
+		if len(departmentID) > 0 {
+			q.Add("departmentid", departmentID)
+		}
+
+		if opts.EncounterID != "" {
+			q.Add("encounterid", opts.EncounterID)
+		}
+
+		if opts.DocumentSubclass != "" {
+			q.Add("documentsubclass", opts.DocumentSubclass)
+		}
+
+		if opts.ShowDeleted {
+			q.Add("showdeleted", "true")
+		}
+
+		if opts.Pagination != nil {
+			if opts.Pagination.Limit > 0 {
+				q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
+			}
+
+			if opts.Pagination.Offset > 0 {
+				q.Add("offset", strconv.Itoa(opts.Pagination.Offset))
+			}
+		}
+	}
+
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s/documents/encounterdocument", patientID), q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ListEncounterDocumentsResult{
+		EncounterDocuments: out.EncounterDocuments,
+		Pagination:         makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
+}

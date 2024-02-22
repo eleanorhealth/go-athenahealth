@@ -261,3 +261,30 @@ func TestHTTPClient_DeleteClinicalDocument(t *testing.T) {
 	assert.Equal(res.ClinicalDocumentID, 101)
 	assert.NoError(err)
 }
+
+func TestHTTPClient_ListEncounterDocuments(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Contains(r.URL.Path, "/patients/123/")
+		assert.Equal("3", r.URL.Query().Get("departmentid"))
+
+		b, _ := os.ReadFile("./resources/ListEncounterDocuments.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &ListEncounterDocumentsOptions{
+		DocumentSubclass: "ENCOUNTERDOCUMENT_PROCEDUREDOC",
+	}
+
+	res, err := athenaClient.ListEncounterDocuments(context.Background(), "3", "123", opts)
+
+	assert.Len(res.EncounterDocuments, 1)
+	assert.Equal(res.Pagination.NextOffset, 30)
+	assert.Equal(res.Pagination.PreviousOffset, 10)
+	assert.Equal(res.Pagination.TotalCount, 1)
+	assert.NoError(err)
+}
