@@ -649,7 +649,7 @@ type EncounterDocument struct {
 type ListEncounterDocumentsOptions struct {
 	DocumentSubclass string
 	ShowDeleted      bool
-	Encounterid      string
+	EncounterID      string
 
 	Pagination *PaginationOptions
 }
@@ -679,8 +679,8 @@ func (h *HTTPClient) ListEncounterDocuments(ctx context.Context, departmentID, p
 			q.Add("departmentid", departmentID)
 		}
 
-		if opts.Encounterid != "" {
-			q.Add("encounterid", opts.Encounterid)
+		if opts.EncounterID != "" {
+			q.Add("encounterid", opts.EncounterID)
 		}
 
 		if opts.DocumentSubclass != "" {
