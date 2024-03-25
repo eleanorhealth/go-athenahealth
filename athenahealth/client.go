@@ -65,7 +65,6 @@ type Client interface {
 
 	ListProblems(ctx context.Context, patientID string, opts *ListProblemsOptions) ([]*Problem, error)
 	ListAdminDocuments(ctx context.Context, patientID string, opts *ListAdminDocumentsOptions) (*ListAdminDocumentsResult, error)
-	ListEncounterDocuments(ctx context.Context, departmentID, patientID string, opts *ListEncounterDocumentsOptions) (*ListEncounterDocumentsResult, error)
 	AddDocument(ctx context.Context, patientID string, opts *AddDocumentOptions) (string, error)
 	AddDocumentReader(ctx context.Context, patientID string, opts *AddDocumentReaderOptions) (string, error)
 	AddClinicalDocument(ctx context.Context, patientID string, opts *AddClinicalDocumentOptions) (*AddClinicalDocumentResponse, error)
@@ -111,6 +110,8 @@ type Client interface {
 	ListChangedLabResults(ctx context.Context, opts *ListChangedLabResultsOptions) (*ListChangedLabResultsResult, error)
 
 	GetPhysicalExam(ctx context.Context, encounterID string, opts *GetPhysicalExamOpts) (*PhysicalExam, error)
+	ListEncounterDocuments(ctx context.Context, departmentID, patientID string, opts *ListEncounterDocumentsOptions) (*ListEncounterDocumentsResult, error)
+	EncounterSummary(ctx context.Context, encounterID string, opts *EncounterSummaryOptions) (*EncounterSummaryResponse, error)
 }
 
 type TokenProvider interface {
