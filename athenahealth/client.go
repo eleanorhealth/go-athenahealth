@@ -69,6 +69,8 @@ type Client interface {
 	UpdatePatientSocialHistory(ctx context.Context, patientID string, opts *UpdatePatientSocialHistoryOptions) error
 	GetHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string) (*HealthHistoryForm, error)
 	UpdateHealthHistoryFormForAppointment(ctx context.Context, appointmentID, formID string, form *HealthHistoryForm) error
+
+	// Medications and Allergies
 	SearchAllergies(ctx context.Context, searchVal string) ([]*Allergy, error)
 	ListMedications(ctx context.Context, patientID string, opts *ListMedicationsOptions) (*ListMedicationsResult, error)
 	SearchMedications(ctx context.Context, searchVal string) ([]*SearchMedicationsResult, error)
