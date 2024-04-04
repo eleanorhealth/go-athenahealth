@@ -123,6 +123,9 @@ type Client interface {
 	// Claims
 	CreateFinancialClaim(ctx context.Context, opts *CreateClaimOptions) ([]string, error)
 	ListClaims(ctx context.Context, opts *ListClaimsOptions) (*ListClaimsResult, error)
+
+	// Telehealth
+	GetTelehealthInviteURL(ctx context.Context, apptID string) (*GetTelehealthInviteURLResult, error)
 }
 
 type TokenProvider interface {
