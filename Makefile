@@ -7,7 +7,7 @@ format:
 	go fmt ./...
 
 test:
-	go test ./...
+	go test ./... -race
 
 tidy:
 	go mod tidy
