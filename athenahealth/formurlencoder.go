@@ -3,7 +3,6 @@ package athenahealth
 import (
 	"context"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"io"
 	"net/url"
@@ -45,7 +44,7 @@ func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 
 	isFirstEntry := true
 	for _, key := range keys {
-		for _, val := range f.entries[key] {
+		for valIdx, val := range f.entries[key] {
 
 			err := func() error {
 				if isFirstEntry {
@@ -70,23 +69,14 @@ func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 
 				switch v := val.(type) {
 				case io.Reader:
-					pr, pw := io.Pipe()
-					encoder := base64.NewEncoder(base64.StdEncoding, &urlQueryEscapeWriter{pw})
+					encoder := base64.NewEncoder(base64.StdEncoding, &urlQueryEscapeWriter{w})
 
-					go func() {
-						err := Copy(ctx, encoder, v)
-						err = errors.Join(err, encoder.Close())
+					err = copyCtx(ctx, encoder, v)
+					if err != nil {
+						return err
+					}
 
-						if err != nil {
-							//nolint
-							pw.CloseWithError(err)
-						} else {
-							//nolint
-							pw.Close()
-						}
-					}()
-
-					_, err = io.Copy(w, pr)
+					err = encoder.Close()
 					if err != nil {
 						return err
 					}
@@ -104,7 +94,7 @@ func (f *formURLEncoder) Encode(ctx context.Context, w io.Writer) error {
 					}
 
 				default:
-					return fmt.Errorf("invalid form url encoder value type '%s' for key %s", reflect.TypeOf(v).String(), key)
+					return fmt.Errorf("invalid form url encoder value type '%s' for key %s[%d]", reflect.TypeOf(v).String(), key, valIdx)
 				}
 
 				return nil
@@ -122,7 +112,7 @@ type readerFunc func(p []byte) (n int, err error)
 
 func (rf readerFunc) Read(p []byte) (n int, err error) { return rf(p) }
 
-func Copy(ctx context.Context, dst io.Writer, src io.Reader) error {
+func copyCtx(ctx context.Context, dst io.Writer, src io.Reader) error {
 	_, err := io.Copy(dst, readerFunc(func(p []byte) (int, error) {
 		select {
 		case <-ctx.Done():
