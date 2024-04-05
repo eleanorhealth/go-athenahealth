@@ -585,3 +585,157 @@ func (h *HTTPClient) AddPatientCaseDocument(ctx context.Context, patientID strin
 
 	return res.PatientCaseID, nil
 }
+
+type DeleteClinicalDocumentResponse struct {
+	ClinicalDocumentID int    `json:"clinicaldocumentid"`
+	ErrorMessage       string `json:"errormessage"`
+	Success            bool   `json:"success"`
+}
+
+// DeleteClinicalDocument - Mark patient's clinical document as deleted
+//
+// DELETE /v1/{practiceid}/patients/{patientid}/documents/clinicaldocument/{clinicaldocumentid}
+//
+// https://docs.athenahealth.com/api/api-ref/document-type-clinical-document#Mark-patient's-clinical-document-as-deleted
+func (h *HTTPClient) DeleteClinicalDocument(ctx context.Context, patientID string, clinicalDocumentID string) (*DeleteClinicalDocumentResponse, error) {
+
+	res := &DeleteClinicalDocumentResponse{}
+
+	_, err := h.Delete(ctx, fmt.Sprintf("/patients/%s/documents/clinicaldocument/%s", patientID, clinicalDocumentID), nil, res)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+type EncounterDocument struct {
+	AppointmentID      int    `json:"appointmentid"`
+	AssignedTo         string `json:"assignedto"`
+	ClinicalProviderID int    `json:"clinicalproviderid"`
+	// ContraindicationReason
+	CreatedDate        string `json:"createddate"`
+	CreatedDateTime    string `json:"createddatetime"`
+	DeclinedReasonText string `json:"declinedreasontext"`
+	DeletedDateTime    string `json:"deleteddatetime"`
+	DepartmentID       string `json:"departmentid"`
+	// DeclinedReason
+	Description          string `json:"description"`
+	DocumentClass        string `json:"documentclass"`
+	DocumentDate         string `json:"documentdate"`
+	DocumentRoute        string `json:"documentroute"`
+	DocumentSource       string `json:"documentsource"`
+	DocumentSubClass     string `json:"documentsubclass"`
+	DocumentType         string `json:"documenttype"`
+	DocumentTypeID       int    `json:"documenttypeid"`
+	Encounterdocumentid  int    `json:"encounterdocumentid"`
+	Encounterid          string `json:"encounterid"`
+	Externalaccessionid  string `json:"externalaccessionid"`
+	InternalNote         string `json:"internalnote"`
+	LastModifiedDate     string `json:"lastmodifieddate"`
+	LastModifiedDatetime string `json:"lastmodifieddatetime"`
+	Lastmodifieduser     string `json:"lastmodifieduser"`
+	Observationdatetime  string `json:"observationdatetime"`
+	Patientid            int    `json:"patientid"`
+	Priority             int    `json:"priority"`
+	ProviderID           int    `json:"providerid"`
+	ProviderUsername     string `json:"providerusername"`
+	Receivernote         string `json:"receivernote"`
+	Status               string `json:"status"`
+	Subject              string `json:"subject"`
+	Tietoorderid         int    `json:"tietoorderid"`
+}
+
+type ListEncounterDocumentsOptions struct {
+	// Document subclasses from https://docs.athenahealth.com/api/workflows/document-classification-guide:
+	// ADMIN_BILLING
+	// ADMIN_CONSENT
+	// ADMIN_HIPAA
+	// ADMIN_INSURANCEAPPROVAL
+	// ADMIN_INSURANCECARD
+	// ADMIN_INSURANCEDENIAL
+	// ADMIN_LEGAL
+	// ADMIN_MEDICALRECORDREQ
+	// ADMIN_REFERRAL
+	// ADMIN_SIGNEDFORMSLETTERS
+	// ADMIN_VACCINATIONRECORD
+	// CLINICALDOCUMENT_ADMISSIONDISCHARGE
+	// CLINICALDOCUMENT_CONSULTNOTE
+	// CLINICALDOCUMENT_MENTALHEALTH
+	// CLINICALDOCUMENT_OPERATIVENOTE
+	// CLINICALDOCUMENT_URGENTCARE
+	// ENCOUNTERDOCUMENT_IMAGEDOC
+	// ENCOUNTERDOCUMENT_PATIENTHISTORY
+	// ENCOUNTERDOCUMENT_PROCEDUREDOC
+	// ENCOUNTERDOCUMENT_PROGRESSNOTE
+	// MEDICALRECORD_CHARTTOABSTRACT
+	// MEDICALRECORD_COUMADIN
+	// MEDICALRECORD_GROWTHCHART
+	// MEDICALRECORD_HISTORICAL
+	// MEDICALRECORD_PATIENTDIARY
+	// MEDICALRECORD_VACCINATION
+	DocumentSubclass string
+	ShowDeleted      bool
+	EncounterID      string
+
+	Pagination *PaginationOptions
+}
+
+type ListEncounterDocumentsResult struct {
+	EncounterDocuments []*EncounterDocument
+
+	Pagination *PaginationResult
+}
+
+type listEncounterDocumentsResponse struct {
+	EncounterDocuments []*EncounterDocument `json:"encounterdocuments"`
+
+	PaginationResponse
+}
+
+func (h *HTTPClient) ListEncounterDocuments(ctx context.Context, departmentID, patientID string, opts *ListEncounterDocumentsOptions) (*ListEncounterDocumentsResult, error) {
+	out := &listEncounterDocumentsResponse{}
+
+	if departmentID == "" || patientID == "" {
+		return nil, fmt.Errorf("DepartmentID and patientID are required")
+	}
+
+	q := url.Values{}
+	if opts != nil {
+		if len(departmentID) > 0 {
+			q.Add("departmentid", departmentID)
+		}
+
+		if opts.EncounterID != "" {
+			q.Add("encounterid", opts.EncounterID)
+		}
+
+		if opts.DocumentSubclass != "" {
+			q.Add("documentsubclass", opts.DocumentSubclass)
+		}
+
+		if opts.ShowDeleted {
+			q.Add("showdeleted", "true")
+		}
+
+		if opts.Pagination != nil {
+			if opts.Pagination.Limit > 0 {
+				q.Add("limit", strconv.Itoa(opts.Pagination.Limit))
+			}
+
+			if opts.Pagination.Offset > 0 {
+				q.Add("offset", strconv.Itoa(opts.Pagination.Offset))
+			}
+		}
+	}
+
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s/documents/encounterdocument", patientID), q, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ListEncounterDocumentsResult{
+		EncounterDocuments: out.EncounterDocuments,
+		Pagination:         makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
+}
