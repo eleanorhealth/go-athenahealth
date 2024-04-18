@@ -126,6 +126,7 @@ type Client interface {
 
 	// Telehealth
 	GetTelehealthInviteURL(ctx context.Context, apptID string) (*GetTelehealthInviteURLResult, error)
+	TelehealthDeeplink(ctx context.Context, apptID, patientID string) (*TelehealthDeeplinkResult, error)
 }
 
 type TokenProvider interface {

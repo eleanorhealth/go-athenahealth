@@ -3,6 +3,7 @@ package athenahealth
 import (
 	"context"
 	"fmt"
+	"net/url"
 )
 
 type GetTelehealthInviteURLResult struct {
@@ -24,6 +25,35 @@ func (h *HTTPClient) GetTelehealthInviteURL(ctx context.Context, apptID string) 
 	out := &GetTelehealthInviteURLResult{}
 
 	_, err := h.Get(ctx, fmt.Sprintf("appointments/%s/nativeathenatelehealthroom", apptID), nil, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+type TelehealthDeeplinkResult struct {
+	ExpirationISOTimestamp string `json:"expiration"`
+	Deeplink               string `json:"telehealthdeeplink"`
+}
+
+// TelehealthDeeplink - Create athenaone telehealth deep link join url
+//
+// GET /v1/{practiceid}/appointments/telehealth/deeplink
+//
+// https://docs.athenahealth.com/api/api-ref/appointment#Create-athenaone-telehealth-deep-link-join-url
+func (h *HTTPClient) TelehealthDeeplink(ctx context.Context, apptID, patientID string) (*TelehealthDeeplinkResult, error) {
+	if apptID == "" || patientID == "" {
+		return nil, fmt.Errorf("apptID [%s] and patientID [%s] are required", apptID, patientID)
+	}
+
+	q := url.Values{}
+	q.Set("patientid", patientID)
+	q.Set("appointmentid", apptID)
+
+	out := &TelehealthDeeplinkResult{}
+
+	_, err := h.PostForm(ctx, "appointments/telehealth/deeplink", q, &out)
 	if err != nil {
 		return nil, err
 	}
