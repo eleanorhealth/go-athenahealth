@@ -16,11 +16,13 @@ import (
 
 // Patient represents a patient in athenahealth.
 type Patient struct {
-	Address1           string `json:"address1"`
-	Address2           string `json:"address2"`
-	AltFirstName       string `json:"altfirstname"`
-	AssignedSexAtBirth string `json:"assignedsexatbirth"`
-	Balances           []struct {
+	Address1               string   `json:"address1"`
+	Address2               string   `json:"address2"`
+	AgriculturalWorker     string   `json:"agriculturalworker"`
+	AgriculturalWorkerType string   `json:"agriculturalworkertype"`
+	AltFirstName           string   `json:"altfirstname"`
+	AssignedSexAtBirth     string   `json:"assignedsexatbirth"`
+	Balances               []struct {
 		Balance         NumberString `json:"balance"`
 		DepartmentList  string       `json:"departmentlist"`
 		ProviderGroupID int          `json:"providergroupid"`
@@ -28,13 +30,13 @@ type Patient struct {
 	} `json:"balances"`
 	CareSummaryDeliveryPreference      string             `json:"caresummarydeliverypreference"`
 	City                               string             `json:"city"`
+	ConfidentialityCode                string             `json:"confidentialitycode"`
 	ConsentToCall                      bool               `json:"consenttocall"`
 	ConsentToText                      bool               `json:"consenttotext"`
 	ContactHomePhone                   string             `json:"contacthomephone"`
 	ContactMobilePhone                 string             `json:"contactmobilephone"`
 	ContactName                        string             `json:"contactname"`
 	ContactPreference                  string             `json:"contactpreference"`
-	ContactPreferenceLabSMS            bool               `json:"contactpreference_lab_sms"`
 	ContactPreferenceAnnouncementEmail bool               `json:"contactpreference_announcement_email"`
 	ContactPreferenceAnnouncementPhone bool               `json:"contactpreference_announcement_phone"`
 	ContactPreferenceAnnouncementSMS   bool               `json:"contactpreference_announcement_sms"`
@@ -46,32 +48,45 @@ type Patient struct {
 	ContactPreferenceBillingSMS        bool               `json:"contactpreference_billing_sms"`
 	ContactPreferenceLabEmail          bool               `json:"contactpreference_lab_email"`
 	ContactPreferenceLabPhone          bool               `json:"contactpreference_lab_phone"`
+	ContactPreferenceLabSMS            bool               `json:"contactpreference_lab_sms"`
 	ContactRelationship                string             `json:"contactrelationship"`
 	CountryCode                        string             `json:"countrycode"`
 	CountryCode3166                    string             `json:"countrycode3166"`
 	CustomFields                       []CustomFieldValue `json:"customfields"`
+	DeceasedDate                       string             `json:"deceaseddate"`
 	DefaultPharmacyNCPDPID             string             `json:"defaultpharmacyncpdpid"`
 	DepartmentID                       string             `json:"departmentid"`
 	DOB                                string             `json:"dob"`
 	DoNotCall                          bool               `json:"donotcall"`
 	DriversLicense                     bool               `json:"driverslicense"`
+	DriversLicenseExpirationDate       string             `json:"driverslicenseexpirationdate"`
+	DriversLicenseNumber               string             `json:"driverslicensenumber"`
+	DriversLicenseStateID              string             `json:"driverslicensestateid"`
+	DriversLicenseURL                  string             `json:"driverslicenseurl"`
 	Email                              string             `json:"email"`
+	EmailExists                        string             `json:"emailexistsyn"`
 	EmployerAddress                    string             `json:"employeraddress"`
+	EmployerCity                       string             `json:"employercity"`
+	EmployerFax                        string             `json:"employerfax"`
 	EmployerID                         string             `json:"employerid"`
 	EmployerName                       string             `json:"employername"`
 	EmployerPhone                      string             `json:"employerphone"`
 	EmployerState                      string             `json:"employerstate"`
+	EmployerZip                        string             `json:"employerzip"`
+	EthinicityCodes                    string             `json:"ethnicitycodes"`
 	EthnicityCode                      string             `json:"ethnicitycode"`
 	FirstAppointment                   string             `json:"firstappointment"`
 	FirstName                          string             `json:"firstname"`
 	GenderIdentity                     string             `json:"genderidentity"`
 	GenderIdentityOther                string             `json:"genderidentityother"`
 	GuarantorAddress1                  string             `json:"guarantoraddress1"`
+	GuarantorAddress2                  string             `json:"guarantoraddress2"`
 	GuarantorAddressSameAsPatient      bool               `json:"guarantoraddresssameaspatient"`
 	GuarantorCity                      string             `json:"guarantorcity"`
 	GuarantorCountryCode               string             `json:"guarantorcountrycode"`
 	GuarantorCountryCode3166           string             `json:"guarantorcountrycode3166"`
 	GuarantorDOB                       string             `json:"guarantordob"`
+	GuarantorEmail                     string             `json:"guarantoremail"`
 	GuarantorEmployerID                string             `json:"guarantoremployerid"`
 	GuarantorFirstName                 string             `json:"guarantorfirstname"`
 	GuarantorLastName                  string             `json:"guarantorlastname"`
@@ -80,20 +95,35 @@ type Patient struct {
 	GuarantorRelationshipToPatient     string             `json:"guarantorrelationshiptopatient"`
 	GuarantorSSN                       string             `json:"guarantorssn"`
 	GuarantorState                     string             `json:"guarantorstate"`
+	GuarantorSuffix                    string             `json:"guarantorsuffix"`
 	GuarantorZip                       string             `json:"guarantorzip"`
-	GuarantorEmail                     string             `json:"guarantoremail"`
+	GuardianFirstName                  string             `json:"guardianfirstname"`
+	GuardianLastName                   string             `json:"guardianlastname"`
+	GuardianMiddleName                 string             `json:"guardianmiddlename"`
+	GuardianSuffix                     string             `json:"guardiansuffix"`
 	HasMobile                          bool               `json:"hasmobile"`
 	Homebound                          bool               `json:"homebound"`
+	Homeless                           string             `json:"homeless"`
+	HomelessType                       string             `json:"homelesstype"`
 	HomePhone                          string             `json:"homephone"`
+	IndustryCode                       string             `json:"industrycode"`
 	Insurances                         []Insurance        `json:"insurances"`
 	Language6392Code                   string             `json:"language6392code"`
 	LastAppointment                    string             `json:"lastappointment"`
 	LastEmail                          string             `json:"lastemail"`
 	LastName                           string             `json:"lastname"`
+	LastUpdated                        string             `json:"lastupdated"`
+	LastUpdatedBy                      string             `json:"lastupdatedby"`
 	LocalPatientID                     string             `json:"localpatientid"`
 	MaritalStatus                      string             `json:"maritalstatus"`
 	MaritalStatusName                  string             `json:"maritalstatusname"`
+	MedicationHistoryConsentVerified   string             `json:"medicationhistoryconsentverified"`
+	MiddleName                         string             `json:"middlename"`
+	MobileCarrierID                    string             `json:"mobilecarrierid"`
 	MobilePhone                        string             `json:"mobilephone"`
+	NextKinName                        string             `json:"nextkinname"`
+	NextKinPhone                       string             `json:"nextkinphone"`
+	NextKinRelationship                string             `json:"nextkinrelationship"`
 	Notes                              string             `json:"notes"`
 	OccupationCode                     string             `json:"occupationcode"`
 	OnlineStatementOnly                bool               `json:"onlinestatementonly"`
@@ -101,23 +131,39 @@ type Patient struct {
 	PatientPhoto                       bool               `json:"patientphoto"`
 	PatientPhotoURL                    string             `json:"patientphotourl"`
 	PortalAccessGiven                  bool               `json:"portalaccessgiven"`
+	PortalSignatureOnFile              string             `json:"portalsignatureonfile"`
 	PortalStatus                       PortalStatus       `json:"portalstatus"`
 	PortalTermsOnFile                  bool               `json:"portaltermsonfile"`
+	PovertyLevelCalculated             NumberString       `json:"povertylevelcalculated"`
+	PovertyLevelFamilySize             string             `json:"povertylevelfamilysize"`
 	PovertyLevelFamilySizeDeclined     bool               `json:"povertylevelfamilysizedeclined"`
 	PovertyLevelIncomeDeclined         bool               `json:"povertylevelincomedeclined"`
+	PovertyLevelIncomePayPeriod        string             `json:"povertylevelincomepayperiod"`
+	PovertyLevelIncomePerPayPeriod     string             `json:"povertylevelincomeperpayperiod"`
 	PovertyLevelIncomeRangeDeclined    bool               `json:"povertylevelincomerangedeclined"`
-	PreferredPronouns                  string             `json:"preferredpronouns"`
 	PreferredName                      string             `json:"preferredname"`
+	PreferredPronouns                  string             `json:"preferredpronouns"`
 	PrimaryDepartmentID                string             `json:"primarydepartmentid"`
 	PrimaryProviderID                  string             `json:"primaryproviderid"`
 	PrivacyInformationVerified         bool               `json:"privacyinformationverified"`
+	PublicHousing                      string             `json:"publichousing"`
 	Race                               []string           `json:"race"`
+	RaceCode                           string             `json:"racecode"`
 	RaceName                           string             `json:"racename"`
+	ReferralSourceID                   string             `json:"referralsourceid"`
+	ReferralSourceOther                string             `json:"referralsourceother"`
 	RegistrationDate                   string             `json:"registrationdate"`
+	SchoolBasedHealthCenter            string             `json:"schoolbasedhealthcenter"`
 	Sex                                string             `json:"sex"`
+	SexualOrientation                  string             `json:"sexualorientation"`
+	SexualOrientationOther             string             `json:"sexualorientationother"`
+	SMSOptInDate                       string             `json:"smsoptindate"`
 	SSN                                string             `json:"ssn"`
 	State                              string             `json:"state"`
 	Status                             string             `json:"status"`
+	Suffix                             string             `json:"suffix"`
+	Veteran                            string             `json:"veteran"`
+	WorkPhone                          string             `json:"workphone"`
 	Zip                                string             `json:"zip"`
 }
 
