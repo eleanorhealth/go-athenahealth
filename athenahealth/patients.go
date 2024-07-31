@@ -117,7 +117,7 @@ type Patient struct {
 	LocalPatientID                     string             `json:"localpatientid"`
 	MaritalStatus                      string             `json:"maritalstatus"`
 	MaritalStatusName                  string             `json:"maritalstatusname"`
-	MedicationHistoryConsentVerified   string             `json:"medicationhistoryconsentverified"`
+	MedicationHistoryConsentVerified   bool               `json:"medicationhistoryconsentverified"`
 	MiddleName                         string             `json:"middlename"`
 	MobileCarrierID                    string             `json:"mobilecarrierid"`
 	MobilePhone                        string             `json:"mobilephone"`
