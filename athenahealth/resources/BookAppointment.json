@@ -13,7 +13,7 @@
         "appointmenttype": "Template: Therapist",
         "providerid": "40",
         "chargeentrynotrequired": false,
-        "supervisingproviderid": "",
+        "supervisingproviderid": 0,
         "patientappointmenttypename": "Template: Therapist"
     }
 ]

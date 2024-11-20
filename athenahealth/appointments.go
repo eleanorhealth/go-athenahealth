@@ -156,7 +156,7 @@ type BookedAppointment struct {
 	StopIntakeDateTime           string             `json:"stopintakedatetime"`
 	StopSignOff                  string             `json:"stopsignoff"`
 	SuggestedOverbooking         string             `json:"suggestedoverbooking"`
-	SupervisingProviderID        int                `json:"supervisingproviderid"`
+	SupervisingProviderID        NumberString       `json:"supervisingproviderid"`
 	TemplateAppointmentID        string             `json:"templateappointmentid"`
 	TemplateAppointmentTypeID    string             `json:"templateappointmenttypeid"`
 	UrgentYN                     string             `json:"urgentyn"`
