@@ -81,46 +81,87 @@ func (h *HTTPClient) ListAppointmentCustomFields(ctx context.Context) ([]*Appoin
 	return out.AppointmentCustomFields, nil
 }
 
+type ReminderDetails struct {
+	CallTime        string `json:"calltime"`
+	MessageResultID string `json:"messageresultid"`
+	MessageType     string `json:"messagetype"`
+	Result          string `json:"result"`
+}
+
+type ProcedureCodes struct {
+	ProcedureCode            string `json:"procedurecode"`
+	ProcedureCodeDescription string `json:"procedurecodedescription"`
+}
+
+type AppointmentCopay struct {
+	CollectedForOther       int `json:"collectedforother"`
+	CollectedForAppointment int `json:"collectedforappointment"`
+	InsuranceCopay          int `json:"insurancecopay"`
+}
+
+type AppointmentNotes struct {
+	DisplayOnSchedule bool   `json:"displayonschedule"`
+	Text              string `json:"text"`
+	ID                int    `json:"id"`
+}
+
 type BookedAppointment struct {
-	AppointmentID    string `json:"appointmentid"`
-	AppointmentCopay struct {
-		CollectedForOther       int `json:"collectedforother"`
-		CollectedForAppointment int `json:"collectedforappointment"`
-		InsuranceCopay          int `json:"insurancecopay"`
-	} `json:"appointmentcopay"`
-	AppointmentNotes []struct {
-		DisplayOnSchedule bool   `json:"displayonschedule"`
-		Text              string `json:"text"`
-		ID                int    `json:"id"`
-	} `json:"appointmentnotes"`
-	AppointmentStatus          AppointmentStatus `json:"appointmentstatus"`
-	AppointmentType            string            `json:"appointmenttype"`
-	AppointmentTypeID          string            `json:"appointmenttypeid"`
-	CancelReasonID             string            `json:"cancelreasonid"`
-	CancelReasonName           string            `json:"cancelreasonname"`
-	CancelReasonNoShow         bool              `json:"cancelreasonnoshow"`
-	CancelReasonSlotAvailable  bool              `json:"cancelreasonslotavailable"`
-	CancelledBy                string            `json:"cancelledby"`
-	CancelledDatetime          string            `json:"cancelleddatetime"`
-	ChargeEntryNotRequired     bool              `json:"chargeentrynotrequired"`
-	CoordinatorEnterprise      bool              `json:"coordinatorenterprise"`
-	Copay                      int               `json:"copay"`
-	Date                       string            `json:"date"`
-	DepartmentID               string            `json:"departmentid"`
-	Duration                   int               `json:"duration"`
-	EncounterID                string            `json:"encounterid"`
-	HL7ProviderID              int               `json:"hl7providerid"`
-	LastModified               string            `json:"lastmodified"`
-	LastModifiedBy             string            `json:"lastmodifiedby"`
-	PatientAppointmentTypeName string            `json:"patientappointmenttypename"`
-	PatientID                  string            `json:"patientid"`
-	ProviderID                 string            `json:"providerid"`
-	RenderingProviderID        string            `json:"renderingproviderid"`
-	ScheduledBy                string            `json:"scheduledby"`
-	ScheduledDatetime          string            `json:"scheduleddatetime"`
-	StartTime                  string            `json:"starttime"`
-	TemplateAppointmentID      string            `json:"templateappointmentid"`
-	TemplateAppointmentTypeID  string            `json:"templateappointmenttypeid"`
+	AppointmentID                string             `json:"appointmentid"`
+	AppointmentCopay             AppointmentCopay   `json:"appointmentcopay"`
+	AppointmentNotes             []AppointmentNotes `json:"appointmentnotes"`
+	AppointmentConfirmationID    string             `json:"appointmentconfirmationid"`
+	AppointmentConfirmationName  string             `json:"appointmentconfirmationname"`
+	AppointmentStatus            AppointmentStatus  `json:"appointmentstatus"`
+	AppointmentType              string             `json:"appointmenttype"`
+	AppointmentTypeID            string             `json:"appointmenttypeid"`
+	CancelledBy                  string             `json:"cancelledby"`
+	CancelledDatetime            string             `json:"cancelleddatetime"`
+	CancelReasonID               string             `json:"cancelreasonid"`
+	CancelReasonName             string             `json:"cancelreasonname"`
+	CancelReasonNoShow           bool               `json:"cancelreasonnoshow"`
+	CancelReasonSlotAvailable    bool               `json:"cancelreasonslotavailable"`
+	ChargeEntryNotRequired       bool               `json:"chargeentrynotrequired"`
+	ChargeEntryNotRequiredReason string             `json:"chargeentrynotrequiredreason"`
+	CheckInDateTime              string             `json:"checkindatetime"`
+	CheckOutDateTime             string             `json:"checkoutdatetime"`
+	Claims                       []*Claim           `json:"claims"`
+	CoordinatorEnterprise        bool               `json:"coordinatorenterprise"`
+	CoordinatorEnterpriseYN      string             `json:"coordinatorenterpriseyn"`
+	Copay                        int                `json:"copay"`
+	Date                         string             `json:"date"`
+	DepartmentID                 string             `json:"departmentid"`
+	Duration                     int                `json:"duration"`
+	EncounterID                  string             `json:"encounterid"`
+	EncounterStatus              string             `json:"encounterstatus"`
+	FrozenYN                     string             `json:"frozenyn"`
+	HL7ProviderID                int                `json:"hl7providerid"`
+	Insurances                   []*Insurance       `json:"insurances"`
+	LastModified                 string             `json:"lastmodified"`
+	LastModifiedBy               string             `json:"lastmodifiedby"`
+	PatientAppointmentTypeName   string             `json:"patientappointmenttypename"`
+	PatientID                    string             `json:"patientid"`
+	PatientLocationID            string             `json:"patientlocationid"`
+	ProviderID                   string             `json:"providerid"`
+	ReferringProviderID          string             `json:"referringproviderid"`
+	ReminderDetails              []*ReminderDetails `json:"reminderdetails"`
+	RenderingProviderID          string             `json:"renderingproviderid"`
+	RescheduledAppointmentID     string             `json:"rescheduledappointmentid"`
+	ScheduledBy                  string             `json:"scheduledby"`
+	ScheduledDatetime            string             `json:"scheduleddatetime"`
+	StartCheckIn                 string             `json:"startcheckin"`
+	StartCheckOutDateTime        string             `json:"startcheckoutdatetime"`
+	StartTime                    string             `json:"starttime"`
+	StopCheckIn                  string             `json:"stopcheckin"`
+	StopExamDateTime             string             `json:"stopexamdatetime"`
+	StopIntakeDateTime           string             `json:"stopintakedatetime"`
+	StopSignOff                  string             `json:"stopsignoff"`
+	SuggestedOverbooking         string             `json:"suggestedoverbooking"`
+	SupervisingProviderID        NumberString       `json:"supervisingproviderid"`
+	TemplateAppointmentID        string             `json:"templateappointmentid"`
+	TemplateAppointmentTypeID    string             `json:"templateappointmenttypeid"`
+	UrgentYN                     string             `json:"urgentyn"`
+	UseExpectedProcedureCodes    []*ProcedureCodes  `json:"useexpectedprocedurecodes"`
+	VisitID                      string             `json:"visitid"`
 }
 
 type ListBookedAppointmentsOptions struct {
