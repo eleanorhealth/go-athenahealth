@@ -141,7 +141,7 @@ type ClaimDiagnosis struct {
 
 type Claim struct {
 	Procedures        []ClaimProcedure   `json:"procedures"`
-	ClaimCeatedDate   string             `json:"claimcreateddate"`
+	ClaimCreatedDate  string             `json:"claimcreateddate"`
 	BilledProviderID  int                `json:"billedproviderid"`
 	ClaimID           string             `json:"claimid"`
 	BilledServiceDate string             `json:"billedservicedate"`
