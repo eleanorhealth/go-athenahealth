@@ -340,49 +340,58 @@ func (h *HTTPClient) ListPatients(ctx context.Context, opts *ListPatientsOptions
 	}, nil
 }
 
-type UpdatePatientOptions struct {
-	Address1            *string
-	Address2            *string
-	AltFirstName        *string
-	AssignedSexAtBirth  *string
-	City                *string
-	ConsentToCall       *bool
-	ConsentToText       *bool
-	ContactHomePhone    *string
-	ContactMobilePhone  *string
-	ContactName         *string
-	ContactPreference   *string
-	ContactRelationship *string
-	DepartmentID        *string
-	DOB                 *string
-	Email               *string
-	EthnicityCode       *string
-	FirstName           *string
-	GenderIdentity      *string
-	GenderIdentityOther *string
-	HasMobile           *bool
-	HomePhone           *string
-	Language6392Code    *string
-	LastName            *string
-	MaritalStatus       *string
-	MobilePhone         *string
-	Notes               *string
-	OccupationCode      *string
-	PreferredName       *string
-	PreferredPronouns   *string
-	PrimaryDepartmentID *string
-	Race                []string
-	State               *string
-	Zip                 *string
-}
+type (
+	UpdatePatientOptions struct {
+		Address1            *string
+		Address2            *string
+		AltFirstName        *string
+		AssignedSexAtBirth  *string
+		City                *string
+		ConsentToCall       *bool
+		ConsentToText       *bool
+		ContactHomePhone    *string
+		ContactMobilePhone  *string
+		ContactName         *string
+		ContactPreference   *string
+		ContactRelationship *string
+		DepartmentID        *string
+		DOB                 *string
+		Email               *string
+		EthnicityCode       *string
+		FirstName           *string
+		GenderIdentity      *string
+		GenderIdentityOther *string
+		HasMobile           *bool
+		HomePhone           *string
+		Language6392Code    *string
+		LastName            *string
+		MaritalStatus       *string
+		MobilePhone         *string
+		Notes               *string
+		OccupationCode      *string
+		PreferredName       *string
+		PreferredPronouns   *string
+		PrimaryDepartmentID *string
+		Race                []string
+		State               *string
+		Status              *string
+		Zip                 *string
+	}
 
-type UpdatePatientResult struct {
-	PatientID string
-}
+	UpdatePatientResult struct {
+		PatientID string
+	}
 
-type updatePatientResponse struct {
-	PatientID string `json:"patientid"`
-}
+	updatePatientResponse struct {
+		PatientID string `json:"patientid"`
+	}
+)
+
+var (
+	UpdatePatientStatusInactiveOption    = "i"
+	UpdatePatientStatusActiveOption      = "a"
+	UpdatePatientStatusProspectiveOption = "p"
+)
 
 // UpdatePatient - Modifies data of a specific patient
 //
@@ -521,6 +530,10 @@ func (h *HTTPClient) UpdatePatient(ctx context.Context, patientID string, opts *
 
 		if opts.State != nil {
 			form.Add("state", *opts.State)
+		}
+
+		if opts.Status != nil {
+			form.Add("status", *opts.Status)
 		}
 
 		if opts.Zip != nil {
