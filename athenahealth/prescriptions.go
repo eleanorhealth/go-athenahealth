@@ -8,7 +8,7 @@ import (
 )
 
 type ListChangedPrescriptionsOptions struct {
-	LeaveUnprocessed           *bool
+	LeaveUnprocessed           bool
 	ShowProcessedEndDatetime   time.Time
 	ShowProcessedStartDatetime time.Time
 
@@ -29,7 +29,7 @@ type ChangedPrescription struct {
 	DeniedTimestamp             string `json:"deniedtimestamp"`
 	DepartmentID                int    `json:"departmentid"`
 	Description                 string `json:"description"`
-	DocumentationOnly           string `json:"documentationonly"`
+	DocumentationOnly           bool   `json:"documentationonly"`
 	DocumentID                  int    `json:"documentid"`
 	EncounterID                 int    `json:"encounterid"`
 	ExternalNote                string `json:"externalnote"`
@@ -61,8 +61,8 @@ func (h *HTTPClient) ListChangedPrescriptions(ctx context.Context, opts *ListCha
 	q := url.Values{}
 
 	if opts != nil {
-		if opts.LeaveUnprocessed != nil {
-			q.Add("leaveunprocessed", strconv.FormatBool(*opts.LeaveUnprocessed))
+		if opts.LeaveUnprocessed {
+			q.Add("leaveunprocessed", strconv.FormatBool(opts.LeaveUnprocessed))
 		}
 		if !opts.ShowProcessedEndDatetime.IsZero() {
 			q.Add("showprocessedenddatetime", opts.ShowProcessedEndDatetime.Format("01/02/2006 15:04:05"))
