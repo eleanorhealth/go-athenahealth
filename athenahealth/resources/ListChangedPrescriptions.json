@@ -1,0 +1,49 @@
+{
+  "totalcount": 3,
+  "prescriptions": [
+    {
+      "approvedby": "admin",
+      "approvedtimestamp": "02/13/2025 12:33 PM",
+      "assigneduser": "admin",
+      "class": "PRESCRIPTION",
+      "classdescription": "Prescription - Refill",
+      "dateordered": "02/13/2025 11:33 AM",
+      "departmentid": 1,
+      "description": "Prescription for Tylenol",
+      "documentationonly": false,
+      "documentid": 1,
+      "encounterid": 1,
+      "orderingprovider": "admin",
+      "patientid": 1,
+      "status": "CLOSED"
+    },
+    {
+      "departmentid": 5,
+      "dateordered": "02/13/2025 11:33 AM",
+      "documentationonly": false,
+      "patientid": 1,
+      "status": "REVIEW",
+      "assigneduser": "doctor STAFF",
+      "description": "Adderall 10 mg tablet",
+      "documentid": 2,
+      "class": "PRESCRIPTION",
+      "orderingprovider": "doctor",
+      "classdescription": "Prescription - New",
+      "encounterid": 1
+    },
+    {
+      "departmentid": 5,
+      "dateordered": "02/13/2025 11:33 AM",
+      "documentationonly": false,
+      "patientid": 1,
+      "status": "NOTIFY",
+      "assigneduser": "doctor STAFF",
+      "description": "Adderall 10 mg tablet",
+      "documentid": 2,
+      "class": "PRESCRIPTION",
+      "orderingprovider": "doctor",
+      "classdescription": "Prescription - New",
+      "encounterid": 1
+    }
+  ]
+}
