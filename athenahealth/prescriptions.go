@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
 	"time"
@@ -90,5 +91,41 @@ func (h *HTTPClient) ListChangedPrescriptions(ctx context.Context, opts *ListCha
 	return &ListChangedPrescriptionsResult{
 		ChangedPrescriptions: out.ChangedPrescriptions,
 		Pagination:           makePaginationResult(out.Next, out.Previous, out.TotalCount),
+	}, nil
+}
+
+type UpdatePrescriptionOptions struct {
+	DocumentID int `json:"documentid"`
+	PatientID  int    `json:"patientid"`
+	ActionNote string `json:"actionnote"`
+}
+
+type UpdatePrescriptionResult struct {
+	ErrorMessage *string `json:"errormessage,omitempty"`
+	Success      bool   `json:"success"`
+}
+
+// ListChangedPrescriptions - List of changes in prescriptions based on subscribed events
+//
+// GET /v1/{practiceid}/prescriptions/changed
+//
+// https://docs.athenahealth.com/api/api-ref/document-type-prescription#Get-list-of-changes-in-prescriptions
+func (h *HTTPClient) UpdatePrescriptionActionNote(ctx context.Context, departmentID int, patientID int, documentID int, actionNote string) (*UpdatePrescriptionResult, error) {
+	q := url.Values{}
+	q.Add("actionnote", actionNote)
+	q.Add("departmentid", strconv.Itoa(departmentID))
+
+	out := &listChangedPrescriptionsResponse{}
+
+	if _, err := h.PutForm(ctx, fmt.Sprintf("/patients/%v/documents/prescriptions/%v", patientID, documentID), q, &out); err != nil {
+		errMsg := err.Error()
+		return &UpdatePrescriptionResult{
+			Success:      false,
+			ErrorMessage: &errMsg,
+		}, err
+	}
+
+	return &UpdatePrescriptionResult{
+		Success:      true,
 	}, nil
 }
