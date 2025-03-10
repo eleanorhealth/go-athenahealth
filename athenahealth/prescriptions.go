@@ -96,13 +96,12 @@ func (h *HTTPClient) ListChangedPrescriptions(ctx context.Context, opts *ListCha
 
 type UpdatePrescriptionOptions struct {
 	DocumentID int `json:"documentid"`
-	// DepartmentID int    `json:"departmentid"`
 	PatientID  int    `json:"patientid"`
 	ActionNote string `json:"actionnote"`
 }
 
 type UpdatePrescriptionResult struct {
-	ErrorMessage string `json:"errormessage,omitempty"`
+	ErrorMessage *string `json:"errormessage,omitempty"`
 	Success      bool   `json:"success"`
 }
 
@@ -111,21 +110,22 @@ type UpdatePrescriptionResult struct {
 // GET /v1/{practiceid}/prescriptions/changed
 //
 // https://docs.athenahealth.com/api/api-ref/document-type-prescription#Get-list-of-changes-in-prescriptions
-func (h *HTTPClient) UpdatePrescription(ctx context.Context, patientID int, documentID int, actionNote string) (*UpdatePrescriptionResult, error) {
+func (h *HTTPClient) UpdatePrescriptionActionNote(ctx context.Context, departmentID int, patientID int, documentID int, actionNote string) (*UpdatePrescriptionResult, error) {
 	q := url.Values{}
 	q.Add("actionnote", actionNote)
+	q.Add("departmentid", strconv.Itoa(departmentID))
 
 	out := &listChangedPrescriptionsResponse{}
 
 	if _, err := h.PutForm(ctx, fmt.Sprintf("/patients/%v/documents/prescriptions/%v", patientID, documentID), q, &out); err != nil {
+		errMsg := err.Error()
 		return &UpdatePrescriptionResult{
 			Success:      false,
-			ErrorMessage: err.Error(),
+			ErrorMessage: &errMsg,
 		}, err
 	}
 
 	return &UpdatePrescriptionResult{
 		Success:      true,
-		ErrorMessage: "",
 	}, nil
 }

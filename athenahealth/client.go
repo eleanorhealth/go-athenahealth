@@ -119,6 +119,10 @@ type Client interface {
 	ListChangedPatients(context.Context, *ListChangedPatientOptions) ([]*Patient, error)
 	ListChangedProviders(context.Context, *ListChangedProviderOptions) ([]*Provider, error)
 	ListChangedProblems(context.Context, *ListChangedProblemsOptions) ([]*ChangedProblem, error)
+	ListChangedPrescriptions(ctx context.Context, options *ListChangedPrescriptionsOptions) (*ListChangedPrescriptionsResult, error)
+
+	// Prescriptions
+	UpdatePrescriptionActionNote(ctx context.Context, departmentID int, patientID int, documentID int, actionNote string) (*UpdatePrescriptionResult, error)
 
 	// Claims
 	CreateFinancialClaim(ctx context.Context, opts *CreateClaimOptions) ([]string, error)
