@@ -224,10 +224,13 @@ type PortalStatus struct {
 }
 
 type GetPatientOptions struct {
-	ShowCustomFields   bool
-	ShowInsurance      bool
-	ShowPortalStatus   bool
-	ShowLocalPatientID bool
+	ShowCustomFields               bool
+	ShowInsurance                  bool
+	ShowPortalStatus               bool
+	ShowLocalPatientID             bool
+	DepartmentID                   int
+	LimitLocalPatientID            bool
+	ShowAllPatientDepartmentStatus bool
 }
 
 // GetPatient - Get data for specific patient
@@ -236,9 +239,7 @@ type GetPatientOptions struct {
 //
 // https://docs.athenahealth.com/api/api-ref/patient#Get-specific-patient-record
 func (h *HTTPClient) GetPatient(ctx context.Context, id string, opts *GetPatientOptions) (*Patient, error) {
-	out := []*Patient{}
-
-	q := url.Values{}
+	out, q := []*Patient{}, url.Values{}
 
 	if opts != nil {
 		if opts.ShowCustomFields {
@@ -255,6 +256,18 @@ func (h *HTTPClient) GetPatient(ctx context.Context, id string, opts *GetPatient
 
 		if opts.ShowLocalPatientID {
 			q.Add("showlocalpatientid", "true")
+		}
+
+		if opts.DepartmentID != 0 {
+			q.Add("departmentid", fmt.Sprintf("%d", opts.DepartmentID))
+		}
+
+		if opts.LimitLocalPatientID {
+			q.Add("limitlocalpatientid", "true")
+		}
+
+		if opts.ShowAllPatientDepartmentStatus {
+			q.Add("showallpatientdepartmentstatus", "true")
 		}
 	}
 
