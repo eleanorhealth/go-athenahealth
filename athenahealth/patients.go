@@ -20,9 +20,14 @@ type Patient struct {
 	Address2               string `json:"address2"`
 	AgriculturalWorker     string `json:"agriculturalworker"`
 	AgriculturalWorkerType string `json:"agriculturalworkertype"`
-	AltFirstName           string `json:"altfirstname"`
-	AssignedSexAtBirth     string `json:"assignedsexatbirth"`
-	Balances               []struct {
+	AllPatientStatuses     *[]struct {
+		Status            string       `json:"status"`
+		DepartmentID      int          `json:"departmentid"`
+		PrimaryProviderID NumberString `json:"primaryproviderid"`
+	} `json:"allpatientstatuses"`
+	AltFirstName       string `json:"altfirstname"`
+	AssignedSexAtBirth string `json:"assignedsexatbirth"`
+	Balances           []struct {
 		Balance         NumberString `json:"balance"`
 		DepartmentList  string       `json:"departmentlist"`
 		ProviderGroupID int          `json:"providergroupid"`
