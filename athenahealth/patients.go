@@ -16,23 +16,14 @@ import (
 
 // Patient represents a patient in athenahealth.
 type Patient struct {
-	Address1               string `json:"address1"`
-	Address2               string `json:"address2"`
-	AgriculturalWorker     string `json:"agriculturalworker"`
-	AgriculturalWorkerType string `json:"agriculturalworkertype"`
-	AllPatientStatuses     *[]struct {
-		Status            string       `json:"status"`
-		DepartmentID      int          `json:"departmentid"`
-		PrimaryProviderID NumberString `json:"primaryproviderid"`
-	} `json:"allpatientstatuses"`
-	AltFirstName       string `json:"altfirstname"`
-	AssignedSexAtBirth string `json:"assignedsexatbirth"`
-	Balances           []struct {
-		Balance         NumberString `json:"balance"`
-		DepartmentList  string       `json:"departmentlist"`
-		ProviderGroupID int          `json:"providergroupid"`
-		CleanBalance    bool         `json:"cleanbalance"`
-	} `json:"balances"`
+	Address1                           string             `json:"address1"`
+	Address2                           string             `json:"address2"`
+	AgriculturalWorker                 string             `json:"agriculturalworker"`
+	AgriculturalWorkerType             string             `json:"agriculturalworkertype"`
+	AllPatientStatuses                 []PatientStatus    `json:"allpatientstatuses"`
+	AltFirstName                       string             `json:"altfirstname"`
+	AssignedSexAtBirth                 string             `json:"assignedsexatbirth"`
+	Balances                           []PatientBalance   `json:"balances"`
 	CareSummaryDeliveryPreference      string             `json:"caresummarydeliverypreference"`
 	City                               string             `json:"city"`
 	ConfidentialityCode                string             `json:"confidentialitycode"`
@@ -172,6 +163,19 @@ type Patient struct {
 	Zip                                string             `json:"zip"`
 }
 
+type PatientStatus struct {
+	Status            string       `json:"status"`
+	DepartmentID      int          `json:"departmentid"`
+	PrimaryProviderID NumberString `json:"primaryproviderid"`
+}
+
+type PatientBalance struct {
+	Balance         NumberString `json:"balance"`
+	DepartmentList  string       `json:"departmentlist"`
+	ProviderGroupID int          `json:"providergroupid"`
+	CleanBalance    bool         `json:"cleanbalance"`
+}
+
 type Insurance struct {
 	EligibilityLastChecked              string `json:"eligibilitylastchecked"`
 	EligibilityReason                   string `json:"eligibilityreason"`
@@ -238,7 +242,7 @@ type GetPatientOptions struct {
 	ShowAllPatientDepartmentStatus bool
 }
 
-// GetPatient - Get data for specific patient
+// GetPatient - Get data for specific patient, only looks at first returned patient.
 //
 // GET /v1/{practiceid}/patients/{patientid}
 //
