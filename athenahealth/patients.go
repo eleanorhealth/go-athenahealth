@@ -270,6 +270,43 @@ func (h *HTTPClient) GetPatient(ctx context.Context, id string, opts *GetPatient
 	return out[0], nil
 }
 
+// GetPatients - Get data for specific patient
+//
+// GET /v1/{practiceid}/patients/{patientid}
+//
+// https://docs.athenahealth.com/api/api-ref/patient#Get-specific-patient-record
+func (h *HTTPClient) GetPatients(ctx context.Context, id string, opts *GetPatientOptions) ([]*Patient, error) {
+	out := []*Patient{}
+
+	q := url.Values{}
+
+	if opts != nil {
+		if opts.ShowCustomFields {
+			q.Add("showcustomfields", "true")
+		}
+
+		if opts.ShowInsurance {
+			q.Add("showinsurance", "true")
+		}
+
+		if opts.ShowPortalStatus {
+			q.Add("showportalstatus", "true")
+		}
+
+		if opts.ShowLocalPatientID {
+			q.Add("showlocalpatientid", "true")
+		}
+	}
+
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s", id), q, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+
 type ListPatientsOptions struct {
 	FirstName    string
 	LastName     string
