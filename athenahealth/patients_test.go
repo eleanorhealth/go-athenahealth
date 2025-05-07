@@ -43,9 +43,31 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 		ShowAllPatientDepartmentStatus: true,
 	}
 	patient, err := athenaClient.GetPatient(context.Background(), id, opts)
+	assert.NoError(err)
 
 	assert.NotNil(patient)
+	assert.Equal("1", patient.PatientID)
+}
+
+func TestHTTPClient_GetPatients(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		b, _ := os.ReadFile("./resources/GetPatient.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	id := "1"
+	opts := &GetPatientOptions{}
+	patients, err := athenaClient.GetPatients(context.Background(), id, opts)
 	assert.NoError(err)
+
+	assert.Len(patients, 2)
+	assert.Equal("1", patients[0].PatientID)
+	assert.Equal("2", patients[1].PatientID)
 }
 
 func TestHTTPClient_ListPatients(t *testing.T) {
