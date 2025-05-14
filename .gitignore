@@ -1,5 +1,4 @@
 .env
-playground/
-playground.go
+playground/*
 
 .idea

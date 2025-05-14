@@ -21,6 +21,9 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 		assert.Equal("true", r.URL.Query().Get("showinsurance"))
 		assert.Equal("true", r.URL.Query().Get("showportalstatus"))
 		assert.Equal("true", r.URL.Query().Get("showlocalpatientid"))
+		assert.Equal("true", r.URL.Query().Get("limitlocalpatientid"))
+		assert.Equal("23", r.URL.Query().Get("departmentid"))
+		assert.Equal("true", r.URL.Query().Get("showallpatientdepartmentstatus"))
 
 		b, _ := os.ReadFile("./resources/GetPatient.json")
 		w.Write(b)
@@ -31,15 +34,40 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 
 	id := "1"
 	opts := &GetPatientOptions{
-		ShowCustomFields:   true,
-		ShowInsurance:      true,
-		ShowPortalStatus:   true,
-		ShowLocalPatientID: true,
+		ShowCustomFields:               true,
+		ShowInsurance:                  true,
+		ShowPortalStatus:               true,
+		ShowLocalPatientID:             true,
+		DepartmentID:                   23,
+		LimitLocalPatientID:            true,
+		ShowAllPatientDepartmentStatus: true,
 	}
 	patient, err := athenaClient.GetPatient(context.Background(), id, opts)
+	assert.NoError(err)
 
 	assert.NotNil(patient)
+	assert.Equal("1", patient.PatientID)
+}
+
+func TestHTTPClient_GetPatients(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		b, _ := os.ReadFile("./resources/GetPatient.json")
+		w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	id := "1"
+	opts := &GetPatientOptions{}
+	patients, err := athenaClient.GetPatients(context.Background(), id, opts)
 	assert.NoError(err)
+
+	assert.Len(patients, 2)
+	assert.Equal("1", patients[0].PatientID)
+	assert.Equal("2", patients[1].PatientID)
 }
 
 func TestHTTPClient_ListPatients(t *testing.T) {

@@ -16,18 +16,14 @@ import (
 
 // Patient represents a patient in athenahealth.
 type Patient struct {
-	Address1               string `json:"address1"`
-	Address2               string `json:"address2"`
-	AgriculturalWorker     string `json:"agriculturalworker"`
-	AgriculturalWorkerType string `json:"agriculturalworkertype"`
-	AltFirstName           string `json:"altfirstname"`
-	AssignedSexAtBirth     string `json:"assignedsexatbirth"`
-	Balances               []struct {
-		Balance         NumberString `json:"balance"`
-		DepartmentList  string       `json:"departmentlist"`
-		ProviderGroupID int          `json:"providergroupid"`
-		CleanBalance    bool         `json:"cleanbalance"`
-	} `json:"balances"`
+	Address1                           string             `json:"address1"`
+	Address2                           string             `json:"address2"`
+	AgriculturalWorker                 string             `json:"agriculturalworker"`
+	AgriculturalWorkerType             string             `json:"agriculturalworkertype"`
+	AllPatientStatuses                 []PatientStatus    `json:"allpatientstatuses"`
+	AltFirstName                       string             `json:"altfirstname"`
+	AssignedSexAtBirth                 string             `json:"assignedsexatbirth"`
+	Balances                           []PatientBalance   `json:"balances"`
 	CareSummaryDeliveryPreference      string             `json:"caresummarydeliverypreference"`
 	City                               string             `json:"city"`
 	ConfidentialityCode                string             `json:"confidentialitycode"`
@@ -167,6 +163,19 @@ type Patient struct {
 	Zip                                string             `json:"zip"`
 }
 
+type PatientStatus struct {
+	Status            string       `json:"status"`
+	DepartmentID      int          `json:"departmentid"`
+	PrimaryProviderID NumberString `json:"primaryproviderid"`
+}
+
+type PatientBalance struct {
+	Balance         NumberString `json:"balance"`
+	DepartmentList  string       `json:"departmentlist"`
+	ProviderGroupID int          `json:"providergroupid"`
+	CleanBalance    bool         `json:"cleanbalance"`
+}
+
 type Insurance struct {
 	EligibilityLastChecked              string `json:"eligibilitylastchecked"`
 	EligibilityReason                   string `json:"eligibilityreason"`
@@ -224,21 +233,22 @@ type PortalStatus struct {
 }
 
 type GetPatientOptions struct {
-	ShowCustomFields   bool
-	ShowInsurance      bool
-	ShowPortalStatus   bool
-	ShowLocalPatientID bool
+	ShowCustomFields               bool
+	ShowInsurance                  bool
+	ShowPortalStatus               bool
+	ShowLocalPatientID             bool
+	DepartmentID                   int
+	LimitLocalPatientID            bool
+	ShowAllPatientDepartmentStatus bool
 }
 
-// GetPatient - Get data for specific patient
+// GetPatient - Get data for specific patient, only looks at first returned patient.
 //
 // GET /v1/{practiceid}/patients/{patientid}
 //
 // https://docs.athenahealth.com/api/api-ref/patient#Get-specific-patient-record
 func (h *HTTPClient) GetPatient(ctx context.Context, id string, opts *GetPatientOptions) (*Patient, error) {
-	out := []*Patient{}
-
-	q := url.Values{}
+	out, q := []*Patient{}, url.Values{}
 
 	if opts != nil {
 		if opts.ShowCustomFields {
@@ -256,6 +266,18 @@ func (h *HTTPClient) GetPatient(ctx context.Context, id string, opts *GetPatient
 		if opts.ShowLocalPatientID {
 			q.Add("showlocalpatientid", "true")
 		}
+
+		if opts.DepartmentID != 0 {
+			q.Add("departmentid", fmt.Sprintf("%d", opts.DepartmentID))
+		}
+
+		if opts.LimitLocalPatientID {
+			q.Add("limitlocalpatientid", "true")
+		}
+
+		if opts.ShowAllPatientDepartmentStatus {
+			q.Add("showallpatientdepartmentstatus", "true")
+		}
 	}
 
 	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s", id), q, &out)
@@ -268,6 +290,52 @@ func (h *HTTPClient) GetPatient(ctx context.Context, id string, opts *GetPatient
 	}
 
 	return out[0], nil
+}
+
+// GetPatients - Get data for specific patient
+//
+// GET /v1/{practiceid}/patients/{patientid}
+//
+// https://docs.athenahealth.com/api/api-ref/patient#Get-specific-patient-record
+func (h *HTTPClient) GetPatients(ctx context.Context, id string, opts *GetPatientOptions) ([]*Patient, error) {
+	out, q := []*Patient{}, url.Values{}
+
+	if opts != nil {
+		if opts.ShowCustomFields {
+			q.Add("showcustomfields", "true")
+		}
+
+		if opts.ShowInsurance {
+			q.Add("showinsurance", "true")
+		}
+
+		if opts.ShowPortalStatus {
+			q.Add("showportalstatus", "true")
+		}
+
+		if opts.ShowLocalPatientID {
+			q.Add("showlocalpatientid", "true")
+		}
+
+		if opts.DepartmentID != 0 {
+			q.Add("departmentid", fmt.Sprintf("%d", opts.DepartmentID))
+		}
+
+		if opts.LimitLocalPatientID {
+			q.Add("limitlocalpatientid", "true")
+		}
+
+		if opts.ShowAllPatientDepartmentStatus {
+			q.Add("showallpatientdepartmentstatus", "true")
+		}
+	}
+
+	_, err := h.Get(ctx, fmt.Sprintf("/patients/%s", id), q, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
 }
 
 type ListPatientsOptions struct {
