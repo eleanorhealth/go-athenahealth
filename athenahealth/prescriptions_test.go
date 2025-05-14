@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -38,28 +39,59 @@ func TestHTTPClient_ListChangedPrescriptions(t *testing.T) {
 	assert.Len(prescriptions, res.Pagination.TotalCount)
 }
 
-func TestHTTPClient_UpdatePrescription(t *testing.T) {
+func TestHTTPClient_UpdatePrescriptionActionNote(t *testing.T) {
 	assert := assert.New(t)
 
-	prescriptionID := "12345"
-	opts := &UpdatePrescriptionOptions{
-		PatientID: 67890,
-		DocumentID: 12345,
-		ActionNote: "test",
-	}
+	departmentID := 1
+	patientID := 67890
+	documentID := 12345
+	actionNote := "test"
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.NoError(r.ParseForm())
-		assert.Equal(r.Form.Get("providerid"), opts.ProviderID)
-		assert.Equal(r.Form.Get("status"), opts.Status)
+		assert.Equal(strconv.Itoa(departmentID), r.Form.Get("departmentid"))
+		assert.Equal(actionNote, r.Form.Get("actionnote"))
 
-		b, _ := os.ReadFile("./resources/UpdatePrescription.json")
-		w.Write(b)
+		// Extract patientID and documentID from the URL path
+		// Path: /patients/{patientid}/documents/prescriptions/{documentid}
+		var gotPatientID, gotDocumentID int
+		_, err := fmt.Sscanf(r.URL.Path, "/patients/%d/documents/prescriptions/%d", &gotPatientID, &gotDocumentID)
+		assert.NoError(err)
+		assert.Equal(patientID, gotPatientID)
+		assert.Equal(documentID, gotDocumentID)
+
+		// Write a minimal valid JSON response directly
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`{"success": true}`))
 	}
 
 	athenaClient, ts := testClient(h)
 	defer ts.Close()
 
-	err := athenaClient.UpdatePrescription(context.Background(), prescriptionID, opts)
+	res, err := athenaClient.UpdatePrescriptionActionNote(context.Background(), departmentID, patientID, documentID, actionNote)
 	assert.NoError(err)
+	assert.True(res.Success)
+}
+
+func TestHTTPClient_UpdatePrescriptionActionNote_Error(t *testing.T) {
+	assert := assert.New(t)
+
+	departmentID := 1
+	patientID := 67890
+	documentID := 12345
+	actionNote := "test"
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	res, err := athenaClient.UpdatePrescriptionActionNote(context.Background(), departmentID, patientID, documentID, actionNote)
+	assert.Error(err)
+	assert.False(res.Success)
+	assert.NotNil(res.ErrorMessage)
+	assert.Contains(*res.ErrorMessage, "Bad Request")
 }
