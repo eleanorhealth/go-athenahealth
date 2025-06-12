@@ -841,3 +841,62 @@ func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID int, opts
 
 	return out[0], nil
 }
+
+var (
+	ErrAppointmentSlotAlreadyFrozen   = errors.New("already frozen")
+	ErrAppointmentSlotAlreadyUnfrozen = errors.New("already unfrozen")
+)
+
+type FreezeOrUnfreezeAppointmentSlotOptions struct {
+	RequiresCancellation bool
+}
+
+func (h *HTTPClient) freezeOrUnfreezeAppointmentSlot(ctx context.Context, apptID int, freeze bool, opts *FreezeOrUnfreezeAppointmentSlotOptions) error {
+	type freezeOrUnfreezeAppointmentSlotResponse struct {
+		ErrorMessage string `json:"errormessage"`
+		Success      bool   `json:"success"`
+	}
+
+	q, out := url.Values{}, &freezeOrUnfreezeAppointmentSlotResponse{}
+
+	q.Set("freeze", strconv.FormatBool(freeze))
+
+	if opts != nil {
+		if opts.RequiresCancellation {
+			q.Set("requirescancellation", strconv.FormatBool(opts.RequiresCancellation))
+		}
+	}
+
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%d/freeze", apptID), q, out)
+	if err != nil {
+		return err
+	}
+
+	if !out.Success {
+		if strings.Contains(out.ErrorMessage, "already frozen") {
+			return ErrAppointmentSlotAlreadyFrozen
+		}
+
+		if strings.Contains(out.ErrorMessage, "already unfrozen") {
+			return ErrAppointmentSlotAlreadyUnfrozen
+		}
+
+		return errors.New(out.ErrorMessage)
+	}
+
+	return nil
+}
+
+// FreezeAppointmentSlot - Freeze an existing appointment
+// PUT /v1/{practiceid}/appointments/{appointmentid}/freeze
+// https://docs.athenahealth.com/api/api-ref/appointment-slot#Freeze-appointment-slot
+func (h *HTTPClient) FreezeAppointmentSlot(ctx context.Context, appointmentID int, opts *FreezeOrUnfreezeAppointmentSlotOptions) error {
+	return h.freezeOrUnfreezeAppointmentSlot(ctx, appointmentID, true, opts)
+}
+
+// UnfreezeAppointmentSlot - Unfreeze an existing appointment
+// PUT /v1/{practiceid}/appointments/{appointmentid}/freeze
+// https://docs.athenahealth.com/api/api-ref/appointment-slot#Freeze-appointment-slot
+func (h *HTTPClient) UnfreezeAppointmentSlot(ctx context.Context, appointmentID int, opts *FreezeOrUnfreezeAppointmentSlotOptions) error {
+	return h.freezeOrUnfreezeAppointmentSlot(ctx, appointmentID, false, opts)
+}
