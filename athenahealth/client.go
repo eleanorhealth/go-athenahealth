@@ -88,6 +88,8 @@ type Client interface {
 	CreateAppointmentSlot(ctx context.Context, opts *CreateAppointmentSlotOptions) (*CreateAppointmentSlotResult, error)
 	CreateAppointmentType(ctx context.Context, options *CreateAppointmentTypeOptions) (*CreateAppointmentTypeResult, error)
 	ListAppointmentCustomFields(context.Context) ([]*AppointmentCustomField, error)
+	FreezeAppointmentSlot(ctx context.Context, appointmentID int, opts *FreezeOrUnfreezeAppointmentSlotOptions) error
+	UnfreezeAppointmentSlot(ctx context.Context, appointmentID int, opts *FreezeOrUnfreezeAppointmentSlotOptions) error
 
 	// Appointment Check-In
 	AppointmentCancelCheckIn(ctx context.Context, apptID string) error
