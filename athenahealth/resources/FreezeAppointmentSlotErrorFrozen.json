@@ -1,0 +1,6 @@
+[
+  {
+    "success": false,
+    "errormessage": "Appointment is already frozen."
+  }
+]
