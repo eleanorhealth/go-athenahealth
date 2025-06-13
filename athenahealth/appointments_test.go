@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -429,4 +430,77 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 	assert.Equal("true", rescheduleAppointmentResult.UrgentYN)
 	assert.Len(rescheduleAppointmentResult.UseExpectedProcedureCodes, 1)
 	assert.Equal("V12345", rescheduleAppointmentResult.VisitID)
+}
+
+func TestHTTPClient_FreezeAppointmentSlot(t *testing.T) {
+	assert := assert.New(t)
+
+	type testCase struct {
+		Msg      string
+		Freeze   bool
+		Resource string
+		Error    error
+	}
+
+	cases := []testCase{
+		{
+			Msg:      "Freeze appointment slot",
+			Freeze:   true,
+			Resource: "./resources/FreezeAppointmentSlotOk.json",
+			Error:    nil,
+		},
+		{
+			Msg:      "Unfreeze appointment slot",
+			Freeze:   false,
+			Resource: "./resources/FreezeAppointmentSlotOk.json",
+			Error:    nil,
+		},
+		{
+			Msg:      "Freeze appointment slot error other",
+			Freeze:   true,
+			Resource: "./resources/FreezeAppointmentSlotError.json",
+			Error:    errors.New("oops"),
+		},
+		{
+			Msg:      "freeze appointment slot error ErrAppointmentSlotAlreadyFrozen",
+			Freeze:   false,
+			Resource: "./resources/FreezeAppointmentSlotErrorFrozen.json",
+			Error:    ErrAppointmentSlotAlreadyFrozen,
+		},
+	}
+
+	apptID, opts := "1230322", &FreezeOrUnfreezeAppointmentSlotOptions{
+		RequiresCancellation: true,
+	}
+
+	for _, testCase := range cases {
+		h := func(w http.ResponseWriter, r *http.Request) {
+			assert.NoError(r.ParseForm())
+
+			assert.Equal(r.Form.Get("requirescancellation"), strconv.FormatBool(opts.RequiresCancellation))
+			assert.Equal(r.Form.Get("freeze"), strconv.FormatBool(testCase.Freeze), testCase.Msg)
+
+			assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/%s/freeze", apptID))
+
+			b, _ := os.ReadFile(testCase.Resource)
+			w.Write(b)
+		}
+
+		athenaClient, ts := testClient(h)
+		defer ts.Close()
+
+		var err error
+
+		if testCase.Freeze {
+			err = athenaClient.FreezeAppointmentSlot(context.Background(), apptID, opts)
+		} else {
+			err = athenaClient.UnfreezeAppointmentSlot(context.Background(), apptID, opts)
+		}
+
+		if testCase.Error != nil {
+			assert.ErrorContains(err, testCase.Error.Error(), testCase.Msg)
+		} else {
+			assert.NoError(err, testCase.Msg)
+		}
+	}
 }
