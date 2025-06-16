@@ -1,6 +1,4 @@
-[
-  {
-    "success": false,
-    "errormessage": "oops"
-  }
-]
+{
+  "success": false,
+  "errormessage": "oops"
+}
