@@ -857,7 +857,7 @@ func (h *HTTPClient) freezeOrUnfreezeAppointmentSlot(ctx context.Context, appoin
 		Success      bool   `json:"success"`
 	}
 
-	q, out := url.Values{}, []freezeOrUnfreezeAppointmentSlotResponse{}
+	q, out := url.Values{}, freezeOrUnfreezeAppointmentSlotResponse{}
 
 	q.Set("freeze", strconv.FormatBool(freeze))
 
@@ -872,16 +872,16 @@ func (h *HTTPClient) freezeOrUnfreezeAppointmentSlot(ctx context.Context, appoin
 		return err
 	}
 
-	if !out[0].Success {
-		if strings.Contains(out[0].ErrorMessage, "already frozen") {
+	if !out.Success {
+		if strings.Contains(out.ErrorMessage, "already frozen") {
 			return ErrAppointmentSlotAlreadyFrozen
 		}
 
-		if strings.Contains(out[0].ErrorMessage, "already unfrozen") {
+		if strings.Contains(out.ErrorMessage, "already unfrozen") {
 			return ErrAppointmentSlotAlreadyUnfrozen
 		}
 
-		return errors.New(out[0].ErrorMessage)
+		return errors.New(out.ErrorMessage)
 	}
 
 	return nil
