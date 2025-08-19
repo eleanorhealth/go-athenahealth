@@ -618,7 +618,7 @@ type BookAppointmentOptions struct {
 // PUT /v1/{practiceid}/appointments/{appointmentid}
 //
 // https://docs.athenahealth.com/api/api-ref/appointment#Book-appointment
-func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID string, opts *BookAppointmentOptions) (*BookedAppointment, error) {
+func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, appointmentID string, opts *BookAppointmentOptions) (*BookedAppointment, error) {
 	var out []*BookedAppointment
 
 	form := url.Values{}
@@ -659,7 +659,7 @@ func (h *HTTPClient) BookAppointment(ctx context.Context, patientID, apptID stri
 		}
 	}
 
-	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%s", apptID), form, &out)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%s", appointmentID), form, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -689,7 +689,7 @@ var updateBookedApptSuccess = "1"
 // UpdateBookedAppointment
 // PUT /v1/{practiceid}/appointments/booked/{appointmentid}
 // https://docs.athenahealth.com/api/api-ref/appointment-booked#Appointment-Booked
-func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) error {
+func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, appointmentID string, opts *UpdateBookedAppointmentOptions) error {
 	form := url.Values{}
 
 	if opts.AppointmentTypeID != nil {
@@ -709,7 +709,7 @@ func (h *HTTPClient) UpdateBookedAppointment(ctx context.Context, apptID string,
 	}
 
 	var statusRes NumberString
-	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/booked/%s", apptID), form, &statusRes)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/booked/%s", appointmentID), form, &statusRes)
 	if err != nil {
 		return err
 	}
@@ -803,7 +803,7 @@ type RescheduleAppointmentOptions struct {
 // RescheduleAppointment - Reschedule an existing appointment
 // PUT /v1/{practiceid}/appointments/{appointmentid}/reschedule
 // https://docs.athenahealth.com/api/api-ref/appointment#Reschedule-appointment
-func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID int, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error) {
+func (h *HTTPClient) RescheduleAppointment(ctx context.Context, appointmentID int, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error) {
 	var out []*RescheduleAppointmentResult
 
 	q := url.Values{}
@@ -833,11 +833,70 @@ func (h *HTTPClient) RescheduleAppointment(ctx context.Context, apptID int, opts
 		}
 	}
 
-	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%d/reschedule", apptID), q, &out)
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%d/reschedule", appointmentID), q, &out)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return out[0], nil
+}
+
+var (
+	ErrAppointmentSlotAlreadyFrozen   = errors.New("already frozen")
+	ErrAppointmentSlotAlreadyUnfrozen = errors.New("already unfrozen")
+)
+
+type FreezeOrUnfreezeAppointmentSlotOptions struct {
+	RequiresCancellation bool
+}
+
+func (h *HTTPClient) freezeOrUnfreezeAppointmentSlot(ctx context.Context, appointmentID string, freeze bool, opts *FreezeOrUnfreezeAppointmentSlotOptions) error {
+	type freezeOrUnfreezeAppointmentSlotResponse struct {
+		ErrorMessage string `json:"errormessage"`
+		Success      bool   `json:"success"`
+	}
+
+	q, out := url.Values{}, freezeOrUnfreezeAppointmentSlotResponse{}
+
+	q.Set("freeze", strconv.FormatBool(freeze))
+
+	if opts != nil {
+		if opts.RequiresCancellation {
+			q.Set("requirescancellation", strconv.FormatBool(opts.RequiresCancellation))
+		}
+	}
+
+	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%s/freeze", appointmentID), q, &out)
+	if err != nil {
+		return err
+	}
+
+	if !out.Success {
+		if strings.Contains(out.ErrorMessage, "already frozen") {
+			return ErrAppointmentSlotAlreadyFrozen
+		}
+
+		if strings.Contains(out.ErrorMessage, "already unfrozen") {
+			return ErrAppointmentSlotAlreadyUnfrozen
+		}
+
+		return errors.New(out.ErrorMessage)
+	}
+
+	return nil
+}
+
+// FreezeAppointmentSlot - Freeze an existing appointment
+// PUT /v1/{practiceid}/appointments/{appointmentid}/freeze
+// https://docs.athenahealth.com/api/api-ref/appointment-slot#Freeze-appointment-slot
+func (h *HTTPClient) FreezeAppointmentSlot(ctx context.Context, appointmentID string, opts *FreezeOrUnfreezeAppointmentSlotOptions) error {
+	return h.freezeOrUnfreezeAppointmentSlot(ctx, appointmentID, true, opts)
+}
+
+// UnfreezeAppointmentSlot - Unfreeze an existing appointment
+// PUT /v1/{practiceid}/appointments/{appointmentid}/freeze
+// https://docs.athenahealth.com/api/api-ref/appointment-slot#Freeze-appointment-slot
+func (h *HTTPClient) UnfreezeAppointmentSlot(ctx context.Context, appointmentID string, opts *FreezeOrUnfreezeAppointmentSlotOptions) error {
+	return h.freezeOrUnfreezeAppointmentSlot(ctx, appointmentID, false, opts)
 }
