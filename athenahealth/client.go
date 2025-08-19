@@ -125,7 +125,7 @@ type Client interface {
 	ListChangedPrescriptions(ctx context.Context, options *ListChangedPrescriptionsOptions) (*ListChangedPrescriptionsResult, error)
 
 	// Prescriptions
-	UpdatePrescriptionActionNote(ctx context.Context, departmentID int, patientID int, documentID int, actionNote string) (*UpdatePrescriptionResult, error)
+	UpdatePrescription(ctx context.Context, departmentID int, patientID int, documentID int, opts *UpdatePrescriptionOptions) (*UpdatePrescriptionResult, error)
 
 	// Claims
 	CreateFinancialClaim(ctx context.Context, opts *CreateClaimOptions) ([]string, error)

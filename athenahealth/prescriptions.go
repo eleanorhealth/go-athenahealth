@@ -95,29 +95,52 @@ func (h *HTTPClient) ListChangedPrescriptions(ctx context.Context, opts *ListCha
 }
 
 type UpdatePrescriptionOptions struct {
-	DocumentID int `json:"documentid"`
-	PatientID  int    `json:"patientid"`
-	ActionNote string `json:"actionnote"`
+	DepartmentID int     `json:"departmentid"`
+	DocumentID   int     `json:"documentid"`
+	PatientID    int     `json:"patientid"`
+	ActionNote   *string `json:"actionnote"`
+	AssignedTo   *string `json:"assignedto"`
+	InternalNote *string `json:"internalnote"`
+	Note         *string `json:"note"`
+	PinToTop     *bool   `json:"pintotop"`
 }
 
 type UpdatePrescriptionResult struct {
 	ErrorMessage *string `json:"errormessage,omitempty"`
-	Success      bool   `json:"success"`
+	Success      bool    `json:"success"`
 }
 
-// ListChangedPrescriptions - List of changes in prescriptions based on subscribed events
+// UpdatePrescription - Update a prescription
 //
-// GET /v1/{practiceid}/prescriptions/changed
+//	/v1/{practiceid}/patients/{patientid}/documents/prescriptions/{prescriptionid}
 //
-// https://docs.athenahealth.com/api/api-ref/document-type-prescription#Get-list-of-changes-in-prescriptions
-func (h *HTTPClient) UpdatePrescriptionActionNote(ctx context.Context, departmentID int, patientID int, documentID int, actionNote string) (*UpdatePrescriptionResult, error) {
-	q := url.Values{}
-	q.Add("actionnote", actionNote)
-	q.Add("departmentid", strconv.Itoa(departmentID))
+// https://docs.athenahealth.com/api/api-ref/document-type-prescription#Update-specific-prescription-document-for-given-patient
+func (h *HTTPClient) UpdatePrescription(ctx context.Context, departmentID int, patientID int, documentID int, opts *UpdatePrescriptionOptions) (*UpdatePrescriptionResult, error) {
+	out := &UpdatePrescriptionResult{}
 
-	out := &listChangedPrescriptionsResponse{}
+	form := url.Values{}
 
-	if _, err := h.PutForm(ctx, fmt.Sprintf("/patients/%v/documents/prescriptions/%v", patientID, documentID), q, &out); err != nil {
+	form.Add("departmentid", strconv.Itoa(departmentID))
+
+	if opts != nil {
+		if opts.ActionNote != nil {
+			form.Add("actionnote", *opts.ActionNote)
+		}
+		if opts.AssignedTo != nil {
+			form.Add("assignedto", *opts.AssignedTo)
+		}
+		if opts.InternalNote != nil {
+			form.Add("internalnote", *opts.InternalNote)
+		}
+		if opts.Note != nil {
+			form.Add("note", *opts.Note)
+		}
+		if opts.PinToTop != nil {
+			form.Add("pintotop", strconv.FormatBool(*opts.PinToTop))
+		}
+	}
+
+	if _, err := h.PutForm(ctx, fmt.Sprintf("/patients/%v/documents/prescriptions/%v", patientID, documentID), form, out); err != nil {
 		errMsg := err.Error()
 		return &UpdatePrescriptionResult{
 			Success:      false,
@@ -125,7 +148,12 @@ func (h *HTTPClient) UpdatePrescriptionActionNote(ctx context.Context, departmen
 		}, err
 	}
 
-	return &UpdatePrescriptionResult{
-		Success:      true,
-	}, nil
+	if !out.Success {
+		if out.ErrorMessage != nil && *out.ErrorMessage != "" {
+			return out, fmt.Errorf(*out.ErrorMessage)
+		}
+		return out, fmt.Errorf("unexpected response from athena")
+	}
+
+	return out, nil
 }
