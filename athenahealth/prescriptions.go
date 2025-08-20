@@ -140,7 +140,7 @@ func (h *HTTPClient) UpdatePrescription(ctx context.Context, departmentID int, p
 		}
 	}
 
-	if _, err := h.PutForm(ctx, fmt.Sprintf("/patients/%v/documents/prescriptions/%v", patientID, documentID), form, out); err != nil {
+	if _, err := h.PutForm(ctx, fmt.Sprintf("/patients/%d/documents/prescriptions/%d", patientID, documentID), form, out); err != nil {
 		errMsg := err.Error()
 		return &UpdatePrescriptionResult{
 			Success:      false,
