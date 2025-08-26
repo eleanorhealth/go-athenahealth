@@ -30,33 +30,34 @@ func (h *HTTPClient) DepartmentGetRequiredCheckInFields(ctx context.Context, dep
 }
 
 type Department struct {
-	MedicationHistoryConsent bool   `json:"medicationhistoryconsent"`
-	TimeZoneOffset           int    `json:"timezoneoffset"`
-	IsHospitalDepartment     bool   `json:"ishospitaldepartment"`
-	ProviderGroupID          string `json:"providergroupid"`
-	State                    string `json:"state"`
-	PortalURL                string `json:"portalurl"`
-	City                     string `json:"city"`
-	ClinicalProviderFax      string `json:"clincalproviderfax"`
-	PlaceOfServiceFacility   bool   `json:"placeofservicefacility"`
-	ServiceDepartment        bool   `json:"servicedepartment"`
-	ProviderGroupName        string `json:"providergroupname"`
-	DoesNotObserveDST        bool   `json:"doesnotobservedst"`
-	DepartmentID             string `json:"departmentid"`
-	Fax                      string `json:"fax"`
-	Address                  string `json:"address"`
-	PlaceOfServiceTypeID     string `json:"placeofservicetypeid"`
-	Clinicals                string `json:"clinicals"`
-	TimeZone                 int    `json:"timezone"`
-	PatientDepartmentName    string `json:"patientdepartmentname"`
-	ChartSharingGroupID      string `json:"chartsharinggroupid"`
-	Name                     string `json:"name"`
-	PlaceOfServiceTypeName   string `json:"placeofservicetypename"`
-	Phone                    string `json:"phone"`
-	Address2                 string `json:"address2"`
-	Zip                      string `json:"zip"`
-	TimeZoneName             string `json:"timezonename"`
-	CommunicatorBrandID      string `json:"communicatorbrandid"`
+	MedicationHistoryConsent bool     `json:"medicationhistoryconsent"`
+	TimeZoneOffset           int      `json:"timezoneoffset"`
+	IsHospitalDepartment     bool     `json:"ishospitaldepartment"`
+	ProviderGroupID          string   `json:"providergroupid"`
+	State                    string   `json:"state"`
+	PortalURL                string   `json:"portalurl"`
+	City                     string   `json:"city"`
+	ClinicalProviderFax      string   `json:"clincalproviderfax"`
+	PlaceOfServiceFacility   bool     `json:"placeofservicefacility"`
+	ServiceDepartment        bool     `json:"servicedepartment"`
+	ProviderGroupName        string   `json:"providergroupname"`
+	ProviderList             []string `json:"providerlist"`
+	DoesNotObserveDST        bool     `json:"doesnotobservedst"`
+	DepartmentID             string   `json:"departmentid"`
+	Fax                      string   `json:"fax"`
+	Address                  string   `json:"address"`
+	PlaceOfServiceTypeID     string   `json:"placeofservicetypeid"`
+	Clinicals                string   `json:"clinicals"`
+	TimeZone                 int      `json:"timezone"`
+	PatientDepartmentName    string   `json:"patientdepartmentname"`
+	ChartSharingGroupID      string   `json:"chartsharinggroupid"`
+	Name                     string   `json:"name"`
+	PlaceOfServiceTypeName   string   `json:"placeofservicetypename"`
+	Phone                    string   `json:"phone"`
+	Address2                 string   `json:"address2"`
+	Zip                      string   `json:"zip"`
+	TimeZoneName             string   `json:"timezonename"`
+	CommunicatorBrandID      string   `json:"communicatorbrandid"`
 }
 
 // GetDepartment - Details about a single department
