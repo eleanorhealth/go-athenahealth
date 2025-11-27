@@ -170,6 +170,16 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 	if headers != nil {
 		req.Header = headers
+
+		// Go's http lib honors Content-Length on the Request struct above the header
+		if cl := req.Header.Get("Content-Length"); len(cl) > 0 {
+			cli, err := strconv.ParseInt(cl, 10, 64)
+			if err != nil {
+				return nil, fmt.Errorf("invalid Content-Length header: %s", err)
+			}
+
+			req.ContentLength = cli
+		}
 	}
 
 	xRequestID := uuid.NewString()
@@ -177,11 +187,6 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	req.Header.Add("User-Agent", userAgent)
 	req.Header.Set(XRequestIDHeaderKey, xRequestID)
-
-	var requestBodyLength int64
-	if srBody, ok := body.(*sizeRecordingReader); ok {
-		requestBodyLength = srBody.size
-	}
 
 	h.logger.Info().
 		Str("method", method).
@@ -196,6 +201,11 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		return res, err
 	}
 	defer res.Body.Close()
+
+	var requestBodyLength int64
+	if srBody, ok := body.(*sizeRecordingReader); ok {
+		requestBodyLength = srBody.size
+	}
 
 	requestDuration := time.Since(requestStart)
 
@@ -348,8 +358,11 @@ func (h *HTTPClient) PostForm(ctx context.Context, path string, v url.Values, ou
 	var headers = http.Header{}
 
 	if v != nil {
-		body = strings.NewReader(v.Encode())
+		r := strings.NewReader(v.Encode())
+		body = r
+
 		headers.Set("Content-Type", "application/x-www-form-urlencoded")
+		headers.Set("Content-Length", strconv.Itoa(r.Len()))
 	}
 
 	return h.request(ctx, http.MethodPost, path, body, headers, out)
