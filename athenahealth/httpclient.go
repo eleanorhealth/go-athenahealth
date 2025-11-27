@@ -173,12 +173,12 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 
 		// Go's http lib honors Content-Length on the Request struct above the header
 		if cl := req.Header.Get("Content-Length"); len(cl) > 0 {
-			cli, err := strconv.ParseInt(cl, 10, 64)
+			parsed, err := strconv.ParseInt(cl, 10, 64)
 			if err != nil {
 				return nil, fmt.Errorf("invalid Content-Length header: %s", err)
 			}
 
-			req.ContentLength = cli
+			req.ContentLength = parsed
 		}
 	}
 

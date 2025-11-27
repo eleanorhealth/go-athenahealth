@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
@@ -144,7 +145,7 @@ func NewObservationDate(t time.Time) *observationDateTime {
 	return &observationDateTime{t, false}
 }
 
-type AddLabResultDocumentOptions struct {
+type AddLabResultDocumentReaderOptions struct {
 	// AttachmentContents must be Base64 encoded
 	AttachmentContents  io.Reader
 	AttachmentType      LabResultAttachmentType
@@ -166,12 +167,13 @@ type addLabResultDocumentResponse struct {
 	Success      bool   `json:"success"`
 }
 
-// AddLabResultDocument creates a lab result document record of a specific patient
+// AddLabResultDocumentReader creates a lab result document record of a specific patient
+// An io.Reader is used for AttachmentContents
 //
 // POST /v1/{practiceid}/patients/{patientid}/documents/labresult
 //
 // https://docs.athenahealth.com/api/api-ref/document-type-lab-result#Add-lab-result-document-to-patient's-chart
-func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID string, departmentID string, opts *AddLabResultDocumentOptions) (int, error) {
+func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID string, departmentID string, opts *AddLabResultDocumentReaderOptions) (int, error) {
 	var requiredParamErrors []error
 	if len(patientID) == 0 {
 		requiredParamErrors = append(requiredParamErrors, errors.New("patientID is required"))
@@ -226,6 +228,91 @@ func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID s
 	out := &addLabResultDocumentResponse{}
 
 	_, err := h.PostFormReader(ctx, fmt.Sprintf("patients/%s/documents/labresult", patientID), form, out)
+	if err != nil {
+		return 0, err
+	}
+
+	if !out.Success {
+		return 0, errors.New(out.ErrorMessage)
+	}
+
+	return out.LabResultID, nil
+}
+
+type AddLabResultDocumentOptions struct {
+	AttachmentContents  []byte
+	AttachmentType      LabResultAttachmentType
+	InternalNote        *string
+	NoteToPatient       *string
+	ObservationDateTime *observationDateTime
+	OriginalFilename    *string
+	// 1 = high, 2 = normal
+	Priority    *string
+	ResultNotes *string
+	// Final, Partial, Pending, Preliminary, Corrected, Cancelled
+	ResultStatus *string
+	TieToOrderID *int
+}
+
+// AddLabResultDocument creates a lab result document record of a specific patient
+//
+// POST /v1/{practiceid}/patients/{patientid}/documents/labresult
+//
+// https://docs.athenahealth.com/api/api-ref/document-type-lab-result#Add-lab-result-document-to-patient's-chart
+func (h *HTTPClient) AddLabResultDocument(ctx context.Context, patientID string, departmentID string, opts *AddLabResultDocumentOptions) (int, error) {
+	var requiredParamErrors []error
+	if len(patientID) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("patientID is required"))
+	}
+	if len(departmentID) == 0 {
+		requiredParamErrors = append(requiredParamErrors, errors.New("departmentID is required"))
+	}
+	if len(requiredParamErrors) > 0 {
+		return 0, errors.Join(requiredParamErrors...)
+	}
+
+	form := url.Values{}
+	form.Add("departmentid", departmentID)
+
+	if opts != nil {
+		if opts.AttachmentContents != nil {
+			form.Add("attachmentcontents", base64.StdEncoding.EncodeToString(opts.AttachmentContents))
+		}
+		if len(opts.AttachmentType) > 0 {
+			form.Add("attachmenttype", string(opts.AttachmentType))
+		}
+		if opts.InternalNote != nil {
+			form.Add("internalnote", string(*opts.InternalNote))
+		}
+		if opts.NoteToPatient != nil {
+			form.Add("notetopatient", string(*opts.NoteToPatient))
+		}
+		if opts.ObservationDateTime != nil {
+			form.Add("observationdate", opts.ObservationDateTime.t.Format("01/02/2006"))
+			if opts.ObservationDateTime.includeTime {
+				form.Add("observationtime", opts.ObservationDateTime.t.Format("15:04"))
+			}
+		}
+		if opts.OriginalFilename != nil {
+			form.Add("originalfilename", string(*opts.OriginalFilename))
+		}
+		if opts.Priority != nil {
+			form.Add("priority", string(*opts.Priority))
+		}
+		if opts.ResultNotes != nil {
+			form.Add("resultnotes", string(*opts.ResultNotes))
+		}
+		if opts.ResultStatus != nil {
+			form.Add("resultstatus", string(*opts.ResultStatus))
+		}
+		if opts.TieToOrderID != nil {
+			form.Add("tietoorderid", strconv.Itoa(*opts.TieToOrderID))
+		}
+	}
+
+	out := &addLabResultDocumentResponse{}
+
+	_, err := h.PostForm(ctx, fmt.Sprintf("patients/%s/documents/labresult", patientID), form, out)
 	if err != nil {
 		return 0, err
 	}
