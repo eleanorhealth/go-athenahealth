@@ -130,6 +130,9 @@ type Client interface {
 
 	// Telehealth
 	GetTelehealthInviteURL(ctx context.Context, apptID string) (*GetTelehealthInviteURLResult, error)
+
+	// Referrals
+	ListReferralSources(ctx context.Context) (*ListReferralSourcesResult, error)
 }
 
 type TokenProvider interface {
