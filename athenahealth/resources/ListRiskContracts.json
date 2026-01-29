@@ -1,0 +1,14 @@
+[
+  {
+    "contractname": "Medicare Advantage",
+    "effectivedate": "01/01/2024",
+    "expirationdate": "12/31/2024",
+    "riskcontractid": 123
+  },
+  {
+    "contractname": "Commercial HMO",
+    "effectivedate": "06/01/2024",
+    "expirationdate": "05/31/2025",
+    "riskcontractid": 456
+  }
+]

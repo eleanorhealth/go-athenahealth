@@ -59,6 +59,11 @@ type Client interface {
 	AddPatientDriversLicenseDocument(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentOptions) (*AddPatientDriversLicenseDocumentResult, error)
 	AddPatientDriversLicenseDocumentReader(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentReaderOptions) (*AddPatientDriversLicenseDocumentResult, error)
 
+	// Patient Risk Contracts
+	ListRiskContracts(ctx context.Context, patientID string, opts *ListRiskContractsOptions) ([]*RiskContract, error)
+	CreateRiskContract(ctx context.Context, patientID string, opts *CreateRiskContractOptions) error
+	DeleteRiskContract(ctx context.Context, patientID string, riskContractID int) error
+
 	// Patient Lab Results
 	AddLabResultDocumentReader(ctx context.Context, patientID string, departmentID string, opts *AddLabResultDocumentOptions) (int, error)
 	ListLabResults(ctx context.Context, patientID string, departmentID string, opts *ListLabResultsOptions) (*ListLabResultsResult, error)
