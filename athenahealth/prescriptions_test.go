@@ -94,7 +94,7 @@ func TestHTTPClient_UpdatePrescriptionActionNote_Error(t *testing.T) {
 	assert.Error(err)
 	assert.False(res.Success)
 	assert.NotNil(res.ErrorMessage)
-	assert.Contains(*res.ErrorMessage, "Bad Request")
+	assert.Contains(res.ErrorMessage, "Bad Request")
 }
 
 func TestHTTPClient_UpdatePrescription_OtherFields_Success(t *testing.T) {

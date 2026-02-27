@@ -95,9 +95,6 @@ func (h *HTTPClient) ListChangedPrescriptions(ctx context.Context, opts *ListCha
 }
 
 type UpdatePrescriptionOptions struct {
-	DepartmentID int     `json:"departmentid"`
-	DocumentID   int     `json:"documentid"`
-	PatientID    int     `json:"patientid"`
 	ActionNote   *string `json:"actionnote"`
 	AssignedTo   *string `json:"assignedto"`
 	InternalNote *string `json:"internalnote"`
@@ -106,8 +103,8 @@ type UpdatePrescriptionOptions struct {
 }
 
 type UpdatePrescriptionResult struct {
-	ErrorMessage *string `json:"errormessage,omitempty"`
-	Success      bool    `json:"success"`
+	ErrorMessage string `json:"errormessage"`
+	Success      bool   `json:"success"`
 }
 
 // UpdatePrescription - Update a prescription
@@ -115,7 +112,7 @@ type UpdatePrescriptionResult struct {
 //	/v1/{practiceid}/patients/{patientid}/documents/prescriptions/{prescriptionid}
 //
 // https://docs.athenahealth.com/api/api-ref/document-type-prescription#Update-specific-prescription-document-for-given-patient
-func (h *HTTPClient) UpdatePrescription(ctx context.Context, departmentID int, patientID int, documentID int, opts *UpdatePrescriptionOptions) (*UpdatePrescriptionResult, error) {
+func (h *HTTPClient) UpdatePrescription(ctx context.Context, departmentID int, patientID int, prescriptionID int, opts *UpdatePrescriptionOptions) (*UpdatePrescriptionResult, error) {
 	out := &UpdatePrescriptionResult{}
 
 	form := url.Values{}
@@ -140,18 +137,18 @@ func (h *HTTPClient) UpdatePrescription(ctx context.Context, departmentID int, p
 		}
 	}
 
-	if _, err := h.PutForm(ctx, fmt.Sprintf("/patients/%d/documents/prescriptions/%d", patientID, documentID), form, out); err != nil {
-		errMsg := err.Error()
+	if _, err := h.PutForm(ctx, fmt.Sprintf("/patients/%d/documents/prescriptions/%d", patientID, prescriptionID), form, out); err != nil {
 		return &UpdatePrescriptionResult{
 			Success:      false,
-			ErrorMessage: &errMsg,
+			ErrorMessage: fmt.Errorf("updating prescription: %w", err).Error(),
 		}, err
 	}
 
 	if !out.Success {
-		if out.ErrorMessage != nil && *out.ErrorMessage != "" {
-			return out, fmt.Errorf(*out.ErrorMessage)
+		if out.ErrorMessage != "" {
+			return out, fmt.Errorf("updating prescription: %s", out.ErrorMessage)
 		}
+
 		return out, fmt.Errorf("unexpected response from athena")
 	}
 
