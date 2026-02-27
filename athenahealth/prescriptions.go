@@ -2,6 +2,7 @@ package athenahealth
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
 	"time"
@@ -91,4 +92,65 @@ func (h *HTTPClient) ListChangedPrescriptions(ctx context.Context, opts *ListCha
 		ChangedPrescriptions: out.ChangedPrescriptions,
 		Pagination:           makePaginationResult(out.Next, out.Previous, out.TotalCount),
 	}, nil
+}
+
+type UpdatePrescriptionOptions struct {
+	ActionNote   *string `json:"actionnote"`
+	AssignedTo   *string `json:"assignedto"`
+	InternalNote *string `json:"internalnote"`
+	Note         *string `json:"note"`
+	PinToTop     *bool   `json:"pintotop"`
+}
+
+type UpdatePrescriptionResult struct {
+	ErrorMessage string `json:"errormessage"`
+	Success      bool   `json:"success"`
+}
+
+// UpdatePrescription - Update a prescription
+//
+//	/v1/{practiceid}/patients/{patientid}/documents/prescriptions/{prescriptionid}
+//
+// https://docs.athenahealth.com/api/api-ref/document-type-prescription#Update-specific-prescription-document-for-given-patient
+func (h *HTTPClient) UpdatePrescription(ctx context.Context, departmentID int, patientID int, prescriptionID int, opts *UpdatePrescriptionOptions) (*UpdatePrescriptionResult, error) {
+	out := &UpdatePrescriptionResult{}
+
+	form := url.Values{}
+
+	form.Add("departmentid", strconv.Itoa(departmentID))
+
+	if opts != nil {
+		if opts.ActionNote != nil {
+			form.Add("actionnote", *opts.ActionNote)
+		}
+		if opts.AssignedTo != nil {
+			form.Add("assignedto", *opts.AssignedTo)
+		}
+		if opts.InternalNote != nil {
+			form.Add("internalnote", *opts.InternalNote)
+		}
+		if opts.Note != nil {
+			form.Add("note", *opts.Note)
+		}
+		if opts.PinToTop != nil {
+			form.Add("pintotop", strconv.FormatBool(*opts.PinToTop))
+		}
+	}
+
+	if _, err := h.PutForm(ctx, fmt.Sprintf("/patients/%d/documents/prescriptions/%d", patientID, prescriptionID), form, out); err != nil {
+		return &UpdatePrescriptionResult{
+			Success:      false,
+			ErrorMessage: fmt.Errorf("updating prescription: %w", err).Error(),
+		}, err
+	}
+
+	if !out.Success {
+		if out.ErrorMessage != "" {
+			return out, fmt.Errorf("updating prescription: %s", out.ErrorMessage)
+		}
+
+		return out, fmt.Errorf("unexpected response from athena")
+	}
+
+	return out, nil
 }
