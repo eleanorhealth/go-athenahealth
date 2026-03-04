@@ -283,7 +283,7 @@ type AddClinicalDocumentOptions struct {
 	// Text data stored with document
 	DocumentData *string
 	// Subclasses for CLINICALDOCUMENT documents
-	DocumentSubclass string
+	DocumentSubclass *string
 	// A specific document type identifier.
 	DocumentTypeID *int
 	// Identifier of entity creating the document. entitytype is required while passing entityid.
@@ -341,7 +341,12 @@ func (h *HTTPClient) AddClinicalDocument(ctx context.Context, patientID string, 
 			form.Add("documentdata", *opts.DocumentData)
 		}
 
-		form.Add("documentsubclass", opts.DocumentSubclass)
+		if opts.DocumentSubclass != nil {
+			form.Add("documentsubclass", *opts.DocumentSubclass)
+		} else {
+			// Magic value Athena accepts to not set a clinical document subclass
+			form.Add("documentsubclass", "CLINICALDOCUMENT")
+		}
 
 		if opts.DocumentTypeID != nil {
 			form.Add("documenttypeid", strconv.Itoa(*opts.DocumentTypeID))

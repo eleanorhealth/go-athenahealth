@@ -169,7 +169,7 @@ func TestHTTPClient_AddClinicalDocument(t *testing.T) {
 		AttachmentContents: attachmentContents,
 		AutoClose:          &autoclose,
 		DepartmentID:       deptID,
-		DocumentSubclass:   documentSubclass,
+		DocumentSubclass:   &documentSubclass,
 		InternalNote:       &internalNote,
 		ProviderID:         &providerID,
 		DocumentTypeID:     &documentTypeId,
