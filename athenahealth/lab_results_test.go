@@ -68,7 +68,7 @@ func TestHTTPClient_AddLabResultDocument_required_params_empty(t *testing.T) {
 	defer ts.Close()
 
 	b := bytes.NewReader([]byte(`test bytes`))
-	_, err := athenaClient.AddLabResultDocumentReader(ctx, "", "", &AddLabResultDocumentOptions{
+	_, err := athenaClient.AddLabResultDocumentReader(ctx, "", "", &AddLabResultDocumentReaderOptions{
 		AttachmentContents: b,
 		AttachmentType:     LabResultAttachmentTypeJPG,
 	})
@@ -105,7 +105,7 @@ func TestHTTPClient_AddLabResultDocument(t *testing.T) {
 	defer ts.Close()
 
 	b := bytes.NewReader([]byte(`test bytes`))
-	res, err := athenaClient.AddLabResultDocumentReader(ctx, patientID, departmentID, &AddLabResultDocumentOptions{
+	res, err := athenaClient.AddLabResultDocumentReader(ctx, patientID, departmentID, &AddLabResultDocumentReaderOptions{
 		AttachmentContents:  b,
 		AttachmentType:      LabResultAttachmentTypeJPG,
 		ObservationDateTime: NewObservationDateTime(observedAt),
@@ -144,7 +144,7 @@ func TestHTTPClient_AddLabResultDocument_observation_without_time(t *testing.T) 
 	defer ts.Close()
 
 	b := bytes.NewReader([]byte(`test bytes`))
-	res, err := athenaClient.AddLabResultDocumentReader(ctx, patientID, departmentID, &AddLabResultDocumentOptions{
+	res, err := athenaClient.AddLabResultDocumentReader(ctx, patientID, departmentID, &AddLabResultDocumentReaderOptions{
 		AttachmentContents:  b,
 		AttachmentType:      LabResultAttachmentTypeJPG,
 		ObservationDateTime: NewObservationDate(observedAt),
