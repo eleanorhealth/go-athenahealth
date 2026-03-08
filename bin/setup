@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+shopt -s globstar
+trap 'echo error: line $LINENO >&2' ERR
+# This script runs on local dev machines and agent containers alike.
+# It is idempotent — safe to re-run at any time.
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Install mise if missing, then install Go+Node from .tool-versions and activate shims.
+install_toolchain() {
+  if ! command -v mise &>/dev/null; then
+    curl https://mise.run | sh
+    export PATH="$HOME/.local/bin:$PATH"
+  fi
+  mise install
+  export PATH="$HOME/.local/share/mise/shims:$PATH"
+}
+
+# storage.googleapis.com is unreachable in the Claude Code cloud environment (DNS issue,
+# April 2026). Detect and reroute module downloads through goproxy.io.
+fix_goproxy_if_needed() {
+  if ! curl -s --max-time 3 https://storage.googleapis.com >/dev/null 2>&1; then
+    export GOPROXY="https://goproxy.io,direct"
+    export GONOSUMDB="*"
+    echo "info: storage.googleapis.com unreachable, using GOPROXY=goproxy.io" >&2
+  fi
+}
+
+install_toolchain
+fix_goproxy_if_needed
+
+if ! command -v prettier &>/dev/null; then
+  npm install -g prettier 2>/dev/null || echo "npm: prettier install failed" >&2
+fi
+
+go mod download
