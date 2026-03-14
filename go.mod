@@ -1,6 +1,11 @@
 module github.com/eleanorhealth/go-athenahealth
 
-go 1.22
+go 1.26.2
+
+tool (
+	github.com/golangci/golangci-lint/v2/cmd/golangci-lint
+	mvdan.cc/gofumpt
+)
 
 require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible
@@ -33,5 +38,7 @@ require (
 	github.com/yuin/gopher-lua v1.1.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+	github.com/golangci/golangci-lint/v2 v2.11.4 // indirect
+	mvdan.cc/gofumpt v0.9.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
