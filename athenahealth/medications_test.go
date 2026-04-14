@@ -21,7 +21,7 @@ func TestHTTPClient_ListMedications(t *testing.T) {
 		assert.Equal(MedicationTypeActive, r.URL.Query().Get("medicationtype"))
 
 		b, _ := os.ReadFile("./resources/ListMedications.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -48,7 +48,7 @@ func TestHTTPClient_ListMedications_None(t *testing.T) {
 
 		b := []byte(`{
 			"patientneedsdownloadconsent": false,"medications": [],"patientdownloadconsent": true,"nomedicationsreported": false}`)
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -70,7 +70,7 @@ func TestHTTPClient_SearchMedications(t *testing.T) {
 		assert.Equal(searchVal, r.URL.Query().Get("searchvalue"))
 
 		b, _ := os.ReadFile("./resources/SearchMedications.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -92,7 +92,7 @@ func TestHTTPClient_SearchMedications_None(t *testing.T) {
 		assert.Equal(searchVal, r.URL.Query().Get("searchvalue"))
 
 		b := []byte("[]")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

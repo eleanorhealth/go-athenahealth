@@ -33,7 +33,7 @@ func TestRedis_Allowed(t *testing.T) {
 	for range 10 {
 		wg.Add(1)
 		go func() {
-			rateLimiter.Allowed(context.Background(), true)
+			_, _ = rateLimiter.Allowed(context.Background(), true)
 			wg.Done()
 		}()
 	}

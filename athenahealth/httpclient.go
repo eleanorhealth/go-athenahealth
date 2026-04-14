@@ -200,7 +200,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 	if err != nil {
 		return res, err
 	}
-	defer res.Body.Close()
+	defer func() { _ = res.Body.Close() }()
 
 	var requestBodyLength int64
 	if srBody, ok := body.(*sizeRecordingReader); ok {
@@ -232,7 +232,7 @@ func (h *HTTPClient) request(ctx context.Context, method, path string, body io.R
 		return res, err
 	}
 	// close original req.Body before before overwriting
-	res.Body.Close()
+	_ = res.Body.Close()
 
 	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
 

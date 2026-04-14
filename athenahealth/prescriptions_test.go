@@ -20,7 +20,7 @@ func TestHTTPClient_ListChangedPrescriptions(t *testing.T) {
 		assert.Equal(strconv.FormatBool(leaveUnprocessed), r.URL.Query().Get("leaveunprocessed"))
 
 		b, _ := os.ReadFile("./resources/ListChangedPrescriptions.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -63,7 +63,7 @@ func TestHTTPClient_UpdatePrescriptionActionNote(t *testing.T) {
 
 		// Write a minimal valid JSON response directly
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"success": true}`))
+		_, _ = w.Write([]byte(`{"success": true}`))
 	}
 
 	athenaClient, ts := testClient(h)
@@ -124,7 +124,7 @@ func TestHTTPClient_UpdatePrescription_OtherFields_Success(t *testing.T) {
 		assert.Equal(documentID, gotDocumentID)
 
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"success": true}`))
+		_, _ = w.Write([]byte(`{"success": true}`))
 	}
 
 	athenaClient, ts := testClient(h)
@@ -160,7 +160,7 @@ func TestHTTPClient_UpdatePrescription_PinToTopFalse_Success(t *testing.T) {
 		assert.Equal(documentID, gotDocumentID)
 
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"success": true}`))
+		_, _ = w.Write([]byte(`{"success": true}`))
 	}
 
 	athenaClient, ts := testClient(h)

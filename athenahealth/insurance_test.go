@@ -40,7 +40,7 @@ func TestHTTPClient_CreatePatientInsurancePackage(t *testing.T) {
 		assert.Equal(r.Form.Get("sequencenumber"), strconv.Itoa(opts.SequenceNumber))
 
 		b, _ := os.ReadFile("./resources/CreatePatientInsurancePackage.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -81,7 +81,7 @@ func TestHTTPClient_UpdatePatientInsurancePackage(t *testing.T) {
 		assert.Equal(r.Form.Get("newsequencenumber"), strconv.Itoa(*opts.NewSequenceNumber))
 
 		b, _ := os.ReadFile("./resources/UpdatePatientInsurancePackage.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -99,14 +99,14 @@ func TestHTTPClient_DeletePatientInsurancePackage(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 
 		assert.Contains(string(reqBody), "cancellationnote=foo")
 
 		called = true
 
 		b, _ := os.ReadFile("./resources/DeletePatientInsurancePackage.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -133,7 +133,7 @@ func TestHTTPClient_ReactivatePatientInsurancePackage(t *testing.T) {
 		assert.Equal(r.Form.Get("expirationdate"), expDate.Format("01/02/2006"))
 
 		b, _ := os.ReadFile("./resources/ReactivatePatientInsurancePackage.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -158,7 +158,7 @@ func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {
 		assert.Equal(r.Form.Get("showcancelled"), "true")
 
 		b, _ := os.ReadFile("./resources/ListPatientInsurancePackages.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -186,7 +186,7 @@ func TestHTTPClient_UploadPatientInsuranceCardImage(t *testing.T) {
 		assert.Equal(deptID, r.FormValue("departmentid"))
 
 		b, _ := os.ReadFile("./resources/UploadPatientInsuranceCardImage.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -213,7 +213,7 @@ func TestHTTPClient_GetPatientInsurancePackage(t *testing.T) {
 		assert.Equal("/patients/1/insurances/2/image", r.URL.String())
 
 		b, _ := os.ReadFile("./resources/GetPatientInsuranceCardImage.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

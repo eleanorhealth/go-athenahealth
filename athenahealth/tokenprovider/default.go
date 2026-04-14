@@ -67,7 +67,7 @@ func (d *Default) Provide(ctx context.Context) (string, time.Time, error) {
 	if err != nil {
 		return "", time.Now(), err
 	}
-	defer res.Body.Close()
+	defer func() { _ = res.Body.Close() }()
 
 	if res.StatusCode != http.StatusOK {
 		return "", time.Now(), fmt.Errorf("%s", res.Status)

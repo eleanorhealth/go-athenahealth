@@ -20,7 +20,7 @@ func TestHTTPClient_DepartmentGetRequiredCheckInFields(t *testing.T) {
 
 		assert.Equal(r.URL.Path, "/departments/45/checkinrequired")
 		b, _ := os.ReadFile("./resources/DepartmentGetRequiredCheckInFields.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -37,7 +37,7 @@ func TestHTTPClient_GetDepartment(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/GetDepartment.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -58,7 +58,7 @@ func TestHTTPClient_ListDepartments(t *testing.T) {
 		assert.Equal("1", r.URL.Query().Get("showalldepartments"))
 
 		b, _ := os.ReadFile("./resources/ListDepartments.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

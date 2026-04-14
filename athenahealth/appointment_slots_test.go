@@ -33,7 +33,7 @@ func TestHTTPClient_CreateAppointmentSlot(t *testing.T) {
 		assert.Equal(r.Form.Get("reasonid"), strconv.Itoa(*opts.ReasonID))
 		assert.Equal(r.URL.Path, "/appointments/open")
 		b, _ := os.ReadFile("./resources/CreateAppointmentSlot.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

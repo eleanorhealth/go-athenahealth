@@ -18,7 +18,7 @@ func TestHTTPClient_AppointmentCancelCheckIn(t *testing.T) {
 
 		assert.Equal(r.URL.Path, "/appointments/54/cancelcheckin")
 		b, _ := os.ReadFile("./resources/AppointmentCancelCheckIn.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -39,7 +39,7 @@ func TestHTTPClient_AppointmentCheckIn(t *testing.T) {
 
 		assert.Equal(r.URL.Path, "/appointments/54/checkin")
 		b, _ := os.ReadFile("./resources/AppointmentCheckIn.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -60,7 +60,7 @@ func TestHTTPClient_AppointmentStartCheckIn(t *testing.T) {
 
 		assert.Equal(r.URL.Path, "/appointments/54/startcheckin")
 		b, _ := os.ReadFile("./resources/AppointmentStartCheckIn.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

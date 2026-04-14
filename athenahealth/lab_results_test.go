@@ -43,7 +43,7 @@ func TestHTTPClient_ListLabResults(t *testing.T) {
 		assert.Equal(startDate.Format("01/02/2006"), r.URL.Query().Get("startdate"))
 
 		b, _ := os.ReadFile("./resources/ListLabResults.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -98,7 +98,7 @@ func TestHTTPClient_AddLabResultDocument(t *testing.T) {
 		assert.Equal("16:41", obsTime)
 
 		b, _ := os.ReadFile("./resources/AddLabResultDocument.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -137,7 +137,7 @@ func TestHTTPClient_AddLabResultDocument_observation_without_time(t *testing.T) 
 		assert.Equal("", obsTime)
 
 		b, _ := os.ReadFile("./resources/AddLabResultDocument.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -165,7 +165,7 @@ func TestHTTPClient_ListChangedLabResults(t *testing.T) {
 		assert.Equal(strconv.FormatBool(showPortalOnly), r.URL.Query().Get("showportalonly"))
 
 		b, _ := os.ReadFile("./resources/ListChangedLabResults.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

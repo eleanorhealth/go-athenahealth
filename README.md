@@ -10,6 +10,26 @@ go-athenahealth is an athenahealth API client for Go.
 $ go get github.com/eleanorhealth/go-athenahealth
 ```
 
+### Development
+
+Clone the repository and run `bin/setup` to install the Go toolchain (via [mise](https://mise.jdx.dev/) and `.tool-versions`) and download dependencies:
+
+```bash
+$ bin/setup
+```
+
+Use the `run` script to build, test, lint, and format:
+
+```bash
+$ ./run build    # build all packages
+$ ./run test     # run tests with race detector
+$ ./run lint     # run golangci-lint
+$ ./run format   # run gofumpt formatter
+$ ./run tidy     # run go mod tidy
+```
+
+See `AGENTS.md` for project conventions and guidelines for AI-assisted development.
+
 ### Basic Example
 
 ```go

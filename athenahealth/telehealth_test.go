@@ -14,7 +14,7 @@ func TestHTTPClient_GetTelehealthInviteURL(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/GetTelehealthInviteURL.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

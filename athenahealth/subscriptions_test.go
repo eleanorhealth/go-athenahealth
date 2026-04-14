@@ -15,7 +15,7 @@ func TestHTTPClient_GetSubscription(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/GetSubscription.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -32,7 +32,7 @@ func TestHTTPClient_ListSubscriptionEvents(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/ListSubscriptionEvents.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -50,7 +50,7 @@ func TestHTTPClient_Subscribe(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 
 		assert.Contains(string(reqBody), "eventname=UpdateAppointment")
 
@@ -75,7 +75,7 @@ func TestHTTPClient_Unsubscribe(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 
 		assert.Contains(string(reqBody), "eventname=UpdateAppointment")
 
