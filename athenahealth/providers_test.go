@@ -15,7 +15,7 @@ func TestHTTPClient_GetProvider(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/GetProvider.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -36,7 +36,7 @@ func TestHTTPClient_ListChangedProviders(t *testing.T) {
 		assert.Equal("06/02/2020 12:30:45", r.URL.Query().Get("showprocessedenddatetime"))
 
 		b, _ := os.ReadFile("./resources/ListChangedProviders.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -61,7 +61,7 @@ func TestHTTPClient_ListProviders(t *testing.T) {
 		assert.Equal("true", r.URL.Query().Get("showallproviderids"))
 
 		b, _ := os.ReadFile("./resources/ListProviders.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

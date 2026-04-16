@@ -32,7 +32,7 @@ func TestHTTPClient_CreateAppointmentType(t *testing.T) {
 		assert.Equal(r.Form.Get("templatetypeonly"), strconv.FormatBool(*opts.TemplateTypeOnly))
 		assert.Equal(r.URL.Path, "/appointmenttypes")
 		b, _ := os.ReadFile("./resources/CreateAppointmentType.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

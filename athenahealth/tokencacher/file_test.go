@@ -18,7 +18,7 @@ func TestFile_Get(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.Remove(file.Name())
+	defer func() { _ = os.Remove(file.Name()) }()
 
 	c := &fileCache{
 		Token:     "foo",
@@ -26,7 +26,7 @@ func TestFile_Get(t *testing.T) {
 	}
 
 	b, _ := json.Marshal(c)
-	os.WriteFile(file.Name(), b, 0644)
+	_ = os.WriteFile(file.Name(), b, 0644)
 
 	cacher := NewFile(file.Name())
 
@@ -43,7 +43,7 @@ func TestFile_Get_ErrTokenNotExist(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.Remove(file.Name())
+	defer func() { _ = os.Remove(file.Name()) }()
 
 	cacher := NewFile(file.Name())
 
@@ -61,7 +61,7 @@ func TestFile_Get_ErrTokenExpired(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.Remove(file.Name())
+	defer func() { _ = os.Remove(file.Name()) }()
 
 	c := &fileCache{
 		Token:     "foo",
@@ -69,7 +69,7 @@ func TestFile_Get_ErrTokenExpired(t *testing.T) {
 	}
 
 	b, _ := json.Marshal(c)
-	os.WriteFile(file.Name(), b, 0644)
+	_ = os.WriteFile(file.Name(), b, 0644)
 
 	cacher := NewFile(file.Name())
 
@@ -87,7 +87,7 @@ func TestFile_Set(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.Remove(file.Name())
+	defer func() { _ = os.Remove(file.Name()) }()
 
 	cacher := NewFile(file.Name())
 
@@ -98,7 +98,7 @@ func TestFile_Set(t *testing.T) {
 
 	b, _ := os.ReadFile(file.Name())
 	c := &fileCache{}
-	json.Unmarshal(b, c)
+	_ = json.Unmarshal(b, c)
 
 	assert.NoError(err)
 	assert.Equal(token, c.Token)

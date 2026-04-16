@@ -96,7 +96,7 @@ func TestHTTPClient_CreateClaim(t *testing.T) {
 		assert.Equal(r.Form.Get("supervisingproviderid"), opts.SupervisingProviderID)
 
 		b, _ := os.ReadFile("./resources/CreateClaim.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -136,7 +136,7 @@ func TestHTTPClient_ListClaims(t *testing.T) {
 		assert.Equal(r.URL.Query().Get("showcustomfields"), "true")
 
 		b, _ := os.ReadFile("./resources/ListClaims.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

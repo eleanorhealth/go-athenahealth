@@ -54,7 +54,7 @@ func (f *File) Get(ctx context.Context) (string, error) {
 	c := &fileCache{}
 	err = json.Unmarshal(contents, c)
 	if err != nil {
-		return "", fmt.Errorf("Error unmarshaling token: %s", err)
+		return "", fmt.Errorf("error unmarshaling token: %s", err)
 	}
 
 	if time.Now().After(c.ExpiresAt) {

@@ -14,7 +14,7 @@ func TestHTTPClient_ListCustomFields(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/ListCustomFields.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
