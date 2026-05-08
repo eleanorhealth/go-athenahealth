@@ -43,7 +43,7 @@ func TestDefault_Provide(t *testing.T) {
 		assert.Equal(r.FormValue("grant_type"), "client_credentials")
 
 		b, _ := json.Marshal(authRes)
-		w.Write(b)
+		_, _ = w.Write(b)
 	}))
 	defer ts.Close()
 

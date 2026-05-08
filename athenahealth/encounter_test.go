@@ -21,7 +21,7 @@ func TestHTTPClient_EncounterSummary(t *testing.T) {
 		assert.Equal("1", r.URL.Query().Get("mobile"))
 
 		b, _ := os.ReadFile("./resources/EncounterSummary.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

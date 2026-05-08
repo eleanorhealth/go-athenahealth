@@ -22,7 +22,7 @@ func TestHTTPClient_GetHealthHistoryFormForAppointment(t *testing.T) {
 		assert.Equal(fmt.Sprintf("/appointments/%s/healthhistoryforms/%s", apptID, formID), r.URL.String())
 
 		b, _ := os.ReadFile("./resources/GetHealthHistoryFormForAppointment.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -55,7 +55,7 @@ func TestHTTPClient_UpdateHealthHistoryFormForAppointment(t *testing.T) {
 		assert.Equal(string(hhfRequestBytes), r.FormValue("healthhistoryform"))
 
 		b, _ := os.ReadFile("./resources/UpdateHealthHistoryFormForAppointmentResponse.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

@@ -26,7 +26,7 @@ func TestHTTPClient_GetPatient(t *testing.T) {
 		assert.Equal("true", r.URL.Query().Get("showallpatientdepartmentstatus"))
 
 		b, _ := os.ReadFile("./resources/GetPatient.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -54,7 +54,7 @@ func TestHTTPClient_GetPatients(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/GetPatient.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -80,7 +80,7 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 		assert.Equal("i", r.URL.Query().Get("status"))
 
 		b, _ := os.ReadFile("./resources/ListPatients.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -126,7 +126,7 @@ func TestHTTPClient_UpdatePatientPhoto(t *testing.T) {
 	data := []byte("Hello World!")
 
 	h := func(w http.ResponseWriter, r *http.Request) {
-		r.ParseForm()
+		_ = r.ParseForm()
 
 		assert.Equal(base64.StdEncoding.EncodeToString(data), r.Form.Get("image"))
 	}
@@ -152,7 +152,7 @@ func TestHTTPClient_ListChangedPatients(t *testing.T) {
 		assert.Equal("06/02/2020 12:30:45", r.URL.Query().Get("showprocessedenddatetime"))
 
 		b, _ := os.ReadFile("./resources/ListChangedPatients.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -203,7 +203,7 @@ func TestHTTPClient_UpdatePatientInformationVerificationDetails(t *testing.T) {
 		assert.Equal(signerRelationshipToPatientID, r.FormValue("signerrelationshiptopatientid"))
 
 		b, _ := os.ReadFile("./resources/UpdatePatientInformationVerificationDetails.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -242,7 +242,7 @@ func TestHTTPClient_UpdatePatientMedicationHistoryConsent(t *testing.T) {
 		assert.Equal(signatureName, r.FormValue("signaturename"))
 
 		b, _ := os.ReadFile("./resources/UpdatePatientMedicationHistoryConsent.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -270,7 +270,7 @@ func TestHTTPClient_GetPatientCustomFields(t *testing.T) {
 		assert.Equal(departmentID, r.URL.Query().Get("departmentid"))
 
 		b, _ := os.ReadFile("./resources/GetPatientCustomFields.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -313,7 +313,7 @@ func TestHTTPClient_UpdatePatientCustomFields(t *testing.T) {
 		assert.Equal(departmentID, r.FormValue("departmentid"))
 		assert.Equal(`[{"customfieldid":"3","customfieldvalue":"foobar","optionid":"4"}]`, r.FormValue("customfields"))
 		b, _ := os.ReadFile("./resources/UpdatePatientCustomFields.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -336,7 +336,7 @@ func TestHTTPClient_ListPatientsMatchingCustomField(t *testing.T) {
 		assert.Contains(r.URL.Path, "/patients/customfields/"+opts.CustomFieldID+"/"+opts.CustomFieldValue)
 
 		b, _ := os.ReadFile("./resources/ListPatientsMatchingCustomField.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -401,7 +401,7 @@ func TestHTTPClient_CreatePatient(t *testing.T) {
 		}
 
 		b, _ := os.ReadFile("./resources/CreatePatient.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -519,7 +519,7 @@ func TestHTTPClient_UpdatePatient(t *testing.T) {
 		assert.Equal(r.Form.Get("zip"), *opts.Zip)
 
 		b, _ := os.ReadFile("./resources/UpdatePatient.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

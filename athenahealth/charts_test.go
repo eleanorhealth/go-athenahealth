@@ -18,7 +18,7 @@ func TestHTTPClient_ListSocialHistoryTemplates(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/ListSocialHistoryTemplates.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -40,7 +40,7 @@ func TestHTTPClient_GetPatientSocialHistory(t *testing.T) {
 		assert.Equal("true", r.URL.Query().Get("showunansweredquestions"))
 
 		b, _ := os.ReadFile("./resources/GetPatientSocialHistory.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -74,7 +74,7 @@ func TestHTTPClient_UpdatePatientSocialHistory(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 
 		assert.Contains(string(reqBody), "departmentid=2")
 		assert.Contains(string(reqBody), fmt.Sprintf("questions=%s", url.QueryEscape(string(questionBytes))))

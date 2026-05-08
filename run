@@ -1,0 +1,37 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+shopt -s globstar
+trap 'echo fatal: $0:$LINENO >&2' ERR
+
+# AGENTS: run commands directly, you cannot execute this file. if making changes to this file, run chmod u+x on it.
+cmd="${1:-help}"
+
+case "$cmd" in
+# -- build all packages
+build)
+  go build ./...
+  ;;
+# -- run tests for all packages
+test)
+  go test -race ./...
+  ;;
+# -- run golangci-lint
+lint)
+  go tool golangci-lint run ./...
+  ;;
+# -- run gofumpt formatter
+format)
+  go tool gofumpt -l -w .
+  ;;
+# -- run go mod tidy
+tidy)
+  go mod tidy
+  ;;
+help | *)
+  echo "Usage: ./run <command>"
+  echo ""
+  echo "Commands:"
+  awk '/^# -- /{desc=substr($0, index($0,"-- ")+3)} /\)$/ && desc{cmd=$0; gsub(/[[:space:]()|*]/, "", cmd); printf "  %-20s %s\n", cmd, desc; desc=""}' "$0"
+  ;;
+esac

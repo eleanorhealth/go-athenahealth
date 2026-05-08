@@ -1,4 +1,4 @@
-# Claude Project Guidelines for go-athenahealth (written in go)
+# Project Guidelines
 
 ## AI Role, behavior, system prompt
 

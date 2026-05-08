@@ -20,7 +20,7 @@ func TestHTTPClient_ListAdminDocuments(t *testing.T) {
 		assert.Equal("3", r.URL.Query().Get("departmentid"))
 
 		b, _ := os.ReadFile("./resources/ListAdminDocuments.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -66,7 +66,7 @@ func TestHTTPClient_AddDocument(t *testing.T) {
 		assert.Equal(strconv.Itoa(providerID), r.FormValue("providerid"))
 
 		b, _ := os.ReadFile("./resources/AddDocument.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -110,7 +110,7 @@ func TestHTTPClient_AddDocumentReader(t *testing.T) {
 		assert.Equal(strconv.Itoa(apptID), r.FormValue("appointmentid"))
 
 		b, _ := os.ReadFile("./resources/AddDocument.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -159,7 +159,7 @@ func TestHTTPClient_AddClinicalDocument(t *testing.T) {
 		assert.Equal(strconv.Itoa(documentTypeId), r.FormValue("documenttypeid"))
 
 		b, _ := os.ReadFile("./resources/AddClinicalDocument.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -215,7 +215,7 @@ func TestHTTPClient_AddPatientCaseDocument(t *testing.T) {
 		assert.Equal("subject", r.FormValue("subject"))
 
 		b, _ := os.ReadFile("./resources/AddPatientCaseDocument.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -249,7 +249,7 @@ func TestHTTPClient_DeleteClinicalDocument(t *testing.T) {
 		assert.Contains(r.URL.Path, "/patients/123/documents/clinicaldocument/101")
 
 		b, _ := os.ReadFile("./resources/DeleteClinicalDocument.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -270,7 +270,7 @@ func TestHTTPClient_ListEncounterDocuments(t *testing.T) {
 		assert.Equal("3", r.URL.Query().Get("departmentid"))
 
 		b, _ := os.ReadFile("./resources/ListEncounterDocuments.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

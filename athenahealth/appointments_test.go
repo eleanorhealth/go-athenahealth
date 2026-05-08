@@ -19,7 +19,7 @@ func TestHTTPClient_GetAppointment(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/GetAppointment.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -36,7 +36,7 @@ func TestHTTPClient_ListAppointmentCustomFields(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := os.ReadFile("./resources/ListAppointmentCustomFields.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -58,7 +58,7 @@ func TestHTTPClient_ListBookedAppointments(t *testing.T) {
 		assert.Equal(AppointmentStatusCancelled.String(), r.URL.Query().Get("appointmentstatus"))
 
 		b, _ := os.ReadFile("./resources/ListBookedAppointments.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -89,7 +89,7 @@ func TestHTTPClient_ListChangedAppointments(t *testing.T) {
 		assert.Equal("06/02/2020 12:30:45", r.URL.Query().Get("showprocessedenddatetime"))
 
 		b, _ := os.ReadFile("./resources/ListChangedAppointments.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -113,7 +113,7 @@ func TestHTTPClient_CreateAppointmentNote(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 
 		assert.Contains(string(reqBody), "notetext=test+note")
 
@@ -141,7 +141,7 @@ func TestHTTPClient_ListAppointmentNotes(t *testing.T) {
 		assert.Equal("1", r.URL.Query().Get("appointmentid"))
 
 		b, _ := os.ReadFile("./resources/ListAppointmentNotes.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -163,7 +163,7 @@ func TestHTTPClient_UpdateAppointmentNote(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 
 		assert.Contains(string(reqBody), "notetext=test+note")
 		assert.Contains(string(reqBody), "noteid=2")
@@ -192,7 +192,7 @@ func TestHTTPClient_DeleteAppointmentNote(t *testing.T) {
 	called := false
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 
 		assert.Contains(string(reqBody), "noteid=1")
 
@@ -248,7 +248,7 @@ func TestHTTPClient_ListOpenAppointmentSlots(t *testing.T) {
 		assert.Equal("7", r.URL.Query().Get("offset"))
 
 		b, _ := os.ReadFile("./resources/ListOpenAppointmentSlots.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -279,7 +279,7 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		reqBody, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 
 		assert.Contains(string(reqBody), "appointmenttypeid=3")
 		assert.Contains(string(reqBody), "bookingnote=Hello+World%21")
@@ -291,7 +291,7 @@ func TestHTTPClient_BookAppointment(t *testing.T) {
 		assert.Contains(string(reqBody), "urgent=true")
 
 		b, _ := os.ReadFile("./resources/BookAppointment.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -325,7 +325,7 @@ func TestHTTPClient_UpdateBookedAppointment_IntResponse(t *testing.T) {
 		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/booked/%s", apptID))
 
 		b, _ := os.ReadFile("./resources/UpdateBookedAppointment_IntResponse.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -358,7 +358,7 @@ func TestHTTPClient_UpdateBookedAppointment_StringResponse(t *testing.T) {
 		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/booked/%s", apptID))
 
 		b, _ := os.ReadFile("./resources/UpdateBookedAppointment_StringResponse.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -395,7 +395,7 @@ func TestHTTPClient_RescheduleAppointment(t *testing.T) {
 		assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/%d/reschedule", 998877))
 
 		b, _ := os.ReadFile("./resources/RescheduleAppointment.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -483,7 +483,7 @@ func TestHTTPClient_FreezeAppointmentSlot(t *testing.T) {
 			assert.Equal(r.URL.Path, fmt.Sprintf("/appointments/%s/freeze", apptID))
 
 			b, _ := os.ReadFile(testCase.Resource)
-			w.Write(b)
+			_, _ = w.Write(b)
 		}
 
 		athenaClient, ts := testClient(h)

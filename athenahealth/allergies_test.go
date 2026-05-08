@@ -18,7 +18,7 @@ func TestHTTPClient_SearchAllergies(t *testing.T) {
 		assert.Equal(searchVal, r.URL.Query().Get("searchvalue"))
 
 		b, _ := os.ReadFile("./resources/SearchAllergies.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)
@@ -40,7 +40,7 @@ func TestHTTPClient_SearchAllergies_None(t *testing.T) {
 		assert.Equal(searchVal, r.URL.Query().Get("searchvalue"))
 
 		b := []byte("[]")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

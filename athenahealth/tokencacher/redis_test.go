@@ -22,7 +22,7 @@ func TestRedis_Get(t *testing.T) {
 
 	expectedToken := "foo"
 
-	s.Set(RedisDefaultKey, expectedToken)
+	_ = s.Set(RedisDefaultKey, expectedToken)
 	s.SetTTL(RedisDefaultKey, time.Minute*1)
 
 	cacher := NewRedis(redis.NewClient(&redis.Options{

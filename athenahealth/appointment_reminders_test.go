@@ -39,7 +39,7 @@ func TestHTTPClient_ListAppointmentReminders(t *testing.T) {
 		assert.Equal("false", query.Get("showdeleted"))
 
 		b, _ := os.ReadFile("./resources/ListAppointmentReminders.json")
-		w.Write(b)
+		_, _ = w.Write(b)
 	}
 
 	athenaClient, ts := testClient(h)

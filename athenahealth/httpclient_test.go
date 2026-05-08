@@ -33,7 +33,7 @@ func testClient(h http.HandlerFunc) (*HTTPClient, *httptest.Server) {
 		h = func(w http.ResponseWriter, r *http.Request) {
 			b, _ := json.Marshal(nil)
 			w.Header().Add("Content-Type", "application/json")
-			w.Write(b)
+			_, _ = w.Write(b)
 		}
 	}
 
@@ -170,7 +170,8 @@ func TestHTTPClient_request(t *testing.T) {
 		assert.Equal(fmt.Sprintf("Bearer %s", testToken), r.Header.Get("Authorization"))
 		assert.Equal(userAgent, r.UserAgent())
 
-		w.Write([]byte(`{"msg":"Hello World!"}`))
+		_, _ = w.Write([]byte(`{"msg":"Hello World!"}`))
+
 	}
 
 	athenaClient, ts := testClient(h)
@@ -377,7 +378,7 @@ func TestHTTPClient_Post(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPost, r.Method)
 		b, _ := io.ReadAll(r.Body)
-		r.Body.Close()
+		_ = r.Body.Close()
 		assert.True(len(b) > 0)
 
 		called = true
@@ -400,7 +401,7 @@ func TestHTTPClient_PostForm(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPost, r.Method)
 		b, _ := io.ReadAll(r.Body)
-		r.Body.Close()
+		_ = r.Body.Close()
 		assert.True(len(b) > 0)
 
 		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
@@ -428,7 +429,7 @@ func TestHTTPClient_PostFormReader(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPost, r.Method)
 		b, _ := io.ReadAll(r.Body)
-		r.Body.Close()
+		_ = r.Body.Close()
 		assert.True(len(b) > 0)
 
 		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
@@ -456,7 +457,7 @@ func TestHTTPClient_PostFormReader_stream(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPost, r.Method)
 
-		r.ParseForm()
+		_ = r.ParseForm()
 		inputStr := r.Form.Get("file")
 		fileBytes, err := base64.StdEncoding.DecodeString(inputStr)
 		assert.NoError(err)
@@ -494,7 +495,7 @@ func TestHTTPClient_Put(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPut, r.Method)
 		b, _ := io.ReadAll(r.Body)
-		r.Body.Close()
+		_ = r.Body.Close()
 		assert.True(len(b) > 0)
 
 		called = true
@@ -517,7 +518,7 @@ func TestHTTPClient_PutForm(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodPut, r.Method)
 		b, _ := io.ReadAll(r.Body)
-		r.Body.Close()
+		_ = r.Body.Close()
 		assert.True(len(b) > 0)
 
 		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
@@ -545,7 +546,7 @@ func TestHTTPClient_Delete(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodDelete, r.Method)
 		b, _ := io.ReadAll(r.Body)
-		r.Body.Close()
+		_ = r.Body.Close()
 		assert.True(len(b) > 0)
 
 		called = true
@@ -570,7 +571,7 @@ func TestHTTPClient_DeleteForm(t *testing.T) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(http.MethodDelete, r.Method)
 		b, _ := io.ReadAll(r.Body)
-		r.Body.Close()
+		_ = r.Body.Close()
 		assert.True(len(b) > 0)
 
 		assert.Equal("application/x-www-form-urlencoded", r.Header.Get("Content-Type"))
