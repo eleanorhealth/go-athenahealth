@@ -154,21 +154,21 @@ func TestHTTPClient_AddLabResultDocument_observation_without_time(t *testing.T) 
 	assert.Equal(res, 1083563)
 }
 
-func TestHTTPClient_AddLabResultDocument_with_document_label(t *testing.T) {
+func TestHTTPClient_AddLabResultDocument_with_document_type_id(t *testing.T) {
 	assert := assert.New(t)
 
 	ctx := context.Background()
 
 	patientID := "123"
 	departmentID := "456"
-	documentLabel := "Drug Screen, Urine"
+	documentTypeID := 440583
 
 	observedAt := time.Date(2023, 9, 6, 16, 41, 3, 0, time.UTC)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		assert.NoError(err)
-		assert.Equal(documentLabel, r.Form.Get("documentlabel"))
+		assert.Equal("440583", r.Form.Get("documenttypeid"))
 
 		b, _ := os.ReadFile("./resources/AddLabResultDocument.json")
 		_, _ = w.Write(b)
@@ -181,7 +181,7 @@ func TestHTTPClient_AddLabResultDocument_with_document_label(t *testing.T) {
 	res, err := athenaClient.AddLabResultDocumentReader(ctx, patientID, departmentID, &AddLabResultDocumentReaderOptions{
 		AttachmentContents:  b,
 		AttachmentType:      LabResultAttachmentTypeJPG,
-		DocumentLabel:       &documentLabel,
+		DocumentTypeID:      &documentTypeID,
 		ObservationDateTime: NewObservationDateTime(observedAt),
 	})
 
