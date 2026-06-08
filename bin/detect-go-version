@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Detects the current Go version from go.mod and the latest stable release
+# from go.dev. Writes outputs to $GITHUB_OUTPUT when running in CI.
+#
+# Outputs:
+#   needs_go_update  - "true" if the latest minor is newer than current
+#   current_go_minor - e.g. "1.26"
+#   latest_go_minor  - e.g. "1.27"
+#   latest_go_full   - e.g. "1.27.2"
+
+GO_MOD="${GO_MOD_FILE:-go.mod}"
+
+# Read the go directive: handles "go 1.26", "go 1.26.1", "go 1.26.0"
+CURRENT_VERSION=$(grep -E '^go [0-9]+\.[0-9]' "$GO_MOD" | head -1 | awk '{print $2}')
+CURRENT_MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f1-2)
+
+echo "Current Go version in $GO_MOD: $CURRENT_VERSION (minor: $CURRENT_MINOR)"
+
+# Fetch latest stable release from go.dev
+LATEST_FULL=$(curl -fsSL "https://go.dev/dl/?mode=json" | \
+  jq -r '[.[] | select(.stable==true) | .version] |
+          map(select(test("^go[0-9]+\\.[0-9]+\\.[0-9]+$"))) |
+          sort_by(ltrimstr("go") | split(".") | map(tonumber)) |
+          last |
+          ltrimstr("go")')
+
+if [[ -z "$LATEST_FULL" ]]; then
+  echo "ERROR: could not determine latest Go version from go.dev" >&2
+  exit 1
+fi
+
+LATEST_MINOR=$(echo "$LATEST_FULL" | cut -d. -f1-2)
+
+echo "Latest Go version on go.dev: $LATEST_FULL (minor: $LATEST_MINOR)"
+
+# Compare: update only when the minor version has increased
+NEEDS_GO_UPDATE="false"
+if [[ "$CURRENT_MINOR" != "$LATEST_MINOR" ]]; then
+  # sort -V puts the lower version first; if current comes first it's older
+  LOWER=$(printf '%s\n%s\n' "$CURRENT_MINOR" "$LATEST_MINOR" | sort -V | head -1)
+  if [[ "$LOWER" == "$CURRENT_MINOR" ]]; then
+    NEEDS_GO_UPDATE="true"
+    echo "Go minor update available: $CURRENT_MINOR -> $LATEST_MINOR"
+  fi
+fi
+
+if [[ "$NEEDS_GO_UPDATE" == "false" ]]; then
+  echo "Go version is up to date (minor: $CURRENT_MINOR)"
+fi
+
+# Write outputs
+if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
+  echo "needs_go_update=$NEEDS_GO_UPDATE"   >> "$GITHUB_OUTPUT"
+  echo "current_go_minor=$CURRENT_MINOR"    >> "$GITHUB_OUTPUT"
+  echo "latest_go_minor=$LATEST_MINOR"      >> "$GITHUB_OUTPUT"
+  echo "latest_go_full=$LATEST_FULL"        >> "$GITHUB_OUTPUT"
+else
+  # Local dev: export for use by subsequent scripts in the same shell session
+  export NEEDS_GO_UPDATE CURRENT_MINOR LATEST_MINOR LATEST_GO_FULL="$LATEST_FULL"
+fi

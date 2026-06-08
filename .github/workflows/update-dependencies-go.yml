@@ -1,0 +1,65 @@
+name: Update Go dependencies
+
+on:
+  schedule:
+    - cron: "0 12 * * 1" # Monday, Thursday 12:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: update-dependencies-go
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      GOPRIVATE: github.com/eleanorhealth/*
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          # Full history needed so git diff against origin/main works in create-pr
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v6.3.0
+        with:
+          go-version-file: go.mod
+
+      - name: Authenticate as GitHub App
+        id: auth-github
+        uses: eleanorhealth/github-app-installation-auth-action@v1.0.3
+        with:
+          private-key: "${{ secrets.PRIVATE_KEY }}"
+          app-id: "${{ secrets.DEPLOYER_GITHUB_APP_ID }}"
+
+      - name: Configure git
+        run: |
+          git config --global url."https://x-access-token:${{ steps.auth-github.outputs.github_app_token }}@github.com/eleanorhealth".insteadOf "https://github.com/eleanorhealth"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      - name: Detect Go version
+        id: detect-go-version
+        run: bin/detect-go-version
+
+      - name: Update dependencies
+        env:
+          NEEDS_GO_UPDATE: ${{ steps.detect-go-version.outputs.needs_go_update }}
+          LATEST_GO_MINOR: ${{ steps.detect-go-version.outputs.latest_go_minor }}
+          LATEST_GO_FULL: ${{ steps.detect-go-version.outputs.latest_go_full }}
+        run: bin/update-deps
+
+      - name: Create PR
+        env:
+          # GH_TOKEN is the environment variable the gh CLI reads by default
+          # for authentication. Use the built-in GITHUB_TOKEN (not the App
+          # token) so that gh api POST /pulls is authorized. The workflow
+          # declares pull-requests: write above, which grants this token that
+          # scope. The App token is used for git push (wired in Configure git)
+          # but the GitHub App installation does not have pull-requests: write,
+          # causing HTTP 403 on every PR API call regardless of REST vs GraphQL.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bin/create-pr
