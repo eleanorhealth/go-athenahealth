@@ -143,6 +143,38 @@ func TestHTTPClient_ReactivatePatientInsurancePackage(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestHTTPClient_CheckPatientInsuranceEligibility(t *testing.T) {
+	assert := assert.New(t)
+
+	patientID := "1"
+	insuranceID := "2"
+	dateOfService := time.Date(2022, time.January, 20, 0, 0, 0, 0, time.UTC)
+	serviceTypeCode := "30"
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal("/patients/1/insurances/2/benefitdetails", r.URL.Path)
+		assert.Equal(http.MethodPost, r.Method)
+
+		assert.NoError(r.ParseForm())
+		assert.Equal(dateOfService.Format("01/02/2006"), r.Form.Get("dateofservice"))
+		assert.Equal(serviceTypeCode, r.Form.Get("servicetypecode"))
+
+		b, _ := os.ReadFile("./resources/CheckPatientInsuranceEligibility.json")
+		_, _ = w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	err := athenaClient.CheckPatientInsuranceEligibility(context.Background(), &CheckPatientInsuranceEligibilityOptions{
+		PatientID:       patientID,
+		InsuranceID:     insuranceID,
+		DateOfService:   &dateOfService,
+		ServiceTypeCode: &serviceTypeCode,
+	})
+	assert.NoError(err)
+}
+
 func TestHTTPClient_ListPatientInsurancePackages(t *testing.T) {
 	assert := assert.New(t)
 

@@ -333,6 +333,48 @@ func (h *HTTPClient) UploadPatientInsuranceCardImageReader(ctx context.Context, 
 	}, nil
 }
 
+type CheckPatientInsuranceEligibilityOptions struct {
+	PatientID   string
+	InsuranceID string
+
+	DateOfService   *time.Time
+	ServiceTypeCode *string
+}
+
+// CheckPatientInsuranceEligibility - Send eligibility check for a specific insurance
+//
+// POST /v1/{practiceid}/patients/{patientid}/insurances/{insuranceid}/benefitdetails
+//
+// https://docs.athenahealth.com/api/api-ref/patient-insurance#Send-eligibility-check-for-a-specific-insurance
+func (h *HTTPClient) CheckPatientInsuranceEligibility(ctx context.Context, opts *CheckPatientInsuranceEligibilityOptions) error {
+	if opts == nil {
+		panic("opts is nil")
+	}
+
+	out := &MessageResponse{}
+
+	form := url.Values{}
+
+	if opts.DateOfService != nil {
+		form.Add("dateofservice", opts.DateOfService.Format("01/02/2006"))
+	}
+
+	if opts.ServiceTypeCode != nil {
+		form.Add("servicetypecode", *opts.ServiceTypeCode)
+	}
+
+	_, err := h.PostForm(ctx, fmt.Sprintf("/patients/%s/insurances/%s/benefitdetails", opts.PatientID, opts.InsuranceID), form, out)
+	if err != nil {
+		return err
+	}
+
+	if !out.Success {
+		return fmt.Errorf("unexpected response with message: %s", out.Message)
+	}
+
+	return nil
+}
+
 type getPatientInsuranceCardImageResponse struct {
 	Image string `json:"image"` // base64 encoded image
 }
