@@ -57,11 +57,15 @@ commit_signing() {
   git config --global gpg.program gpg
 
   if [[ -n "${GPG_PASSPHRASE:-}" ]]; then
-    cat >/usr/local/bin/gpg-passphrase-wrapper <<'WRAPPER'
+    if ! curl -fsSL https://raw.githubusercontent.com/rthomazel/interface/dev/bin/gpg-passphrase-wrapper \
+      -o /usr/local/bin/gpg-passphrase-wrapper; then
+      echo "bin/setup: WARN could not fetch gpg-passphrase-wrapper, writing fallback" >&2
+      cat >/usr/local/bin/gpg-passphrase-wrapper <<'WRAPPER'
 #!/usr/bin/env bash
 _gpg_passphrase="${GPG_PASSPHRASE:-$(cat /run/secrets/gpg_passphrase 2>/dev/null)}"
 exec gpg --batch --passphrase "${_gpg_passphrase}" --pinentry-mode loopback "$@"
 WRAPPER
+    fi
     chmod +x /usr/local/bin/gpg-passphrase-wrapper
     git config --global gpg.program /usr/local/bin/gpg-passphrase-wrapper
   fi
