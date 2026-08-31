@@ -15,6 +15,7 @@ type Client interface {
 
 	// Patient
 	CreatePatient(ctx context.Context, opts *CreatePatientOptions) (string, error)
+	EnhancedBestMatch(ctx context.Context, opts *EnhancedBestMatchOptions) ([]*EnhancedBestMatchPatient, error)
 	GetPatient(ctx context.Context, patientID string, opts *GetPatientOptions) (*Patient, error)
 	GetPatients(ctx context.Context, id string, opts *GetPatientOptions) ([]*Patient, error)
 	ListPatients(context.Context, *ListPatientsOptions) (*ListPatientsResult, error)
