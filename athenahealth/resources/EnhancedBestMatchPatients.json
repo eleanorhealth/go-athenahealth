@@ -1,0 +1,20 @@
+[
+    {
+        "patientid": "1",
+        "firstname": "John",
+        "lastname": "Smith",
+        "dob": "01/15/1985",
+        "email": "john.smith@example.com",
+        "mobilephone": "8605551234",
+        "score": 23
+    },
+    {
+        "patientid": "2",
+        "firstname": "John",
+        "lastname": "Smith",
+        "dob": "01/15/1985",
+        "email": "johnsmith2@example.com",
+        "mobilephone": "8605555678",
+        "score": 16
+    }
+]

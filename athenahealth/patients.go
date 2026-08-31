@@ -1037,3 +1037,80 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 
 	return out[0].PatientID, nil
 }
+
+// EnhancedBestMatchPatient is a Patient returned by the enhanced best match search,
+// augmented with a match score.
+type EnhancedBestMatchPatient struct {
+	Patient
+	Score float64 `json:"score"`
+}
+
+// EnhancedBestMatchOptions are the parameters for EnhancedBestMatch.
+// FirstName, LastName, and DOB are required; all other fields are optional
+// and improve match accuracy when provided.
+type EnhancedBestMatchOptions struct {
+	// Required
+	FirstName string
+	LastName  string
+	DOB       string // MM/DD/YYYY
+
+	// Optional — additional fields improve match accuracy
+	DepartmentID      int
+	Email             string
+	MobilePhone       string
+	HomePhone         string
+	WorkPhone         string
+	Zip               string
+	MinScore          float64
+	ReturnBestMatches bool
+}
+
+// EnhancedBestMatch searches for patients using the enhanced best-match algorithm.
+// Returns patients ordered by descending score. Athena never returns patients with
+// a score below 16; a score of 23 indicates a strong match on name + DOB alone.
+//
+// GET /v1/{practiceid}/patients/enhancedbestmatch
+//
+// https://docs.athenahealth.com/api/api-ref/patient#Get-list-of-patients---enhanced-best-matching-search-criteria
+func (h *HTTPClient) EnhancedBestMatch(ctx context.Context, opts *EnhancedBestMatchOptions) ([]*EnhancedBestMatchPatient, error) {
+	if opts == nil {
+		panic("opts is nil")
+	}
+
+	q := url.Values{}
+	q.Add("firstname", opts.FirstName)
+	q.Add("lastname", opts.LastName)
+	q.Add("dob", opts.DOB)
+
+	if opts.DepartmentID != 0 {
+		q.Add("departmentid", strconv.Itoa(opts.DepartmentID))
+	}
+	if opts.Email != "" {
+		q.Add("email", opts.Email)
+	}
+	if opts.MobilePhone != "" {
+		q.Add("mobilephone", opts.MobilePhone)
+	}
+	if opts.HomePhone != "" {
+		q.Add("homephone", opts.HomePhone)
+	}
+	if opts.WorkPhone != "" {
+		q.Add("workphone", opts.WorkPhone)
+	}
+	if opts.Zip != "" {
+		q.Add("zip", opts.Zip)
+	}
+	if opts.MinScore != 0 {
+		q.Add("minscore", strconv.FormatFloat(opts.MinScore, 'f', -1, 64))
+	}
+	if opts.ReturnBestMatches {
+		q.Add("returnbestmatches", "true")
+	}
+
+	var out []*EnhancedBestMatchPatient
+	if _, err := h.Get(ctx, "/patients/enhancedbestmatch", q, &out); err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
