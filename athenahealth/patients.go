@@ -1003,7 +1003,9 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 	form.Add("address1", opts.Address1)
 	form.Add("address2", opts.Address2)
 	form.Add("city", opts.City)
-	form.Add("departmentid", opts.DepartmentID)
+	if opts.DepartmentID != "" {
+		form.Add("departmentid", opts.DepartmentID)
+	}
 	form.Add("dob", opts.DOB.Format("01/02/2006"))
 	form.Add("email", opts.Email)
 	form.Add("firstname", opts.FirstName)
@@ -1012,11 +1014,19 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 	form.Add("middlename", opts.MiddleName)
 	form.Add("mobilephone", opts.MobilePhone)
 	form.Add("notes", opts.Notes)
-	form.Add("sex", opts.Sex)
-	form.Add("ssn", opts.SSN)
+	if opts.Sex != "" {
+		form.Add("sex", opts.Sex)
+	}
+	if opts.SSN != "" {
+		form.Add("ssn", opts.SSN)
+	}
 	form.Add("state", opts.State)
-	form.Add("status", opts.Status)
-	form.Add("zip", opts.Zip)
+	if opts.Status != "" {
+		form.Add("status", opts.Status)
+	}
+	if opts.Zip != "" {
+		form.Add("zip", opts.Zip)
+	}
 
 	if opts.BypassPatientMatching {
 		form.Add("bypasspatientmatching", "true")
