@@ -1,6 +1,6 @@
 module github.com/eleanorhealth/go-athenahealth
 
-go 1.26.7
+go 1.27
 
 tool (
 	github.com/golangci/golangci-lint/v2/cmd/golangci-lint
