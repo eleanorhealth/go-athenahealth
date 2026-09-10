@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Creates or updates a PR with the go.mod/go.sum changes produced by update-deps.
+# Idempotent: if a PR already exists on the update branch, it refreshes the body
+# and force-pushes the branch instead of opening a duplicate.
+#
+# Environment variables:
+#   GH_TOKEN      - GitHub token with repo + PR write access (required in CI)
+#   PR_BRANCH     - branch name for the update (default: chore/update-dependencies-go)
+#   PR_LABELS     - comma-separated labels (default: "dependencies,go")
+#   BASE_BRANCH   - PR target branch (default: main)
+
+PR_BRANCH="${PR_BRANCH:-chore/update-dependencies-go}"
+PR_LABELS="${PR_LABELS:-dependencies,go}"
+BASE_BRANCH="${BASE_BRANCH:-main}"
+
+# No-op if nothing changed
+if git diff --quiet go.mod go.sum 2>/dev/null; then
+  echo "No changes to go.mod or go.sum — nothing to do."
+  [[ -n "${GITHUB_OUTPUT:-}" ]] && echo "updated=false" >> "$GITHUB_OUTPUT"
+  exit 0
+fi
+
+# Ensure git identity is set (required for commits; no-op if already configured)
+git config user.email "github-actions[bot]@users.noreply.github.com" 2>/dev/null || true
+git config user.name "github-actions[bot]" 2>/dev/null || true
+
+# Create/reset the update branch off the current HEAD (which is main in CI)
+git checkout -B "$PR_BRANCH"
+git add go.mod go.sum
+git commit -m "chore(deps): update Go dependencies"
+git push origin "$PR_BRANCH" --force-with-lease
+
+# Build a PR body showing the go.mod diff
+DIFF=$(git diff "origin/${BASE_BRANCH}" -- go.mod 2>/dev/null || git diff HEAD~1 -- go.mod)
+BODY="## Go dependency updates
+
+\`\`\`diff
+${DIFF}
+\`\`\`
+
+---
+*Automated update via the \`update-dependencies-go\` workflow.*"
+
+# Check for an existing open PR on this branch via REST (avoids GraphQL which
+# the GitHub App token cannot access via repository.pullRequests).
+OWNER_REPO=$(git remote get-url origin | sed -E 's|.*github\.com[:/]||; s|\.git$||')
+OWNER="${OWNER_REPO%%/*}"
+
+EXISTING=$(gh api "repos/${OWNER_REPO}/pulls?head=${OWNER}:${PR_BRANCH}&state=open" \
+  --jq '.[0].html_url // ""' 2>/dev/null) || EXISTING=""
+
+if [[ -n "$EXISTING" ]]; then
+  echo "Updating existing PR: $EXISTING"
+  PR_NUMBER=$(basename "$EXISTING")
+  gh api "repos/${OWNER_REPO}/pulls/${PR_NUMBER}" --method PATCH --field body="$BODY" > /dev/null
+  PR_URL="$EXISTING"
+else
+  echo "Creating new PR..."
+  PR_RESPONSE=$(gh api "repos/${OWNER_REPO}/pulls" \
+    --method POST \
+    --field title="chore(deps): weekly Go dependency update" \
+    --field body="$BODY" \
+    --field head="$PR_BRANCH" \
+    --field base="$BASE_BRANCH")
+  PR_URL=$(echo "$PR_RESPONSE" | jq -r '.html_url')
+  PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
+  # Add labels (PRs are issues in the GitHub REST API)
+  jq -nc --arg labels "$PR_LABELS" '{"labels": ($labels | split(","))}' | \
+    gh api "repos/${OWNER_REPO}/issues/${PR_NUMBER}/labels" --method POST --input - > /dev/null || true
+fi
+
+echo "PR: $PR_URL"
+
+if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
+  echo "updated=true"    >> "$GITHUB_OUTPUT"
+  echo "pr-url=$PR_URL"  >> "$GITHUB_OUTPUT"
+fi

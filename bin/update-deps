@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Updates all direct dependencies in go.mod to their latest versions and
+# optionally bumps the go directive to a new minor version.
+#
+# Environment variables (set by the workflow from detect-go-version outputs):
+#   NEEDS_GO_UPDATE  - "true" to bump the go directive
+#   LATEST_GO_MINOR  - e.g. "1.27"   (used for go mod edit -go)
+#   LATEST_GO_FULL   - e.g. "1.27.2" (used for toolchain directive if present)
+
+GO_MOD="${GO_MOD_FILE:-go.mod}"
+NEEDS_GO_UPDATE="${NEEDS_GO_UPDATE:-false}"
+LATEST_GO_MINOR="${LATEST_GO_MINOR:-}"
+LATEST_GO_FULL="${LATEST_GO_FULL:-}"
+
+# Direct dependencies to keep at their current version.
+# Add entries here when a license or other constraint prevents upgrading.
+PINNED_DEPS=(
+  "github.com/unidoc/unipdf/v3" # license key expires per version; update manually when renewed
+)
+
+# Collect direct (non-indirect) dependency paths using go mod edit -json.
+# This is reliable and avoids fragile text parsing of go.mod.
+DIRECTS=$(go mod edit -json "$GO_MOD" | jq -r '.Require[]? | select(.Indirect != true) | .Path')
+
+# Remove pinned dependencies so they are not bumped to @latest.
+for dep in "${PINNED_DEPS[@]}"; do
+  DIRECTS=$(echo "$DIRECTS" | grep -v "^${dep}$")
+done
+
+if [[ -z "$DIRECTS" ]]; then
+  echo "No direct dependencies found in $GO_MOD."
+else
+  # Build a single "go get" invocation with all deps@latest.
+  # Batching avoids redundant module graph resolutions.
+  ARGS=$(echo "$DIRECTS" | awk '{print $1 "@latest"}' | tr '\n' ' ')
+  echo "Updating direct dependencies..."
+  # shellcheck disable=SC2086
+  go get $ARGS
+fi
+
+# Bump the go directive if a new minor is available
+if [[ "$NEEDS_GO_UPDATE" == "true" ]] && [[ -n "$LATEST_GO_MINOR" ]]; then
+  echo "Bumping go directive: -> $LATEST_GO_MINOR"
+  go mod edit -go="$LATEST_GO_MINOR"
+
+  # Only touch toolchain if the directive already exists in go.mod
+  if go mod edit -json "$GO_MOD" | jq -e '.Toolchain != null' > /dev/null 2>&1; then
+    echo "Updating toolchain directive: -> go$LATEST_GO_FULL"
+    go mod edit -toolchain="go${LATEST_GO_FULL}"
+  fi
+fi
+
+echo "Running go mod tidy..."
+go mod tidy
+
+echo "Done."

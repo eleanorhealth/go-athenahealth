@@ -15,6 +15,7 @@ type Client interface {
 
 	// Patient
 	CreatePatient(ctx context.Context, opts *CreatePatientOptions) (string, error)
+	EnhancedBestMatch(ctx context.Context, opts *EnhancedBestMatchOptions) ([]*EnhancedBestMatchPatient, error)
 	GetPatient(ctx context.Context, patientID string, opts *GetPatientOptions) (*Patient, error)
 	GetPatients(ctx context.Context, id string, opts *GetPatientOptions) ([]*Patient, error)
 	ListPatients(context.Context, *ListPatientsOptions) (*ListPatientsResult, error)
@@ -54,6 +55,7 @@ type Client interface {
 	UploadPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageOptions) (*UploadPatientInsuranceCardImageResult, error)
 	UploadPatientInsuranceCardImageReader(ctx context.Context, patientID, insuranceID string, opts *UploadPatientInsuranceCardImageReaderOptions) (*UploadPatientInsuranceCardImageResult, error)
 	GetPatientInsuranceCardImage(ctx context.Context, patientID, insuranceID string) (*GetPatientInsuranceCardImageResult, error)
+	CheckPatientInsuranceEligibility(ctx context.Context, opts *CheckPatientInsuranceEligibilityOptions) error
 
 	// Patient Drivers License
 	AddPatientDriversLicenseDocument(ctx context.Context, patientID string, opts *AddPatientDriversLicenseDocumentOptions) (*AddPatientDriversLicenseDocumentResult, error)

@@ -102,6 +102,41 @@ func TestHTTPClient_ListPatients(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestHTTPClient_EnhancedBestMatch(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal("John", r.URL.Query().Get("firstname"))
+		assert.Equal("Smith", r.URL.Query().Get("lastname"))
+		assert.Equal("01/15/1985", r.URL.Query().Get("dob"))
+		assert.Equal("john.smith@example.com", r.URL.Query().Get("email"))
+		assert.Equal("23", r.URL.Query().Get("minscore"))
+
+		b, _ := os.ReadFile("./resources/EnhancedBestMatchPatients.json")
+		_, _ = w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	opts := &EnhancedBestMatchOptions{
+		FirstName: "John",
+		LastName:  "Smith",
+		DOB:       "01/15/1985",
+		Email:     "john.smith@example.com",
+		MinScore:  23,
+	}
+
+	patients, err := athenaClient.EnhancedBestMatch(context.Background(), opts)
+
+	assert.NoError(err)
+	assert.Len(patients, 2)
+	assert.Equal("1", patients[0].PatientID)
+	assert.Equal(float64(23), patients[0].Score)
+	assert.Equal("2", patients[1].PatientID)
+	assert.Equal(float64(16), patients[1].Score)
+}
+
 func TestHTTPClient_GetPatientPhoto_JPEGOutputNotSupported(t *testing.T) {
 	assert := assert.New(t)
 

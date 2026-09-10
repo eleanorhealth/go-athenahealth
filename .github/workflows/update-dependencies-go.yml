@@ -1,0 +1,51 @@
+name: Update Go dependencies
+
+on:
+  schedule:
+    - cron: "0 12 * * 1" # Monday, Thursday 12:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: update-dependencies-go
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          # Full history needed so git diff against origin/main works in create-pr
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v6.3.0
+        with:
+          go-version-file: go.mod
+
+      - name: Configure git
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      - name: Detect Go version
+        id: detect-go-version
+        run: bin/detect-go-version
+
+      - name: Update dependencies
+        env:
+          NEEDS_GO_UPDATE: ${{ steps.detect-go-version.outputs.needs_go_update }}
+          LATEST_GO_MINOR: ${{ steps.detect-go-version.outputs.latest_go_minor }}
+          LATEST_GO_FULL: ${{ steps.detect-go-version.outputs.latest_go_full }}
+          # actions/setup-go pins GOTOOLCHAIN=local to the version resolved from go.mod, so once
+          # this step bumps the go directive to a newer minor, `go` needs GOTOOLCHAIN=auto to
+          # download and switch to that toolchain itself rather than erroring out.
+          GOTOOLCHAIN: auto
+        run: bin/update-deps
+
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bin/create-pr

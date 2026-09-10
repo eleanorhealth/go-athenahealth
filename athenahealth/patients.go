@@ -1009,7 +1009,9 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 	form.Add("address1", opts.Address1)
 	form.Add("address2", opts.Address2)
 	form.Add("city", opts.City)
-	form.Add("departmentid", opts.DepartmentID)
+	if opts.DepartmentID != "" {
+		form.Add("departmentid", opts.DepartmentID)
+	}
 	form.Add("dob", opts.DOB.Format("01/02/2006"))
 	form.Add("email", opts.Email)
 	form.Add("firstname", opts.FirstName)
@@ -1018,11 +1020,19 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 	form.Add("middlename", opts.MiddleName)
 	form.Add("mobilephone", opts.MobilePhone)
 	form.Add("notes", opts.Notes)
-	form.Add("sex", opts.Sex)
-	form.Add("ssn", opts.SSN)
+	if opts.Sex != "" {
+		form.Add("sex", opts.Sex)
+	}
+	if opts.SSN != "" {
+		form.Add("ssn", opts.SSN)
+	}
 	form.Add("state", opts.State)
-	form.Add("status", opts.Status)
-	form.Add("zip", opts.Zip)
+	if opts.Status != "" {
+		form.Add("status", opts.Status)
+	}
+	if opts.Zip != "" {
+		form.Add("zip", opts.Zip)
+	}
 
 	if opts.BypassPatientMatching {
 		form.Add("bypasspatientmatching", "true")
@@ -1042,4 +1052,81 @@ func (h *HTTPClient) CreatePatient(ctx context.Context, opts *CreatePatientOptio
 	}
 
 	return out[0].PatientID, nil
+}
+
+// EnhancedBestMatchPatient is a Patient returned by the enhanced best match search,
+// augmented with a match score.
+type EnhancedBestMatchPatient struct {
+	Patient
+	Score float64 `json:"score"`
+}
+
+// EnhancedBestMatchOptions are the parameters for EnhancedBestMatch.
+// FirstName, LastName, and DOB are required; all other fields are optional
+// and improve match accuracy when provided.
+type EnhancedBestMatchOptions struct {
+	// Required
+	FirstName string
+	LastName  string
+	DOB       string // MM/DD/YYYY
+
+	// Optional — additional fields improve match accuracy
+	DepartmentID      int
+	Email             string
+	MobilePhone       string
+	HomePhone         string
+	WorkPhone         string
+	Zip               string
+	MinScore          float64
+	ReturnBestMatches bool
+}
+
+// EnhancedBestMatch searches for patients using the enhanced best-match algorithm.
+// Returns patients ordered by descending score. Athena never returns patients with
+// a score below 16; a score of 23 indicates a strong match on name + DOB alone.
+//
+// GET /v1/{practiceid}/patients/enhancedbestmatch
+//
+// https://docs.athenahealth.com/api/api-ref/patient#Get-list-of-patients---enhanced-best-matching-search-criteria
+func (h *HTTPClient) EnhancedBestMatch(ctx context.Context, opts *EnhancedBestMatchOptions) ([]*EnhancedBestMatchPatient, error) {
+	if opts == nil {
+		panic("opts is nil")
+	}
+
+	q := url.Values{}
+	q.Add("firstname", opts.FirstName)
+	q.Add("lastname", opts.LastName)
+	q.Add("dob", opts.DOB)
+
+	if opts.DepartmentID != 0 {
+		q.Add("departmentid", strconv.Itoa(opts.DepartmentID))
+	}
+	if opts.Email != "" {
+		q.Add("email", opts.Email)
+	}
+	if opts.MobilePhone != "" {
+		q.Add("mobilephone", opts.MobilePhone)
+	}
+	if opts.HomePhone != "" {
+		q.Add("homephone", opts.HomePhone)
+	}
+	if opts.WorkPhone != "" {
+		q.Add("workphone", opts.WorkPhone)
+	}
+	if opts.Zip != "" {
+		q.Add("zip", opts.Zip)
+	}
+	if opts.MinScore != 0 {
+		q.Add("minscore", strconv.FormatFloat(opts.MinScore, 'f', -1, 64))
+	}
+	if opts.ReturnBestMatches {
+		q.Add("returnbestmatches", "true")
+	}
+
+	var out []*EnhancedBestMatchPatient
+	if _, err := h.Get(ctx, "/patients/enhancedbestmatch", q, &out); err != nil {
+		return nil, err
+	}
+
+	return out, nil
 }

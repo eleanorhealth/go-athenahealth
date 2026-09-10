@@ -149,6 +149,7 @@ type AddLabResultDocumentReaderOptions struct {
 	// AttachmentContents must be Base64 encoded
 	AttachmentContents  io.Reader
 	AttachmentType      LabResultAttachmentType
+	DocumentTypeID      *int
 	InternalNote        *string
 	NoteToPatient       *string
 	ObservationDateTime *observationDateTime
@@ -196,6 +197,9 @@ func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID s
 		if len(opts.AttachmentType) > 0 {
 			form.AddString("attachmenttype", string(opts.AttachmentType))
 		}
+		if opts.DocumentTypeID != nil {
+			form.AddInt("documenttypeid", *opts.DocumentTypeID)
+		}
 		if opts.InternalNote != nil {
 			form.AddString("internalnote", string(*opts.InternalNote))
 		}
@@ -242,6 +246,7 @@ func (h *HTTPClient) AddLabResultDocumentReader(ctx context.Context, patientID s
 type AddLabResultDocumentOptions struct {
 	AttachmentContents  []byte
 	AttachmentType      LabResultAttachmentType
+	DocumentTypeID      *int
 	InternalNote        *string
 	NoteToPatient       *string
 	ObservationDateTime *observationDateTime
@@ -280,6 +285,9 @@ func (h *HTTPClient) AddLabResultDocument(ctx context.Context, patientID string,
 		}
 		if len(opts.AttachmentType) > 0 {
 			form.Add("attachmenttype", string(opts.AttachmentType))
+		}
+		if opts.DocumentTypeID != nil {
+			form.Add("documenttypeid", strconv.Itoa(*opts.DocumentTypeID))
 		}
 		if opts.InternalNote != nil {
 			form.Add("internalnote", string(*opts.InternalNote))
