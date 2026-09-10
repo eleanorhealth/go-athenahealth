@@ -39,6 +39,10 @@ jobs:
           NEEDS_GO_UPDATE: ${{ steps.detect-go-version.outputs.needs_go_update }}
           LATEST_GO_MINOR: ${{ steps.detect-go-version.outputs.latest_go_minor }}
           LATEST_GO_FULL: ${{ steps.detect-go-version.outputs.latest_go_full }}
+          # actions/setup-go pins GOTOOLCHAIN=local to the version resolved from go.mod, so once
+          # this step bumps the go directive to a newer minor, `go` needs GOTOOLCHAIN=auto to
+          # download and switch to that toolchain itself rather than erroring out.
+          GOTOOLCHAIN: auto
         run: bin/update-deps
 
       - name: Create PR
