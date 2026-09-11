@@ -124,6 +124,7 @@ type Patient struct {
 	OccupationCode                     string             `json:"occupationcode"`
 	OnlineStatementOnly                bool               `json:"onlinestatementonly"`
 	PatientID                          string             `json:"patientid"`
+	PreviousPatientIDs                 []string           `json:"previouspatientids"`
 	PatientPhoto                       bool               `json:"patientphoto"`
 	PatientPhotoURL                    string             `json:"patientphotourl"`
 	PortalAccessGiven                  bool               `json:"portalaccessgiven"`
@@ -687,6 +688,7 @@ type ListChangedPatientOptions struct {
 	LeaveUnprocessed           bool
 	PatientID                  string
 	ReturnGlobalID             bool
+	ShowPreviousPatientIDs     bool
 	ShowProcessedEndDatetime   time.Time
 	ShowProcessedStartDatetime time.Time
 }
@@ -724,6 +726,10 @@ func (h *HTTPClient) ListChangedPatients(ctx context.Context, opts *ListChangedP
 
 		if opts.ReturnGlobalID {
 			q.Add("returnglobalid", strconv.FormatBool(opts.ReturnGlobalID))
+		}
+
+		if opts.ShowPreviousPatientIDs {
+			q.Add("showpreviouspatientids", "true")
 		}
 
 		if !opts.ShowProcessedEndDatetime.IsZero() {

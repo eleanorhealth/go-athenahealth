@@ -117,6 +117,7 @@
             "state": "MA",
             "contactpreference_appointment_phone": true,
             "patientid": "1",
+            "previouspatientids": ["73259"],
             "dob": "01/15/1985",
             "customfields": [
                 {

@@ -183,6 +183,7 @@ func TestHTTPClient_ListChangedPatients(t *testing.T) {
 		assert.Equal("true", r.URL.Query().Get("leaveunprocessed"))
 		assert.Equal("p1", r.URL.Query().Get("patientid"))
 		assert.Equal("true", r.URL.Query().Get("returnglobalid"))
+		assert.Equal("true", r.URL.Query().Get("showpreviouspatientids"))
 		assert.Equal("06/01/2020 15:30:45", r.URL.Query().Get("showprocessedstartdatetime"))
 		assert.Equal("06/02/2020 12:30:45", r.URL.Query().Get("showprocessedenddatetime"))
 
@@ -199,13 +200,34 @@ func TestHTTPClient_ListChangedPatients(t *testing.T) {
 		LeaveUnprocessed:           true,
 		PatientID:                  "p1",
 		ReturnGlobalID:             true,
+		ShowPreviousPatientIDs:     true,
 		ShowProcessedStartDatetime: time.Date(2020, 6, 1, 15, 30, 45, 0, time.UTC),
 		ShowProcessedEndDatetime:   time.Date(2020, 6, 2, 12, 30, 45, 0, time.UTC),
 	}
 
 	patients, err := athenaClient.ListChangedPatients(context.Background(), opts)
 
+	assert.NoError(err)
 	assert.Len(patients, 1)
+	assert.Equal([]string{"73259"}, patients[0].PreviousPatientIDs)
+}
+
+func TestHTTPClient_ListChangedPatients_ShowPreviousPatientIDsOmittedWhenFalse(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		_, ok := r.URL.Query()["showpreviouspatientids"]
+		assert.False(ok)
+
+		b, _ := os.ReadFile("./resources/ListChangedPatients.json")
+		_, _ = w.Write(b)
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	_, err := athenaClient.ListChangedPatients(context.Background(), &ListChangedPatientOptions{})
+
 	assert.NoError(err)
 }
 
