@@ -87,6 +87,7 @@ type Client interface {
 	BookAppointment(ctx context.Context, patientID, apptID string, opts *BookAppointmentOptions) (*BookedAppointment, error)
 	UpdateBookedAppointment(ctx context.Context, apptID string, opts *UpdateBookedAppointmentOptions) error
 	RescheduleAppointment(ctx context.Context, apptID int, opts *RescheduleAppointmentOptions) (*RescheduleAppointmentResult, error)
+	CancelAppointment(ctx context.Context, apptID string, opts *CancelAppointmentOptions) error
 	ListAppointmentReminders(ctx context.Context, opts *ListAppointmentRemindersOptions) (*ListAppointmentRemindersResult, error)
 	CreateAppointmentSlot(ctx context.Context, opts *CreateAppointmentSlotOptions) (*CreateAppointmentSlotResult, error)
 	CreateAppointmentType(ctx context.Context, options *CreateAppointmentTypeOptions) (*CreateAppointmentTypeResult, error)
