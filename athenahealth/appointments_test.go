@@ -504,3 +504,59 @@ func TestHTTPClient_FreezeAppointmentSlot(t *testing.T) {
 		}
 	}
 }
+
+func TestHTTPClient_CancelAppointment(t *testing.T) {
+	assert := assert.New(t)
+
+	opts := &CancelAppointmentOptions{
+		PatientID:                   "456",
+		AppointmentCancelReasonID:   func() *string { a := "2"; return &a }(),
+		CancellationReason:          func() *string { a := "LA transition"; return &a }(),
+		IgnoreSchedulablePermission: func() *bool { a := true; return &a }(),
+		NoPatientCase:               func() *bool { a := false; return &a }(),
+	}
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		assert.NoError(r.ParseForm())
+
+		assert.Equal(http.MethodPut, r.Method)
+		assert.Equal("/appointments/123/cancel", r.URL.Path)
+		assert.Equal("456", r.Form.Get("patientid"))
+		assert.Equal("2", r.Form.Get("appointmentcancelreasonid"))
+		assert.Equal("LA transition", r.Form.Get("cancellationreason"))
+		assert.Equal("true", r.Form.Get("ignoreschedulablepermission"))
+		assert.Equal("false", r.Form.Get("nopatientcase"))
+
+		_, _ = w.Write([]byte(`{}`))
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	assert.NoError(athenaClient.CancelAppointment(context.Background(), "123", opts))
+}
+
+func TestHTTPClient_CancelAppointment_ErrorMessage(t *testing.T) {
+	assert := assert.New(t)
+
+	h := func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"errormessage":"The appointment is already cancelled."}`))
+	}
+
+	athenaClient, ts := testClient(h)
+	defer ts.Close()
+
+	err := athenaClient.CancelAppointment(context.Background(), "123", &CancelAppointmentOptions{PatientID: "456"})
+	assert.EqualError(err, "The appointment is already cancelled.")
+}
+
+func TestHTTPClient_CancelAppointment_MissingParams(t *testing.T) {
+	assert := assert.New(t)
+
+	athenaClient, ts := testClient(nil)
+	defer ts.Close()
+
+	assert.Error(athenaClient.CancelAppointment(context.Background(), "", &CancelAppointmentOptions{PatientID: "456"}))
+	assert.Error(athenaClient.CancelAppointment(context.Background(), "123", nil))
+	assert.Error(athenaClient.CancelAppointment(context.Background(), "123", &CancelAppointmentOptions{}))
+}

@@ -834,12 +834,68 @@ func (h *HTTPClient) RescheduleAppointment(ctx context.Context, appointmentID in
 	}
 
 	_, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%d/reschedule", appointmentID), q, &out)
-
 	if err != nil {
 		return nil, err
 	}
 
 	return out[0], nil
+}
+
+type CancelAppointmentOptions struct {
+	// The athenaNet patient ID. Required.
+	PatientID string
+	// The appointment cancel reason ID. Use GET /appointmentcancelreasons to retrieve a list of cancel reasons.
+	AppointmentCancelReasonID *string
+	// A text explanation why the appointment is being cancelled.
+	CancellationReason *string
+	// Bypasses the restriction that only appointments marked as schedulable via the web can be cancelled.
+	IgnoreSchedulablePermission *bool
+	// Bypasses the creation of a patient case.
+	NoPatientCase *bool
+}
+
+// CancelAppointment - Cancel an existing appointment
+// PUT /v1/{practiceid}/appointments/{appointmentid}/cancel
+// https://docs.athenahealth.com/api/api-ref/appointment#Cancel-appointment
+func (h *HTTPClient) CancelAppointment(ctx context.Context, appointmentID string, opts *CancelAppointmentOptions) error {
+	if appointmentID == "" {
+		return errors.New("cannot CancelAppointment with empty appointmentID")
+	}
+
+	if opts == nil || opts.PatientID == "" {
+		return errors.New("cannot CancelAppointment with empty PatientID")
+	}
+
+	form := url.Values{}
+	form.Set("patientid", opts.PatientID)
+
+	if opts.AppointmentCancelReasonID != nil {
+		form.Set("appointmentcancelreasonid", *opts.AppointmentCancelReasonID)
+	}
+
+	if opts.CancellationReason != nil {
+		form.Set("cancellationreason", *opts.CancellationReason)
+	}
+
+	if opts.IgnoreSchedulablePermission != nil {
+		form.Set("ignoreschedulablepermission", strconv.FormatBool(*opts.IgnoreSchedulablePermission))
+	}
+
+	if opts.NoPatientCase != nil {
+		form.Set("nopatientcase", strconv.FormatBool(*opts.NoPatientCase))
+	}
+
+	// Athena can answer 200 with an errormessage.
+	var out ErrorMessageResponse
+	if _, err := h.PutForm(ctx, fmt.Sprintf("/appointments/%s/cancel", appointmentID), form, &out); err != nil {
+		return err
+	}
+
+	if out.Message != "" {
+		return errors.New(out.Message)
+	}
+
+	return nil
 }
 
 var (
