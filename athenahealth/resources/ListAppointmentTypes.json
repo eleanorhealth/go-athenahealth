@@ -1,0 +1,31 @@
+{
+  "next": "/foo?limit=2&offset=2",
+  "previous": "/foo?limit=2&offset=0",
+  "totalcount": 3,
+  "appointmenttypes": [
+    {
+      "appointmenttypeid": 607,
+      "createencounteroncheckin": false,
+      "duration": 20,
+      "generic": true,
+      "group": false,
+      "name": "Template CRP 20",
+      "patient": true,
+      "patientdisplayname": "Template CRP 20",
+      "shortname": "TCR2",
+      "templatetypeonly": true
+    },
+    {
+      "appointmenttypeid": 15,
+      "createencounteroncheckin": true,
+      "duration": 60,
+      "generic": false,
+      "group": false,
+      "name": "Therapy Intake 60 - Clinic",
+      "patient": true,
+      "patientdisplayname": "Therapy Intake (60 min)",
+      "shortname": "TIC",
+      "templatetypeonly": false
+    }
+  ]
+}

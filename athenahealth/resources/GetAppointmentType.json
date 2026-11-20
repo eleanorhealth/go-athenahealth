@@ -1,0 +1,18 @@
+[
+  {
+    "appointmenttypeid": 578,
+    "appointmenttypeclassid": "12",
+    "appointmenttypeclassname": "Intake",
+    "createencounteroncheckin": true,
+    "departmentid": 40,
+    "duration": 40,
+    "generic": false,
+    "group": false,
+    "name": "CRP Intake 40 - Virtual",
+    "patient": true,
+    "patientdisplayname": "CRP Intake (40 min)",
+    "providerid": 302,
+    "shortname": "CIV4",
+    "templatetypeonly": false
+  }
+]
